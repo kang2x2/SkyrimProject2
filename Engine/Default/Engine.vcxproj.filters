@@ -85,7 +85,13 @@
     <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\02. Grid">
       <UniqueIdentifier>{ab836f33-0f58-4e73-8a65-f9005208118d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00. System\02. Ray">
+    <Filter Include="06. Light">
+      <UniqueIdentifier>{72e63eae-e4d1-413f-bf0b-c9fb787b76be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Light\Manager">
+      <UniqueIdentifier>{1927c0d0-b4b5-41df-88b0-0f4d07fa9729}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Calculator">
       <UniqueIdentifier>{01f54085-1f9b-484c-8568-4379ecfbc979}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -174,8 +180,12 @@
     <ClInclude Include="..\Public\VIBuffer_Grid.h">
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\02. Grid</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Ray_Manager.h">
-      <Filter>00. System\02. Ray</Filter>
+    <ClInclude Include="..\Public\Calculator.h">
+      <Filter>05. Calculator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Light.h" />
+    <ClInclude Include="..\Public\Light_Manager.h">
+      <Filter>06. Light\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -251,8 +261,12 @@
     <ClCompile Include="..\Private\VIBuffer_Grid.cpp">
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\02. Grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Ray_Manager.cpp">
-      <Filter>00. System\02. Ray</Filter>
+    <ClCompile Include="..\Private\Calculator.cpp">
+      <Filter>05. Calculator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Light.cpp" />
+    <ClCompile Include="..\Private\Light_Manager.cpp">
+      <Filter>06. Light\Manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

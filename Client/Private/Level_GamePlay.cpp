@@ -17,8 +17,10 @@ HRESULT CLevel_GamePlay::Initialize()
 	// CIMGui_Manager 초기화
 	CIMGui_Manager::GetInstance()->Initialize(m_pDevice, m_pContext, LEVEL_GAMEPLAY);
 
+	if (FAILED(Ready_Light()))
+		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain"))))
+	if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain_Grid"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_FreeCamera"))))
@@ -46,6 +48,43 @@ void CLevel_GamePlay::AfterRender()
 {
 	// ImGui 그리기
 	CIMGui_Manager::GetInstance()->Frame();
+}
+
+HRESULT CLevel_GamePlay::Ready_Light()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	LIGHT_DESC LightDesc;
+
+	/* 방향성 광원을 추가. */
+	//ZeroMemory(&LightDesc, sizeof LightDesc);
+	//LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
+	//LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
+	
+	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	
+	//if (FAILED(pGameInstance->Add_Light(LightDesc)))
+	//	return E_FAIL;
+
+	/* 점 광원 추가 */
+	ZeroMemory(&LightDesc, sizeof(LightDesc));
+	LightDesc.eLightType = LIGHT_DESC::LIGHT_POINT;
+	LightDesc.vLightPos = _float4(50.f, 1.f, 50.f, 1.f);
+	LightDesc.fLightRange = 25.f;
+
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
+	if (FAILED(pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
 }
 
 HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)

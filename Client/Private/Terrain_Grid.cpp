@@ -23,6 +23,8 @@ HRESULT CTerrain_Grid::Initialize_Clone(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_strName = TEXT("Tool_GridTerrain");
+
 	return S_OK;
 }
 
@@ -52,7 +54,7 @@ HRESULT CTerrain_Grid::Ready_Components()
 {
 	// VIBuffer
 	if (FAILED(__super::Add_CloneComponent(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid"),
-		TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
+		TEXT("Com_VIBuffer_Grid"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 	
 	// Shader

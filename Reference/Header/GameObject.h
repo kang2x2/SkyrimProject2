@@ -20,6 +20,9 @@ public:
 	virtual HRESULT Render();
 
 protected:
+	// 고유한 이름을 가지고 있어야 탐색이 용이 할 것 같다.
+	wstring					m_strName = TEXT("");
+
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pContext = nullptr;
 

@@ -33,7 +33,7 @@ public : /* For.Timer_Manager */
 	_float	Compute_TimeDelta(const wstring & strTimerTag);
 	HRESULT Add_Timer(const wstring & strTimerTag);
 
-public: /* For. Ray_Manager */
+public: /* For.Calculator */
 	_float3 Return_WorldMousePos(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos) const;
 
 public: /* For.Level_Manager */
@@ -46,6 +46,11 @@ public: /* For.Object_Manager */
 public: /* For.Component_Manager */
 	HRESULT Add_ProtoType_Component(_uint _iLevelIndex, const wstring & _strProtoTypeTag, class CComponent* _pProtoTypeComponent);
 	class CComponent* Clone_Component(_uint _iLevelIndex, const wstring & _strProtoTypeTag, void* _pArg = nullptr);
+	class CComponent* Find_ProtoType(_uint _iLevelIndex, const wstring & _strProtoTypeTag);
+
+public: /* For.Light_Manager */
+	const LIGHT_DESC* Get_LightDesc(_uint _iLightIndex);
+	HRESULT Add_Light(const LIGHT_DESC & _LightDesc);
 
 public: /* For. PipeLine */
 	HRESULT Bind_TransformToShader(class CShader* _pShader, const char* _pConstantName, CPipeLine::TRANSFORMSTATE _eState);
@@ -60,10 +65,11 @@ private:
 	class CGraphic_Device*		m_pGraphic_Device = nullptr;
 	class CInput_Device*		m_pInput_Device = nullptr;
 	class CTimer_Manager*		m_pTimer_Manager = nullptr;
-	class CRay_Manager*			m_pRay_Manager = nullptr;
+	class CCalculator*			m_pCalculator = nullptr;
 	class CLevel_Manager*		m_pLevel_Manager = nullptr;
 	class CObject_Manager*		m_pObject_Manager = nullptr;
 	class CComponent_Manager*	m_pComponent_Manager = nullptr;
+	class CLight_Manager*		m_pLight_Manager = nullptr;
 	class CPipeLine*		    m_pPipeLine = nullptr;
 
 public:

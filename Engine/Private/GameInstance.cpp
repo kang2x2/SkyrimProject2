@@ -2,9 +2,10 @@
 
 #include "Timer_Manager.h"
 #include "Graphic_Device.h"
-#include "Ray_Manager.h"
+#include "Calculator.h"
 #include "Level_Manager.h"
 #include "Object_Manager.h"
+#include "Light_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -12,20 +13,22 @@ CGameInstance::CGameInstance()
 	: m_pGraphic_Device(CGraphic_Device::GetInstance())
 	, m_pTimer_Manager(CTimer_Manager::GetInstance())
 	, m_pInput_Device(CInput_Device::GetInstance())
-	, m_pRay_Manager(CRay_Manager::GetInstance())
+	, m_pCalculator(CCalculator::GetInstance())
 	, m_pLevel_Manager(CLevel_Manager::GetInstance())
 	, m_pObject_Manager(CObject_Manager::GetInstance())
 	, m_pComponent_Manager(CComponent_Manager::GetInstance())
+	, m_pLight_Manager(CLight_Manager::GetInstance())
 	, m_pPipeLine(CPipeLine::GetInstance())
 	
 {
 	Safe_AddRef(m_pGraphic_Device);
 	Safe_AddRef(m_pTimer_Manager);
 	Safe_AddRef(m_pInput_Device);
-	Safe_AddRef(m_pRay_Manager);
+	Safe_AddRef(m_pCalculator);
 	Safe_AddRef(m_pLevel_Manager);
 	Safe_AddRef(m_pObject_Manager);
 	Safe_AddRef(m_pComponent_Manager);
+	Safe_AddRef(m_pLight_Manager);
 	Safe_AddRef(m_pPipeLine);
 }
 
@@ -149,10 +152,10 @@ HRESULT CGameInstance::Add_Timer(const wstring& strTimerTag)
 // Ray Manager
 _float3 CGameInstance::Return_WorldMousePos(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos) const
 {
-	if (m_pRay_Manager == nullptr)
+	if (m_pCalculator == nullptr)
 		return _float3();
 
-	return m_pRay_Manager->Return_WorldMousePos(_pDevice, _pContext, _WinMousePos);
+	return m_pCalculator->Return_WorldMousePos(_pDevice, _pContext, _WinMousePos);
 }
 
 /* Level Manager */
@@ -198,6 +201,31 @@ CComponent* CGameInstance::Clone_Component(_uint _iLevelIndex, const wstring& _s
 	return m_pComponent_Manager->Clone_Component(_iLevelIndex, _strProtoTypeTag, _pArg);
 }
 
+CComponent* CGameInstance::Find_ProtoType(_uint _iLevelIndex, const wstring& _strProtoTypeTag)
+{
+	if (m_pComponent_Manager == nullptr)
+		return nullptr;
+
+	return m_pComponent_Manager->Find_ProtoType(_iLevelIndex, _strProtoTypeTag);
+}
+
+/* Light Manager */
+const LIGHT_DESC* CGameInstance::Get_LightDesc(_uint _iLightIndex)
+{
+	if (m_pLight_Manager == nullptr)
+		return nullptr;
+
+	return m_pLight_Manager->Get_LightDesc(_iLightIndex);
+}
+
+HRESULT CGameInstance::Add_Light(const LIGHT_DESC& _LightDesc)
+{
+	if (m_pLight_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pLight_Manager->Add_Light(_LightDesc);
+}
+
 /* PipeLine */
 HRESULT CGameInstance::Bind_TransformToShader(CShader* _pShader, const char* _pConstantName, CPipeLine::TRANSFORMSTATE _eState)
 {
@@ -241,20 +269,22 @@ void CGameInstance::Release_Engine()
 	CLevel_Manager::GetInstance()->DestroyInstance();
 	CObject_Manager::GetInstance()->DestroyInstance();
 	CComponent_Manager::GetInstance()->DestroyInstance();
+	CLight_Manager::GetInstance()->DestroyInstance();
 	CTimer_Manager::GetInstance()->DestroyInstance();
 	CInput_Device::GetInstance()->DestroyInstance();
-	CRay_Manager::GetInstance()->DestroyInstance();
+	CCalculator::GetInstance()->DestroyInstance();
 	CGraphic_Device::GetInstance()->DestroyInstance();
 }
 
 void CGameInstance::Free()
 {
+	Safe_Release(m_pLight_Manager);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pGraphic_Device);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pInput_Device);
-	Safe_Release(m_pRay_Manager);
+	Safe_Release(m_pCalculator);
 	Safe_Release(m_pPipeLine);
 }

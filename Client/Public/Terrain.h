@@ -16,7 +16,7 @@ BEGIN(Client)
 class CTerrain final : public CGameObject
 {
 public:
-	enum TEXTUER { TEX_DIFFUSE, TEX_MASK, TEX_END };
+	enum TEXTUER { TEX_DIFFUSE, TEX_MASK, TEX_BRUSH, TEX_END };
 private:
 	CTerrain(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	CTerrain(const CTerrain& rhs);

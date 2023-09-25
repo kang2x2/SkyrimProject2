@@ -24,13 +24,11 @@ public:
 	HRESULT Reserve_Manager(_uint _iLevelIndex);
 	HRESULT Add_ProtoType_Component(_uint _iLevelIndex, const wstring& _strProtoTypeTag, class CComponent* _pProtoTypeComponent);
 	class CComponent* Clone_Component(_uint _iLevelIndex, const wstring& _strProtoTypeTag, void* _pArg);
+	class CComponent* Find_ProtoType(_uint _iLevelIndex, const wstring& _strProtoTypeTag);
 
 private:
 	_uint								   m_iLevelIndex = 0;
 	map<const wstring, class CComponent*>* m_mapProtoTypeObj = nullptr;
-
-private:
-	class CComponent* Find_ProtoType(_uint _iLevelIndex, const wstring& _strProtoTypeTag);
 
 public:
 	virtual void Free() override;

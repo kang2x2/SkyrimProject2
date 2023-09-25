@@ -49,6 +49,6 @@ using namespace DirectX;
 
 #endif // _DEBUG
 
-
+using namespace TriangleTests;
 using namespace Engine;
 using namespace std;

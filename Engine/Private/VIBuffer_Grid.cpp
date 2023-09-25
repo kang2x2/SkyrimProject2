@@ -23,6 +23,8 @@ HRESULT CVIBuffer_Grid::Initialize_ProtoType(_uint _iTerrainWidth, _uint _iTerra
 	m_eTopology = D3D_PRIMITIVE_TOPOLOGY_LINELIST;
 	m_iNumVBs = 1;
 
+	m_pPos = new _float3[m_iNumVertices];
+
 #pragma region Vertex Buffer
 
 	VTXPOSCOL* pVertices = new VTXPOSCOL[m_iNumVertices];
@@ -33,6 +35,8 @@ HRESULT CVIBuffer_Grid::Initialize_ProtoType(_uint _iTerrainWidth, _uint _iTerra
 		for (size_t j = 0; j < m_iNumVerticesX; ++j)
 		{
 			_uint iIndex = i * m_iNumVerticesX + j;
+
+			m_pPos[iIndex] = pVertices[iIndex].vPosition;
 
 			pVertices[iIndex].vPosition = _float3(j, 0, i);
 			pVertices[iIndex].vColor = _float4(1.f, 1.f, 1.f, 1.f);
@@ -131,7 +135,7 @@ CVIBuffer_Grid* CVIBuffer_Grid::Create(ID3D11Device* _pDevice, ID3D11DeviceConte
 {
 	CVIBuffer_Grid* pInstance = new CVIBuffer_Grid(_pDevice, _pContext);
 
-	if (FAILED(pInstance->Initialize_ProtoType(129, 129)))
+	if (FAILED(pInstance->Initialize_ProtoType(GRIDWIDTH, GRIDHEIGHT)))
 	{
 		MSG_BOX("Fail Create : CVIBuffer_Grid");
 		Safe_Release(pInstance);
@@ -156,4 +160,6 @@ CVIBuffer* CVIBuffer_Grid::Clone(void* pArg)
 void CVIBuffer_Grid::Free()
 {
 	__super::Free();
+
+	Safe_Delete_Array(m_pPos);
 }

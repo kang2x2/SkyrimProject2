@@ -4,12 +4,12 @@
 
 BEGIN(Engine)
 
-class ENGINE_DLL CRay_Manager : public CBase
+class ENGINE_DLL CCalculator : public CBase
 {
-	DECLARE_SINGLETON(CRay_Manager)
+	DECLARE_SINGLETON(CCalculator)
 private:
-	CRay_Manager();
-	virtual ~CRay_Manager() = default;
+	CCalculator();
+	virtual ~CCalculator() = default;
 
 public:
 	_float3 Return_WorldMousePos(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos) const;

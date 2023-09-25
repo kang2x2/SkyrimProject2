@@ -1,6 +1,7 @@
 #include "framework.h"
 #include <filesystem>
 #include <commdlg.h>
+#include <fstream>
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -74,7 +75,6 @@ void CImGui_Tool::LayOut_Mouse()
 
 	ImGui::End();
 }
-
 void CImGui_Tool::LayOut_SaveLoad()
 {
 	ImGui::Begin("Save/Load");
@@ -93,7 +93,6 @@ void CImGui_Tool::LayOut_SaveLoad()
 
 	ImGui::End();
 }
-
 void CImGui_Tool::LayOut_Object()
 {
 	ImGui::Begin("FBX Object LayOut");
@@ -371,8 +370,22 @@ void CImGui_Tool::File_Save()
 		MessageBox(g_hWnd, filePathName, L"저장 선택", MB_OK);
 
 		std::wstring filePath = OFN.lpstrFile;
-		std::string filePathUTF8(filePath.begin(), filePath.end()); // UTF-8로 변환
-		int a = 0;
+
+		// 파일 내용을 저장할 변수에 원하는 내용을 할당.
+		// 추후 문자열이 아닌 현재 게임의 모든 정보를 여기서 저장하면 될 듯 하다.
+		std::wstring fileContent = L"Test";
+
+		// 파일을 쓰기 모드로 열기.
+		std::wofstream fileStream(filePath);
+		if (fileStream.is_open()) {
+			// 파일 내용을 파일에 쓰기.
+			fileStream << fileContent;
+			fileStream.close();
+			MessageBox(g_hWnd, L"파일이 성공적으로 저장되었습니다.", L"저장 완료", MB_OK);
+		}
+		else {
+			MessageBox(g_hWnd, L"파일을 저장하는 중 오류가 발생했습니다.", L"저장 오류", MB_OK | MB_ICONERROR);
+		}
 	}
 
 	SetCurrentDirectory(originalPath);

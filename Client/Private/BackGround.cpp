@@ -36,6 +36,8 @@ HRESULT CBackGround::Initialize_Clone(void* pArg)
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(g_iWinSizeX, g_iWinSizeY, 0.f, 1.f));
 
+	m_strName = TEXT("Logo_BackGround");
+
 	return S_OK;
 }
 

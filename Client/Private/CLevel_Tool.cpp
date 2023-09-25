@@ -18,14 +18,14 @@ CLevel_Tool::CLevel_Tool(const CLevel_Tool& rhs)
 
 HRESULT CLevel_Tool::Initialize()
 {
-	// CIMGui_Manager 초기화
-	CIMGui_Manager::GetInstance()->Initialize(m_pDevice, m_pContext, LEVEL_TOOL);
-
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_FreeCamera"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain"))))
 		return E_FAIL;
+
+	// CIMGui_Manager 초기화
+	CIMGui_Manager::GetInstance()->Initialize(m_pDevice, m_pContext, LEVEL_TOOL);
 
 	return S_OK;
 }

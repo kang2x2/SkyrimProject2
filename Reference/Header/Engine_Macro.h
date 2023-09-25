@@ -1,6 +1,9 @@
 #ifndef Engine_Macro_h__
 #define Engine_Macro_h__
 
+#define			GRIDWIDTH 129
+#define			GRIDHEIGHT 129
+
 #ifndef			MSG_BOX
 #define			MSG_BOX(_message)			MessageBox(nullptr, TEXT(_message), L"System Message", MB_OK)
 #endif
