@@ -32,12 +32,6 @@ namespace Engine
 
 	}LIGHT_DESC;
 
-	typedef struct tagRay
-	{
-		_float3 origin;
-		_float3 direction;
-	}RAY;
-
 	typedef struct ENGINE_DLL tagVertex_Position_Color
 	{
 		XMFLOAT3	vPosition;
@@ -64,6 +58,18 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC Elements[iNumElements];
 
 	}VTXNORTEX;
+
+	typedef struct ENGINE_DLL tagVertex_Mesh
+	{
+		XMFLOAT3		vPosition;
+		XMFLOAT3		vNormal;
+		XMFLOAT2		vTexcoord;
+		XMFLOAT3		vTangent;
+
+		static const unsigned int				iNumElements = 4;
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
+
+	}VTXMESH;
 
 	enum ENGINE_LEVELID { ELEVEL_STATIC, ELEVEL_LOGO, ELEVEL_GAMEPLAY, ELEVEL_LOADING, ELEVEL_TOOL, ELEVEL_END };
 }

@@ -49,9 +49,6 @@
     <Filter Include="02. GameObject\01. GamePlay\01. Terrain">
       <UniqueIdentifier>{7bf92707-2698-41c0-9dc1-b6dcf5c16dc4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\00. TestObj">
-      <UniqueIdentifier>{62cd656a-a0c9-47f7-a125-97bcf9e25c8a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\00. Logo\99. BackGround">
       <UniqueIdentifier>{163fea8e-bd66-4375-9625-d26c58650695}</UniqueIdentifier>
     </Filter>
@@ -78,6 +75,9 @@
     </Filter>
     <Filter Include="02. GameObject\99. Tool\00. Terrain">
       <UniqueIdentifier>{b6923e3d-1e14-4c77-85f6-c0be4029cac1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. Player">
+      <UniqueIdentifier>{0a8bb210-b1c9-4183-8de3-dc2cbb5cfa6c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -141,9 +141,6 @@
     <ClInclude Include="..\IMGUI\imstb_truetype.h">
       <Filter>96. IMGUI\Default</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\TestObj.h">
-      <Filter>02. GameObject\01. GamePlay\00. TestObj</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Terrain.h">
       <Filter>02. GameObject\01. GamePlay\01. Terrain</Filter>
     </ClInclude>
@@ -167,6 +164,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Tool_Camera.h">
       <Filter>02. GameObject\99. Tool\99. Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player.h">
+      <Filter>02. GameObject\01. GamePlay\02. Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -223,9 +223,6 @@
     <ClCompile Include="..\IMGUI\imgui_widgets.cpp">
       <Filter>96. IMGUI\Default</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\TestObj.cpp">
-      <Filter>02. GameObject\01. GamePlay\00. TestObj</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Terrain.cpp">
       <Filter>02. GameObject\01. GamePlay\01. Terrain</Filter>
     </ClCompile>
@@ -250,6 +247,9 @@
     <ClCompile Include="..\Private\Tool_Camera.cpp">
       <Filter>02. GameObject\99. Tool\99. Camera</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Player.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -264,6 +264,9 @@
       <Filter>97. ShaderFile</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFile\Shader_VtxPosCol.hlsl">
+      <Filter>97. ShaderFile</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFile\Shader_VtxMesh.hlsl">
       <Filter>97. ShaderFile</Filter>
     </FxCompile>
   </ItemGroup>

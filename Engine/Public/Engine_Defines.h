@@ -14,6 +14,9 @@
 #include <DirectXTK/DDSTextureLoader.h>
 #include <DirectXTK/WICTextureLoader.h>
 #include <DirectXTK/ScreenGrab.h>
+#include <assimp\scene.h>
+#include <assimp\Importer.hpp>
+#include <assimp\postprocess.h>
 
 using namespace DirectX;
 
@@ -49,6 +52,5 @@ using namespace DirectX;
 
 #endif // _DEBUG
 
-using namespace TriangleTests;
 using namespace Engine;
 using namespace std;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Model.h"
 #include "Renderer.h"
 #include "VIBuffer_Rect.h"
 #include "VIBuffer_Terrain.h"

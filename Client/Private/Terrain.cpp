@@ -139,7 +139,7 @@ HRESULT CTerrain::Bind_ShaderResources()
 	if (FAILED(m_pTextureCom[TEX_BRUSH]->Bind_ShaderResources(m_pShaderCom, "g_BrushTexture")))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(1);
+	m_pShaderCom->Begin(0);
 
 	return S_OK;
 }

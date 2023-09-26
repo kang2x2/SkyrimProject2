@@ -94,6 +94,12 @@
     <Filter Include="05. Calculator">
       <UniqueIdentifier>{01f54085-1f9b-484c-8568-4379ecfbc979}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utiltiy\03. Component\05. Model">
+      <UniqueIdentifier>{c5777cf1-621b-4403-a398-202e0bd9b244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\03. Component\05. Model\00. Mesh">
+      <UniqueIdentifier>{b7117381-59a3-43a4-9e52-f0524dd5c4c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -183,9 +189,17 @@
     <ClInclude Include="..\Public\Calculator.h">
       <Filter>05. Calculator</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Light.h" />
     <ClInclude Include="..\Public\Light_Manager.h">
       <Filter>06. Light\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Model.h">
+      <Filter>01. Utiltiy\03. Component\05. Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Light.h">
+      <Filter>06. Light</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Mesh.h">
+      <Filter>01. Utiltiy\03. Component\05. Model\00. Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -264,9 +278,17 @@
     <ClCompile Include="..\Private\Calculator.cpp">
       <Filter>05. Calculator</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Light.cpp" />
     <ClCompile Include="..\Private\Light_Manager.cpp">
       <Filter>06. Light\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Model.cpp">
+      <Filter>01. Utiltiy\03. Component\05. Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Light.cpp">
+      <Filter>06. Light</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mesh.cpp">
+      <Filter>01. Utiltiy\03. Component\05. Model\00. Mesh</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@
 
 #include "Terrain.h"
 
-#include "TestObj.h"
+#include "Player.h"
 
 // Tool Level
 #include "Tool_Camera.h"
@@ -172,13 +172,9 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Terrain/Mask.bmp"), 1))))
 		return E_FAIL;
 
+	/* Brush */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Texture_Terrain_Brush"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Terrain/Brush.png"), 1))))
-		return E_FAIL;
-
-	// Creature
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Texture_TestObj"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/SkyrimLE/BackGround.png"), 1))))
 		return E_FAIL;
 
 #pragma endregion
@@ -186,8 +182,14 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 #pragma region Mesh
 	/* Mesh */
 	m_strLoadingText = TEXT("Loading Mesh.");
+	
+	/* Terrain */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Terrain/Height.bmp")))))
+		return E_FAIL;
+	/* Player */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Player/Idle.fbx"))))
 		return E_FAIL;
 
 #pragma endregion
@@ -195,8 +197,14 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 #pragma region Shader
 	/* Shader */
 	m_strLoadingText = TEXT("Loading Shader.");
+	
+	/* Shader_VtxNorTex */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxNorTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
+		return E_FAIL;
+	/* Shader_VtxMesh */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
 		return E_FAIL;
 
 #pragma endregion
@@ -215,9 +223,9 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 		CTerrain::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	// TestObj
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_TestObj"),
-		CTestObj::Create(m_pDevice, m_pContext))))
+	// Player
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player"),
+		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

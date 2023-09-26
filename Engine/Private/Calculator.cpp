@@ -4,6 +4,8 @@
 
 #include "VIBuffer_Grid.h"
 
+using namespace TriangleTests;
+
 IMPLEMENT_SINGLETON(CCalculator)
 
 CCalculator::CCalculator()
@@ -13,99 +15,79 @@ CCalculator::CCalculator()
 
 _float3 CCalculator::Return_WorldMousePos(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos) const
 {
-	// viewport 얻어오기
-	UINT viewPortCount = 1;
-	D3D11_VIEWPORT vp;
-	_pContext->RSGetViewports(&viewPortCount, &vp);
-
-	// viewport -> proj 변환
-	_float fX = ((2.f - _WinMousePos.x) / vp.Width) - 1.f;
-	_float fY = ((-2.f - _WinMousePos.y) / vp.Height) - 1.f;
-
-	// 투영 행렬 얻어오기
-	_float4x4 matProj;
-	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	matProj = pGameInstance->Get_Transform_float4x4(CPipeLine::D3DTS_PROJ);
+	_uint iVpNum = 1;
+	CD3D11_VIEWPORT vp;
 
-	// proj -> view
-	fX = fX / matProj.m[0][0];
-	fY = fY / matProj.m[1][1];
+	_pContext->RSGetViewports(&iVpNum, &vp);
 
-	RAY tRay;
-	ZeroMemory(&tRay, sizeof(RAY));
-	tRay.origin = { 0.f, 0.f, 0.f };
-	tRay.direction = { fX, fY, 1.f };
-	
+	_float3 vRay;
+
+	_float4 vCamPosition = pGameInstance->Get_CamPosition_Float4();
+	_float4x4 matProj = pGameInstance->Get_Transform_float4x4(CPipeLine::D3DTS_PROJ);
 	_float4x4 matViewInverse = pGameInstance->Get_Transform_float4x4_Inverse(CPipeLine::D3DTS_VIEW);
-	
-	// view -> world(추후 충돌 픽킹 시 사용할 광선세팅) 지금은 안 씀
-	XMVector3TransformCoord(XMLoadFloat3(&tRay.origin), XMLoadFloat4x4(&matViewInverse));
-	XMVector3TransformNormal(XMLoadFloat3(&tRay.direction), XMLoadFloat4x4(&matViewInverse));
-	XMVector3Normalize(XMLoadFloat3(&tRay.direction));
 
-	// 피킹 진행을 위해 Grid Terrain의 VIBuffer 정보가 필요하다.
+	vRay.x = (((2.f * _WinMousePos.x) / vp.Width) - 1.f) / matProj.m[0][0];
+	vRay.y = (((-2.f * _WinMousePos.y) / vp.Height) + 1.f) / matProj.m[1][1];
+	vRay.z = 1.f;
+
+	_float4 vOrigin = { vCamPosition.x, vCamPosition.y, vCamPosition.z, vCamPosition.w };
+	_float4 vDir = { vRay.x, vRay.y, vRay.z, 0.f};
+
+	XMStoreFloat4(&vOrigin, XMVector3TransformCoord(XMLoadFloat4(&vOrigin), XMLoadFloat4x4(&matViewInverse)));
+	XMStoreFloat4(&vDir, XMVector3TransformNormal(XMLoadFloat4(&vDir), XMLoadFloat4x4(&matViewInverse)));
+
+	XMStoreFloat4(&vDir, XMVector3Normalize(XMLoadFloat4(&vDir)));
+
 	CVIBuffer_Grid* pGridBuffer = dynamic_cast<CVIBuffer_Grid*>(pGameInstance->Find_ProtoType(ELEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid")));
 	const _float3* pTerrainVtxPos = pGridBuffer->Get_VtxPos();
-	// 연산을 편하게 하기 위한 배열
-	_ulong dwVtxIdx[3]{};
 
-	_float	fU = 0.f, fV = 0.f, fDist = 0.f;
+	Safe_Release(pGameInstance);
 
-	for (_ulong i = 0; i < GRIDHEIGHT; ++i)
+	_ulong		dwVtxIdx[3]{};
+	_float		fDist = 0.f;
+
+	for (_ulong i = 0; i < GRIDHEIGHT - 1; ++i)
 	{
-		for (_ulong j = 0; j < GRIDWIDTH; ++j)
+		for (_ulong j = 0; j < GRIDWIDTH - 1; ++j)
 		{
-			_ulong	iIndex = i * GRIDHEIGHT + j;
+			_ulong	dwIndex = i * GRIDWIDTH + j;
 
 			// 오른쪽 위
-			dwVtxIdx[0] = iIndex + GRIDHEIGHT;
-			dwVtxIdx[1] = iIndex + GRIDHEIGHT + 1;
-			dwVtxIdx[2] = iIndex + 1;
+			dwVtxIdx[0] = dwIndex + GRIDWIDTH;
+			dwVtxIdx[1] = dwIndex + GRIDWIDTH + 1;
+			dwVtxIdx[2] = dwIndex + 1;
 
-			if (Intersects(
-				FXMVECTOR(XMLoadFloat3(&tRay.origin)),
-				FXMVECTOR(XMLoadFloat3(&tRay.direction)),
-				FXMVECTOR(XMLoadFloat3(&pTerrainVtxPos[dwVtxIdx[1]])),
-				FXMVECTOR(XMLoadFloat3(&pTerrainVtxPos[dwVtxIdx[0]])),
-				FXMVECTOR(XMLoadFloat3(&pTerrainVtxPos[dwVtxIdx[2]])),
+			if (Intersects(XMLoadFloat4(&vOrigin), XMLoadFloat4(&vDir),
+				XMLoadFloat3(&pTerrainVtxPos[dwVtxIdx[1]]),
+				XMLoadFloat3(&pTerrainVtxPos[dwVtxIdx[0]]),
+				XMLoadFloat3(&pTerrainVtxPos[dwVtxIdx[2]]),
 				fDist))
 			{
-				// V1 + U(V2 - V1) + V(V3 - V1)
-
-				return _float3(pTerrainVtxPos[dwVtxIdx[1]].x + fU * (pTerrainVtxPos[dwVtxIdx[0]].x - pTerrainVtxPos[dwVtxIdx[1]].x),
-					0.f,
-					pTerrainVtxPos[dwVtxIdx[1]].z + fV * (pTerrainVtxPos[dwVtxIdx[2]].z - pTerrainVtxPos[dwVtxIdx[1]].z));
+				return pTerrainVtxPos[dwVtxIdx[0]];
 			}
 
 			// 왼쪽 아래
-			dwVtxIdx[0] = iIndex + GRIDWIDTH;
-			dwVtxIdx[1] = iIndex + 1;
-			dwVtxIdx[2] = iIndex;
+			dwVtxIdx[0] = dwIndex + GRIDWIDTH;
+			dwVtxIdx[1] = dwIndex + 1;
+			dwVtxIdx[2] = dwIndex;
 
-			if (Intersects(
-				FXMVECTOR(XMLoadFloat3(&tRay.origin)),
-				FXMVECTOR(XMLoadFloat3(&tRay.direction)),
-				FXMVECTOR(XMLoadFloat3(&pTerrainVtxPos[dwVtxIdx[1]])),
-				FXMVECTOR(XMLoadFloat3(&pTerrainVtxPos[dwVtxIdx[0]])),
-				FXMVECTOR(XMLoadFloat3(&pTerrainVtxPos[dwVtxIdx[2]])),
+			if (Intersects(XMLoadFloat4(&vOrigin), XMLoadFloat4(&vDir),
+				XMLoadFloat3(&pTerrainVtxPos[dwVtxIdx[1]]),
+				XMLoadFloat3(&pTerrainVtxPos[dwVtxIdx[0]]),
+				XMLoadFloat3(&pTerrainVtxPos[dwVtxIdx[2]]),
 				fDist))
 			{
-				// V1 + U(V2 - V1) + V(V3 - V1)
-
-				return _float3(pTerrainVtxPos[dwVtxIdx[1]].x + fU * (pTerrainVtxPos[dwVtxIdx[0]].x - pTerrainVtxPos[dwVtxIdx[1]].x),
-					0.f,
-					pTerrainVtxPos[dwVtxIdx[1]].z + fV * (pTerrainVtxPos[dwVtxIdx[2]].z - pTerrainVtxPos[dwVtxIdx[1]].z));
+				return pTerrainVtxPos[dwVtxIdx[0]];
 			}
 
 		}
 	}
 
-	Safe_Release(pGameInstance);
-
 	return _float3();
+
 }
 
 void CCalculator::Free()

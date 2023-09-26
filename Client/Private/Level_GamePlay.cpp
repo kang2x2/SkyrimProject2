@@ -26,7 +26,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_FreeCamera"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_TestObj(TEXT("Layer_TestObj"))))
+	if (FAILED(Ready_Layer_Playher(TEXT("Layer_Player"))))
 		return E_FAIL;
 
 	return S_OK;
@@ -58,29 +58,29 @@ HRESULT CLevel_GamePlay::Ready_Light()
 	LIGHT_DESC LightDesc;
 
 	/* 방향성 광원을 추가. */
-	//ZeroMemory(&LightDesc, sizeof LightDesc);
-	//LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
-	//LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+	LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
+	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
 	
-	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	//LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-	
-	//if (FAILED(pGameInstance->Add_Light(LightDesc)))
-	//	return E_FAIL;
-
-	/* 점 광원 추가 */
-	ZeroMemory(&LightDesc, sizeof(LightDesc));
-	LightDesc.eLightType = LIGHT_DESC::LIGHT_POINT;
-	LightDesc.vLightPos = _float4(50.f, 1.f, 50.f, 1.f);
-	LightDesc.fLightRange = 25.f;
-
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-
+	
 	if (FAILED(pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
+
+	/* 점 광원 추가 */
+	//ZeroMemory(&LightDesc, sizeof(LightDesc));
+	//LightDesc.eLightType = LIGHT_DESC::LIGHT_POINT;
+	//LightDesc.vLightPos = _float4(50.f, 1.f, 50.f, 1.f);
+	//LightDesc.fLightRange = 25.f;
+	//
+	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	//
+	//if (FAILED(pGameInstance->Add_Light(LightDesc)))
+	//	return E_FAIL;
 
 	Safe_Release(pGameInstance);
 
@@ -129,19 +129,17 @@ HRESULT CLevel_GamePlay::Ready_Layer_Terrain(const wstring& _strLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_TestObj(const wstring& _strLayerTag)
+HRESULT CLevel_GamePlay::Ready_Layer_Playher(const wstring& _strLayerTag)
 {
-	/* 원형객체를 복제하여 사본객체를 생성하고 레이어에 추가한다. */
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_TestObj"))))
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 
 	return S_OK;
-
 }
 
 CLevel_GamePlay* CLevel_GamePlay::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
