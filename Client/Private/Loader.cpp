@@ -182,15 +182,25 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 #pragma region Mesh
 	/* Mesh */
 	m_strLoadingText = TEXT("Loading Mesh.");
-	
+	_matrix matInitialize = XMMatrixIdentity();
+
 	/* Terrain */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
+
 	/* Player */
+	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	// matInitialize = XMMatrixScaling(1.f, 1.f, 1.f);
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Player/Idle.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Player/Idle.fbx", matInitialize))))
 		return E_FAIL;
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Fiona/Fiona.fbx", matInitialize))))
+	//	return E_FAIL;
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_WhiteRun_Building/BreezeHome.FBX", matInitialize))))
+	//	return E_FAIL;
 
 #pragma endregion
 

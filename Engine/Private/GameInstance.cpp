@@ -149,13 +149,13 @@ HRESULT CGameInstance::Add_Timer(const wstring& strTimerTag)
 	return m_pTimer_Manager->Add_Timer(strTimerTag);
 }
 
-// Ray Manager
-_float3 CGameInstance::Return_WorldMousePos(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos) const
+// Calculator
+_float3 CGameInstance::Return_WorldMousePos(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, class CGameObject* _pTerrain, const _float3* _vec) const
 {
 	if (m_pCalculator == nullptr)
 		return _float3();
 
-	return m_pCalculator->Return_WorldMousePos(_pDevice, _pContext, _WinMousePos);
+	return m_pCalculator->Return_WorldMousePos(_pDevice, _pContext, _WinMousePos, _pTerrain, _vec);
 }
 
 /* Level Manager */
@@ -182,6 +182,14 @@ HRESULT CGameInstance::Add_CloneObject(_uint _iLevelIndex, const wstring& _strLa
 		return E_FAIL;
 
 	return m_pObject_Manager->Add_CloneObject(_iLevelIndex, _strLayerTag, _strProtoTypeTag, pArg);
+}
+
+CGameObject* CGameInstance::Find_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName)
+{
+	if (m_pObject_Manager == nullptr)
+		return nullptr;
+
+	return m_pObject_Manager->Find_CloneObject(_iLevelIndex, _strLayerTag, _strName);
 }
 
 /* Component Manager */

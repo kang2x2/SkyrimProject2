@@ -11,6 +11,9 @@
 
 #include "GameInstance.h"
 
+#include "VIBuffer_Grid.h"
+#include "Terrain_Grid.h"
+
 CImGui_Tool::CImGui_Tool()
 {
 }
@@ -66,7 +69,13 @@ void CImGui_Tool::LayOut_Mouse()
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
-		ResultPickPos = pGameInstance->Return_WorldMousePos(m_pDevice, m_pContext, MousePos);
+
+		CTerrain_Grid* pTerrainGrid = dynamic_cast<CTerrain_Grid*>(pGameInstance->Find_CloneObject(LEVEL_TOOL, TEXT("Layer_Terrain"), TEXT("Tool_GridTerrain")));
+
+		CVIBuffer_Grid* pGridBuffer = dynamic_cast<CVIBuffer_Grid*>(pGameInstance->Find_ProtoType(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid")));
+		const _float3* pTerrainVtxPos = pGridBuffer->Get_VtxPos();
+
+		ResultPickPos = pGameInstance->Return_WorldMousePos(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos);
 
 		Safe_Release(pGameInstance);
 	}

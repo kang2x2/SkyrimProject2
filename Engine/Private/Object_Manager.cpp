@@ -93,6 +93,22 @@ void CObject_Manager::Clear(_uint _iLevelIndex)
 	m_mapLayer[_iLevelIndex].clear();
 }
 
+CGameObject* CObject_Manager::Find_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName)
+{
+	// 매개로 받은 레벨의 레이어만 검사
+	for (auto& iter : m_mapLayer[_iLevelIndex])
+	{
+		if (iter.first == _strLayerTag)
+		{
+			// 매개로 받은 레이어의 이름을 찾았다면
+			// 매개로 받은 오브젝트의 이름을 레이어의 Find_Object로 넘긴다.
+			return iter.second->Find_CloneObject(_strName);
+		}
+	}
+
+	return nullptr;
+}
+
 CGameObject* CObject_Manager::Find_ProtoObject(const wstring& _strPrototypeTag)
 {
 	auto iter = m_mapProtoTypeObj.find(_strPrototypeTag);

@@ -32,7 +32,7 @@ HRESULT CTexture::Initialize_ProtoType(const wstring& _strTextureFilePath, _uint
 		_tchar szTextureFilePath[MAX_PATH] = TEXT("");
 
 		// 파일 경로 저장
-		wsprintf(szTextureFilePath, _strTextureFilePath.c_str(), i);
+ 		wsprintf(szTextureFilePath, _strTextureFilePath.c_str(), i);
 
 		// 파일 확장자 저장을 위한 변수(dds, jpg, png, bmp)
 		_tchar szExt[MAX_PATH] = TEXT("");

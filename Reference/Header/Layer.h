@@ -16,6 +16,9 @@ public:
 	void    Tick(_float _fTimeDelta);
 	void    LateTick(_float _fTimeDelta);
 
+public:
+	CGameObject* Find_CloneObject(const wstring& _strName);
+
 private:
 	list<class CGameObject*> m_ltCloneObj;
 

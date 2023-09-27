@@ -28,7 +28,7 @@ private:
 
 public:
 	static CTexture* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext,
-		const wstring& _strTextureFilePath, _uint _iNumTextures);
+		const wstring& _strTextureFilePath, _uint _iNumTextures = 1);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

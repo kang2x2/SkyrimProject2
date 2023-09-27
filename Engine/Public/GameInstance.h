@@ -34,7 +34,7 @@ public : /* For.Timer_Manager */
 	HRESULT Add_Timer(const wstring & strTimerTag);
 
 public: /* For.Calculator */
-	_float3 Return_WorldMousePos(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos) const;
+	_float3 Return_WorldMousePos(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, class CGameObject* _pTerrain, const _float3 * _vec) const;
 
 public: /* For.Level_Manager */
 	HRESULT Open_Level(_uint _iLevelIndex, class CLevel* _pLevel);
@@ -42,6 +42,8 @@ public: /* For.Level_Manager */
 public: /* For.Object_Manager */
 	HRESULT Add_ProtoObject(const wstring& _strProtoTypeTag, class CGameObject* _pGameObject);
 	HRESULT Add_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strProtoTypeTag, void* pArg = nullptr);
+	class CGameObject* Find_CloneObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strName);
+
 
 public: /* For.Component_Manager */
 	HRESULT Add_ProtoType_Component(_uint _iLevelIndex, const wstring & _strProtoTypeTag, class CComponent* _pProtoTypeComponent);

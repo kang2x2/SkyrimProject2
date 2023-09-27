@@ -40,7 +40,18 @@ HRESULT CPlayer::Render()
 	if (FAILED(Bind_ShaderResource()))
 		return E_FAIL;
 
-	m_pModelCom->Render();
+	// 메시 몇개
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; ++i)
+	{
+		m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE);
+
+		m_pShaderCom->Begin(0);
+
+		m_pModelCom->Render(i);
+	}
+
 
 	return S_OK;
 }

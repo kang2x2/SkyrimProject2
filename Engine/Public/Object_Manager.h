@@ -19,6 +19,9 @@ public:
 	void LateTick(_float _fTimeDelta);
 	void Clear(_uint _iLevelIndex);
 
+public:
+	class CGameObject* Find_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName);
+
 private:
 	// ¿øº»
 	map<const wstring, class CGameObject*> m_mapProtoTypeObj;

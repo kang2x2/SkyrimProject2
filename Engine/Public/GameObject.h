@@ -19,6 +19,11 @@ public:
 	virtual void	LateTick(_float _fTimeDelta);
 	virtual HRESULT Render();
 
+public:
+	// 클론으로 생성된 오브젝트들은 모두 고유한 이름을 가진다.
+	const wstring& Get_Name() { return m_strName; }
+	class CComponent* Get_Component(const wstring& _strComponentName);
+
 protected:
 	// 고유한 이름을 가지고 있어야 탐색이 용이 할 것 같다.
 	wstring					m_strName = TEXT("");
@@ -30,8 +35,8 @@ protected:
 	_float4x4		 m_ViewMatrix, m_ProjMatrix;
 protected:
 	/* 컴포넌트의 검색을 용이하게 하기 위해 map으로 보관. 
-	   다른 객체가 현 객체의 컴포넌트(Translate 등)을 참조하는 경우가 빈번해서 */
-	map<const wstring, class CComponent*> m_mapComponent;
+	   다른 객체가 현 객체의 컴포넌트(Transform 등)을 참조하는 경우가 빈번해서 */
+	map<const wstring, class CComponent*> m_mapComponent; // 원본이 아니라 사본을 보관하네?
 
 protected:
 	/* 컴포넌트도 레벨별로 관리하고 있어서 해당 레벨의 원본 컴포넌트를 검색하기 위해 레벨 인덱스 필요  */

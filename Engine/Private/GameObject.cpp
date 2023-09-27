@@ -40,6 +40,17 @@ HRESULT CGameObject::Render()
 	return S_OK;
 }
 
+CComponent* CGameObject::Get_Component(const wstring& _strComponentName)
+{
+	for (auto& iter : m_mapComponent)
+	{
+		if (iter.first == _strComponentName)
+			return iter.second;
+	}
+
+	return nullptr;
+}
+
 HRESULT CGameObject::Add_CloneComponent(_uint _iLevelIndex, const wstring& _strProtoTypeTag, const wstring& _strComponentTag, CComponent** _ppOut, void* pArg)
 {
 	// 이미 등록 되어있는 컴포넌트 그룹이라면 실패. 

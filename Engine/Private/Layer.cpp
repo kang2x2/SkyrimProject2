@@ -39,6 +39,18 @@ void CLayer::LateTick(_float _fTimeDelta)
 	}
 }
 
+CGameObject* CLayer::Find_CloneObject(const wstring& _strName)
+{
+	for (auto& iter : m_ltCloneObj)
+	{
+		// 매개로 받은 오브젝트의 이름을 찾았다면 해당 이름을 가진 오브젝트를 반환한다.
+		if (iter->Get_Name() == _strName)
+			return iter;
+	}
+
+	return nullptr;
+}
+
 CLayer* CLayer::Create()
 {
 	CLayer* pInstance = new CLayer();

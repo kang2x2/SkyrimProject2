@@ -10,8 +10,11 @@ CMesh::CMesh(const CMesh& rhs)
 {
 }
 
-HRESULT CMesh::Initialize_ProtoType(const aiMesh* _pAIMesh)
+HRESULT CMesh::Initialize_ProtoType(const aiMesh* _pAIMesh, _fmatrix _matPivot)
 {
+	/* 이 메시는 mMaterialIndex번째 머테리얼 정보를 이용한다. */
+	m_iMaterialIndex = _pAIMesh->mMaterialIndex;
+
 	m_iStride = sizeof(VTXMESH);
 	m_iNumVertices = _pAIMesh->mNumVertices;
 	m_iIndexStride = 4;
@@ -36,8 +39,15 @@ HRESULT CMesh::Initialize_ProtoType(const aiMesh* _pAIMesh)
 
 	for (size_t i = 0; i < m_iNumVertices; ++i)
 	{
+		/*  사전 준비를 위해 Pivot 행렬을 받아왔다. 
+			이 행렬을 통해 내가 원하는 위치, 회전, 스케일을 벡터에 곱해 적용해 줄 수 있다.*/
 		memcpy(&pVertices[i].vPosition, &_pAIMesh->mVertices[i], sizeof(_float3));
+		XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), _matPivot));
+		
+		/* 위치, 회전, 스케일이 변했으므로 normal도 똑같이 변환이 필요하다.*/
 		memcpy(&pVertices[i].vNormal, &_pAIMesh->mNormals[i], sizeof(_float3));
+		XMStoreFloat3(&pVertices[i].vNormal, XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), _matPivot));
+
 		memcpy(&pVertices[i].vTexcoord, &_pAIMesh->mTextureCoords[0][i], sizeof(_float2));
 		memcpy(&pVertices[i].vTangent, &_pAIMesh->mTangents[i], sizeof(_float3));
 	}
@@ -93,11 +103,11 @@ HRESULT CMesh::Initialize_Clone(void* _pArg)
 	return S_OK;
 }
 
-CMesh* CMesh::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const aiMesh* _pAIMesh)
+CMesh* CMesh::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const aiMesh* _pAIMesh, _fmatrix _matPivot)
 {
 	CMesh* pInstance = new CMesh(_pDevice, _pContext);
 
-	if (FAILED(pInstance->Initialize_ProtoType(_pAIMesh)))
+	if (FAILED(pInstance->Initialize_ProtoType(_pAIMesh, _matPivot)))
 	{
 		MSG_BOX("Fail Create : CMesh ProtoType");
 		Safe_Release(pInstance);
