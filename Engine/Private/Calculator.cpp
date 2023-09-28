@@ -16,7 +16,7 @@ CCalculator::CCalculator()
 
 }
 
-_float3 CCalculator::Return_WorldMousePos(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext,
+_float3 CCalculator::Return_TransPos(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext,
 	const POINT& _WinMousePos, CGameObject* _pTerrain, const _float3* _vec) const
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -71,18 +71,26 @@ _float3 CCalculator::Return_WorldMousePos(ID3D11Device* _pDevice, ID3D11DeviceCo
 		{
 			_ulong	dwIndex = i * GRIDWIDTH + j;
 
+			// 교차 지점을 저장할 _float3 변수.
+			_float3 vIntersectionPos;
+
 			// 오른쪽 위
 			dwVtxIdx[0] = dwIndex + GRIDWIDTH;
 			dwVtxIdx[1] = dwIndex + GRIDWIDTH + 1;
 			dwVtxIdx[2] = dwIndex + 1;
 
-			if (true == Intersects(XMLoadFloat3(&vRayPos), XMLoadFloat3(&vRayDir),
+			if (Intersects(XMLoadFloat3(&vRayPos), XMLoadFloat3(&vRayDir),
 				XMLoadFloat3(&_vec[dwVtxIdx[0]]),
 				XMLoadFloat3(&_vec[dwVtxIdx[1]]),
 				XMLoadFloat3(&_vec[dwVtxIdx[2]]),
 				fDist))
 			{
-				return _vec[dwVtxIdx[1]];
+				// 방향 벡터에 거리를 곱하고 시작 지점을 더하여 교차 지점 구한다.
+				vIntersectionPos.x = vRayPos.x + vRayDir.x * fDist;
+				vIntersectionPos.y = vRayPos.y + vRayDir.y * fDist;
+				vIntersectionPos.z = vRayPos.z + vRayDir.z * fDist;
+
+				return vIntersectionPos;
 			}
 
 			// 왼쪽 아래
@@ -90,20 +98,24 @@ _float3 CCalculator::Return_WorldMousePos(ID3D11Device* _pDevice, ID3D11DeviceCo
 			dwVtxIdx[1] = dwIndex + 1;
 			dwVtxIdx[2] = dwIndex;
 
-			if (true == Intersects(XMLoadFloat3(&vRayPos), XMLoadFloat3(&vRayDir),
+			if (Intersects(XMLoadFloat3(&vRayPos), XMLoadFloat3(&vRayDir),
 				XMLoadFloat3(&_vec[dwVtxIdx[0]]),
 				XMLoadFloat3(&_vec[dwVtxIdx[1]]),
 				XMLoadFloat3(&_vec[dwVtxIdx[2]]),
 				fDist))
 			{
-				return _vec[dwVtxIdx[2]];
+				// 방향 벡터에 거리를 곱하고 시작 지점을 더하여 교차 지점 구한다.
+				vIntersectionPos.x = vRayPos.x + vRayDir.x * fDist;
+				vIntersectionPos.y = vRayPos.y + vRayDir.y * fDist;
+				vIntersectionPos.z = vRayPos.z + vRayDir.z * fDist;
+
+				return vIntersectionPos;
 			}
 
 		}
 	}
 
 	return _float3();
-
 }
 
 void CCalculator::Free()

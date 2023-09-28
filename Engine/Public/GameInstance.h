@@ -34,7 +34,7 @@ public : /* For.Timer_Manager */
 	HRESULT Add_Timer(const wstring & strTimerTag);
 
 public: /* For.Calculator */
-	_float3 Return_WorldMousePos(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, class CGameObject* _pTerrain, const _float3 * _vec) const;
+	_float3 Return_TransPos(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, class CGameObject* _pTerrain, const _float3 * _vec) const;
 
 public: /* For.Level_Manager */
 	HRESULT Open_Level(_uint _iLevelIndex, class CLevel* _pLevel);

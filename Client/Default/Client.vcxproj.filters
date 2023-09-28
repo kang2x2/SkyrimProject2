@@ -79,6 +79,9 @@
     <Filter Include="02. GameObject\01. GamePlay\02. Player">
       <UniqueIdentifier>{0a8bb210-b1c9-4183-8de3-dc2cbb5cfa6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. SkyrimTerrain">
+      <UniqueIdentifier>{cd088392-98f1-43ef-a656-c7d86e2f3e04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -168,6 +171,9 @@
     <ClInclude Include="..\Public\Player.h">
       <Filter>02. GameObject\01. GamePlay\02. Player</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SkyrimTerrain.h">
+      <Filter>02. GameObject\01. GamePlay\03. SkyrimTerrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -249,6 +255,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player.cpp">
       <Filter>02. GameObject\01. GamePlay\02. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimTerrain.cpp">
+      <Filter>02. GameObject\01. GamePlay\03. SkyrimTerrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -69,13 +69,12 @@ void CImGui_Tool::LayOut_Mouse()
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
-
 		CTerrain_Grid* pTerrainGrid = dynamic_cast<CTerrain_Grid*>(pGameInstance->Find_CloneObject(LEVEL_TOOL, TEXT("Layer_Terrain"), TEXT("Tool_GridTerrain")));
 
 		CVIBuffer_Grid* pGridBuffer = dynamic_cast<CVIBuffer_Grid*>(pGameInstance->Find_ProtoType(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid")));
 		const _float3* pTerrainVtxPos = pGridBuffer->Get_VtxPos();
 
-		ResultPickPos = pGameInstance->Return_WorldMousePos(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos);
+		ResultPickPos = pGameInstance->Return_TransPos(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos);
 
 		Safe_Release(pGameInstance);
 	}
@@ -102,6 +101,32 @@ void CImGui_Tool::LayOut_SaveLoad()
 
 	ImGui::End();
 }
+void CImGui_Tool::LayOut_Object_CreateDelete()
+{
+	ImGui::Begin("Create/Delete");
+
+	if (ImGui::Button("Create"))
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+
+
+		Safe_Release(pGameInstance);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Delete"))
+	{
+		if (m_pObject != nullptr)
+		{
+			Safe_Release(m_pObject);
+			m_pObject = nullptr;
+		}
+	}
+
+	ImGui::End();
+}
+
 void CImGui_Tool::LayOut_Object()
 {
 	ImGui::Begin("FBX Object LayOut");
@@ -216,8 +241,10 @@ void CImGui_Tool::LayOut_Object_FBX()
 				}
 			}
 			ImGui::EndListBox();
-		}
+		}		
 	}
+
+	LayOut_Object_CreateDelete();
 }
 void CImGui_Tool::LayOut_Object_DDS()
 {
@@ -398,6 +425,9 @@ void CImGui_Tool::File_Save()
 	}
 
 	SetCurrentDirectory(originalPath);
+}
+void CImGui_Tool::Create_Object()
+{
 }
 void CImGui_Tool::File_Load()
 {

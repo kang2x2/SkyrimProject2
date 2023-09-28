@@ -150,12 +150,12 @@ HRESULT CGameInstance::Add_Timer(const wstring& strTimerTag)
 }
 
 // Calculator
-_float3 CGameInstance::Return_WorldMousePos(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, class CGameObject* _pTerrain, const _float3* _vec) const
+_float3 CGameInstance::Return_TransPos(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, class CGameObject* _pTerrain, const _float3* _vec) const
 {
 	if (m_pCalculator == nullptr)
 		return _float3();
 
-	return m_pCalculator->Return_WorldMousePos(_pDevice, _pContext, _WinMousePos, _pTerrain, _vec);
+	return m_pCalculator->Return_TransPos(_pDevice, _pContext, _WinMousePos, _pTerrain, _vec);
 }
 
 /* Level Manager */

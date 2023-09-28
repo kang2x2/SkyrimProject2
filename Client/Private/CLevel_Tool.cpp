@@ -65,7 +65,7 @@ HRESULT CLevel_Tool::Ready_Layer_Camera(const wstring& _strLayerTag)
 	FreeCameraDesc.fAspect = g_iWinSizeX / (_float)g_iWinSizeY;
 	FreeCameraDesc.fNear = 0.2f;
 	FreeCameraDesc.fFar = 600.f;
-	FreeCameraDesc.fSpeedPerSec = 40.f;
+	FreeCameraDesc.fSpeedPerSec = 15.f;
 	FreeCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
 
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, _strLayerTag, TEXT("ProtoType_GameObject_ToolCamera"), &FreeCameraDesc)))
