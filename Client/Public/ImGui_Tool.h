@@ -8,11 +8,14 @@ BEGIN(Client)
 class CImGui_Tool final : public CImGui_Base
 {
 private:
-	typedef struct tagFileDesc
+	typedef struct tagAfterFileDesc
 	{
 		const char* m_strFileName;
+		const char* m_strFBXPath;
+		wstring m_strObjTag;
+		wstring m_strComTag;
 		_bool	m_bCheck = false;
-	}TOOL_FILEDESC;
+	}TOOL_AFTER_FILEDESC;
 
 private:
 	CImGui_Tool();
@@ -62,8 +65,8 @@ public:
 
 private:
 	// 장치
-	ID3D11Device*			m_pDevice = nullptr;
-	ID3D11DeviceContext*	m_pContext = nullptr;
+	ID3D11Device* m_pDevice = nullptr;
+	ID3D11DeviceContext* m_pContext = nullptr;
 
 	// 선택된 오브젝트
 	class CGameObject* m_pObject = nullptr;
@@ -75,7 +78,7 @@ private:
 
 	// 파일 검색 불리언
 	_bool m_bFindFolder = true;
-	_bool m_bFindFBX	= true;
+	_bool m_bFindFBX = true;
 
 	// 파일 확장자 불리언
 	_bool showFBXContent = true;
@@ -83,11 +86,12 @@ private:
 	_bool showWICContent = false;
 
 	// 파일 배열
-	vector<wstring> m_vecFolderList; // 검색된 폴더 이름 저장.
-	vector<const char*> m_vecChangeFolderList; // 검색된 폴더 이름 const char* 형변환.
+	vector<wstring> m_vecBeforeFolderList; // 검색된 폴더 이름 저장.
+	vector<const char*> m_vecAfterFolderList; // 검색된 폴더 이름 const char* 형변환.
 
-	vector<wstring> m_vecFileList;
-	vector<TOOL_FILEDESC> m_vecChangeFileList;
+	vector<wstring> m_vecFilePathList; // 파일 경로 저장.
+	vector<wstring> m_vecBeforeFileList; // 변환 전 파일 이름 리스트
+	vector<TOOL_AFTER_FILEDESC> m_vecAfterFileList; // 변환 후 파일 정보 리스트
 
 	// 현재 list에서 선택된 파일의 경로 저장.
 
@@ -98,4 +102,3 @@ public:
 };
 
 END
-

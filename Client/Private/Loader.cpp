@@ -89,28 +89,29 @@ HRESULT CLoader::Loading_For_Level_Tool()
 	/* Texture */
 	m_strLoadingText = TEXT("Loading Texture.");
 
-	/* Mesh */
-	m_strLoadingText = TEXT("Loading Mesh.");
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid"),
-		CVIBuffer_Grid::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
 	/* Shader */
 	m_strLoadingText = TEXT("Loading Shader.");
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Shader_VtxPosCol"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxPosCol.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
 		return E_FAIL;
 
-	/* GameObject(원본) */
+	/* Mesh*/
+	m_strLoadingText = TEXT("Loading Mesh.");
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid"),
+		CVIBuffer_Grid::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
-		// Camera
+	/* GameObject */
+
+	// Camera
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_ToolCamera"),
 		CTool_Camera::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
+	// Grid Terrain
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_GridTerrain"),
 		CTerrain_Grid::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
 
 	/* 로딩 끝 */
 	Safe_Release(pGameInstance);
