@@ -12,8 +12,11 @@ private:
 	virtual ~CCalculator() = default;
 
 public:
-	_float3 Return_TransPos(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext,
+	// 오버 라이딩
+	_float3 Picking_Grid(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext,
 		const POINT& _WinMousePos, class CGameObject* _pTerrain, const _float3* _vec) const;
+	_float3 Picking_Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext,
+		const POINT& _WinMousePos) const;
 
 private:
 

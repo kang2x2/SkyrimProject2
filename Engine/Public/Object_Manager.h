@@ -15,6 +15,7 @@ public:
 	HRESULT Reserve_Manager(_uint _iLevelCount);
 	HRESULT Add_ProtoObject(const wstring& _strProtoTypeTag, class CGameObject* _pGameObject);
 	HRESULT Add_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strProtoTypeTag, void* pArg);
+	HRESULT Add_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strProtoTypeTag, const wstring& _strModelComTag, void* pArg);
 	void Tick(_float _fTimeDelta);
 	void LateTick(_float _fTimeDelta);
 	void Clear(_uint _iLevelIndex);

@@ -22,6 +22,7 @@ public:
 	virtual void AfterRender();
 
 public:
+	HRESULT Ready_Light();
 	HRESULT Ready_Layer_Camera(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Terrain(const wstring& _strLayerTag);
 

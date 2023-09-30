@@ -42,6 +42,9 @@ private:
 	HRESULT					Loading_For_Level_Logo();
 	HRESULT					Loading_For_Level_GamePlay();
 
+	HRESULT					Set_ProtoType_Mesh(LEVELID _eLevel);
+	HRESULT					Set_ProtoType_Object();
+
 public:
 	static CLoader* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, LEVELID eNextLevel);
 	virtual void Free() override;

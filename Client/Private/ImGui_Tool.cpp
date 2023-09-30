@@ -10,6 +10,7 @@
 #include "ImGui_Tool.h"
 
 #include "GameInstance.h"
+#include "Model.h"
 
 #include "VIBuffer_Grid.h"
 #include "Terrain_Grid.h"
@@ -74,7 +75,7 @@ void CImGui_Tool::LayOut_Mouse()
 		CVIBuffer_Grid* pGridBuffer = dynamic_cast<CVIBuffer_Grid*>(pGameInstance->Find_ProtoType(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid")));
 		const _float3* pTerrainVtxPos = pGridBuffer->Get_VtxPos();
 
-		ResultPickPos = pGameInstance->Return_TransPos(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos);
+		ResultPickPos = pGameInstance->Picking_Grid(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos);
 
 		Safe_Release(pGameInstance);
 	}
@@ -107,12 +108,7 @@ void CImGui_Tool::LayOut_Object_CreateDelete()
 
 	if (ImGui::Button("Create"))
 	{
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
-
-
-
-		Safe_Release(pGameInstance);
+		Create_Object();
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Delete"))
@@ -240,6 +236,8 @@ void CImGui_Tool::LayOut_Object_FBX()
 
 					// 현재 선택한 항목만 true로 설정.
 					m_vecAfterFileList[i].m_bCheck = true;
+					// 현재 선택된 파일 변수에 저장.
+					m_pCurFile = &m_vecAfterFileList[i];
 				}
 			}
 			ImGui::EndListBox();
@@ -385,7 +383,7 @@ void CImGui_Tool::ChangeType_File()
 		tempFile.m_bCheck = false;
 
 		// 오브젝트 태그 문자열 자르기
-		tempFile.m_strObjTag = L"ProtoType_Object_" + m_vecBeforeFileList[i];
+		tempFile.m_strObjTag = L"ProtoType_GameObject_" + m_vecBeforeFileList[i];
 		wstring wstr = tempFile.m_strObjTag;
 		size_t lastDotPos = wstr.rfind(L'.'); // . 저장
 		if (lastDotPos != wstring::npos) { // .이전까지 자른다.
@@ -460,8 +458,38 @@ void CImGui_Tool::File_Save()
 
 	SetCurrentDirectory(originalPath);
 }
-void CImGui_Tool::Create_Object()
+HRESULT CImGui_Tool::Create_Object()
 {
+	_float3 fCreatePos;
+
+	// 여기서 원본까지 세팅하려 했으나 로더에서 그냥 세팅해야 할 듯.
+	if (m_pCurFile != nullptr)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		// 가운데 위치 변환
+		fCreatePos = pGameInstance->Picking_Create(m_pDevice, m_pContext,
+			{g_iWinSizeX / 2, g_iWinSizeY / 2});
+
+		// 행렬 세팅
+		_matrix matInitialize = XMMatrixIdentity();
+		matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixTranslation(fCreatePos.x, fCreatePos.y, fCreatePos.z);
+
+		// clone object
+		if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, TEXT("Layer_SkyrimTerrain"),
+			m_pCurFile->m_strObjTag, m_pCurFile->m_strComTag)))
+			return E_FAIL;
+
+		Safe_Release(pGameInstance);
+	}
+	ImGui::Begin("Create PickPos");
+
+	ImGui::Text("%f %f %f", fCreatePos.x, fCreatePos.y, fCreatePos.z);
+
+	ImGui::End();
+
+	return S_OK;
 }
 void CImGui_Tool::File_Load()
 {

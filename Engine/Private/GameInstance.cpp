@@ -150,12 +150,20 @@ HRESULT CGameInstance::Add_Timer(const wstring& strTimerTag)
 }
 
 // Calculator
-_float3 CGameInstance::Return_TransPos(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, class CGameObject* _pTerrain, const _float3* _vec) const
+_float3 CGameInstance::Picking_Grid(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, class CGameObject* _pTerrain, const _float3* _vec) const
 {
 	if (m_pCalculator == nullptr)
 		return _float3();
 
-	return m_pCalculator->Return_TransPos(_pDevice, _pContext, _WinMousePos, _pTerrain, _vec);
+	return m_pCalculator->Picking_Grid(_pDevice, _pContext, _WinMousePos, _pTerrain, _vec);
+}
+
+_float3 CGameInstance::Picking_Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos) const
+{
+	if (m_pCalculator == nullptr)
+		return _float3();
+
+	return m_pCalculator->Picking_Create(_pDevice, _pContext, _WinMousePos);
 }
 
 /* Level Manager */
@@ -182,6 +190,15 @@ HRESULT CGameInstance::Add_CloneObject(_uint _iLevelIndex, const wstring& _strLa
 		return E_FAIL;
 
 	return m_pObject_Manager->Add_CloneObject(_iLevelIndex, _strLayerTag, _strProtoTypeTag, pArg);
+}
+
+HRESULT CGameInstance::Add_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strProtoTypeTag, const wstring& _strModelComTag, void* pArg)
+{
+	if (m_pObject_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pObject_Manager->Add_CloneObject(_iLevelIndex, _strLayerTag, _strProtoTypeTag, _strModelComTag, pArg);
+
 }
 
 CGameObject* CGameInstance::Find_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName)

@@ -27,6 +27,11 @@ HRESULT CGameObject::Initialize_Clone(void* pArg)
 	return S_OK;
 }
 
+HRESULT CGameObject::Initialize_Clone(const wstring& _strModelComTag)
+{
+	return S_OK;
+}
+
 void CGameObject::Tick(_float _fTimeDelta)
 {
 }
@@ -85,6 +90,11 @@ CComponent* CGameObject::Find_ProtoTypeComponent(const wstring& _strProtoTypeTag
 		return nullptr;
 
 	return iter->second;
+}
+
+CGameObject* CGameObject::Clone(const wstring& _strModelComTag)
+{
+	return nullptr;
 }
 
 void CGameObject::Free()

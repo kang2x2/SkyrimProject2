@@ -7,7 +7,7 @@ BEGIN(Client)
 
 class CImGui_Tool final : public CImGui_Base
 {
-private:
+public:
 	typedef struct tagAfterFileDesc
 	{
 		const char* m_strFileName;
@@ -53,7 +53,7 @@ private:
 	void    ChangeType_File();
 
 	// Create Object
-	void	Create_Object();
+	HRESULT	Create_Object();
 
 	// Save / Load
 	void    File_Save();
@@ -94,6 +94,7 @@ private:
 	vector<TOOL_AFTER_FILEDESC> m_vecAfterFileList; // 변환 후 파일 정보 리스트
 
 	// 현재 list에서 선택된 파일의 경로 저장.
+	TOOL_AFTER_FILEDESC* m_pCurFile;
 
 public:
 	static CImGui_Tool* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

@@ -16,7 +16,7 @@ CCalculator::CCalculator()
 
 }
 
-_float3 CCalculator::Return_TransPos(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext,
+_float3 CCalculator::Picking_Grid(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext,
 	const POINT& _WinMousePos, CGameObject* _pTerrain, const _float3* _vec) const
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -116,6 +116,38 @@ _float3 CCalculator::Return_TransPos(ID3D11Device* _pDevice, ID3D11DeviceContext
 	}
 
 	return _float3();
+}
+
+_float3 CCalculator::Picking_Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos) const
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_uint iVpNum = 1;
+	CD3D11_VIEWPORT vp;
+
+	_pContext->RSGetViewports(&iVpNum, &vp);
+
+	_float4 vCamPosition = pGameInstance->Get_CamPosition_Float4();
+	_float4x4 matProjInverse = pGameInstance->Get_Transform_float4x4_Inverse(CPipeLine::D3DTS_PROJ);
+	_float4x4 matViewInverse = pGameInstance->Get_Transform_float4x4_Inverse(CPipeLine::D3DTS_VIEW);
+
+	_float3 vMousePos = { 0.f, 0.f, 0.f };
+
+	// ºäÆ÷Æ® -> Åõ¿µ
+	vMousePos.x = _WinMousePos.x / (vp.Width * 0.5f) - 1.f;
+	vMousePos.y = _WinMousePos.y / -(vp.Height * 0.5f) + 1.f;
+	vMousePos.z = 0.f;
+
+	// Åõ¿µ -> ºä ½ºÆäÀÌ½º
+	XMStoreFloat3(&vMousePos, XMVector3TransformCoord(XMLoadFloat3(&vMousePos), XMLoadFloat4x4(&matProjInverse)));
+
+	// ºä -> ¿ùµå
+	XMStoreFloat3(&vMousePos, XMVector3TransformCoord(XMLoadFloat3(&vMousePos), XMLoadFloat4x4(&matViewInverse)));
+
+	Safe_Release(pGameInstance);
+	
+	return vMousePos;
 }
 
 void CCalculator::Free()

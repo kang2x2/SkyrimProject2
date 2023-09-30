@@ -66,6 +66,41 @@ HRESULT CObject_Manager::Add_CloneObject(_uint _iLevelIndex, const wstring& _str
 	return S_OK;
 }
 
+HRESULT CObject_Manager::Add_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strProtoTypeTag, const wstring& _strModelComTag, void* pArg)
+{
+	// 복제하려는 원본을 찾는다.
+	CGameObject* pProtoTypeObject = Find_ProtoObject(_strProtoTypeTag);
+	if (pProtoTypeObject == nullptr) // 복제하려는 원본이 없으면 실패.
+		return E_FAIL;
+
+	// 찾은 원본을 복제하여 사본 생성.
+	CGameObject* pCloneObject = pProtoTypeObject->Clone(_strModelComTag);
+	if (pCloneObject == nullptr) // 복사에 실패 했을 시
+		return E_FAIL;
+
+	CLayer* pLayer = Find_Layer(_iLevelIndex, _strLayerTag);
+
+	// 사본을 추가하려는 레이어가 존재하지 않음.(새로 추가)
+	if (pLayer == nullptr)
+	{
+		// 레이어 새로 생성
+		pLayer = CLayer::Create();
+
+		// 레이어에 오브젝트 추가
+		pLayer->Add_CloneObject(pCloneObject);
+
+		// 레이어를 새로운 레이어로 해당 레벨의 map에 추가.
+		m_mapLayer[_iLevelIndex].emplace(_strLayerTag, pLayer);
+	}
+	else
+	{
+		pLayer->Add_CloneObject(pCloneObject);
+	}
+
+	return S_OK;
+
+}
+
 void CObject_Manager::Tick(_float _fTimeDelta)
 {
 	for (size_t i = 0; i < m_iLevelNum; ++i)
