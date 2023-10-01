@@ -27,7 +27,7 @@ public:
 
 private:
 	// Mouse
-	void	LayOut_Mouse();
+	HRESULT	LayOut_Mouse();
 	// main
 	void	LayOut_Object();
 	// Save / Load
@@ -68,9 +68,6 @@ private:
 	ID3D11Device* m_pDevice = nullptr;
 	ID3D11DeviceContext* m_pContext = nullptr;
 
-	// 선택된 오브젝트
-	class CGameObject* m_pObject = nullptr;
-
 	// mouse
 	_float3 ResultPickPos = _float3();
 
@@ -93,8 +90,11 @@ private:
 	vector<wstring> m_vecBeforeFileList; // 변환 전 파일 이름 리스트
 	vector<TOOL_AFTER_FILEDESC> m_vecAfterFileList; // 변환 후 파일 정보 리스트
 
-	// 현재 list에서 선택된 파일의 경로 저장.
-	TOOL_AFTER_FILEDESC* m_pCurFile;
+	// 현재 list에서 선택된 파일 변수에 저장.
+	TOOL_AFTER_FILEDESC* m_pCurFile = nullptr;
+	_bool				 m_bReadyCreateObj = false;
+	// 선택된 오브젝트
+	class CGameObject*   m_pObject = nullptr;
 
 public:
 	static CImGui_Tool* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

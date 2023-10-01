@@ -55,7 +55,7 @@ void CImGui_Tool::Frame()
 	}
 }
 
-void CImGui_Tool::LayOut_Mouse()
+HRESULT CImGui_Tool::LayOut_Mouse()
 {
 	POINT MousePos = {};
 	GetCursorPos(&MousePos);
@@ -77,12 +77,23 @@ void CImGui_Tool::LayOut_Mouse()
 
 		ResultPickPos = pGameInstance->Picking_Grid(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos);
 
+		if (m_bReadyCreateObj)
+			Create_Object();
+
 		Safe_Release(pGameInstance);
+	}
+
+	if (GetKeyState(MK_RBUTTON) & 0x8000)
+	{
+		if (m_bReadyCreateObj)
+			m_bReadyCreateObj = false;
 	}
 
 	ImGui::Text("Pick Pos : X(%f) Y(%f) Z(%f)", ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
 
 	ImGui::End();
+
+	return S_OK;
 }
 void CImGui_Tool::LayOut_SaveLoad()
 {
@@ -108,7 +119,7 @@ void CImGui_Tool::LayOut_Object_CreateDelete()
 
 	if (ImGui::Button("Create"))
 	{
-		Create_Object();
+		m_bReadyCreateObj = true;
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Delete"))
@@ -458,39 +469,6 @@ void CImGui_Tool::File_Save()
 
 	SetCurrentDirectory(originalPath);
 }
-HRESULT CImGui_Tool::Create_Object()
-{
-	_float3 fCreatePos;
-
-	// 여기서 원본까지 세팅하려 했으나 로더에서 그냥 세팅해야 할 듯.
-	if (m_pCurFile != nullptr)
-	{
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
-
-		// 가운데 위치 변환
-		fCreatePos = pGameInstance->Picking_Create(m_pDevice, m_pContext,
-			{g_iWinSizeX / 2, g_iWinSizeY / 2});
-
-		// 행렬 세팅
-		_matrix matInitialize = XMMatrixIdentity();
-		matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixTranslation(fCreatePos.x, fCreatePos.y, fCreatePos.z);
-
-		// clone object
-		if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, TEXT("Layer_SkyrimTerrain"),
-			m_pCurFile->m_strObjTag, m_pCurFile->m_strComTag)))
-			return E_FAIL;
-
-		Safe_Release(pGameInstance);
-	}
-	ImGui::Begin("Create PickPos");
-
-	ImGui::Text("%f %f %f", fCreatePos.x, fCreatePos.y, fCreatePos.z);
-
-	ImGui::End();
-
-	return S_OK;
-}
 void CImGui_Tool::File_Load()
 {
 	// 작업을 하고 나면 작업한 경로가 최종 저장 되어 추후 작업 시 문제가 됨.
@@ -526,6 +504,24 @@ void CImGui_Tool::File_Load()
 	}
 
 	SetCurrentDirectory(originalPath);
+}
+HRESULT CImGui_Tool::Create_Object()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	// 행렬 세팅
+	_matrix matInitialize = XMMatrixIdentity();
+	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixTranslation(ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
+
+	// clone object
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, TEXT("Layer_SkyrimTerrain"),
+		m_pCurFile->m_strObjTag, m_pCurFile->m_strComTag, &matInitialize)))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
 }
 
 CImGui_Tool* CImGui_Tool::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)

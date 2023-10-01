@@ -142,12 +142,28 @@ _float3 CCalculator::Picking_Create(ID3D11Device* _pDevice, ID3D11DeviceContext*
 	// 투영 -> 뷰 스페이스
 	XMStoreFloat3(&vMousePos, XMVector3TransformCoord(XMLoadFloat3(&vMousePos), XMLoadFloat4x4(&matProjInverse)));
 
+	// 광선 구하기
+	_float3 vRayPos = { vCamPosition.x, vCamPosition.y, vCamPosition.z };
+	_float3 vRayDir;
+	XMStoreFloat3(&vRayDir, XMLoadFloat3(&vMousePos) - XMLoadFloat3(&vRayPos));
+
 	// 뷰 -> 월드
-	XMStoreFloat3(&vMousePos, XMVector3TransformCoord(XMLoadFloat3(&vMousePos), XMLoadFloat4x4(&matViewInverse)));
+	XMStoreFloat3(&vRayPos, XMVector3TransformCoord(XMLoadFloat3(&vRayPos), XMLoadFloat4x4(&matViewInverse)));
+	XMStoreFloat3(&vRayDir, XMVector3TransformNormal(XMLoadFloat3(&vRayDir), XMLoadFloat4x4(&matViewInverse)));
+	XMStoreFloat3(&vRayDir, XMVector3Normalize(XMLoadFloat3(&vRayDir)));
+
+	// 월드 좌표의 y값이 0이 되는 지점을 찾기 위한 거리 계산
+	_float fDist = (0.0f - vRayPos.y) / vRayDir.y;
+
+	// 거리를 사용하여 해당 지점을 계산
+	_float3 vIntersectionPoint;
+	vIntersectionPoint.x = vRayPos.x + (vRayDir.x * fDist);
+	vIntersectionPoint.y = vRayPos.y + (vRayDir.y * fDist);
+	vIntersectionPoint.z = vRayPos.z + (vRayDir.z * fDist);
 
 	Safe_Release(pGameInstance);
-	
-	return vMousePos;
+
+	return vIntersectionPoint; 
 }
 
 void CCalculator::Free()

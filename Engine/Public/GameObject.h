@@ -15,7 +15,7 @@ protected:
 public:
 	virtual HRESULT Initialize_ProtoType(); // 원본
 	virtual HRESULT Initialize_Clone(void* pArg); // 사본
-	virtual HRESULT Initialize_Clone(const wstring & _strModelComTag); // 사본
+	virtual HRESULT Initialize_Clone(const wstring & _strModelComTag, void* pArg); // 사본
 	virtual void	Tick(_float _fTimeDelta);
 	virtual void	LateTick(_float _fTimeDelta);
 	virtual HRESULT Render();
@@ -46,7 +46,7 @@ protected:
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
-	virtual CGameObject* Clone(const wstring& _strModelComTag);
+	virtual CGameObject* Clone(const wstring& _strModelComTag, void* _pArg);
 	virtual void Free() override;
 };
 

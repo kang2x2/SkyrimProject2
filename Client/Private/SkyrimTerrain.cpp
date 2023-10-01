@@ -23,12 +23,18 @@ HRESULT CSkyrimTerrain::Initialize_Clone(void* pArg)
 	return S_OK;
 }
 
-HRESULT CSkyrimTerrain::Initialize_Clone(const wstring& _strModelComTag)
+HRESULT CSkyrimTerrain::Initialize_Clone(const wstring& _strModelComTag, void* pArg)
 {
+	_matrix* pMatPivot = (_matrix*)pArg;
+
 	m_strModelComTag = _strModelComTag;
 
-	if (FAILED(Ready_Component(m_strModelComTag)))
+	if (FAILED(Ready_Component()))
 		return E_FAIL;
+
+	_vector vPos = pMatPivot->r[3];
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
 	m_strName = TEXT("SkyrimTerrain");
 
@@ -65,9 +71,9 @@ HRESULT CSkyrimTerrain::Render()
 	return S_OK;
 }
 
-HRESULT CSkyrimTerrain::Ready_Component(const wstring& _strProtoModelComTag)
+HRESULT CSkyrimTerrain::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(LEVEL_TOOL, _strProtoModelComTag,
+	if (FAILED(__super::Add_CloneComponent(LEVEL_TOOL, m_strModelComTag,
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -166,11 +172,11 @@ CGameObject* CSkyrimTerrain::Clone(void* _pArg)
 	return pInstance;
 }
 
-CGameObject* CSkyrimTerrain::Clone(const wstring& _strModelComTag)
+CGameObject* CSkyrimTerrain::Clone(const wstring& _strModelComTag, void* _pArg)
 {
 	CSkyrimTerrain* pInstance = new CSkyrimTerrain(*this);
 
-	if (FAILED(pInstance->Initialize_Clone(_strModelComTag)))
+	if (FAILED(pInstance->Initialize_Clone(_strModelComTag, _pArg)))
 	{
 		MSG_BOX("Fail Clone : CSkyrimTerrain Clone");
 		Safe_Release(pInstance);

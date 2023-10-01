@@ -27,7 +27,7 @@ HRESULT CGameObject::Initialize_Clone(void* pArg)
 	return S_OK;
 }
 
-HRESULT CGameObject::Initialize_Clone(const wstring& _strModelComTag)
+HRESULT CGameObject::Initialize_Clone(const wstring& _strModelComTag, void* pArg)
 {
 	return S_OK;
 }
@@ -92,7 +92,7 @@ CComponent* CGameObject::Find_ProtoTypeComponent(const wstring& _strProtoTypeTag
 	return iter->second;
 }
 
-CGameObject* CGameObject::Clone(const wstring& _strModelComTag)
+CGameObject* CGameObject::Clone(const wstring& _strModelComTag, void* _pArg)
 {
 	return nullptr;
 }

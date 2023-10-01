@@ -74,7 +74,7 @@ HRESULT CObject_Manager::Add_CloneObject(_uint _iLevelIndex, const wstring& _str
 		return E_FAIL;
 
 	// 찾은 원본을 복제하여 사본 생성.
-	CGameObject* pCloneObject = pProtoTypeObject->Clone(_strModelComTag);
+	CGameObject* pCloneObject = pProtoTypeObject->Clone(_strModelComTag, pArg);
 	if (pCloneObject == nullptr) // 복사에 실패 했을 시
 		return E_FAIL;
 
