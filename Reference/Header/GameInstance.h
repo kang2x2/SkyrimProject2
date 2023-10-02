@@ -36,6 +36,7 @@ public : /* For.Timer_Manager */
 public: /* For.Calculator */
 	_float3 Picking_Grid(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, class CGameObject* _pTerrain, const _float3 * _vec) const;
 	_float3 Picking_Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos) const;
+	CGameObject* Picking_Object(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, _uint _iLevel);
 
 public: /* For.Level_Manager */
 	HRESULT Open_Level(_uint _iLevelIndex, class CLevel* _pLevel);
@@ -45,7 +46,7 @@ public: /* For.Object_Manager */
 	HRESULT Add_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strProtoTypeTag, void* pArg = nullptr);
 	HRESULT Add_CloneObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strProtoTypeTag, const wstring & _strModelComTag, void* pArg = nullptr);
 	class CGameObject* Find_CloneObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strName);
-
+	map<const wstring, class CLayer*>* Get_CloneObjectMap(_uint _iLevel);
 
 public: /* For.Component_Manager */
 	HRESULT Add_ProtoType_Component(_uint _iLevelIndex, const wstring & _strProtoTypeTag, class CComponent* _pProtoTypeComponent);

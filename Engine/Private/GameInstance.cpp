@@ -166,6 +166,14 @@ _float3 CGameInstance::Picking_Create(ID3D11Device* _pDevice, ID3D11DeviceContex
 	return m_pCalculator->Picking_Create(_pDevice, _pContext, _WinMousePos);
 }
 
+CGameObject* CGameInstance::Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, _uint _iLevel)
+{
+	if (m_pCalculator == nullptr)
+		return nullptr;
+
+	return m_pCalculator->Picking_Object(_pDevice, _pContext, _WinMousePos, _iLevel);
+}
+
 /* Level Manager */
 HRESULT CGameInstance::Open_Level(_uint _iLevelIndex, CLevel* _pLevel)
 {
@@ -207,6 +215,14 @@ CGameObject* CGameInstance::Find_CloneObject(_uint _iLevelIndex, const wstring& 
 		return nullptr;
 
 	return m_pObject_Manager->Find_CloneObject(_iLevelIndex, _strLayerTag, _strName);
+}
+
+map<const wstring, class CLayer*>* CGameInstance::Get_CloneObjectMap(_uint _iLevel)
+{
+	if (m_pObject_Manager == nullptr)
+		return nullptr;
+
+	return m_pObject_Manager->Get_CloneObjectMap(_iLevel);
 }
 
 /* Component Manager */

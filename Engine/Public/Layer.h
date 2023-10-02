@@ -18,6 +18,7 @@ public:
 
 public:
 	CGameObject* Find_CloneObject(const wstring& _strName);
+	list<class CGameObject*> Get_ObjList() { return m_ltCloneObj; }
 
 private:
 	list<class CGameObject*> m_ltCloneObj;

@@ -77,16 +77,31 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 
 		ResultPickPos = pGameInstance->Picking_Grid(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos);
 
-		if (m_bReadyCreateObj)
+		if (m_bCreateMode)
 			Create_Object();
-
+		if (m_bDeleteMode)
+			Delete_Object();
+		if (m_bSelectMode)
+		{
+			m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
+		}
+			
 		Safe_Release(pGameInstance);
 	}
 
 	if (GetKeyState(MK_RBUTTON) & 0x8000)
 	{
-		if (m_bReadyCreateObj)
-			m_bReadyCreateObj = false;
+		if (m_bCreateMode)
+			m_bCreateMode = false;
+
+		if (m_bDeleteMode)
+			m_bDeleteMode = false;
+
+		if (m_bSelectMode)
+			m_bSelectMode = false;
+
+		if (m_pSelectObject != nullptr)
+			m_pSelectObject = nullptr;
 	}
 
 	ImGui::Text("Pick Pos : X(%f) Y(%f) Z(%f)", ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
@@ -113,22 +128,27 @@ void CImGui_Tool::LayOut_SaveLoad()
 
 	ImGui::End();
 }
-void CImGui_Tool::LayOut_Object_CreateDelete()
+void CImGui_Tool::LayOut_Object_PickMode()
 {
-	ImGui::Begin("Create/Delete");
+	ImGui::Begin("Pick Mode");
 
 	if (ImGui::Button("Create"))
 	{
-		m_bReadyCreateObj = true;
+		m_bCreateMode = true;
+		m_bDeleteMode = false;
+		m_bSelectMode = false;
 	}
-	ImGui::SameLine();
 	if (ImGui::Button("Delete"))
 	{
-		if (m_pObject != nullptr)
-		{
-			Safe_Release(m_pObject);
-			m_pObject = nullptr;
-		}
+		m_bCreateMode = false;
+		m_bDeleteMode = true;
+		m_bSelectMode = false;
+	}
+	if (ImGui::Button("Select"))
+	{
+		m_bCreateMode = false;
+		m_bDeleteMode = false;
+		m_bSelectMode = true;
 	}
 
 	ImGui::End();
@@ -182,7 +202,15 @@ void CImGui_Tool::LayOut_Object_FBX()
 {
 	if (showFBXContent)
 	{
-		ImGui::Text("FBX");
+		ImGui::Text("Transform");
+
+		if (m_pSelectObject != nullptr)
+		{
+			CTransform* pTransform = dynamic_cast<CTransform*>(m_pSelectObject->Get_Component(TEXT("Com_Transform")));
+			_float3 objPos;
+			XMStoreFloat3(&objPos, pTransform->Get_State(CTransform::STATE_POSITION));
+			ImGui::Text("%f %f %f", objPos.x, objPos.y, objPos.z);
+		}
 
 		ImGui::Image(nullptr, ImVec2(150, 150));
 
@@ -255,7 +283,7 @@ void CImGui_Tool::LayOut_Object_FBX()
 		}
 	}
 
-	LayOut_Object_CreateDelete();
+	LayOut_Object_PickMode();
 }
 void CImGui_Tool::LayOut_Object_DDS()
 {
@@ -520,6 +548,16 @@ HRESULT CImGui_Tool::Create_Object()
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+HRESULT CImGui_Tool::Delete_Object()
+{
+	if (m_pSelectObject != nullptr)
+	{
+		Safe_Release(m_pSelectObject);
+		m_pSelectObject = nullptr;
+	}
 
 	return S_OK;
 }

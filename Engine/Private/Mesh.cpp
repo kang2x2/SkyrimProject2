@@ -37,6 +37,8 @@ HRESULT CMesh::Initialize_ProtoType(const aiMesh* _pAIMesh, _fmatrix _matPivot)
 	VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
 	ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
 
+	m_pPos = new _float3[m_iNumVertices];
+
 	for (size_t i = 0; i < m_iNumVertices; ++i)
 	{
 		/*  사전 준비를 위해 Pivot 행렬을 받아왔다. 
@@ -44,6 +46,9 @@ HRESULT CMesh::Initialize_ProtoType(const aiMesh* _pAIMesh, _fmatrix _matPivot)
 		memcpy(&pVertices[i].vPosition, &_pAIMesh->mVertices[i], sizeof(_float3));
 		XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), _matPivot));
 		
+		// 정점 정보 담기
+		m_pPos[i] = pVertices[i].vPosition;
+
 		/* 위치, 회전, 스케일이 변했으므로 normal도 똑같이 변환이 필요하다.*/
 		memcpy(&pVertices[i].vNormal, &_pAIMesh->mNormals[i], sizeof(_float3));
 		XMStoreFloat3(&pVertices[i].vNormal, XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), _matPivot));
@@ -83,6 +88,10 @@ HRESULT CMesh::Initialize_ProtoType(const aiMesh* _pAIMesh, _fmatrix _matPivot)
 		pIndices[iNumIndices++] = _pAIMesh->mFaces[i].mIndices[0];
 		pIndices[iNumIndices++] = _pAIMesh->mFaces[i].mIndices[1];
 		pIndices[iNumIndices++] = _pAIMesh->mFaces[i].mIndices[2];
+
+		m_vecIndex.push_back(_pAIMesh->mFaces[i].mIndices[0]);
+		m_vecIndex.push_back(_pAIMesh->mFaces[i].mIndices[1]);
+		m_vecIndex.push_back(_pAIMesh->mFaces[i].mIndices[2]);
 	}
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);
@@ -132,4 +141,7 @@ CComponent* CMesh::Clone(void* _pArg)
 void CMesh::Free()
 {
 	__super::Free();
+
+	Safe_Delete_Array(m_pPos);
+	m_vecIndex.clear();
 }

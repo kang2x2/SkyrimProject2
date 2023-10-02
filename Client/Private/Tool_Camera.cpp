@@ -27,6 +27,7 @@ HRESULT CTool_Camera::Initialize_Clone(void* pArg)
 	if (FAILED(__super::Initialize_Clone(pArg)))
 		return E_FAIL;
 
+	m_bHasMesh = false;
 	m_strName = TEXT("Tool_Camera");
 
 	return S_OK;

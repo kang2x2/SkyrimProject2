@@ -23,11 +23,14 @@ public:
 public:
 	// 클론으로 생성된 오브젝트들은 모두 고유한 이름을 가진다.
 	const wstring& Get_Name() { return m_strName; }
+	_bool Get_IsHasMesh() { return m_bHasMesh; }
 	class CComponent* Get_Component(const wstring& _strComponentName);
 
 protected:
 	// 고유한 이름을 가지고 있어야 탐색이 용이 할 것 같다.
 	wstring					m_strName = TEXT("");
+	// 메시를 가지고 있는 객체인지 판별이 필요 할 것 같다.
+	_bool					m_bHasMesh = false;
 
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pContext = nullptr;

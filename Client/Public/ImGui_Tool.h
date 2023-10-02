@@ -33,7 +33,7 @@ private:
 	// Save / Load
 	void	LayOut_SaveLoad();
 	// Object Create / Delete
-	void	LayOut_Object_CreateDelete();
+	void	LayOut_Object_PickMode();
 
 	// Object Content
 	void    LayOut_Object_FBX();
@@ -54,6 +54,7 @@ private:
 
 	// Create Object
 	HRESULT	Create_Object();
+	HRESULT	Delete_Object();
 
 	// Save / Load
 	void    File_Save();
@@ -92,9 +93,13 @@ private:
 
 	// 현재 list에서 선택된 파일 변수에 저장.
 	TOOL_AFTER_FILEDESC* m_pCurFile = nullptr;
-	_bool				 m_bReadyCreateObj = false;
 	// 선택된 오브젝트
-	class CGameObject*   m_pObject = nullptr;
+	class CGameObject*   m_pSelectObject = nullptr;
+
+	// 생성, 삭제, 선택 모드
+	_bool				 m_bCreateMode = false;
+	_bool				 m_bDeleteMode = false;
+	_bool				 m_bSelectMode = false;
 
 public:
 	static CImGui_Tool* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

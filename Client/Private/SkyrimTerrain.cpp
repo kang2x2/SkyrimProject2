@@ -36,6 +36,7 @@ HRESULT CSkyrimTerrain::Initialize_Clone(const wstring& _strModelComTag, void* p
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
+	m_bHasMesh = true;
 	m_strName = TEXT("SkyrimTerrain");
 
 	return S_OK;

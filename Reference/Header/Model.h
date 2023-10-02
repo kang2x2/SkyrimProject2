@@ -20,6 +20,8 @@ public:
 		return m_iNumMeshes;
 	}
 
+	vector<class CMesh*> Get_VecMesh() { return m_vecMesh; }
+
 public:
 	HRESULT Bind_MaterialTexture(class CShader* _pShader, const char* _pConstantName, _uint _iMeshIndex, aiTextureType _eType);
 	HRESULT Render(_uint iMeshIndex);

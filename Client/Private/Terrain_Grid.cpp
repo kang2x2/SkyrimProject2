@@ -23,6 +23,7 @@ HRESULT CTerrain_Grid::Initialize_Clone(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_bHasMesh = false;
 	m_strName = TEXT("Tool_GridTerrain");
 
 	return S_OK;

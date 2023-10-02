@@ -67,6 +67,12 @@
     <Filter Include="96. IMGUI\01. ImGui_GamePlay">
       <UniqueIdentifier>{6d7753a0-b717-4111-976a-1dac6ce5f55d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. Player">
+      <UniqueIdentifier>{0a8bb210-b1c9-4183-8de3-dc2cbb5cfa6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. SkyrimTerrain">
+      <UniqueIdentifier>{cd088392-98f1-43ef-a656-c7d86e2f3e04}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02. GameObject\99. Tool">
       <UniqueIdentifier>{dc414e22-1a72-4f82-8eb6-4c954cf7f371}</UniqueIdentifier>
     </Filter>
@@ -75,12 +81,6 @@
     </Filter>
     <Filter Include="02. GameObject\99. Tool\00. Terrain">
       <UniqueIdentifier>{b6923e3d-1e14-4c77-85f6-c0be4029cac1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. Player">
-      <UniqueIdentifier>{0a8bb210-b1c9-4183-8de3-dc2cbb5cfa6c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\03. SkyrimTerrain">
-      <UniqueIdentifier>{cd088392-98f1-43ef-a656-c7d86e2f3e04}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

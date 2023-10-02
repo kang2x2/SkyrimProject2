@@ -23,6 +23,9 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
+	m_bHasMesh = true;
+	m_strName = TEXT("Player");
+
 	return S_OK;
 }
 
