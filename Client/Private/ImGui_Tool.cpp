@@ -206,10 +206,7 @@ void CImGui_Tool::LayOut_Object_FBX()
 
 		if (m_pSelectObject != nullptr)
 		{
-			CTransform* pTransform = dynamic_cast<CTransform*>(m_pSelectObject->Get_Component(TEXT("Com_Transform")));
-			_float3 objPos;
-			XMStoreFloat3(&objPos, pTransform->Get_State(CTransform::STATE_POSITION));
-			ImGui::Text("%f %f %f", objPos.x, objPos.y, objPos.z);
+			Select_Object();
 		}
 
 		ImGui::Image(nullptr, ImVec2(150, 150));
@@ -558,6 +555,18 @@ HRESULT CImGui_Tool::Delete_Object()
 		Safe_Release(m_pSelectObject);
 		m_pSelectObject = nullptr;
 	}
+
+	return S_OK;
+}
+HRESULT CImGui_Tool::Select_Object()
+{
+	CTransform* pTransform = dynamic_cast<CTransform*>(m_pSelectObject->Get_Component(TEXT("Com_Transform")));
+	_float3 objPos;
+	_float3 objScale = pTransform->Get_Scaled();
+	XMStoreFloat3(&objPos, pTransform->Get_State(CTransform::STATE_POSITION));
+
+	ImGui::Text("Pos   : %f %f %f", objPos.x, objPos.y, objPos.z);
+	ImGui::Text("Scale : %f %f %f", objScale.x, objScale.y, objScale.z);
 
 	return S_OK;
 }

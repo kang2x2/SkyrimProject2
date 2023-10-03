@@ -55,6 +55,7 @@ private:
 	// Create Object
 	HRESULT	Create_Object();
 	HRESULT	Delete_Object();
+	HRESULT	Select_Object();
 
 	// Save / Load
 	void    File_Save();
