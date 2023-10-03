@@ -209,6 +209,14 @@ HRESULT CGameInstance::Add_CloneObject(_uint _iLevelIndex, const wstring& _strLa
 
 }
 
+HRESULT CGameInstance::Delete_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName)
+{
+	if (m_pObject_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pObject_Manager->Delete_CloneObject(_iLevelIndex, _strLayerTag, _strName);
+}
+
 CGameObject* CGameInstance::Find_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName)
 {
 	if (m_pObject_Manager == nullptr)

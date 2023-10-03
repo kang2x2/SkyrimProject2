@@ -112,6 +112,20 @@ HRESULT CMesh::Initialize_Clone(void* _pArg)
 	return S_OK;
 }
 
+void CMesh::Update_VI(const _fmatrix& _matPivot)
+{
+	VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
+	ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
+
+	for (size_t i = 0; i < m_iNumVertices; ++i)
+	{
+		XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), _matPivot));
+		XMStoreFloat3(&pVertices[i].vNormal, XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), _matPivot));
+	}
+
+	Safe_Delete_Array(pVertices);
+}
+
 CMesh* CMesh::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const aiMesh* _pAIMesh, _fmatrix _matPivot)
 {
 	CMesh* pInstance = new CMesh(_pDevice, _pContext);

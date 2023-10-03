@@ -21,16 +21,25 @@ public:
 	virtual HRESULT Render();
 
 public:
-	// 클론으로 생성된 오브젝트들은 모두 고유한 이름을 가진다.
-	const wstring& Get_Name() { return m_strName; }
-	_bool Get_IsHasMesh() { return m_bHasMesh; }
-	class CComponent* Get_Component(const wstring& _strComponentName);
+	const wstring& Get_Name() { return m_strName; } // 클론으로 생성된 오브젝트들은 모두 고유한 이름을 가진다.
+	_bool Get_IsHasMesh() { return m_bHasMesh; } // 메시를 가지는 오브젝트인지 확인한다.
+	class CComponent* Get_Component(const wstring& _strComponentName); // 가지고 있는 컴포넌트 정보를 반환.
+
+	_bool Get_IsDead() { return m_bDead; } // 삭제될 오브젝트인지 확인한다.
+	void  Set_IsDead(_bool _bDead) { m_bDead = _bDead; } // 삭제 여부를 설정한다.
+
+	// 자신이 속한 레이어 태그 저장 및 레이어 태그 반환.
+	void			Set_HasLayerTag(const wstring& _strLayerTag) { m_strHasLayerTag = _strLayerTag; }
+	const wstring&  Get_HasLayerTag() { return m_strHasLayerTag; }
 
 protected:
-	// 고유한 이름을 가지고 있어야 탐색이 용이 할 것 같다.
-	wstring					m_strName = TEXT("");
-	// 메시를 가지고 있는 객체인지 판별이 필요 할 것 같다.
-	_bool					m_bHasMesh = false;
+	wstring					m_strName = TEXT(""); // 고유한 이름을 가지고 있어야 탐색이 용이 할 것 같다.
+	wstring					m_strHasLayerTag = TEXT(""); // 자신이 속한 레이어를 알고 있어야 삭제가 빠를 것 같다.
+	_bool					m_bHasMesh = false; // 메시를 가지고 있는 객체인지 판별이 필요 할 것 같다.
+
+	// 삭제를 위해 고유 인덱스를 주는 것 보단 bool 값으로 현재 선택된 상태를 전달하자.
+	// 같은 이름의 오브젝트가 많을 것이기에.
+	_bool					m_bDead = false;
 
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pContext = nullptr;

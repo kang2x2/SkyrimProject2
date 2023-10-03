@@ -162,6 +162,14 @@ HRESULT CModel::Ready_Material(const char* _pModelFilePath)
 	return S_OK;
 }
 
+void CModel::Update_VI(const _fmatrix& _matPivot)
+{
+	for (size_t i = 0; i < m_vecMesh.size(); ++i)
+	{
+		m_vecMesh[i]->Update_VI(_matPivot);
+	}
+}
+
 CModel* CModel::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const char* _strModleFilePath, _fmatrix _matPivot)
 {
 	CModel* pInstance = new CModel(_pDevice, _pContext);

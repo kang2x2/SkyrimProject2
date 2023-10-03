@@ -50,6 +50,19 @@ void CImGui_Tool::Frame()
 		LayOut_Object();
 		LayOut_SaveLoad();
 
+		if (m_bDelete)
+		{
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			pGameInstance->Delete_CloneObject(LEVEL_TOOL, m_pSelectObject->Get_HasLayerTag(), m_pSelectObject->Get_Name());
+			m_pSelectObject = nullptr;
+
+			Safe_Release(pGameInstance);
+
+			m_bDelete = false;
+		}
+
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	}
@@ -80,7 +93,19 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 		if (m_bCreateMode)
 			Create_Object();
 		if (m_bDeleteMode)
-			Delete_Object();
+		{
+			if (!m_bDelete)
+			{
+				m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
+			
+				if (m_pSelectObject != nullptr)
+				{
+					m_pSelectObject->Set_IsDead(true);
+					m_bDelete = true;
+				}
+			}
+
+		}
 		if (m_bSelectMode)
 		{
 			m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
@@ -134,15 +159,20 @@ void CImGui_Tool::LayOut_Object_PickMode()
 
 	if (ImGui::Button("Create"))
 	{
-		m_bCreateMode = true;
-		m_bDeleteMode = false;
-		m_bSelectMode = false;
+		if (m_pCurFile != nullptr)
+		{
+			m_bCreateMode = true;
+			m_bDeleteMode = false;
+			m_bSelectMode = false;
+			m_pSelectObject = nullptr;
+		}
 	}
 	if (ImGui::Button("Delete"))
 	{
 		m_bCreateMode = false;
 		m_bDeleteMode = true;
 		m_bSelectMode = false;
+		m_pSelectObject = nullptr;
 	}
 	if (ImGui::Button("Select"))
 	{
@@ -150,6 +180,15 @@ void CImGui_Tool::LayOut_Object_PickMode()
 		m_bDeleteMode = false;
 		m_bSelectMode = true;
 	}
+
+	if (m_bCreateMode)
+		ImGui::Text("Cur Mode : Create");
+	else if (m_bDeleteMode)
+		ImGui::Text("Cur Mode : Delete");
+	else if (m_bSelectMode)
+		ImGui::Text("Cur Mode : Select");
+	else
+		ImGui::Text("Cur Mode : None");
 
 	ImGui::End();
 }
@@ -550,7 +589,7 @@ HRESULT CImGui_Tool::Create_Object()
 }
 HRESULT CImGui_Tool::Delete_Object()
 {
-	if (m_pSelectObject != nullptr)
+	if (m_pSelectObject != nullptr && m_bDeleteMode)
 	{
 		Safe_Release(m_pSelectObject);
 		m_pSelectObject = nullptr;

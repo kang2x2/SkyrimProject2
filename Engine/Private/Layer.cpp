@@ -21,6 +21,24 @@ HRESULT CLayer::Add_CloneObject(CGameObject* _pGameObject)
 	return S_OK;
 }
 
+HRESULT CLayer::Delete_CloneObject(const wstring& _strName)
+{
+	for (auto iter = m_ltCloneObj.begin(); iter != m_ltCloneObj.end(); )
+	{
+		if ((*iter)->Get_IsDead())
+		{
+			Safe_Release(*iter);
+			iter = m_ltCloneObj.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+
+	return S_OK;
+}
+
 void CLayer::Tick(_float _fTimeDelta)
 {
 	for (auto& iter : m_ltCloneObj)

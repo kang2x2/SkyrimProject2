@@ -87,6 +87,7 @@ HRESULT CObject_Manager::Add_CloneObject(_uint _iLevelIndex, const wstring& _str
 		pLayer = CLayer::Create();
 
 		// 레이어에 오브젝트 추가
+		pCloneObject->Set_HasLayerTag(_strLayerTag);
 		pLayer->Add_CloneObject(pCloneObject);
 
 		// 레이어를 새로운 레이어로 해당 레벨의 map에 추가.
@@ -94,11 +95,24 @@ HRESULT CObject_Manager::Add_CloneObject(_uint _iLevelIndex, const wstring& _str
 	}
 	else
 	{
+		pCloneObject->Set_HasLayerTag(_strLayerTag);
 		pLayer->Add_CloneObject(pCloneObject);
 	}
 
 	return S_OK;
 
+}
+
+HRESULT CObject_Manager::Delete_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName)
+{
+	auto objLayer = m_mapLayer[_iLevelIndex].find(_strLayerTag);
+
+	if (objLayer == m_mapLayer[_iLevelIndex].end())
+		return E_FAIL;
+
+	objLayer->second->Delete_CloneObject(_strName);
+
+	return S_OK;
 }
 
 void CObject_Manager::Tick(_float _fTimeDelta)

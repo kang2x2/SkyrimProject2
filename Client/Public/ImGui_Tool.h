@@ -100,8 +100,8 @@ private:
 	// 생성, 삭제, 선택 모드
 	_bool				 m_bCreateMode = false;
 	_bool				 m_bDeleteMode = false;
-	_bool				 m_bSelectMode = false;
-
+	_bool				 m_bSelectMode = false;	
+	_bool				 m_bDelete = false; // gui의 모든 작업이 끝나고 객체를 삭제하기 위함.
 public:
 	static CImGui_Tool* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual void Free() override;

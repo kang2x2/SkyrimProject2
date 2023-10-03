@@ -13,6 +13,7 @@ private:
 public:
 	HRESULT Initialize();
 	HRESULT Add_CloneObject(class CGameObject* _pGameObject);
+	HRESULT Delete_CloneObject(const wstring& _strName);
 	void    Tick(_float _fTimeDelta);
 	void    LateTick(_float _fTimeDelta);
 

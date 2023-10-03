@@ -21,6 +21,9 @@ public:
 	vector<_ulong> Get_Indices() { return m_vecIndex; }
 
 public:
+	void Update_VI(const _fmatrix& _matPivot);
+
+public:
 	virtual HRESULT Initialize_ProtoType(const aiMesh* _pAIMesh, _fmatrix _matPivot);
 	virtual HRESULT Initialize_Clone(void* _pArg) override;
 

@@ -250,6 +250,11 @@ CGameObject* CCalculator::Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceCon
 					_float3 vertex1 = pPos[idx1];
 					_float3 vertex2 = pPos[idx2];
 
+					// 정점 위치를 월드 공간으로 변환
+					XMStoreFloat3(&vertex0, XMVector3TransformCoord(XMLoadFloat3(&vertex0), XMLoadFloat4x4(&matWorldInverse)));
+					XMStoreFloat3(&vertex1, XMVector3TransformCoord(XMLoadFloat3(&vertex1), XMLoadFloat4x4(&matWorldInverse)));
+					XMStoreFloat3(&vertex2, XMVector3TransformCoord(XMLoadFloat3(&vertex2), XMLoadFloat4x4(&matWorldInverse)));
+
 					if (Intersects(XMLoadFloat3(&vRayPos), XMLoadFloat3(&vRayDir),
 						XMLoadFloat3(&vertex0),
 						XMLoadFloat3(&vertex1),

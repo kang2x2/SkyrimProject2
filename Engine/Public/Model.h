@@ -21,6 +21,7 @@ public:
 	}
 
 	vector<class CMesh*> Get_VecMesh() { return m_vecMesh; }
+	void				 Update_VI(const _fmatrix& _matPivot);
 
 public:
 	HRESULT Bind_MaterialTexture(class CShader* _pShader, const char* _pConstantName, _uint _iMeshIndex, aiTextureType _eType);
