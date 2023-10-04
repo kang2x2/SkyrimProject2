@@ -69,7 +69,7 @@ private:
 
 	// RangeCheck(레이아웃 범위 밖에서만 피킹 가능하도록)
 	void    Add_LayOut_Array(const char* _strName, ImVec2 _LayOutPos, ImVec2 _LayOutSize);
-	_bool   Check_LayOut_Range();
+	_bool   Check_LayOut_Range(POINT _MousePos);
 
 public:
 	void    Set_ImGuiActive(_bool _isActive) { m_bActive = _isActive; }

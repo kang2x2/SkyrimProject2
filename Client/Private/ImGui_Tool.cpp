@@ -1,4 +1,5 @@
 #include "framework.h"
+#include <iostream>
 #include <filesystem>
 #include <commdlg.h>
 #include <fstream>
@@ -47,6 +48,7 @@ void CImGui_Tool::Frame()
 		LayOut_Object();
 		LayOut_SaveLoad();
 
+
 		if (m_bDelete)
 		{
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -84,54 +86,51 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 	Safe_AddRef(pGameInstance);
 
 	// 레이아웃 범위 밖에서만 수행.
-	if (Check_LayOut_Range())
+	if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON) && Check_LayOut_Range(MousePos))
 	{
-		if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+		CTerrain_Grid* pTerrainGrid = dynamic_cast<CTerrain_Grid*>(pGameInstance->Find_CloneObject(LEVEL_TOOL, TEXT("Layer_Terrain"), TEXT("Tool_GridTerrain")));
+
+		CVIBuffer_Grid* pGridBuffer = dynamic_cast<CVIBuffer_Grid*>(pGameInstance->Find_ProtoType(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid")));
+		const _float3* pTerrainVtxPos = pGridBuffer->Get_VtxPos();
+
+		ResultPickPos = pGameInstance->Picking_Grid(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos);
+
+		if (m_bCreateMode)
+			Create_Object();
+		if (m_bDeleteMode)
 		{
-			CTerrain_Grid* pTerrainGrid = dynamic_cast<CTerrain_Grid*>(pGameInstance->Find_CloneObject(LEVEL_TOOL, TEXT("Layer_Terrain"), TEXT("Tool_GridTerrain")));
-
-			CVIBuffer_Grid* pGridBuffer = dynamic_cast<CVIBuffer_Grid*>(pGameInstance->Find_ProtoType(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid")));
-			const _float3* pTerrainVtxPos = pGridBuffer->Get_VtxPos();
-
-			ResultPickPos = pGameInstance->Picking_Grid(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos);
-
-			if (m_bCreateMode)
-				Create_Object();
-			if (m_bDeleteMode)
-			{
-				if (!m_bDelete)
-				{
-					m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
-
-					if (m_pSelectObject != nullptr)
-					{
-						m_pSelectObject->Set_IsDead(true);
-						m_bDelete = true;
-					}
-				}
-
-			}
-			if (m_bSelectMode)
+			if (!m_bDelete)
 			{
 				m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
+
+				if (m_pSelectObject != nullptr)
+				{
+					m_pSelectObject->Set_IsDead(true);
+					m_bDelete = true;
+				}
 			}
 
 		}
-
-		if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_RBUTTON))
+		if (m_bSelectMode)
 		{
-			if (m_bCreateMode)
-				m_bCreateMode = false;
-
-			if (m_bDeleteMode)
-				m_bDeleteMode = false;
-
-			if (m_bSelectMode)
-				m_bSelectMode = false;
-
-			if (m_pSelectObject != nullptr)
-				m_pSelectObject = nullptr;
+			m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
 		}
+
+	}
+
+	if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_RBUTTON))
+	{
+		if (m_bCreateMode)
+			m_bCreateMode = false;
+
+		if (m_bDeleteMode)
+			m_bDeleteMode = false;
+
+		if (m_bSelectMode)
+			m_bSelectMode = false;
+
+		if (m_pSelectObject != nullptr)
+			m_pSelectObject = nullptr;
 	}
 
 	ImGui::Text("Pick Pos : X(%f) Y(%f) Z(%f)", ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
@@ -586,11 +585,12 @@ void CImGui_Tool::Add_LayOut_Array(const char* _strName, ImVec2 _LayOutPos, ImVe
 
 	if (!m_bDupliName) m_vecLayOut.push_back(tempLayOutDesc);
 }
-_bool CImGui_Tool::Check_LayOut_Range()
+_bool CImGui_Tool::Check_LayOut_Range(POINT _MousePos)
 {
 	for (size_t i = 0; i < m_vecLayOut.size(); ++i)
 	{
-		if (ImGui::IsMouseHoveringRect(m_vecLayOut[i].m_vStartLayOutPos, m_vecLayOut[i].m_vEndLayOutPos))
+		if(m_vecLayOut[i].m_vStartLayOutPos.x <= _MousePos.x && m_vecLayOut[i].m_vEndLayOutPos.x >= _MousePos.x &&
+		   m_vecLayOut[i].m_vStartLayOutPos.y <= _MousePos.y && m_vecLayOut[i].m_vEndLayOutPos.y >= _MousePos.y)
 		{
 			return false;
 		}
@@ -640,9 +640,11 @@ HRESULT CImGui_Tool::Select_Object()
 	_float3 objScale = pTransform->Get_Scaled();
 	XMStoreFloat3(&objPos, pTransform->Get_State(CTransform::STATE_POSITION));
 
-	ImGui::InputText("##X", buffer, sizeof(buffer));
-
-	ImGui::Text("PosX   : %f", objPos.x);
+	if (ImGui::InputFloat("PosX", &objPos.x, fChangeValue))
+	{
+		objPos.x = fChangeValue;
+		pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&objPos));
+	}
 	ImGui::Text("PosY   : %f", objPos.y);
 	ImGui::Text("PosZ   : %f", objPos.z);
 	ImGui::Text("ScaleX : %f", objScale.x);
