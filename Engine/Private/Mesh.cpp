@@ -10,12 +10,13 @@ CMesh::CMesh(const CMesh& rhs)
 {
 }
 
-HRESULT CMesh::Initialize_ProtoType(const aiMesh* _pAIMesh, _fmatrix _matPivot)
+HRESULT CMesh::Initialize_ProtoType(const aiMesh* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType)
 {
+	m_iStride = _eType == CModel::TYPE_ANIM ? sizeof(VTX_ANIMMESH) : sizeof(VTX_NONANIMMESH);
+
 	/* 이 메시는 mMaterialIndex번째 머테리얼 정보를 이용한다. */
 	m_iMaterialIndex = _pAIMesh->mMaterialIndex;
 
-	m_iStride = sizeof(VTXMESH);
 	m_iNumVertices = _pAIMesh->mNumVertices;
 	m_iIndexStride = 4;
 	m_iNumIndices = _pAIMesh->mNumFaces * 3;
@@ -34,36 +35,12 @@ HRESULT CMesh::Initialize_ProtoType(const aiMesh* _pAIMesh, _fmatrix _matPivot)
 	m_BufferDesc.MiscFlags = 0;
 	m_BufferDesc.StructureByteStride = m_iStride;
 
-	VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
-	ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
+	HRESULT hr = _eType == CModel::TYPE_ANIM ?
+		Ready_VertexBuffer_For_Anim(_pAIMesh, _matPivot) :
+		Ready_VertexBuffer_For_NonAnim(_pAIMesh, _matPivot);
 
-	m_pPos = new _float3[m_iNumVertices];
-
-	for (size_t i = 0; i < m_iNumVertices; ++i)
-	{
-		/*  사전 준비를 위해 Pivot 행렬을 받아왔다. 
-			이 행렬을 통해 내가 원하는 위치, 회전, 스케일을 벡터에 곱해 적용해 줄 수 있다.*/
-		memcpy(&pVertices[i].vPosition, &_pAIMesh->mVertices[i], sizeof(_float3));
-		XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), _matPivot));
-		
-		// 정점 정보 담기
-		m_pPos[i] = pVertices[i].vPosition;
-
-		/* 위치, 회전, 스케일이 변했으므로 normal도 똑같이 변환이 필요하다.*/
-		memcpy(&pVertices[i].vNormal, &_pAIMesh->mNormals[i], sizeof(_float3));
-		XMStoreFloat3(&pVertices[i].vNormal, XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), _matPivot));
-
-		memcpy(&pVertices[i].vTexcoord, &_pAIMesh->mTextureCoords[0][i], sizeof(_float2));
-		memcpy(&pVertices[i].vTangent, &_pAIMesh->mTangents[i], sizeof(_float3));
-	}
-
-	ZeroMemory(&m_InitialData, sizeof m_InitialData);
-	m_InitialData.pSysMem = pVertices;
-
-	if (FAILED(__super::Create_Buffer(&m_pVB)))
+	if (FAILED(hr))
 		return E_FAIL;
-
-	Safe_Delete_Array(pVertices);
 
 #pragma endregion
 
@@ -114,8 +91,8 @@ HRESULT CMesh::Initialize_Clone(void* _pArg)
 
 void CMesh::Update_VI(const _fmatrix& _matPivot)
 {
-	VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
-	ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
+	VTX_NONANIMMESH* pVertices = new VTX_NONANIMMESH[m_iNumVertices];
+	ZeroMemory(pVertices, sizeof(VTX_NONANIMMESH) * m_iNumVertices);
 
 	for (size_t i = 0; i < m_iNumVertices; ++i)
 	{
@@ -126,11 +103,95 @@ void CMesh::Update_VI(const _fmatrix& _matPivot)
 	Safe_Delete_Array(pVertices);
 }
 
-CMesh* CMesh::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const aiMesh* _pAIMesh, _fmatrix _matPivot)
+HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(const aiMesh* _pAIMesh, _fmatrix _matPivot)
+{
+	VTX_NONANIMMESH* pVertices = new VTX_NONANIMMESH[m_iNumVertices];
+	ZeroMemory(pVertices, sizeof(VTX_NONANIMMESH) * m_iNumVertices);
+
+	m_pPos = new _float3[m_iNumVertices];
+
+	for (size_t i = 0; i < m_iNumVertices; ++i)
+	{
+		/*  사전 준비를 위해 Pivot 행렬을 받아왔다.
+			이 행렬을 통해 내가 원하는 위치, 회전, 스케일을 벡터에 곱해 적용해 줄 수 있다.*/
+		memcpy(&pVertices[i].vPosition, &_pAIMesh->mVertices[i], sizeof(_float3));
+		XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), _matPivot));
+
+		// 정점 정보 담기
+		m_pPos[i] = pVertices[i].vPosition;
+
+		/* 위치, 회전, 스케일이 변했으므로 normal도 똑같이 변환이 필요하다.*/
+		memcpy(&pVertices[i].vNormal, &_pAIMesh->mNormals[i], sizeof(_float3));
+		XMStoreFloat3(&pVertices[i].vNormal, XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), _matPivot));
+
+		memcpy(&pVertices[i].vTexcoord, &_pAIMesh->mTextureCoords[0][i], sizeof(_float2));
+		memcpy(&pVertices[i].vTangent, &_pAIMesh->mTangents[i], sizeof(_float3));
+	}
+
+	ZeroMemory(&m_InitialData, sizeof m_InitialData);
+	m_InitialData.pSysMem = pVertices;
+
+	if (FAILED(__super::Create_Buffer(&m_pVB)))
+		return E_FAIL;
+
+	Safe_Delete_Array(pVertices);
+
+	return S_OK;
+}
+
+HRESULT CMesh::Ready_VertexBuffer_For_Anim(const aiMesh* _pAIMesh, _fmatrix _matPivot)
+{
+	VTX_ANIMMESH* pVertices = new VTX_ANIMMESH[m_iNumVertices];
+	ZeroMemory(pVertices, sizeof(VTX_ANIMMESH) * m_iNumVertices);
+
+	m_pPos = new _float3[m_iNumVertices];
+
+	for (size_t i = 0; i < m_iNumVertices; ++i)
+	{
+		/*  사전 준비를 위해 Pivot 행렬을 받아왔다.
+			이 행렬을 통해 내가 원하는 위치, 회전, 스케일을 벡터에 곱해 적용해 줄 수 있다.*/
+		memcpy(&pVertices[i].vPosition, &_pAIMesh->mVertices[i], sizeof(_float3));
+		XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), _matPivot));
+
+		// 정점 정보 담기
+		m_pPos[i] = pVertices[i].vPosition;
+
+		/* 위치, 회전, 스케일이 변했으므로 normal도 똑같이 변환이 필요하다.*/
+		memcpy(&pVertices[i].vNormal, &_pAIMesh->mNormals[i], sizeof(_float3));
+		XMStoreFloat3(&pVertices[i].vNormal, XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), _matPivot));
+
+		memcpy(&pVertices[i].vTexcoord, &_pAIMesh->mTextureCoords[0][i], sizeof(_float2));
+		memcpy(&pVertices[i].vTangent, &_pAIMesh->mTangents[i], sizeof(_float3));
+	}
+
+	///* 이 메시에 영향릉 주는 뼈들의 갯수. */
+	//pAIMesh->mNumBones;
+	
+	///* 이 뼈는 이 메시에 속해있는 몇개의 정점에게 영향을 주는가. */
+	//pAIMesh->mBones[0]->mNumWeights;
+	
+	//pVertices[pAIMesh->mBones[0]->mWeights[0].mVertexId].vBlendIndices.x = 0;
+	
+	pVertices[0].vBlendIndices;
+	pVertices[0].vBlendWeights;
+
+
+	ZeroMemory(&m_InitialData, sizeof m_InitialData);
+	m_InitialData.pSysMem = pVertices;
+
+	if (FAILED(__super::Create_Buffer(&m_pVB)))
+		return E_FAIL;
+
+	Safe_Delete_Array(pVertices);
+
+	return S_OK;
+}
+
+CMesh* CMesh::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const aiMesh* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType)
 {
 	CMesh* pInstance = new CMesh(_pDevice, _pContext);
 
-	if (FAILED(pInstance->Initialize_ProtoType(_pAIMesh, _matPivot)))
+	if (FAILED(pInstance->Initialize_ProtoType(_pAIMesh, _matPivot, _eType)))
 	{
 		MSG_BOX("Fail Create : CMesh ProtoType");
 		Safe_Release(pInstance);

@@ -275,7 +275,10 @@
     <FxCompile Include="..\Bin\ShaderFile\Shader_VtxPosCol.hlsl">
       <Filter>97. ShaderFile</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFile\Shader_VtxMesh.hlsl">
+    <FxCompile Include="..\Bin\ShaderFile\Shader_VtxNonAnimMesh.hlsl">
+      <Filter>97. ShaderFile</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFile\Shader_VtxAnimMesh.hlsl">
       <Filter>97. ShaderFile</Filter>
     </FxCompile>
   </ItemGroup>

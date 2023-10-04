@@ -62,6 +62,7 @@ HRESULT CTransform::Initialize_Clone(void* pArg)
 
 		m_fSpeedPerSec = TransformDesc.fSpeedPerSec;
 		m_fRotationRadianPerSec = TransformDesc.fRotationRadianPerSec;
+		m_fZoomPerSec = TransformDesc.fZoomPerSec;
 	}
 
 	return S_OK;
@@ -109,6 +110,46 @@ void CTransform::Go_Right(_float _fTimeDelta)
 	_vector vPosition = Get_State(STATE_POSITION);
 
 	vPosition += XMVector3Normalize(vRight) * m_fSpeedPerSec * _fTimeDelta;
+
+	Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Go_Up(_float _fTimeDelta)
+{
+	_vector vUp = Get_State(STATE_UP);
+	_vector vPosition = Get_State(STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vUp) * m_fSpeedPerSec * _fTimeDelta;
+
+	Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Go_Down(_float _fTimeDelta)
+{
+	_vector vUp = Get_State(STATE_UP);
+	_vector vPosition = Get_State(STATE_POSITION);
+
+	vPosition -= XMVector3Normalize(vUp) * m_fSpeedPerSec * _fTimeDelta;
+
+	Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Zoom_In(_float _fTimeDelta)
+{
+	_vector vLook = Get_State(STATE_LOOK);
+	_vector vPosition = Get_State(STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vLook) * m_fZoomPerSec * _fTimeDelta;
+
+	Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Zoom_Out(_float _fTimeDelta)
+{
+	_vector vLook = Get_State(STATE_LOOK);
+	_vector vPosition = Get_State(STATE_POSITION);
+
+	vPosition -= XMVector3Normalize(vLook) * m_fZoomPerSec * _fTimeDelta;
 
 	Set_State(STATE_POSITION, vPosition);
 }

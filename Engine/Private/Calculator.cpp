@@ -220,7 +220,7 @@ CGameObject* CCalculator::Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceCon
 
 			// 해당 객체의 월드 행렬을 얻어오기 위함.
 			CTransform* pObjTransform = dynamic_cast<CTransform*>(obj->Get_Component(TEXT("Com_Transform")));
-			_float4x4 matWorldInverse = pObjTransform->Get_WorldMatrix_Float4x4_Inverse();
+			_float4x4 matObjWorld = pObjTransform->Get_WorldMatrix_Float4x4();
 
 			// 해당 객체의 모델을 얻어옴.
 			CModel* pModel = dynamic_cast<CModel*>(obj->Get_Component(TEXT("Com_Model")));
@@ -250,10 +250,10 @@ CGameObject* CCalculator::Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceCon
 					_float3 vertex1 = pPos[idx1];
 					_float3 vertex2 = pPos[idx2];
 
-					// 정점 위치를 월드 공간으로 변환
-					XMStoreFloat3(&vertex0, XMVector3TransformCoord(XMLoadFloat3(&vertex0), XMLoadFloat4x4(&matWorldInverse)));
-					XMStoreFloat3(&vertex1, XMVector3TransformCoord(XMLoadFloat3(&vertex1), XMLoadFloat4x4(&matWorldInverse)));
-					XMStoreFloat3(&vertex2, XMVector3TransformCoord(XMLoadFloat3(&vertex2), XMLoadFloat4x4(&matWorldInverse)));
+					//// 정점 위치를 월드 공간으로 변환
+					XMStoreFloat3(&vertex0, XMVector3TransformCoord(XMLoadFloat3(&vertex0), XMLoadFloat4x4(&matObjWorld)));
+					XMStoreFloat3(&vertex1, XMVector3TransformCoord(XMLoadFloat3(&vertex1), XMLoadFloat4x4(&matObjWorld)));
+					XMStoreFloat3(&vertex2, XMVector3TransformCoord(XMLoadFloat3(&vertex2), XMLoadFloat4x4(&matObjWorld)));
 
 					if (Intersects(XMLoadFloat3(&vRayPos), XMLoadFloat3(&vRayDir),
 						XMLoadFloat3(&vertex0),

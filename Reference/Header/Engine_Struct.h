@@ -64,7 +64,7 @@ namespace Engine
 
 	}VTXNORTEX;
 
-	typedef struct ENGINE_DLL tagVertex_Mesh
+	typedef struct ENGINE_DLL tagVertex_NonAnim_Mesh
 	{
 		XMFLOAT3		vPosition;
 		XMFLOAT3		vNormal;
@@ -74,7 +74,25 @@ namespace Engine
 		static const unsigned int				iNumElements = 4;
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 
-	}VTXMESH;
+	}VTX_NONANIMMESH;
+
+	typedef struct ENGINE_DLL tagVertex_Anim_Mesh
+	{
+		XMFLOAT3		vPosition;
+		XMFLOAT3		vNormal;
+		XMFLOAT2		vTexcoord;
+		XMFLOAT3		vTangent;
+
+		// 자신이 상태를 받아야 할 뼈들의 인덱스를 담는 변수.
+		// 최대 4개까지 저장 가능하다.
+		XMUINT4			vBlendIndices;
+		// 뼈의 상태를 몇 퍼센트 가져올 것인지 저장하는 변수.
+		XMFLOAT4		vBlendWeights;
+
+		static const unsigned int				iNumElements = 6;
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
+
+	}VTX_ANIMMESH;
 }
 
 #endif // Engine_Struct_h__

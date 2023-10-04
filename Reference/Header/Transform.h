@@ -14,6 +14,7 @@ public:
 	{
 		_float fSpeedPerSec = 0.f;
 		_float fRotationRadianPerSec = 0.f;
+		_float fZoomPerSec = 0.f;
 	}TRANSFORM_DESC;
 	
 private:
@@ -68,6 +69,12 @@ public:
 	void Go_Backward(_float _fTimeDelta);
 	void Go_Left(_float _fTimeDelta);
 	void Go_Right(_float _fTimeDelta);
+	void Go_Up(_float _fTimeDelta);
+	void Go_Down(_float _fTimeDelta);
+
+	void Zoom_In(_float _fTimeDelta);
+	void Zoom_Out(_float _fTimeDelta);
+
 	void Fix_Rotation(FXMVECTOR _vAxis, _float _fRadian);
 	void Turn(FXMVECTOR _vAxis, _float _fTimeDelta);
 	void LookAt(_fvector _vPoint);
@@ -86,6 +93,7 @@ private:
 
 	_float				m_fSpeedPerSec = { 0.0f }; // 실시간 이동 속도.
 	_float				m_fRotationRadianPerSec = { 0.0f }; // 실시간 회전 속도.
+	_float				m_fZoomPerSec = { 0.0f }; // 실시간 줌 속도.
 
 public:
 	static CTransform* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

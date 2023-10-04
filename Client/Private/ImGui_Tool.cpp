@@ -3,7 +3,6 @@
 #include <commdlg.h>
 #include <fstream>
 
-#include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
@@ -32,8 +31,6 @@ HRESULT CImGui_Tool::Initialize(ID3D11Device* _pDevice, ID3D11DeviceContext* _pC
 	ImGui::StyleColorsLight();
 	ImGui_ImplWin32_Init(g_hWnd);
 	ImGui_ImplDX11_Init(m_pDevice, m_pContext);
-
-
 
 	return S_OK;
 }
@@ -74,62 +71,72 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 	GetCursorPos(&MousePos);
 	ScreenToClient(g_hWnd, &MousePos);
 
-	ImGui::Begin("Mouse Pos");
+	const char* strLayOutName = "Mouse Pos";
+
+	ImGui::Begin(strLayOutName);
+
+	// 범위 밖에서만 수행하기 위한 레이아웃 범위 저장.
+	Add_LayOut_Array(strLayOutName, ImGui::GetWindowPos(), ImGui::GetWindowSize());
 
 	ImGui::Text("Cur Pos : X(%d) Y(%d)", MousePos.x, MousePos.y);
 
-	if (GetKeyState(MK_LBUTTON) & 0x8000)
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	// 레이아웃 범위 밖에서만 수행.
+	if (Check_LayOut_Range())
 	{
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
-
-		CTerrain_Grid* pTerrainGrid = dynamic_cast<CTerrain_Grid*>(pGameInstance->Find_CloneObject(LEVEL_TOOL, TEXT("Layer_Terrain"), TEXT("Tool_GridTerrain")));
-
-		CVIBuffer_Grid* pGridBuffer = dynamic_cast<CVIBuffer_Grid*>(pGameInstance->Find_ProtoType(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid")));
-		const _float3* pTerrainVtxPos = pGridBuffer->Get_VtxPos();
-
-		ResultPickPos = pGameInstance->Picking_Grid(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos);
-
-		if (m_bCreateMode)
-			Create_Object();
-		if (m_bDeleteMode)
+		if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 		{
-			if (!m_bDelete)
+			CTerrain_Grid* pTerrainGrid = dynamic_cast<CTerrain_Grid*>(pGameInstance->Find_CloneObject(LEVEL_TOOL, TEXT("Layer_Terrain"), TEXT("Tool_GridTerrain")));
+
+			CVIBuffer_Grid* pGridBuffer = dynamic_cast<CVIBuffer_Grid*>(pGameInstance->Find_ProtoType(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid")));
+			const _float3* pTerrainVtxPos = pGridBuffer->Get_VtxPos();
+
+			ResultPickPos = pGameInstance->Picking_Grid(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos);
+
+			if (m_bCreateMode)
+				Create_Object();
+			if (m_bDeleteMode)
+			{
+				if (!m_bDelete)
+				{
+					m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
+
+					if (m_pSelectObject != nullptr)
+					{
+						m_pSelectObject->Set_IsDead(true);
+						m_bDelete = true;
+					}
+				}
+
+			}
+			if (m_bSelectMode)
 			{
 				m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
-			
-				if (m_pSelectObject != nullptr)
-				{
-					m_pSelectObject->Set_IsDead(true);
-					m_bDelete = true;
-				}
 			}
 
 		}
-		if (m_bSelectMode)
+
+		if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_RBUTTON))
 		{
-			m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
+			if (m_bCreateMode)
+				m_bCreateMode = false;
+
+			if (m_bDeleteMode)
+				m_bDeleteMode = false;
+
+			if (m_bSelectMode)
+				m_bSelectMode = false;
+
+			if (m_pSelectObject != nullptr)
+				m_pSelectObject = nullptr;
 		}
-			
-		Safe_Release(pGameInstance);
-	}
-
-	if (GetKeyState(MK_RBUTTON) & 0x8000)
-	{
-		if (m_bCreateMode)
-			m_bCreateMode = false;
-
-		if (m_bDeleteMode)
-			m_bDeleteMode = false;
-
-		if (m_bSelectMode)
-			m_bSelectMode = false;
-
-		if (m_pSelectObject != nullptr)
-			m_pSelectObject = nullptr;
 	}
 
 	ImGui::Text("Pick Pos : X(%f) Y(%f) Z(%f)", ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
+
+	Safe_Release(pGameInstance);
 
 	ImGui::End();
 
@@ -137,7 +144,12 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 }
 void CImGui_Tool::LayOut_SaveLoad()
 {
-	ImGui::Begin("Save/Load");
+	const char* strLayOutName = "Save/Load";
+
+	ImGui::Begin(strLayOutName);
+
+	// 범위 밖에서만 수행하기 위한 레이아웃 범위 저장.
+	Add_LayOut_Array(strLayOutName, ImGui::GetWindowPos(), ImGui::GetWindowSize());
 
 	if (ImGui::Button("Save"))
 	{
@@ -155,7 +167,12 @@ void CImGui_Tool::LayOut_SaveLoad()
 }
 void CImGui_Tool::LayOut_Object_PickMode()
 {
+	const char* strLayOutName = "Pick Mode";
+
 	ImGui::Begin("Pick Mode");
+
+	// 범위 밖에서만 수행하기 위한 레이아웃 범위 저장.
+	Add_LayOut_Array(strLayOutName, ImGui::GetWindowPos(), ImGui::GetWindowSize());
 
 	if (ImGui::Button("Create"))
 	{
@@ -195,7 +212,12 @@ void CImGui_Tool::LayOut_Object_PickMode()
 
 void CImGui_Tool::LayOut_Object()
 {
+	const char* strLayOutName = "FBX Object LayOut";
+
 	ImGui::Begin("FBX Object LayOut");
+
+	// 범위 밖에서만 수행하기 위한 레이아웃 범위 저장.
+	Add_LayOut_Array(strLayOutName, ImGui::GetWindowPos(), ImGui::GetWindowSize());
 
 	if (ImGui::BeginTabBar("Tabs")) // 탭 그룹 시작
 	{
@@ -204,32 +226,13 @@ void CImGui_Tool::LayOut_Object()
 			m_bFindFolder = true;
 			m_bFindFBX = true;
 
-			showFBXContent = true;
-			showDDSContent = false;
-			showWICContent = false;
-		}
-		if (ImGui::TabItemButton("DDS"))
-		{
-			m_bFindFolder = true;
-
-			showFBXContent = false;
-			showDDSContent = true;
-			showWICContent = false;
-		}
-		if (ImGui::TabItemButton("WIC"))
-		{
-			m_bFindFolder = true;
-
-			showFBXContent = false;
-			showDDSContent = false;
-			showWICContent = true;
+			showFBXListShow = true;
 		}
 
 		ImGui::EndTabBar(); // 탭 그룹 종료
 
-		LayOut_Object_FBX();
-		LayOut_Object_DDS();
-		LayOut_Object_WIC();
+		LayOut_FBX_List();
+		LayOut_Object_Transform();
 	}
 
 	ImGui::End();
@@ -237,17 +240,11 @@ void CImGui_Tool::LayOut_Object()
 
 // 선택된 폴더명 저장하기 위한 전역변수
 const char* selectedFolderName;
-void CImGui_Tool::LayOut_Object_FBX()
+void CImGui_Tool::LayOut_FBX_List()
 {
-	if (showFBXContent)
+	if (showFBXListShow)
 	{
-		ImGui::Text("Transform");
-
-		if (m_pSelectObject != nullptr)
-		{
-			Select_Object();
-		}
-
+		ImGui::Text("File List");
 		ImGui::Image(nullptr, ImVec2(150, 150));
 
 		// 한 번만 폴더 검색
@@ -321,24 +318,22 @@ void CImGui_Tool::LayOut_Object_FBX()
 
 	LayOut_Object_PickMode();
 }
-void CImGui_Tool::LayOut_Object_DDS()
-{
-	if (showDDSContent)
-	{
-		ImGui::Text("DDS");
-		if (m_bFindFolder)
-			Empty_Content();
-	}
-}
-void CImGui_Tool::LayOut_Object_WIC()
-{
-	if (showWICContent)
-	{
-		ImGui::Text("WIC");
 
-		if (m_bFindFolder)
-			Empty_Content();
+void CImGui_Tool::LayOut_Object_Transform()
+{
+	const char* strLayOutName = "Object Transform";
+
+	ImGui::Begin("Object Transform");
+
+	// 범위 밖에서만 수행하기 위한 레이아웃 범위 저장.
+	Add_LayOut_Array(strLayOutName, ImGui::GetWindowPos(), ImGui::GetWindowSize());
+
+	if (m_pSelectObject != nullptr)
+	{
+		Select_Object();
 	}
+
+	ImGui::End();
 }
 
 void CImGui_Tool::FindFolder()
@@ -569,6 +564,43 @@ void CImGui_Tool::File_Load()
 
 	SetCurrentDirectory(originalPath);
 }
+
+void CImGui_Tool::Add_LayOut_Array(const char* _strName, ImVec2 _LayOutPos, ImVec2 _LayOutSize)
+{
+	_bool m_bDupliName = false;
+
+	TOOL_LAYOUTDESC tempLayOutDesc;
+	tempLayOutDesc.m_strName = _strName;
+	tempLayOutDesc.m_vStartLayOutPos = _LayOutPos;
+	tempLayOutDesc.m_vEndLayOutPos = { tempLayOutDesc.m_vStartLayOutPos.x + _LayOutSize.x ,
+									   tempLayOutDesc.m_vStartLayOutPos.y + _LayOutSize.y };
+
+	for (size_t i = 0; i < m_vecLayOut.size(); ++i)
+	{
+		if (m_vecLayOut[i].m_strName == tempLayOutDesc.m_strName)
+		{
+			m_bDupliName = true;
+			return;
+		}
+	}
+
+	if (!m_bDupliName) m_vecLayOut.push_back(tempLayOutDesc);
+}
+_bool CImGui_Tool::Check_LayOut_Range()
+{
+	for (size_t i = 0; i < m_vecLayOut.size(); ++i)
+	{
+		if (ImGui::IsMouseHoveringRect(m_vecLayOut[i].m_vStartLayOutPos, m_vecLayOut[i].m_vEndLayOutPos))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+
+
 HRESULT CImGui_Tool::Create_Object()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -599,13 +631,23 @@ HRESULT CImGui_Tool::Delete_Object()
 }
 HRESULT CImGui_Tool::Select_Object()
 {
+	char buffer[256];
+	_bool bIsChangeValue = false;
+	_float fChangeValue = 0.f;
+
 	CTransform* pTransform = dynamic_cast<CTransform*>(m_pSelectObject->Get_Component(TEXT("Com_Transform")));
 	_float3 objPos;
 	_float3 objScale = pTransform->Get_Scaled();
 	XMStoreFloat3(&objPos, pTransform->Get_State(CTransform::STATE_POSITION));
 
-	ImGui::Text("Pos   : %f %f %f", objPos.x, objPos.y, objPos.z);
-	ImGui::Text("Scale : %f %f %f", objScale.x, objScale.y, objScale.z);
+	ImGui::InputText("##X", buffer, sizeof(buffer));
+
+	ImGui::Text("PosX   : %f", objPos.x);
+	ImGui::Text("PosY   : %f", objPos.y);
+	ImGui::Text("PosZ   : %f", objPos.z);
+	ImGui::Text("ScaleX : %f", objScale.x);
+	ImGui::Text("ScaleY : %f", objScale.y);
+	ImGui::Text("ScaleZ : %f", objScale.z);
 
 	return S_OK;
 }

@@ -4,7 +4,7 @@
 #include "IMGui_Manager.h"
 #include "GameInstance.h"
 
-#include "Free_Camera.h"
+#include "Tool_Camera.h"
 
 CLevel_Tool::CLevel_Tool(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CLevel(_pDevice, _pContext)
@@ -96,20 +96,21 @@ HRESULT CLevel_Tool::Ready_Layer_Camera(const wstring& _strLayerTag)
 	Safe_AddRef(pGameInstance);
 
 	// 구조체 생성
-	CFree_Camera::FREE_CAMERA_DESC FreeCameraDesc;
-	ZeroMemory(&FreeCameraDesc, sizeof FreeCameraDesc);
+	CTool_Camera::TOOL_CAMERA_DESC ToolCameraDesc;
+	ZeroMemory(&ToolCameraDesc, sizeof ToolCameraDesc);
 
-	FreeCameraDesc.fMouseSensitive = 0.2f;
-	FreeCameraDesc.vEye = _float4(0.f, 10.f, -8.f, 1.f);
-	FreeCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
-	FreeCameraDesc.fFovY = XMConvertToRadians(60.f);
-	FreeCameraDesc.fAspect = g_iWinSizeX / (_float)g_iWinSizeY;
-	FreeCameraDesc.fNear = 0.2f;
-	FreeCameraDesc.fFar = 600.f;
-	FreeCameraDesc.fSpeedPerSec = 15.f;
-	FreeCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
+	ToolCameraDesc.fMouseSensitive = 0.2f;
+	ToolCameraDesc.vEye = _float4(0.f, 10.f, -8.f, 1.f);
+	ToolCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	ToolCameraDesc.fFovY = XMConvertToRadians(60.f);
+	ToolCameraDesc.fAspect = g_iWinSizeX / (_float)g_iWinSizeY;
+	ToolCameraDesc.fNear = 0.2f;
+	ToolCameraDesc.fFar = 600.f;
+	ToolCameraDesc.fSpeedPerSec = 15.f;
+	ToolCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
+	ToolCameraDesc.fZoomPerSec = 500.f;
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, _strLayerTag, TEXT("ProtoType_GameObject_ToolCamera"), &FreeCameraDesc)))
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, _strLayerTag, TEXT("ProtoType_GameObject_ToolCamera"), &ToolCameraDesc)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

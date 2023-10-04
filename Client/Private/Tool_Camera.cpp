@@ -38,6 +38,8 @@ void CTool_Camera::Tick(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+#pragma region KeyBoard
+
 	// 키 입력
 	if (pGameInstance->Get_DIKeyState(DIK_W) & 0x80)
 	{
@@ -56,31 +58,67 @@ void CTool_Camera::Tick(_float _fTimeDelta)
 		m_pTransformCom->Go_Right(_fTimeDelta);
 	}
 
-	if (pGameInstance->Get_DIKeyState(DIK_P) & 0x8000)
-	{
-		if(m_bRotMode)
-			m_bRotMode = false;
-		else
-			m_bRotMode = true;
-	}
+#pragma endregion
 
-	if (m_bRotMode)
+#pragma region Mouse
+
+	// 휠 클릭
+	if (pGameInstance->Get_DIMouseState(CInput_Device::MKS_WHEELBUTTON) & 0x80)
 	{
 		// 마우스 입력
 		_long mouseMove = 0l;
 
-		// 일반적인 y축으로 회전 할 것. 
-		if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_X)) // (y축을 회전하면 x축이 움직이기에.)
+		// Shift 안 눌리고 휠만 : 회전
+		if (!pGameInstance->Get_DIKeyState(DIK_LSHIFT))
 		{
-			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), mouseMove * m_fMouseSensitive * _fTimeDelta);
+			// 일반적인 y축으로 회전 할 것. 
+			if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_X)) // (y축을 회전하면 x축이 움직이기에.)
+				m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), mouseMove * m_fMouseSensitive * _fTimeDelta);
+
+			// 카메라 월드 행렬의 right 축을 기준으로 회전할 것.
+			if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_Y))
+				m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), mouseMove * m_fMouseSensitive * _fTimeDelta);
 		}
 
-		// 카메라 월드 행렬의 right 축을 기준으로 회전할 것.
-		if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_Y))
+		// Shift + MouseWheel = 카메라 이동.
+		if (pGameInstance->Get_DIKeyState(DIK_LSHIFT) & 0x80)
 		{
-			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), mouseMove * m_fMouseSensitive * _fTimeDelta);
+			_long mouseMove = 0l;
+
+			// down = -1, up = 1
+			if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_Y))
+			{
+				if (mouseMove > 0)
+					m_pTransformCom->Go_Up(_fTimeDelta);
+				else if (mouseMove < 0)
+					m_pTransformCom->Go_Down(_fTimeDelta);
+			}
+
+			if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_X))
+			{
+				if (mouseMove > 0)
+					m_pTransformCom->Go_Left(_fTimeDelta);
+				else if (mouseMove < 0)
+					m_pTransformCom->Go_Right(_fTimeDelta);
+			}
 		}
 	}
+	// 휠 클릭이 아닌 굴리기
+	else
+	{
+		_long mouseMove = 0l;
+
+		if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_WHEEL))
+		{
+			if (mouseMove < 0)
+				m_pTransformCom->Zoom_Out(_fTimeDelta);
+			else
+				m_pTransformCom->Zoom_In(_fTimeDelta);
+		}
+
+	}
+
+#pragma endregion
 
 	Safe_Release(pGameInstance);
 

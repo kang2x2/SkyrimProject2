@@ -6,13 +6,16 @@ BEGIN(Engine)
 
 class ENGINE_DLL CModel final : public CComponent
 {
+public:
+	enum MODEL_TYPE { TYPE_NONANIM, TYPE_ANIM, TYPE_END };
+
 private:
 	CModel(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	CModel(const CModel& rhs);
 	virtual ~CModel() = default;
 
 public:
-	virtual HRESULT Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _matPivot);
+	virtual HRESULT Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _matPivot, MODEL_TYPE _eType);
 	virtual HRESULT Initialize_Clone(void* pArg) override;
 
 public:
@@ -28,8 +31,9 @@ public:
 	HRESULT Render(_uint iMeshIndex);
 
 private:
-	HRESULT Ready_Mesh();
+	HRESULT Ready_Mesh(MODEL_TYPE _eType);
 	HRESULT Ready_Material(const char* _pModelFilePath);
+	HRESULT Ready_Bone(const aiNode* _pAINode, _int _iParentBoneIndex);
 
 private:
 	Assimp::Importer m_Importer; // FBX파일을 열어서 읽는다.
@@ -43,8 +47,10 @@ private:
 
 	_float4x4		m_matPivot; // 사전 준비를 위한 행렬.
 
+	vector<class CBone*> m_vecBone; // 뼈들을 저장.
+
 public:
-	static CModel* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const char* _strModleFilePath, _fmatrix _matPivot);
+	static CModel* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const char* _strModleFilePath, _fmatrix _matPivot, MODEL_TYPE _eType);
 	virtual CComponent* Clone(void* _pArg) override;
 	virtual void Free() override;
 

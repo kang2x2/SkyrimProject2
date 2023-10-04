@@ -28,6 +28,7 @@ public: /* For. InputDevice */
 	_byte	Get_DIKeyState(_ubyte byKeyID);
 	_byte	Get_DIMouseState(CInput_Device::MOUSEKEYSTATE eMouse);
 	_long	Get_DIMouseMove(CInput_Device::MOUSEMOVESTATE eMouseState);
+	_bool   Get_DIMouseDown(CInput_Device::MOUSEKEYSTATE eMouse);
 
 public : /* For.Timer_Manager */
 	_float	Compute_TimeDelta(const wstring & strTimerTag);

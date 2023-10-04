@@ -49,6 +49,22 @@ HRESULT Engine::CInput_Device::Ready_Input_Device(HINSTANCE hInst, HWND hWnd)
 	return S_OK;
 }
 
+
+_bool CInput_Device::Get_DIMouseDown(MOUSEKEYSTATE eMouse)
+{
+	// 눌린 적 없고 지금 눌렀으면
+	if (m_curMouseKey != eMouse && Get_DIMouseState(eMouse) & 0x80)
+	{
+		m_curMouseKey = eMouse;
+		return true;
+	}
+
+	if(m_curMouseKey == eMouse && !(Get_DIMouseState(eMouse) & 0x80))
+		m_curMouseKey = MKS_END;
+
+	return false;
+}
+
 void Engine::CInput_Device::Update_InputDev(void)
 {
 	/* 매 프레임마다 키보드와 마우스의 상태를 저장해준다. */

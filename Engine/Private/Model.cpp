@@ -3,6 +3,8 @@
 #include "Mesh.h"
 #include "Texture.h"
 
+#include "Bone.h"
+
 CModel::CModel(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CComponent(_pDevice, _pContext)
 {
@@ -27,7 +29,7 @@ CModel::CModel(const CModel& rhs)
 		Safe_AddRef(iter);
 }
 
-HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _matPivot)
+HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _matPivot, MODEL_TYPE _eType)
 {
 	// fbx파일을 읽어 데이터를 m_pAIScene으로 리턴.
 	/*  aiProcess_PreTransformVertices 
@@ -38,7 +40,14 @@ HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _ma
 
 	// aiProcess_ConvertToLeftHanded : 왼손 좌표계로 알아서 변환하여 가져와줌(FBX SDK는 지원 안함)
 	// aiProcessPreset_TargetRealtime_Fast : 옵션을 변경해 줌으로써 퀄리티의 차이가 있다.
-	m_pAIScene = m_Importer.ReadFile(_strModleFilePath, aiProcess_PreTransformVertices | aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast);
+	
+	// 기본적인 플래그.
+	_uint iFlag = aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast;
+	// 매개로 들어온 타입이 NonAnim일 때 aiProcess_PreTransformVertices도 바인딩 해준다.
+	if (_eType == TYPE_NONANIM)
+		iFlag = iFlag | aiProcess_PreTransformVertices;
+	
+	m_pAIScene = m_Importer.ReadFile(_strModleFilePath, iFlag);
 	if (m_pAIScene == nullptr)
 		return E_FAIL;
 
@@ -47,10 +56,16 @@ HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _ma
 
 	// DirectX로 그려낼 수 있게 데이터를 정리하는 부분
 	
-	if (FAILED(Ready_Mesh()))
+	/* 모델의 각 파츠 정점 정보를 로드. */
+	if (FAILED(Ready_Mesh(_eType)))
 		return E_FAIL;
-		
+
+	/* 모델의 픽셀별로 정의된 재질 정보를 저장해준 텍스쳐를 읽음. */
 	if (FAILED(Ready_Material(_strModleFilePath)))
+		return E_FAIL;
+
+	/* 뼈 로드(최상위 부모 노드를 매개로 보낸다.) */
+	if (FAILED(Ready_Bone(m_pAIScene->mRootNode, -1)))
 		return E_FAIL;
 
 	return S_OK;
@@ -89,7 +104,7 @@ HRESULT CModel::Render(_uint iMeshIndex)
 	return S_OK;
 }
 
-HRESULT CModel::Ready_Mesh()
+HRESULT CModel::Ready_Mesh(MODEL_TYPE _eType)
 {
 	m_iNumMeshes = m_pAIScene->mNumMeshes;
 
@@ -97,7 +112,7 @@ HRESULT CModel::Ready_Mesh()
 
 	for (size_t i = 0; i < m_iNumMeshes; ++i)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_pAIScene->mMeshes[i], XMLoadFloat4x4(&m_matPivot));
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_pAIScene->mMeshes[i], XMLoadFloat4x4(&m_matPivot), _eType);
 		if (pMesh == nullptr)
 			return E_FAIL;
 
@@ -162,6 +177,30 @@ HRESULT CModel::Ready_Material(const char* _pModelFilePath)
 	return S_OK;
 }
 
+HRESULT CModel::Ready_Bone(const aiNode* _pAINode, _int _iParentBoneIndex)
+{
+	// 뼈 생성 (최상위 부모 노드가 가장 처음에 들어오기 때문에 매개로 -1을 받음)
+	CBone* pBone = CBone::Create(_pAINode, _iParentBoneIndex);
+	if (pBone == nullptr)
+		return E_FAIL;
+
+	m_vecBone.push_back(pBone);
+
+	// 뼈의 부모 인덱스 설정.
+	_int iParentIndex = m_vecBone.size() - 1;
+
+	// 자식 노드 수 만큼 재귀 함수 수행하여 뼈 생성.
+	// 더 이상 생성 할 자식이 없을 때 까지 계속해서 재귀를 수행 할 것이다.
+	for (size_t i = 0; i < _pAINode->mNumChildren; ++i)
+	{
+		// 재귀를 돌며 i번째 자식 노드를 생성한다.
+		// 부모의 인덱스는 반복문 이전에 세팅해 둔 인덱스가 될 것이다.
+		Ready_Bone(_pAINode->mChildren[i], iParentIndex);
+	}
+
+	return S_OK;
+}
+
 void CModel::Update_VI(const _fmatrix& _matPivot)
 {
 	for (size_t i = 0; i < m_vecMesh.size(); ++i)
@@ -170,11 +209,11 @@ void CModel::Update_VI(const _fmatrix& _matPivot)
 	}
 }
 
-CModel* CModel::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const char* _strModleFilePath, _fmatrix _matPivot)
+CModel* CModel::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const char* _strModleFilePath, _fmatrix _matPivot, MODEL_TYPE _eType)
 {
 	CModel* pInstance = new CModel(_pDevice, _pContext);
 
-	if (FAILED(pInstance->Initialize_ProtoType(_strModleFilePath, _matPivot)))
+	if (FAILED(pInstance->Initialize_ProtoType(_strModleFilePath, _matPivot, _eType)))
 	{
 		MSG_BOX("Fail Create : CModel ProtoType");
 		Safe_Release(pInstance);
@@ -214,6 +253,13 @@ void CModel::Free()
 		Safe_Release(iter);
 	}
 	m_vecMesh.clear();
+
+	for (auto& iter : m_vecBone)
+	{
+		Safe_Release(iter);
+	}
+	m_vecBone.clear();
+
 
 	m_Importer.FreeScene();
 }

@@ -132,6 +132,14 @@ _long CGameInstance::Get_DIMouseMove(CInput_Device::MOUSEMOVESTATE eMouseState)
 	return m_pInput_Device->Get_DIMouseMove(eMouseState);
 }
 
+_bool CGameInstance::Get_DIMouseDown(CInput_Device::MOUSEKEYSTATE eMouse)
+{
+	if (m_pInput_Device == nullptr)
+		return false;
+
+	return m_pInput_Device->Get_DIMouseDown(eMouse);
+}
+
 /* Timer Manager */
 _float CGameInstance::Compute_TimeDelta(const wstring& strTimerTag)
 {

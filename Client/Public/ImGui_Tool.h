@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "ImGui_Base.h"
+#include "imgui.h"
 
 BEGIN(Client)
 
@@ -16,6 +17,13 @@ public:
 		wstring m_strComTag;
 		_bool	m_bCheck = false;
 	}TOOL_AFTER_FILEDESC;
+
+	typedef struct tagLayOutDesc
+	{
+		const char*  m_strName;
+		ImVec2		 m_vStartLayOutPos;
+		ImVec2		 m_vEndLayOutPos;
+	}TOOL_LAYOUTDESC;
 
 private:
 	CImGui_Tool();
@@ -36,10 +44,8 @@ private:
 	void	LayOut_Object_PickMode();
 
 	// Object Content
-	void    LayOut_Object_FBX();
-	void    LayOut_Object_DDS();
-	void    LayOut_Object_WIC();
-
+	void    LayOut_FBX_List();
+	void    LayOut_Object_Transform();
 
 	// FindFile
 	void	FindFolder();
@@ -61,6 +67,10 @@ private:
 	void    File_Save();
 	void    File_Load();
 
+	// RangeCheck(레이아웃 범위 밖에서만 피킹 가능하도록)
+	void    Add_LayOut_Array(const char* _strName, ImVec2 _LayOutPos, ImVec2 _LayOutSize);
+	_bool   Check_LayOut_Range();
+
 public:
 	void    Set_ImGuiActive(_bool _isActive) { m_bActive = _isActive; }
 	_bool	Get_ImGuiActive() { return m_bActive; }
@@ -80,9 +90,7 @@ private:
 	_bool m_bFindFBX = true;
 
 	// 파일 확장자 불리언
-	_bool showFBXContent = true;
-	_bool showDDSContent = false;
-	_bool showWICContent = false;
+	_bool showFBXListShow = true;
 
 	// 파일 배열
 	vector<wstring> m_vecBeforeFolderList; // 검색된 폴더 이름 저장.
@@ -102,6 +110,10 @@ private:
 	_bool				 m_bDeleteMode = false;
 	_bool				 m_bSelectMode = false;	
 	_bool				 m_bDelete = false; // gui의 모든 작업이 끝나고 객체를 삭제하기 위함.
+
+	// 레이아웃 범위 밖에서만 클라이언트 작업을 수행하기 위함.
+	vector<TOOL_LAYOUTDESC> m_vecLayOut;
+
 public:
 	static CImGui_Tool* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual void Free() override;
