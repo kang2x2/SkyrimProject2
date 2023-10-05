@@ -176,14 +176,14 @@ void CTransform::Fix_Rotation(FXMVECTOR _vAxis, _float _fRadian)
 	Set_State(STATE_LOOK, vLook);
 }
 
-void CTransform::Turn(FXMVECTOR _vAxis, _float _fTimeDelta)
+void CTransform::Turn(FXMVECTOR _vAxis, _float _fTimeDelta, _float _fRotationRadianPerSec)
 {
 	/* 현재 상태기준 정해준 각도만큼 회전시켜놓는다. */
 	_vector vRight = Get_State(STATE_RIGHT);
 	_vector vUp = Get_State(STATE_UP);
 	_vector vLook = Get_State(STATE_LOOK);
 
-	_matrix RotationMatrix = XMMatrixRotationAxis(_vAxis, m_fRotationRadianPerSec * _fTimeDelta);
+	_matrix RotationMatrix = XMMatrixRotationAxis(_vAxis, (m_fRotationRadianPerSec + _fRotationRadianPerSec) * _fTimeDelta);
 
 	vRight = XMVector4Transform(vRight, RotationMatrix);
 	vUp = XMVector4Transform(vUp, RotationMatrix);

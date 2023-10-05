@@ -509,14 +509,13 @@ void CImGui_Tool::File_Save()
 		std::wstring filePath = OFN.lpstrFile;
 
 		// 파일 내용을 저장할 변수에 원하는 내용을 할당.
-		// 추후 문자열이 아닌 현재 게임의 모든 정보를 여기서 저장하면 될 듯 하다.
-		std::wstring fileContent = L"Test";
 
 		// 파일을 쓰기 모드로 열기.
 		std::wofstream fileStream(filePath);
 		if (fileStream.is_open()) {
 			// 파일 내용을 파일에 쓰기.
-			fileStream << fileContent;
+			m_pSelectObject->Object_FileSave(fileStream);
+
 			fileStream.close();
 			MessageBox(g_hWnd, L"파일이 성공적으로 저장되었습니다.", L"저장 완료", MB_OK);
 		}
@@ -551,14 +550,31 @@ void CImGui_Tool::File_Load()
 		wsprintf(filePathName, L"%s 파일을 열겠습니까?", OFN.lpstrFile);
 		MessageBox(g_hWnd, filePathName, L"열기 선택", MB_OK);
 
-		int requiredSize = WideCharToMultiByte(CP_UTF8, 0, OFN.lpstrFile, -1, NULL, 0, NULL, NULL);
-		if (requiredSize > 0) {
-			std::string t;
-			t.resize(requiredSize);
-			WideCharToMultiByte(CP_UTF8, 0, OFN.lpstrFile, -1, &t[0], requiredSize, NULL, NULL);
+		wstring filePath = OFN.lpstrFile;
 
-			int a = 0;
+		// 파일을 열기 모드로 열기.
+		wifstream fileStream(filePath);
+		if (fileStream.is_open()) {
+			// 파일 내용을 읽기.
+
+
+
+			fileStream.close();
+			MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
 		}
+		else {
+			MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
+		}
+
+
+		//int requiredSize = WideCharToMultiByte(CP_UTF8, 0, OFN.lpstrFile, -1, NULL, 0, NULL, NULL);
+		//if (requiredSize > 0) {
+		//	std::string t;
+		//	t.resize(requiredSize);
+		//	WideCharToMultiByte(CP_UTF8, 0, OFN.lpstrFile, -1, &t[0], requiredSize, NULL, NULL);
+		//
+		//	int a = 0;
+		//}
 	}
 
 	SetCurrentDirectory(originalPath);
@@ -633,25 +649,43 @@ HRESULT CImGui_Tool::Select_Object()
 {
 	char buffer[256];
 	_bool bIsChangeValue = false;
-	_float fChangeValue = 0.f;
 
 	CTransform* pTransform = dynamic_cast<CTransform*>(m_pSelectObject->Get_Component(TEXT("Com_Transform")));
-	_float3 objPos;
+	_float4 objPos;
 	_float3 objScale = pTransform->Get_Scaled();
-	XMStoreFloat3(&objPos, pTransform->Get_State(CTransform::STATE_POSITION));
+	_float  fRotSpeed = 10.f;
 
-	if (ImGui::InputFloat("PosX", &objPos.x, fChangeValue))
+	XMStoreFloat4(&objPos, pTransform->Get_State(CTransform::STATE_POSITION));
+
+	if (ImGui::DragFloat("##PosX", &objPos.x, 1.f))
+		pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
+	if (ImGui::DragFloat("##PosY", &objPos.y, 1.f))
+		pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
+	if (ImGui::DragFloat("##PosZ", &objPos.z, 1.f))
+		pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
+
+	if (ImGui::DragFloat("##ScaleX", &objScale.x, 0.1f, 0.1f, 100.f))
+		pTransform->Set_Scaling(objScale);
+	if (ImGui::DragFloat("##ScaleY", &objScale.y, 0.1f, 0.1f, 100.f))
+		pTransform->Set_Scaling(objScale);
+	if (ImGui::DragFloat("##ScaleZ", &objScale.z, 0.1f, 0.1f, 100.f))
+		pTransform->Set_Scaling(objScale);
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (ImGui::DragFloat("##RotX", &objPos.y, 0.1f, 100.f))
 	{
-		objPos.x = fChangeValue;
-		pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&objPos));
+		// 일단 한쪽으로만 회전 됨.
+		// 추후 마우스 회전의 값을 이용하여 양쪽 모두 회전 가능하게 변경
+		// m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), mouseMove * m_fMouseSensitive * _fTimeDelta);
+		pTransform->Turn(pTransform->Get_State(CTransform::STATE_UP), pGameInstance->Compute_TimeDelta(TEXT("Timer_60")), fRotSpeed);
 	}
-	ImGui::Text("PosY   : %f", objPos.y);
-	ImGui::Text("PosZ   : %f", objPos.z);
-	ImGui::Text("ScaleX : %f", objScale.x);
-	ImGui::Text("ScaleY : %f", objScale.y);
-	ImGui::Text("ScaleZ : %f", objScale.z);
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
+
 }
 
 CImGui_Tool* CImGui_Tool::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)

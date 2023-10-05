@@ -32,9 +32,15 @@ public:
 	void			Set_HasLayerTag(const wstring& _strLayerTag) { m_strHasLayerTag = _strLayerTag; }
 	const wstring&  Get_HasLayerTag() { return m_strHasLayerTag; }
 
+public: /* 파일 저장과 로드를 담당하는 함수들 */
+	virtual HRESULT Object_FileSave(wofstream& outFile) const;
+	virtual HRESULT Object_FileLoad(std::ifstream& inFile);
+	
+
 protected:
 	wstring					m_strName = TEXT(""); // 고유한 이름을 가지고 있어야 탐색이 용이 할 것 같다.
 	wstring					m_strHasLayerTag = TEXT(""); // 자신이 속한 레이어를 알고 있어야 삭제가 빠를 것 같다.
+	wstring					m_strModelComTag = TEXT(""); // 자신이 가지고 있는 모델 컴포넌트의 원본 태그
 	_bool					m_bHasMesh = false; // 메시를 가지고 있는 객체인지 판별이 필요 할 것 같다.
 
 	// 삭제를 위해 고유 인덱스를 주는 것 보단 bool 값으로 현재 선택된 상태를 전달하자.

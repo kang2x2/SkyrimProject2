@@ -1,29 +1,29 @@
 #include "framework.h"
-#include "SkyrimTerrain.h"
+#include "Building.h"
 
 #include "GameInstance.h"
 
-CSkyrimTerrain::CSkyrimTerrain(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CBuilding::CBuilding(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CGameObject(_pDevice, _pContext)
 {
 }
 
-CSkyrimTerrain::CSkyrimTerrain(const CSkyrimTerrain& rhs)
+CBuilding::CBuilding(const CBuilding& rhs)
 	: CGameObject(rhs)
 {
 }
 
-HRESULT CSkyrimTerrain::Initialize_ProtoType()
+HRESULT CBuilding::Initialize_ProtoType()
 {
 	return S_OK;
 }
 
-HRESULT CSkyrimTerrain::Initialize_Clone(void* pArg)
+HRESULT CBuilding::Initialize_Clone(void* pArg)
 {
 	return S_OK;
 }
 
-HRESULT CSkyrimTerrain::Initialize_Clone(const wstring& _strModelComTag, void* pArg)
+HRESULT CBuilding::Initialize_Clone(const wstring& _strModelComTag, void* pArg)
 {
 	_matrix* pMatPivot = (_matrix*)pArg;
 
@@ -44,16 +44,16 @@ HRESULT CSkyrimTerrain::Initialize_Clone(const wstring& _strModelComTag, void* p
 	return S_OK;
 }
 
-void CSkyrimTerrain::Tick(_float _fTimeDelta)
+void CBuilding::Tick(_float _fTimeDelta)
 {
 }
 
-void CSkyrimTerrain::LateTick(_float _fTimeDelta)
+void CBuilding::LateTick(_float _fTimeDelta)
 {
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 }
 
-HRESULT CSkyrimTerrain::Render()
+HRESULT CBuilding::Render()
 {
 	if (FAILED(Bind_ShaderResource()))
 		return E_FAIL;
@@ -74,17 +74,17 @@ HRESULT CSkyrimTerrain::Render()
 	return S_OK;
 }
 
-HRESULT CSkyrimTerrain::Object_FileSave(ofstream& outFile) const
+HRESULT CBuilding::Object_FileSave(ofstream& outFile) const
 {
 	return S_OK;
 }
 
-HRESULT CSkyrimTerrain::Object_FileLoad(std::ifstream& inFile)
+HRESULT CBuilding::Object_FileLoad(std::ifstream& inFile)
 {
 	return S_OK;
 }
 
-HRESULT CSkyrimTerrain::Ready_Component()
+HRESULT CBuilding::Ready_Component()
 {
 	if (FAILED(__super::Add_CloneComponent(LEVEL_TOOL, m_strModelComTag,
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
@@ -105,7 +105,7 @@ HRESULT CSkyrimTerrain::Ready_Component()
 	return S_OK;
 }
 
-HRESULT CSkyrimTerrain::Bind_ShaderResource()
+HRESULT CBuilding::Bind_ShaderResource()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
@@ -159,46 +159,46 @@ HRESULT CSkyrimTerrain::Bind_ShaderResource()
 
 }
 
-CSkyrimTerrain* CSkyrimTerrain::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CBuilding* CBuilding::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 {
-	CSkyrimTerrain* pInstance = new CSkyrimTerrain(_pDevice, _pContext);
+	CBuilding* pInstance = new CBuilding(_pDevice, _pContext);
 
 	if (FAILED(pInstance->Initialize_ProtoType()))
 	{
-		MSG_BOX("Fail Create : CSkyrimTerrain ProtoType");
+		MSG_BOX("Fail Create : CBuilding ProtoType");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CSkyrimTerrain::Clone(void* _pArg)
+CGameObject* CBuilding::Clone(void* _pArg)
 {
-	CSkyrimTerrain* pInstance = new CSkyrimTerrain(*this);
+	CBuilding* pInstance = new CBuilding(*this);
 
 	if (FAILED(pInstance->Initialize_Clone(_pArg)))
 	{
-		MSG_BOX("Fail Clone : CSkyrimTerrain Clone");
+		MSG_BOX("Fail Clone : CBuilding Clone");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CSkyrimTerrain::Clone(const wstring& _strModelComTag, void* _pArg)
+CGameObject* CBuilding::Clone(const wstring& _strModelComTag, void* _pArg)
 {
-	CSkyrimTerrain* pInstance = new CSkyrimTerrain(*this);
+	CBuilding* pInstance = new CBuilding(*this);
 
 	if (FAILED(pInstance->Initialize_Clone(_strModelComTag, _pArg)))
 	{
-		MSG_BOX("Fail Clone : CSkyrimTerrain Clone");
+		MSG_BOX("Fail Clone : CBuilding Clone");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CSkyrimTerrain::Free()
+void CBuilding::Free()
 {
 	__super::Free();
 

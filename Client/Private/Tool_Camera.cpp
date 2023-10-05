@@ -110,9 +110,9 @@ void CTool_Camera::Tick(_float _fTimeDelta)
 
 		if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_WHEEL))
 		{
-			if (mouseMove < 0)
+			if (mouseMove < 0 && pGameInstance->Get_DIKeyState(DIK_LCONTROL))
 				m_pTransformCom->Zoom_Out(_fTimeDelta);
-			else
+			else if (mouseMove > 0 && pGameInstance->Get_DIKeyState(DIK_LCONTROL))
 				m_pTransformCom->Zoom_In(_fTimeDelta);
 		}
 

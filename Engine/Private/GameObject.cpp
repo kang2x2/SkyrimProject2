@@ -1,6 +1,8 @@
 #include "GameObject.h"
 #include "GameInstance.h"
 
+#include <fstream>
+
 CGameObject::CGameObject(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: m_pDevice(_pDevice)
 	, m_pContext(_pContext)
@@ -54,6 +56,52 @@ CComponent* CGameObject::Get_Component(const wstring& _strComponentName)
 	}
 
 	return nullptr;
+}
+
+HRESULT CGameObject::Object_FileSave(wofstream& outFile) const
+{
+	outFile << m_strName << '\n';
+	outFile << m_strHasLayerTag << '\n';
+	outFile << m_strModelComTag << '\n';
+	outFile << m_bHasMesh << '\n';
+	outFile << m_bDead << '\n';
+	outFile << m_pDevice << '\n';
+	outFile << m_pContext << '\n';
+	outFile << m_fX << '\n';
+	outFile << m_fY << '\n';
+	outFile << m_fSizeX << '\n';
+	outFile << m_fSizeY << '\n';
+
+	wstring matrixStr;
+	for (int row = 0; row < 4; ++row) {
+		for (int col = 0; col < 4; ++col) {
+			matrixStr += std::to_wstring(m_ViewMatrix.m[row][col]) + L" ";
+		}
+		matrixStr += L"\n";
+	}
+
+	outFile << matrixStr << '\n';
+
+	for (int row = 0; row < 4; ++row) {
+		for (int col = 0; col < 4; ++col) {
+			matrixStr += std::to_wstring(m_ProjMatrix.m[row][col]) + L" ";
+		}
+		matrixStr += L"\n";
+	}
+
+	outFile << matrixStr << '\n';
+
+	for (const auto& pair : m_mapComponent) {
+		outFile << pair.first << L'\n';  // 키 저장
+		outFile << pair.second << L'\n';  // 값 저장
+	}
+
+	return S_OK;
+}
+
+HRESULT CGameObject::Object_FileLoad(std::ifstream& inFile)
+{
+	return S_OK;
 }
 
 HRESULT CGameObject::Add_CloneComponent(_uint _iLevelIndex, const wstring& _strProtoTypeTag, const wstring& _strComponentTag, CComponent** _ppOut, void* pArg)

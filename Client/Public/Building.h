@@ -12,12 +12,12 @@ END
 
 BEGIN(Client)
 
-class CSkyrimTerrain final : public CGameObject
+class CBuilding final : public CGameObject
 {
 private:
-	CSkyrimTerrain(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
-	CSkyrimTerrain(const CSkyrimTerrain& rhs);
-	virtual ~CSkyrimTerrain() = default;
+	CBuilding(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	CBuilding(const CBuilding& rhs);
+	virtual ~CBuilding() = default;
 
 public:
 	virtual HRESULT Initialize_ProtoType() override; // ¿øº»
@@ -33,17 +33,17 @@ public:
 	virtual HRESULT Object_FileLoad(std::ifstream& inFile);
 
 private:
-	CModel*			m_pModelCom = nullptr;
-	CShader*		m_pShaderCom = nullptr;
-	CRenderer*		m_pRendererCom = nullptr;
-	CTransform*		m_pTransformCom = nullptr;
+	CModel* m_pModelCom = nullptr;
+	CShader* m_pShaderCom = nullptr;
+	CRenderer* m_pRendererCom = nullptr;
+	CTransform* m_pTransformCom = nullptr;
 
 private:
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResource();
 
 public:
-	static CSkyrimTerrain* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	static CBuilding* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;
 	virtual CGameObject* Clone(const wstring& _strModelComTag, void* _pArg) override;
 	virtual void Free() override;
