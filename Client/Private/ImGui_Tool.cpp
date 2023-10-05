@@ -653,33 +653,55 @@ HRESULT CImGui_Tool::Select_Object()
 	CTransform* pTransform = dynamic_cast<CTransform*>(m_pSelectObject->Get_Component(TEXT("Com_Transform")));
 	_float4 objPos;
 	_float3 objScale = pTransform->Get_Scaled();
-	_float  fRotSpeed = 10.f;
+	_float  fRotSpeed = 20.f;
 
 	XMStoreFloat4(&objPos, pTransform->Get_State(CTransform::STATE_POSITION));
 
+	ImGui::Text("PosX   ");
+	ImGui::SameLine();
 	if (ImGui::DragFloat("##PosX", &objPos.x, 1.f))
 		pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
+
+	ImGui::Text("PosY   ");
+	ImGui::SameLine();
 	if (ImGui::DragFloat("##PosY", &objPos.y, 1.f))
 		pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
+
+	ImGui::Text("PosZ   ");
+	ImGui::SameLine();
 	if (ImGui::DragFloat("##PosZ", &objPos.z, 1.f))
 		pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
 
+	ImGui::Text("ScaleX ");
+	ImGui::SameLine();
 	if (ImGui::DragFloat("##ScaleX", &objScale.x, 0.1f, 0.1f, 100.f))
 		pTransform->Set_Scaling(objScale);
+
+	ImGui::Text("ScaleY ");
+	ImGui::SameLine();
 	if (ImGui::DragFloat("##ScaleY", &objScale.y, 0.1f, 0.1f, 100.f))
 		pTransform->Set_Scaling(objScale);
+
+	ImGui::Text("ScaleZ ");
+	ImGui::SameLine();
 	if (ImGui::DragFloat("##ScaleZ", &objScale.z, 0.1f, 0.1f, 100.f))
 		pTransform->Set_Scaling(objScale);
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (ImGui::DragFloat("##RotX", &objPos.y, 0.1f, 100.f))
+	ImGui::Text("RotX   ");
+	ImGui::SameLine();
+	if (ImGui::DragFloat("##RotX", &fRotSpeed, 0.1f, 100.f))
 	{
-		// 일단 한쪽으로만 회전 됨.
-		// 추후 마우스 회전의 값을 이용하여 양쪽 모두 회전 가능하게 변경
-		// m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), mouseMove * m_fMouseSensitive * _fTimeDelta);
 		pTransform->Turn(pTransform->Get_State(CTransform::STATE_UP), pGameInstance->Compute_TimeDelta(TEXT("Timer_60")), fRotSpeed);
+	}
+
+	ImGui::Text("RotY   ");
+	ImGui::SameLine();
+	if (ImGui::DragFloat("##RotY", &fRotSpeed, 0.1f, 100.f))
+	{
+		pTransform->Turn(pTransform->Get_State(CTransform::STATE_RIGHT), pGameInstance->Compute_TimeDelta(TEXT("Timer_60")), fRotSpeed);
 	}
 
 	Safe_Release(pGameInstance);
