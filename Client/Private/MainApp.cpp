@@ -44,7 +44,7 @@ void CMainApp::Tick(_float _fTimeDelta)
 
 HRESULT CMainApp::Render()
 {
-	m_pGameInstance->Clear_BackBuffer_View(_float4(0.2f, 0.4f, 0.6f, 1.f));
+	m_pGameInstance->Clear_BackBuffer_View(_float4(0.f, 0.f, 0.f, 1.f));
 	m_pGameInstance->Clear_DepthStencil_View();
 
 	// ±×¸®±â
