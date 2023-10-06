@@ -2,8 +2,8 @@
 
 #include "Mesh.h"
 #include "Texture.h"
-
 #include "Bone.h"
+#include "Animation.h"
 
 CModel::CModel(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CComponent(_pDevice, _pContext)
@@ -16,7 +16,13 @@ CModel::CModel(const CModel& rhs)
 	, m_vecMesh(rhs.m_vecMesh)
 	, m_iNumMaterails(rhs.m_iNumMaterails)
 	, m_vecMaterial(rhs.m_vecMaterial)
+	, m_vecBone(rhs.m_vecBone)
 {
+	for (auto& iter : m_vecBone)
+	{
+		Safe_AddRef(iter);
+	}
+
 	for (auto& iter : m_vecMaterial)
 	{
 		for (size_t i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
@@ -26,7 +32,9 @@ CModel::CModel(const CModel& rhs)
 	}
 
 	for (auto& iter : m_vecMesh)
+	{
 		Safe_AddRef(iter);
+	}
 }
 
 HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _matPivot, MODEL_TYPE _eType)
@@ -56,6 +64,10 @@ HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _ma
 
 	// DirectX로 그려낼 수 있게 데이터를 정리하는 부분
 	
+	/* 뼈 로드(최상위 부모 노드를 매개로 보낸다.) */
+	if (FAILED(Ready_Bone(m_pAIScene->mRootNode, -1)))
+		return E_FAIL;
+
 	/* 모델의 각 파츠 정점 정보를 로드. */
 	if (FAILED(Ready_Mesh(_eType)))
 		return E_FAIL;
@@ -64,9 +76,7 @@ HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _ma
 	if (FAILED(Ready_Material(_strModleFilePath)))
 		return E_FAIL;
 
-	/* 뼈 로드(최상위 부모 노드를 매개로 보낸다.) */
-	if (FAILED(Ready_Bone(m_pAIScene->mRootNode, -1)))
-		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -74,6 +84,11 @@ HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _ma
 HRESULT CModel::Initialize_Clone(void* pArg)
 {
 	return S_OK;
+}
+
+HRESULT CModel::Bind_BondMatrices(CShader* _pShader, _uint _iMeshIndex, const char* _strConstantName)
+{
+	return m_vecMesh[_iMeshIndex]->Bind_BondMatrices(_pShader, m_vecBone, _strConstantName);
 }
 
 HRESULT CModel::Bind_MaterialTexture(CShader* _pShader, const char* _pConstantName, _uint _iMeshIndex, aiTextureType _eType)
@@ -86,6 +101,20 @@ HRESULT CModel::Bind_MaterialTexture(CShader* _pShader, const char* _pConstantNa
 		return E_FAIL;
 
 	return m_vecMaterial[iMaterialIndex].pTextures[_eType]->Bind_ShaderResource(_pShader, _pConstantName, 0);
+}
+
+HRESULT CModel::Play_Animation(_float fTimeDelta)
+{
+	/* 뼈들의 TransformationMatrix를 애니메이션 상태에 맞도록 바꿔준다. */
+	// m_Animations[0]->Update_TransformationMatrix();
+	
+	/* 모든 뼈들의 CombinedTransformationMatrix를 갱신한다. */
+	for (size_t i = 0; i < m_vecBone.size(); ++i)
+	{
+		m_vecBone[i]->Update_CombinedTransformationMatrix(m_vecBone);
+	}
+
+	return S_OK;
 }
 
 HRESULT CModel::Render(_uint iMeshIndex)
@@ -112,7 +141,7 @@ HRESULT CModel::Ready_Mesh(MODEL_TYPE _eType)
 
 	for (size_t i = 0; i < m_iNumMeshes; ++i)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_pAIScene->mMeshes[i], XMLoadFloat4x4(&m_matPivot), _eType);
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, this, m_pAIScene->mMeshes[i], XMLoadFloat4x4(&m_matPivot), _eType);
 		if (pMesh == nullptr)
 			return E_FAIL;
 
@@ -199,6 +228,33 @@ HRESULT CModel::Ready_Bone(const aiNode* _pAINode, _int _iParentBoneIndex)
 	}
 
 	return S_OK;
+}
+
+HRESULT CModel::Ready_Animation()
+{
+	m_iNumAnimation = m_pAIScene->mNumAnimations;
+
+	for (size_t i = 0; i < m_iNumAnimation; ++i)
+	{
+		CAnimation* pAnimation = CAnimation::Create(m_pAIScene->mAnimations[i]);
+		if (pAnimation == nullptr)
+			return E_FAIL;
+
+		m_vecAnimation.push_back(pAnimation);
+	}
+
+	return S_OK;
+}
+
+_int CModel::Get_BoneIndex(const char* _strBoneName) const
+{
+	for (size_t iBoneIndex = 0; iBoneIndex < m_vecBone.size(); ++iBoneIndex)
+	{
+		if (false == strcmp(m_vecBone[iBoneIndex]->Get_BoneName(), _strBoneName))
+			return iBoneIndex;
+	}
+
+	return -1;
 }
 
 void CModel::Update_VI(const _fmatrix& _matPivot)

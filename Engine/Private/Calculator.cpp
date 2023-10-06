@@ -112,7 +112,6 @@ _float3 CCalculator::Picking_Grid(ID3D11Device* _pDevice, ID3D11DeviceContext* _
 
 				return vIntersectionPos;
 			}
-
 		}
 	}
 

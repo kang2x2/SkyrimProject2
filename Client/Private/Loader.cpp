@@ -203,10 +203,9 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 		return E_FAIL;
 
 	/* Player */
-	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	// matInitialize = XMMatrixScaling(1.f, 1.f, 1.f);
+	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Player/Idle.fbx", matInitialize, CModel::TYPE_ANIM))))
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Player/1Hand_Equip.fbx", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
 	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Fiona/Fiona.fbx", matInitialize))))
@@ -225,9 +224,13 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxNorTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
 		return E_FAIL;
+	/* Shader_VtxNonAnimMesh */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNonAnimMesh.hlsl"), VTX_NONANIMMESH::Elements, VTX_NONANIMMESH::iNumElements))))
+		return E_FAIL;
 	/* Shader_VtxAnimMesh */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNonAnimMesh.hlsl"), VTX_NONANIMMESH::Elements, VTX_NONANIMMESH::iNumElements))))
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxAnimMesh.hlsl"), VTX_ANIMMESH::Elements, VTX_ANIMMESH::iNumElements))))
 		return E_FAIL;
 
 #pragma endregion
@@ -462,9 +465,9 @@ HRESULT CLoader::Set_ProtoType_Mesh(LEVELID _eLevel)
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_WhiteRun_Building/CastleBridge.FBX", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
-	//if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_FarmHouseWindmill"),
-	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_WhiteRun_Building/FarmHouseWindmill.FBX", matInitialize, CModel::TYPE_NONANIM))))
-	//	return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_FarmHouseWindmill"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_WhiteRun_Building/FarmHouseWindmill.FBX", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_GuardHouse"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_WhiteRun_Building/GuardHouse.FBX", matInitialize, CModel::TYPE_NONANIM))))
@@ -773,151 +776,151 @@ HRESULT CLoader::Set_ProtoType_Object()
 #pragma region Building
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BreezeHome"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Bridge01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Bridge02"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Castle"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CastleBridge"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FarmHouseWindmill"),
-	//	CSkyrimTerrain::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FarmHouseWindmill"),
+		CBuilding::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_GuardHouse"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HalloftheDead"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_House02"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseBanneredmare"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseBlackSmith"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseGreymane"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseMeadery01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseMeadery01WareHouse"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseShack01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseShack02"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseStables01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseStores01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseStores02"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseWind01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseWind02"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseWind03"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HouseWind04"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Jorvaskr01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_MarketStand01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_MarketStand02"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_MarketStand03"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_StablePlatend01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_StablePlatstr01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_StableStr01end"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_StableWallbackStr01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_StableWallShortStr01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Templeofk01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Trellisarch01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_TrellisColumn01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_TrellisComplete01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_TrelliSlattice01"),
-		CSkyrimTerrain::Create(m_pDevice, m_pContext))))
+		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

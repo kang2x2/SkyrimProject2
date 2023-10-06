@@ -93,6 +93,15 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 
 	}VTX_ANIMMESH;
+
+	typedef struct tagKeyFrame
+	{
+		float		fTime;
+		XMFLOAT3    vScale;
+		XMFLOAT4    vRotation;
+		XMFLOAT3    vTranslation;
+
+	}KEYFRAME;
 }
 
 #endif // Engine_Struct_h__

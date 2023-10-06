@@ -19,35 +19,50 @@ public:
 	virtual HRESULT Initialize_Clone(void* pArg) override;
 
 public:
-	_uint Get_NumMeshes() const {
+	_uint Get_NumMeshes() const { // 매시 쉬 반환
 		return m_iNumMeshes;
 	}
 
+	_int  Get_BoneIndex(const char* _strBoneName) const; // 해당 이름의 뼈 수 반환
+
+public:
 	vector<class CMesh*> Get_VecMesh() { return m_vecMesh; }
 	void				 Update_VI(const _fmatrix& _matPivot);
 
 public:
+	HRESULT Bind_BondMatrices(class CShader* _pShader, _uint _iMeshIndex, const char* _strConstantName);
 	HRESULT Bind_MaterialTexture(class CShader* _pShader, const char* _pConstantName, _uint _iMeshIndex, aiTextureType _eType);
+	HRESULT Play_Animation(_float fTimeDelta);
 	HRESULT Render(_uint iMeshIndex);
 
 private:
 	HRESULT Ready_Mesh(MODEL_TYPE _eType);
 	HRESULT Ready_Material(const char* _pModelFilePath);
 	HRESULT Ready_Bone(const aiNode* _pAINode, _int _iParentBoneIndex);
+	HRESULT Ready_Animation();
 
 private:
-	Assimp::Importer m_Importer; // FBX파일을 열어서 읽는다.
-	const aiScene* m_pAIScene = nullptr; // 읽고 얻은 데이터들을 보관한다.
+	/* Base */
+	Assimp::Importer	m_Importer; // FBX파일을 열어서 읽는다.
+	const aiScene*		m_pAIScene = nullptr; // 읽고 얻은 데이터들을 보관한다.
 
-	_uint			m_iNumMeshes = 0; // numMeshes
-	vector<class CMesh*> m_vecMesh; // 모델 하나가 여러개의 메시를 가질 수 있다.(옷, 무기 등등)
+	/* 메시 */
+	_uint					m_iNumMeshes = 0; // numMeshes
+	vector<class CMesh*>	m_vecMesh; // 모델 하나가 여러개의 메시를 가질 수 있다.(옷, 무기 등등)
 
-	_uint			m_iNumMaterails = 0; // 총 재질 수
-	vector<MESH_MATERIAL> m_vecMaterial; // 재질 정보를 담는 벡터
+	/* 재질 */
+	_uint					m_iNumMaterails = 0; // 총 재질 수
+	vector<MESH_MATERIAL>	m_vecMaterial; // 재질 정보를 담는 벡터
 
-	_float4x4		m_matPivot; // 사전 준비를 위한 행렬.
+	/* 초기화 행렬 */
+	_float4x4				m_matPivot; // 사전 준비를 위한 행렬.
 
-	vector<class CBone*> m_vecBone; // 뼈들을 저장.
+	/* 뼈 */
+	vector<class CBone*>	m_vecBone; // 뼈들을 저장.
+
+	/* 애니메이션 */
+	_uint						m_iNumAnimation = 0; /* 모델이 가지고 있는 애니메이션 수 */
+	vector<class CAnimation*>	m_vecAnimation; /* 모델이 가지고 있는 애니메이션 배열 */
 
 public:
 	static CModel* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const char* _strModleFilePath, _fmatrix _matPivot, MODEL_TYPE _eType);

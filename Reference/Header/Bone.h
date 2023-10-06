@@ -23,6 +23,10 @@ public:
 	HRESULT Initialize(const aiNode* _pAINode, _int _iParentBoneIndex);
 	HRESULT Update_CombinedTransformationMatrix(const vector<class CBone*>& _vecBone);
 
+public:
+	const char* Get_BoneName() const { return m_szName; }
+	_float4x4 Get_CombinedTransformationMatrix() const { return m_CombinedTransformationMatrix; }
+
 private:
 	char	m_szName[MAX_PATH] = ""; // ª¿¿« ¿Ã∏ß
 

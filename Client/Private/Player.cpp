@@ -31,6 +31,7 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 
 void CPlayer::Tick(_float _fTimeDelta)
 {
+	m_pModelCom->Play_Animation(_fTimeDelta);
 }
 
 void CPlayer::LateTick(_float _fTimeDelta)
@@ -48,11 +49,17 @@ HRESULT CPlayer::Render()
 
 	for (size_t i = 0; i < iNumMeshes; ++i)
 	{
-		m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE);
+		if (FAILED(m_pModelCom->Bind_BondMatrices(m_pShaderCom, i, "g_BoneMatrices")))
+			return E_FAIL;
 
-		m_pShaderCom->Begin(0);
+		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
+			return E_FAIL;
 
-		m_pModelCom->Render(i);
+		if(FAILED(m_pShaderCom->Begin(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pModelCom->Render(i)))
+			return E_FAIL;
 	}
 
 
@@ -127,8 +134,6 @@ HRESULT CPlayer::Bind_ShaderResource()
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
-
-	m_pShaderCom->Begin(iPassIndex);
 
 	return S_OK;
 }

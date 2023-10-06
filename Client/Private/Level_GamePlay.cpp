@@ -20,14 +20,16 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Playher(TEXT("Layer_Player"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain_Grid"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_FreeCamera"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Playher(TEXT("Layer_Player"))))
-		return E_FAIL;
+
 
 	return S_OK;
 }
