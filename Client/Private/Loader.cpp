@@ -207,12 +207,8 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Player/1Hand_Equip.fbx", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
-	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
-	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Fiona/Fiona.fbx", matInitialize))))
-	//	return E_FAIL;
-	// if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
-	// 	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_WhiteRun_Terrain/ArcadiaBase01.FBX", matInitialize))))
-	// 	return E_FAIL;
+
+	Set_ProtoType_Mesh(LEVEL_GAMEPLAY);
 
 #pragma endregion
 
@@ -245,9 +241,9 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 		return E_FAIL;
 
 	// Terrain
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Terrain"),
-		CTerrain::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Terrain"),
+	//	CTerrain::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
 	// Player
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player"),

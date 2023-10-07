@@ -35,8 +35,7 @@ public : /* For.Timer_Manager */
 	HRESULT Add_Timer(const wstring & strTimerTag);
 
 public: /* For.Calculator */
-	_float3 Picking_Grid(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, class CGameObject* _pTerrain, const _float3 * _vec) const;
-	_float3 Picking_Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos) const;
+	_float3 Picking_Terrain(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, class CGameObject* _pTerrain, const _float3 * _vec, _uint _iLevel);
 	CGameObject* Picking_Object(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, _uint _iLevel);
 
 public: /* For.Level_Manager */

@@ -32,9 +32,16 @@ HRESULT CSkyrimTerrain::Initialize_Clone(const wstring& _strModelComTag, void* p
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	// 받아온 행렬의 position 행을 저장 후 세팅
-	_vector vPos = pMatPivot->r[3];
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+	// 받아온 행렬의 정보를 저장 후 세팅
+	//_float4x4 _matInit;
+	//XMStoreFloat4x4(&_matInit, (*pMatPivot));
+	//_float3 vScale = { _matInit._11, _matInit._22, _matInit._33 };
+	//
+	//_vector vPos = pMatPivot->r[3];
+	//
+	//m_pTransformCom->Set_Scaling(vScale);
+	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+	m_pTransformCom->Set_WorldMatrix(*pMatPivot);
 	// 메시의 정점 정보도 같이 업데이트 해준다.
 	m_pModelCom->Update_VI(*pMatPivot);
 

@@ -19,6 +19,18 @@ _float3 CTransform::Get_Scaled()
 		XMVectorGetX(XMVector3Length(Get_State(STATE_LOOK))));
 }
 
+_float3 CTransform::Get_Rotated()
+{
+	_matrix matRotation = XMMatrixRotationQuaternion(XMQuaternionRotationMatrix(XMLoadFloat4x4(&m_WorldMatrix)));
+
+	_float3 vRotationAngles;
+	_vector vScale, vRotation, vTranslation;
+	XMMatrixDecompose(&vScale, &vRotation, &vTranslation, matRotation);
+	XMStoreFloat3(&vRotationAngles, vRotation);
+
+	return vRotationAngles;
+}
+
 void CTransform::Set_State(STATE _eState, _fvector _vState)
 {
 	_matrix StateMatrix;
@@ -40,6 +52,11 @@ void CTransform::Set_Scaling(const _float3& _vScale)
 	Set_State(STATE_RIGHT, XMVector3Normalize(vRight) * _vScale.x);
 	Set_State(STATE_UP, XMVector3Normalize(vUp) * _vScale.y);
 	Set_State(STATE_LOOK, XMVector3Normalize(vLook) * _vScale.z);
+}
+
+void CTransform::Set_WorldMatrix(const _matrix& _matrix)
+{
+	XMStoreFloat4x4(&m_WorldMatrix, _matrix);
 }
 
 HRESULT CTransform::Initialize_ProtoType()

@@ -161,20 +161,12 @@ HRESULT CGameInstance::Add_Timer(const wstring& strTimerTag)
 }
 
 // Calculator
-_float3 CGameInstance::Picking_Grid(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, class CGameObject* _pTerrain, const _float3* _vec) const
+_float3 CGameInstance::Picking_Terrain(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, CGameObject* _pTerrain, const _float3* _vec, _uint _iLevel)
 {
 	if (m_pCalculator == nullptr)
 		return _float3();
 
-	return m_pCalculator->Picking_Grid(_pDevice, _pContext, _WinMousePos, _pTerrain, _vec);
-}
-
-_float3 CGameInstance::Picking_Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos) const
-{
-	if (m_pCalculator == nullptr)
-		return _float3();
-
-	return m_pCalculator->Picking_Create(_pDevice, _pContext, _WinMousePos);
+	return m_pCalculator->Picking_Terrain(_pDevice, _pContext, _WinMousePos, _pTerrain, _vec, _iLevel);
 }
 
 CGameObject* CGameInstance::Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, _uint _iLevel)

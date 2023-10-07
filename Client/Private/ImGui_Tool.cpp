@@ -93,7 +93,7 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 		CVIBuffer_Grid* pGridBuffer = dynamic_cast<CVIBuffer_Grid*>(pGameInstance->Find_ProtoType(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid")));
 		const _float3* pTerrainVtxPos = pGridBuffer->Get_VtxPos();
 
-		ResultPickPos = pGameInstance->Picking_Grid(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos);
+		ResultPickPos = pGameInstance->Picking_Terrain(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos, LEVEL_TOOL);
 
 		if (m_bCreateMode)
 			Create_Object();
@@ -636,7 +636,7 @@ HRESULT CImGui_Tool::Create_Object()
 
 	// 행렬 세팅
 	_matrix matInitialize = XMMatrixIdentity();
-	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixTranslation(ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
+	matInitialize = XMMatrixTranslation(ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
 
 	// clone object
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, m_strCurLayerTag,

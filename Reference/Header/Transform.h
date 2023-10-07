@@ -32,9 +32,13 @@ public:
 	_float3 Get_Scaled();
 	// _vector가 아닌 _fvector와 같이 알파벳이 붙은 vector const 형이다.
 	/* 월드행렬에 각 행에 필요한 정보를 넣어준다. */
+	_float3 Get_Rotated();
+
 	void Set_State(STATE _eState, _fvector _vState);
 	/* 행렬의 스케일 정보를 vScale에 담겨있는 각각 값으로 셋한다. */
 	void Set_Scaling(const _float3& _vScale);
+
+	void Set_WorldMatrix(const _matrix& _matrix);
 
 	// 월드 행렬 반환
 	_float4x4 Get_WorldMatrix_Float4x4() const
