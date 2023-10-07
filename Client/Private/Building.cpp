@@ -39,7 +39,7 @@ HRESULT CBuilding::Initialize_Clone(const wstring& _strModelComTag, void* pArg)
 	m_pModelCom->Update_VI(*pMatPivot);
 
 	m_bHasMesh = true;
-	m_strName = TEXT("SkyrimTerrain");
+	m_strName = TEXT("SkyrimBuilding");
 
 	return S_OK;
 }

@@ -109,6 +109,9 @@
     <Filter Include="01. Utiltiy\03. Component\05. Model\02. Animation\Channel">
       <UniqueIdentifier>{97f2c8bc-0b18-4642-8818-f4daa711adeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07. File">
+      <UniqueIdentifier>{463121a0-9070-49cd-87ef-caafd4d94e7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -219,6 +222,9 @@
     <ClInclude Include="..\Public\Channel.h">
       <Filter>01. Utiltiy\03. Component\05. Model\02. Animation\Channel</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\File_Manager.h">
+      <Filter>07. File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Graphic_Device.cpp">
@@ -316,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Channel.cpp">
       <Filter>01. Utiltiy\03. Component\05. Model\02. Animation\Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\File_Manager.cpp">
+      <Filter>07. File</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

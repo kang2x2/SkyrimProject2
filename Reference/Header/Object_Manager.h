@@ -23,7 +23,7 @@ public:
 
 public:
 	class CGameObject* Find_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName);
-	map<const wstring, class CLayer*>* Get_CloneObjectMap(_uint _iLevel){ return &m_mapLayer[_iLevel]; }
+	map<const wstring, class CLayer*>* Get_CloneObjectMapAry(_uint _iLevel){ return &m_mapLayer[_iLevel]; }
 
 private:
 	// ¿øº»

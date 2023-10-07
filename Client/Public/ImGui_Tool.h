@@ -102,6 +102,7 @@ private:
 
 	// 현재 list에서 선택된 파일 변수에 저장.
 	TOOL_AFTER_FILEDESC* m_pCurFile = nullptr;
+	wstring				 m_strCurLayerTag = TEXT(""); // 현재 선택된 폴더명을 레이어 태그로.
 	// 선택된 오브젝트
 	class CGameObject*   m_pSelectObject = nullptr;
 

@@ -48,7 +48,7 @@ public: /* For.Object_Manager */
 	HRESULT Add_CloneObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strProtoTypeTag, const wstring & _strModelComTag, void* pArg = nullptr);
 	HRESULT Delete_CloneObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strName);
 	class CGameObject* Find_CloneObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strName);
-	map<const wstring, class CLayer*>* Get_CloneObjectMap(_uint _iLevel);
+	map<const wstring, class CLayer*>* Get_CloneObjectMapAry(_uint _iLevel);
 
 public: /* For.Component_Manager */
 	HRESULT Add_ProtoType_Component(_uint _iLevelIndex, const wstring & _strProtoTypeTag, class CComponent* _pProtoTypeComponent);
@@ -68,6 +68,10 @@ public: /* For. PipeLine */
 	_float4 Get_CamPosition_Float4()const;
 	_vector Get_CamPosition_Vector()const;
 
+public: /* For. File Manager */
+	virtual HRESULT Object_FileSave(ofstream & _outFile, _uint _iLevelIndex) const;
+	virtual HRESULT Object_FileLoad(std::ifstream & _inFile, _uint _iLevelIndex);
+
 private:
 	class CGraphic_Device*		m_pGraphic_Device = nullptr;
 	class CInput_Device*		m_pInput_Device = nullptr;
@@ -78,6 +82,7 @@ private:
 	class CComponent_Manager*	m_pComponent_Manager = nullptr;
 	class CLight_Manager*		m_pLight_Manager = nullptr;
 	class CPipeLine*		    m_pPipeLine = nullptr;
+	class CFile_Manager*		m_pFile_Manager = nullptr;
 
 public:
 	static void Release_Engine();

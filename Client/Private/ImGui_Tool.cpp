@@ -54,7 +54,7 @@ void CImGui_Tool::Frame()
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
 			Safe_AddRef(pGameInstance);
 
-			pGameInstance->Delete_CloneObject(LEVEL_TOOL, m_pSelectObject->Get_HasLayerTag(), m_pSelectObject->Get_Name());
+			pGameInstance->Delete_CloneObject(LEVEL_TOOL, m_pSelectObject->Get_ObjFileDesc().m_strLayerTag, m_pSelectObject->Get_Name());
 			m_pSelectObject = nullptr;
 
 			Safe_Release(pGameInstance);
@@ -249,6 +249,9 @@ void CImGui_Tool::LayOut_FBX_List()
 		// 한 번만 폴더 검색
 		if (m_bFindFolder)
 		{
+			// wstring 폴더 배열 비우기
+			m_vecBeforeFolderList.clear();
+
 			// Folder vector 모두 정리.(strdup를 사용하였기에 메모리 해제도 필수).
 			Empty_Content();
 
@@ -268,7 +271,9 @@ void CImGui_Tool::LayOut_FBX_List()
 				_bool isSelected = m_vecAfterFolderList[i] == selectedFolderName;
 				if (ImGui::Selectable(m_vecAfterFolderList[i], isSelected))
 				{
-					selectedFolderName = m_vecAfterFolderList[i];
+					selectedFolderName = m_vecAfterFolderList[i]; 
+					// 클론 시 사용할 레이어 태그
+					m_strCurLayerTag = TEXT("Layer_") + m_vecBeforeFolderList[i];
 
 					// File vector 모두 정리.(strdup를 사용하였기에 메모리 해제도 필수).
 					for (size_t i = 0; i < m_vecAfterFileList.size(); ++i)
@@ -436,8 +441,6 @@ void CImGui_Tool::ChangeType_Folder()
 		// strdup를 사용하여 복사하면 메모리도 같이 할당 됨. 나중에 꼭 해제해줘야 함.
 	}
 
-	m_vecBeforeFolderList.clear();
-
 	m_bFindFolder = false;
 }
 void CImGui_Tool::ChangeType_File()
@@ -506,15 +509,21 @@ void CImGui_Tool::File_Save()
 		wsprintf(filePathName, L"%s 파일을 저장하겠습니까?", OFN.lpstrFile);
 		MessageBox(g_hWnd, filePathName, L"저장 선택", MB_OK);
 
-		std::wstring filePath = OFN.lpstrFile;
+		wstring filePath = OFN.lpstrFile;
 
 		// 파일 내용을 저장할 변수에 원하는 내용을 할당.
 
 		// 파일을 쓰기 모드로 열기.
-		std::wofstream fileStream(filePath);
+		ofstream fileStream(filePath, ios::binary);
 		if (fileStream.is_open()) {
 			// 파일 내용을 파일에 쓰기.
-			m_pSelectObject->Object_FileSave(fileStream);
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			pGameInstance->Object_FileSave(fileStream, LEVEL_TOOL);
+
+			Safe_Release(pGameInstance);
 
 			fileStream.close();
 			MessageBox(g_hWnd, L"파일이 성공적으로 저장되었습니다.", L"저장 완료", MB_OK);
@@ -553,11 +562,16 @@ void CImGui_Tool::File_Load()
 		wstring filePath = OFN.lpstrFile;
 
 		// 파일을 열기 모드로 열기.
-		wifstream fileStream(filePath);
+		ifstream fileStream(filePath, ios::binary);
 		if (fileStream.is_open()) {
 			// 파일 내용을 읽기.
 
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
 
+			pGameInstance->Object_FileLoad(fileStream ,LEVEL_TOOL);
+
+			Safe_Release(pGameInstance);
 
 			fileStream.close();
 			MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
@@ -615,8 +629,6 @@ _bool CImGui_Tool::Check_LayOut_Range(POINT _MousePos)
 	return true;
 }
 
-
-
 HRESULT CImGui_Tool::Create_Object()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -627,7 +639,7 @@ HRESULT CImGui_Tool::Create_Object()
 	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixTranslation(ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
 
 	// clone object
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, TEXT("Layer_SkyrimTerrain"),
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, m_strCurLayerTag,
 		m_pCurFile->m_strObjTag, m_pCurFile->m_strComTag, &matInitialize)))
 		return E_FAIL;
 
@@ -653,7 +665,6 @@ HRESULT CImGui_Tool::Select_Object()
 	CTransform* pTransform = dynamic_cast<CTransform*>(m_pSelectObject->Get_Component(TEXT("Com_Transform")));
 	_float4 objPos;
 	_float3 objScale = pTransform->Get_Scaled();
-	_float  fRotSpeed = 20.f;
 
 	XMStoreFloat4(&objPos, pTransform->Get_State(CTransform::STATE_POSITION));
 
@@ -690,6 +701,22 @@ HRESULT CImGui_Tool::Select_Object()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+
+
+	_float  fRotSpeed = 0.f;
+
+	// ImGui에 자체적으로 마우스를 입력 상태를 확인하는 함수가 있네?
+	if (ImGui::IsMouseDragging(0, 0.0f)) // 왼쪽 버튼이 눌렸는지 확인한단다.
+	{
+		ImVec2 dragDelta = ImGui::GetMouseDragDelta(0); // 드래그 변위라고 한다.
+		if (dragDelta.x > 0.0f) { // 오른쪽 드래그
+			fRotSpeed += 20.f;
+		}
+		else if (dragDelta.x < 0.0f) { // 왼쪽 드래그
+			fRotSpeed -= 20.f;
+		}
+	}
+
 	ImGui::Text("RotX   ");
 	ImGui::SameLine();
 	if (ImGui::DragFloat("##RotX", &fRotSpeed, 0.1f, 100.f))
@@ -702,6 +729,13 @@ HRESULT CImGui_Tool::Select_Object()
 	if (ImGui::DragFloat("##RotY", &fRotSpeed, 0.1f, 100.f))
 	{
 		pTransform->Turn(pTransform->Get_State(CTransform::STATE_RIGHT), pGameInstance->Compute_TimeDelta(TEXT("Timer_60")), fRotSpeed);
+	}
+
+	ImGui::Text("RotZ   ");
+	ImGui::SameLine();
+	if (ImGui::DragFloat("##RotZ", &fRotSpeed, 0.1f, 100.f))
+	{
+		pTransform->Turn(pTransform->Get_State(CTransform::STATE_LOOK), pGameInstance->Compute_TimeDelta(TEXT("Timer_60")), fRotSpeed);
 	}
 
 	Safe_Release(pGameInstance);

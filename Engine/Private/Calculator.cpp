@@ -205,7 +205,7 @@ CGameObject* CCalculator::Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceCon
 	// 걸리면 끝 (바로 해당 오브젝트 반환)
 
 	// 해당 레벨에 해당하는 레이어 배열 얻어오기
-	map<const wstring, CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMap(_iLevel);
+	map<const wstring, CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(_iLevel);
 
 	for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
 	{
