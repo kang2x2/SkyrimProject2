@@ -85,6 +85,9 @@
     <Filter Include="02. GameObject\01. GamePlay\04. Building">
       <UniqueIdentifier>{610b7e19-d7e7-4cb6-bbef-1f676ea6027f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\05. StoneWork">
+      <UniqueIdentifier>{a12bbec8-e07a-47e2-aee8-4f7e89f5a785}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -180,6 +183,9 @@
     <ClInclude Include="..\Public\Building.h">
       <Filter>02. GameObject\01. GamePlay\04. Building</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\StoneWork.h">
+      <Filter>02. GameObject\01. GamePlay\05. StoneWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -267,6 +273,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Building.cpp">
       <Filter>02. GameObject\01. GamePlay\04. Building</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StoneWork.cpp">
+      <Filter>02. GameObject\01. GamePlay\05. StoneWork</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

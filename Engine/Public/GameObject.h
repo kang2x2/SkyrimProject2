@@ -24,7 +24,7 @@ protected:
 public:
 	virtual HRESULT Initialize_ProtoType(); // 원본
 	virtual HRESULT Initialize_Clone(void* pArg); // 사본
-	virtual HRESULT Initialize_Clone(const wstring & _strModelComTag, void* pArg); // 사본
+	virtual HRESULT Initialize_Clone(_uint _iLevel, const wstring & _strModelComTag, void* pArg); // 사본
 	virtual void	Tick(_float _fTimeDelta);
 	virtual void	LateTick(_float _fTimeDelta);
 	virtual HRESULT Render();
@@ -40,6 +40,8 @@ public:
 	// 오브젝트 자신의 파일 관련 구조체 Get, Set
 	void			Set_ObjFileDesc(const wstring& _strLayerTag, const wstring& _strProtoObjTag, const wstring& _strProtoModelComTag);
 	FILE_OBJDESC    Get_ObjFileDesc() { return m_tObjFileDesc; }
+
+	// 레벨 설정
 
 protected:
 	wstring					m_strName = TEXT(""); // 고유한 이름을 가지고 있어야 탐색이 용이 할 것 같다.
@@ -70,7 +72,7 @@ protected:
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
-	virtual CGameObject* Clone(const wstring& _strModelComTag, void* _pArg);
+	virtual CGameObject* Clone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg);
 	virtual void Free() override;
 };
 

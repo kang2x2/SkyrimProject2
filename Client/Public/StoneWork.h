@@ -4,20 +4,22 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
+
 class CModel;
 class CShader;
 class CRenderer;
 class CTransform;
+
 END
 
 BEGIN(Client)
 
-class CBuilding final : public CGameObject
+class CStoneWork final : public CGameObject
 {
 private:
-	CBuilding(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
-	CBuilding(const CBuilding& rhs);
-	virtual ~CBuilding() = default;
+	CStoneWork(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	CStoneWork(const CStoneWork& rhs);
+	virtual ~CStoneWork() = default;
 
 public:
 	virtual HRESULT Initialize_ProtoType() override; // ¿øº»
@@ -38,11 +40,10 @@ private:
 	HRESULT Bind_ShaderResource();
 
 public:
-	static CBuilding* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	static CStoneWork* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;
 	virtual CGameObject* Clone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg) override;
 	virtual void Free() override;
 };
 
 END
-

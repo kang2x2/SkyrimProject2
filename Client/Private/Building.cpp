@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "Building.h"
 
+
 #include "GameInstance.h"
 
 CBuilding::CBuilding(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
@@ -23,13 +24,13 @@ HRESULT CBuilding::Initialize_Clone(void* pArg)
 	return S_OK;
 }
 
-HRESULT CBuilding::Initialize_Clone(const wstring& _strModelComTag, void* pArg)
+HRESULT CBuilding::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag, void* pArg)
 {
 	_matrix* pMatPivot = (_matrix*)pArg;
 
 	m_strModelComTag = _strModelComTag;
 
-	if (FAILED(Ready_Component()))
+	if (FAILED(Ready_Component(_iLevel)))
 		return E_FAIL;
 
 	// 받아온 행렬의 정보를 저장 후 세팅
@@ -77,23 +78,12 @@ HRESULT CBuilding::Render()
 		m_pModelCom->Render(i);
 	}
 
-
 	return S_OK;
 }
 
-HRESULT CBuilding::Object_FileSave(ofstream& outFile) const
+HRESULT CBuilding::Ready_Component(_uint _iLevel)
 {
-	return S_OK;
-}
-
-HRESULT CBuilding::Object_FileLoad(std::ifstream& inFile)
-{
-	return S_OK;
-}
-
-HRESULT CBuilding::Ready_Component()
-{
-	if (FAILED(__super::Add_CloneComponent(LEVEL_TOOL, m_strModelComTag,
+	if (FAILED(__super::Add_CloneComponent(_iLevel, m_strModelComTag,
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -192,11 +182,11 @@ CGameObject* CBuilding::Clone(void* _pArg)
 	return pInstance;
 }
 
-CGameObject* CBuilding::Clone(const wstring& _strModelComTag, void* _pArg)
+CGameObject* CBuilding::Clone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg)
 {
 	CBuilding* pInstance = new CBuilding(*this);
 
-	if (FAILED(pInstance->Initialize_Clone(_strModelComTag, _pArg)))
+	if (FAILED(pInstance->Initialize_Clone(_iLevel, _strModelComTag, _pArg)))
 	{
 		MSG_BOX("Fail Clone : CBuilding Clone");
 		Safe_Release(pInstance);

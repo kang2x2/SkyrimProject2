@@ -13,9 +13,7 @@ private:
 		wstring		m_strLayerTag = TEXT("");
 		wstring		m_strProtoObjTag = TEXT("");
 		wstring		m_strProtoModelComTag = TEXT("");
-		_float3		m_vScale;
-		_float3     m_vRotation;
-		_float4     m_vTranslation;
+		_matrix     m_matWorld;
 	}FILE_INOUTDESC;
 
 private:

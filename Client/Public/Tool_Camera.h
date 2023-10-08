@@ -27,6 +27,7 @@ public:
 private:
 	_float			m_fMouseSensitive = 0.f;
 
+	_bool			m_bIsStop = false;
 public:
 	static CTool_Camera* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* pArg) override;

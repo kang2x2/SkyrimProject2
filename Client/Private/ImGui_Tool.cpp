@@ -579,16 +579,6 @@ void CImGui_Tool::File_Load()
 		else {
 			MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
 		}
-
-
-		//int requiredSize = WideCharToMultiByte(CP_UTF8, 0, OFN.lpstrFile, -1, NULL, 0, NULL, NULL);
-		//if (requiredSize > 0) {
-		//	std::string t;
-		//	t.resize(requiredSize);
-		//	WideCharToMultiByte(CP_UTF8, 0, OFN.lpstrFile, -1, &t[0], requiredSize, NULL, NULL);
-		//
-		//	int a = 0;
-		//}
 	}
 
 	SetCurrentDirectory(originalPath);
@@ -665,6 +655,7 @@ HRESULT CImGui_Tool::Select_Object()
 	CTransform* pTransform = dynamic_cast<CTransform*>(m_pSelectObject->Get_Component(TEXT("Com_Transform")));
 	_float4 objPos;
 	_float3 objScale = pTransform->Get_Scaled();
+	_float3 vRotation = pTransform->Get_Rotated();
 
 	XMStoreFloat4(&objPos, pTransform->Get_State(CTransform::STATE_POSITION));
 
@@ -719,23 +710,23 @@ HRESULT CImGui_Tool::Select_Object()
 
 	ImGui::Text("RotX   ");
 	ImGui::SameLine();
-	if (ImGui::DragFloat("##RotX", &fRotSpeed, 0.1f, 100.f))
+	if (ImGui::DragFloat("##RotX", &vRotation.x, 0.1f, 100.f))
 	{
 		pTransform->Turn(pTransform->Get_State(CTransform::STATE_UP), pGameInstance->Compute_TimeDelta(TEXT("Timer_60")), fRotSpeed);
 	}
 
 	ImGui::Text("RotY   ");
 	ImGui::SameLine();
-	if (ImGui::DragFloat("##RotY", &fRotSpeed, 0.1f, 100.f))
+	if (ImGui::DragFloat("##RotY", &vRotation.y, 0.1f, 100.f))
 	{
 		pTransform->Turn(pTransform->Get_State(CTransform::STATE_RIGHT), pGameInstance->Compute_TimeDelta(TEXT("Timer_60")), fRotSpeed);
 	}
 
 	ImGui::Text("RotZ   ");
 	ImGui::SameLine();
-	if (ImGui::DragFloat("##RotZ", &fRotSpeed, 0.1f, 100.f))
+	if (ImGui::DragFloat("##RotZ", &vRotation.z, 0.1f, 100.f))
 	{
-		pTransform->Turn(pTransform->Get_State(CTransform::STATE_LOOK), pGameInstance->Compute_TimeDelta(TEXT("Timer_60")), fRotSpeed);
+		pTransform->Turn(pTransform->Get_State(CTransform::STATE_LOOK), pGameInstance->Compute_TimeDelta(TEXT("Timer_60")), fRotSpeed -15.f);
 	}
 
 	Safe_Release(pGameInstance);

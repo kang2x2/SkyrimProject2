@@ -200,6 +200,7 @@
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\SkyrimTerrain.h" />
+    <ClInclude Include="..\Public\StoneWork.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Terrain_Grid.h" />
     <ClInclude Include="..\Public\Tool_Camera.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\SkyrimTerrain.cpp" />
+    <ClCompile Include="..\Private\StoneWork.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Terrain_Grid.cpp" />
     <ClCompile Include="..\Private\Tool_Camera.cpp" />

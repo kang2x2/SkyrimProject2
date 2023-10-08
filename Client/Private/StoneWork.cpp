@@ -1,29 +1,29 @@
 #include "framework.h"
-#include "SkyrimTerrain.h"
+#include "StoneWork.h"
 
 #include "GameInstance.h"
 
-CSkyrimTerrain::CSkyrimTerrain(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CStoneWork::CStoneWork(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CGameObject(_pDevice, _pContext)
 {
 }
 
-CSkyrimTerrain::CSkyrimTerrain(const CSkyrimTerrain& rhs)
+CStoneWork::CStoneWork(const CStoneWork& rhs)
 	: CGameObject(rhs)
 {
 }
 
-HRESULT CSkyrimTerrain::Initialize_ProtoType()
+HRESULT CStoneWork::Initialize_ProtoType()
 {
 	return S_OK;
 }
 
-HRESULT CSkyrimTerrain::Initialize_Clone(void* pArg)
+HRESULT CStoneWork::Initialize_Clone(void* pArg)
 {
 	return S_OK;
 }
 
-HRESULT CSkyrimTerrain::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag, void* pArg)
+HRESULT CStoneWork::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag, void* pArg)
 {
 	_matrix* pMatPivot = (_matrix*)pArg;
 
@@ -32,35 +32,26 @@ HRESULT CSkyrimTerrain::Initialize_Clone(_uint _iLevel, const wstring& _strModel
 	if (FAILED(Ready_Component(_iLevel)))
 		return E_FAIL;
 
-	// 받아온 행렬의 정보를 저장 후 세팅
-	//_float4x4 _matInit;
-	//XMStoreFloat4x4(&_matInit, (*pMatPivot));
-	//_float3 vScale = { _matInit._11, _matInit._22, _matInit._33 };
-	//
-	//_vector vPos = pMatPivot->r[3];
-	//
-	//m_pTransformCom->Set_Scaling(vScale);
-	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 	m_pTransformCom->Set_WorldMatrix(*pMatPivot);
-	// 메시의 정점 정보도 같이 업데이트 해준다.
-	//m_pModelCom->Update_VI(*pMatPivot);
 
 	m_bHasMesh = true;
-	m_strName = TEXT("SkyrimTerrain");
+	m_strName = TEXT("SkyrimStoneWork");
 
 	return S_OK;
+
 }
 
-void CSkyrimTerrain::Tick(_float _fTimeDelta)
+void CStoneWork::Tick(_float _fTimeDelta)
 {
+
 }
 
-void CSkyrimTerrain::LateTick(_float _fTimeDelta)
+void CStoneWork::LateTick(_float _fTimeDelta)
 {
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 }
 
-HRESULT CSkyrimTerrain::Render()
+HRESULT CStoneWork::Render()
 {
 	if (FAILED(Bind_ShaderResource()))
 		return E_FAIL;
@@ -77,11 +68,11 @@ HRESULT CSkyrimTerrain::Render()
 		m_pModelCom->Render(i);
 	}
 
-
 	return S_OK;
+
 }
 
-HRESULT CSkyrimTerrain::Ready_Component(_uint _iLevel)
+HRESULT CStoneWork::Ready_Component(_uint _iLevel)
 {
 	if (FAILED(__super::Add_CloneComponent(_iLevel, m_strModelComTag,
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
@@ -100,9 +91,10 @@ HRESULT CSkyrimTerrain::Ready_Component(_uint _iLevel)
 		return E_FAIL;
 
 	return S_OK;
+
 }
 
-HRESULT CSkyrimTerrain::Bind_ShaderResource()
+HRESULT CStoneWork::Bind_ShaderResource()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
@@ -153,48 +145,48 @@ HRESULT CSkyrimTerrain::Bind_ShaderResource()
 	m_pShaderCom->Begin(iPassIndex);
 
 	return S_OK;
-
 }
 
-CSkyrimTerrain* CSkyrimTerrain::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CStoneWork* CStoneWork::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 {
-	CSkyrimTerrain* pInstance = new CSkyrimTerrain(_pDevice, _pContext);
+	CStoneWork* pInstance = new CStoneWork(_pDevice, _pContext);
 
 	if (FAILED(pInstance->Initialize_ProtoType()))
 	{
-		MSG_BOX("Fail Create : CSkyrimTerrain ProtoType");
+		MSG_BOX("Fail Create : CStoneWork");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CSkyrimTerrain::Clone(void* _pArg)
+CGameObject* CStoneWork::Clone(void* _pArg)
 {
-	CSkyrimTerrain* pInstance = new CSkyrimTerrain(*this);
+	CStoneWork* pInstance = new CStoneWork(*this);
 
 	if (FAILED(pInstance->Initialize_Clone(_pArg)))
 	{
-		MSG_BOX("Fail Clone : CSkyrimTerrain Clone");
+		MSG_BOX("Fail Clone : CStoneWork");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CSkyrimTerrain::Clone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg)
+CGameObject* CStoneWork::Clone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg)
 {
-	CSkyrimTerrain* pInstance = new CSkyrimTerrain(*this);
+	CStoneWork* pInstance = new CStoneWork(*this);
+
 	if (FAILED(pInstance->Initialize_Clone(_iLevel, _strModelComTag, _pArg)))
 	{
-		MSG_BOX("Fail Clone : CSkyrimTerrain Clone");
+		MSG_BOX("Fail Clone : CStoneWork");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CSkyrimTerrain::Free()
+void CStoneWork::Free()
 {
 	__super::Free();
 

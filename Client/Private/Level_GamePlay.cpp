@@ -1,4 +1,9 @@
 #include "framework.h"
+
+#include <filesystem>
+#include <fstream>
+#include <commdlg.h>
+
 #include "Level_GamePlay.h"
 
 #include "IMGui_Manager.h"
@@ -29,7 +34,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_FreeCamera"))))
 		return E_FAIL;
 
-
+	if (FAILED(Ready_Level()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -50,6 +56,33 @@ void CLevel_GamePlay::AfterRender()
 {
 	// ImGui 그리기
 	CIMGui_Manager::GetInstance()->Frame();
+}
+
+HRESULT CLevel_GamePlay::Ready_Level()
+{
+	wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Skyrim";
+
+	// 파일을 열기 모드로 열기.
+	ifstream fileStream(filePath, ios::binary);
+	if (fileStream.is_open()) {
+		// 파일 내용을 읽기.
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->Object_FileLoad(fileStream, LEVEL_GAMEPLAY);
+
+		Safe_Release(pGameInstance);
+
+		fileStream.close();
+		MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
+	}
+	else {
+		MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
+		return E_FAIL;
+	}
+
+	return S_OK;
 }
 
 HRESULT CLevel_GamePlay::Ready_Light()
