@@ -38,6 +38,7 @@ private:
 	CRITICAL_SECTION		m_Critical_Section;
 
 private:
+	HRESULT					Loading_For_Level_Zero();
 	HRESULT					Loading_For_Level_Tool();
 	HRESULT					Loading_For_Level_Logo();
 	HRESULT					Loading_For_Level_GamePlay();

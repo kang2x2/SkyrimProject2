@@ -95,7 +95,7 @@ private:
 
 	_float4x4			m_WorldMatrix; // 저장용
 
-	_float				m_fSpeedPerSec = { 0.0f }; // 실시간 이동 속도.
+	_float				m_fSpeedPerSec = { 10.0f }; // 실시간 이동 속도.
 	_float				m_fRotationRadianPerSec = { 0.0f }; // 실시간 회전 속도.
 	_float				m_fZoomPerSec = { 0.0f }; // 실시간 줌 속도.
 

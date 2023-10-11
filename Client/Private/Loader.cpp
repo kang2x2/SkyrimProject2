@@ -66,6 +66,9 @@ _int CLoader::Loading()
 
 	switch (m_eNextLevel)
 	{
+	case LEVEL_ZERO:
+		hr = Loading_For_Level_Zero();
+		break;
 	case LEVEL_TOOL:
 		hr = Loading_For_Level_Tool();
 		break;
@@ -83,6 +86,18 @@ _int CLoader::Loading()
 	LeaveCriticalSection(&m_Critical_Section);
 
 	return 0;
+}
+
+HRESULT CLoader::Loading_For_Level_Zero()
+{
+	m_strLoadingText = TEXT("Loading Mesh.");
+
+	Set_ProtoType_Mesh(LEVEL_ZERO);
+
+	m_strLoadingText = TEXT("Loading Complete");
+	m_bIsFinish = true;
+
+	return S_OK;
 }
 
 HRESULT CLoader::Loading_For_Level_Tool()
@@ -204,9 +219,12 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 		return E_FAIL;
 
 	/* Player */
-	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	// ../Bin/Resource/Models/Skyrim/Skyrim_Player/Player_NonEquip_Stand.fbx
+	// XMMatrixScaling(0.01f, 0.01f, 0.01f) * 
+	//  * XMMatrixRotationY(XMConvertToRadians(180.0f))
+	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Player/1Hand_Equip.fbx", matInitialize, CModel::TYPE_ANIM))))
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Player/Player_NonEquip_Stand.fbx", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
 	Set_ProtoType_Mesh(LEVEL_GAMEPLAY);

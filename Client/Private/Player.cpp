@@ -31,6 +31,30 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 
 void CPlayer::Tick(_float _fTimeDelta)
 {
+	if (GetKeyState('Q') & 0x8000)
+	{
+		m_iAnimKeyIndex += 1;
+		m_pModelCom->SetUp_Animation(true, m_iAnimKeyIndex);
+	}
+
+	if (GetKeyState('E') & 0x8000)
+	{
+		m_iAnimKeyIndex -= 1;
+		m_pModelCom->SetUp_Animation(true, m_iAnimKeyIndex);
+	}
+
+	if (GetKeyState(VK_UP) & 0x8000)
+		m_pTransformCom->Go_Foward(_fTimeDelta);
+
+	if (GetKeyState(VK_DOWN) & 0x8000)
+		m_pTransformCom->Go_Backward(_fTimeDelta);
+
+	if (GetKeyState(VK_LEFT) & 0x8000)
+		m_pTransformCom->Go_Left(_fTimeDelta);
+
+	if (GetKeyState(VK_RIGHT) & 0x8000)
+		m_pTransformCom->Go_Right(_fTimeDelta);
+
 	m_pModelCom->Play_Animation(_fTimeDelta);
 }
 

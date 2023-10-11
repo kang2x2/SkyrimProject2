@@ -17,6 +17,7 @@ class CBone final : public CBase
 {
 private:
 	CBone();
+	CBone(const CBone& rhs);
 	virtual ~CBone() = default;
 
 public:
@@ -26,6 +27,7 @@ public:
 public:
 	const char* Get_BoneName() const { return m_szName; }
 	_float4x4 Get_CombinedTransformationMatrix() const { return m_CombinedTransformationMatrix; }
+	void Set_TransformationMatrix(_fmatrix _matTransformation) { XMStoreFloat4x4(&m_TransformationMatrix, _matTransformation); }
 
 private:
 	char	m_szName[MAX_PATH] = ""; // ª¿¿« ¿Ã∏ß
@@ -37,6 +39,7 @@ private:
 
 public:
 	static CBone* Create(const aiNode* _pAINode, _int _iParentBoneIndex);
+	CBone* Clone();
 	virtual void Free() override;
 };
 

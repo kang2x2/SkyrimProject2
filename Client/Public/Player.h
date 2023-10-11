@@ -32,6 +32,8 @@ private:
 	CRenderer*		m_pRendererCom = nullptr;
 	CTransform*		m_pTransformCom = nullptr;
 
+	_uint			m_iAnimKeyIndex = 0;
+
 private:
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResource();

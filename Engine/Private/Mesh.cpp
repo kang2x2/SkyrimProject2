@@ -15,6 +15,8 @@ CMesh::CMesh(const CMesh& rhs)
 
 HRESULT CMesh::Initialize_ProtoType(const CModel* _pModel, const aiMesh* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType)
 {
+	strcpy_s(m_szName, _pAIMesh->mName.data);
+
 	m_iStride = CModel::TYPE_NONANIM ==  _eType ? sizeof(VTX_NONANIMMESH) : sizeof(VTX_ANIMMESH);
 
 	/* 이 메시는 mMaterialIndex번째 머테리얼 정보를 이용한다. */
@@ -100,7 +102,7 @@ HRESULT CMesh::Bind_BondMatrices(CShader* _pShader, vector<class CBone*> _vecBon
 	for (size_t i = 0; i < m_vecBoneIndex.size(); ++i)
 	{
 		_float4x4 matBone = _vecBone[m_vecBoneIndex[i]]->Get_CombinedTransformationMatrix();
-		XMStoreFloat4x4(&BoneMatrices[i], XMLoadFloat4x4(&m_OffsetMatrices[i]) * XMLoadFloat4x4(&matBone));
+		XMStoreFloat4x4(&BoneMatrices[i], XMLoadFloat4x4(&m_OffsetMatrices[i]) * XMLoadFloat4x4(&matBone) * XMMatrixScaling(0.0025f, 0.005f, 0.005f));
 	}
 
 	return _pShader->Bind_Matrices(_strConstantName, BoneMatrices, m_iNumBones);
@@ -208,24 +210,41 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* _pModel, const aiMesh* 
 				pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.x = pAIBone->mWeights[j].mWeight;
 			}
 
-			if (pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.y == 0.f)
+			else if (pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.y == 0.f)
 			{
-				pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.y == i;
-				pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.y == pAIBone->mWeights[j].mWeight;
+				pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.y = i;
+				pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.y = pAIBone->mWeights[j].mWeight;
 			}
 
-			if (pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.z == 0.f)
+			else if (pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.z == 0.f)
 			{
-				pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.z == i;
+				pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.z = i;
 				pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.z = pAIBone->mWeights[j].mWeight;
 			}
 
-			if (pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.w == 0.f)
+			else if (pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.w == 0.f)
 			{
 				pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.w = i;
 				pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.w = pAIBone->mWeights[j].mWeight;
 			}
 		}
+	}
+
+	/* 뼈 수가 필요한데 뼈 수가 0일 때 */
+	if (m_iNumBones == 0)
+	{
+		m_iNumBones = 1; // 강제로 늘려준다.
+
+		_uint iIndex = _pModel->Get_BoneIndex(m_szName);
+		if (iIndex == -1)
+			return E_FAIL;
+
+		_float4x4 matOffset;
+		XMStoreFloat4x4(&matOffset, XMMatrixIdentity());
+
+		m_OffsetMatrices.push_back(matOffset);
+
+		m_vecBoneIndex.push_back(iIndex);
 	}
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);

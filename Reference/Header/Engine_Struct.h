@@ -99,7 +99,7 @@ namespace Engine
 		float		fTime;
 		XMFLOAT3    vScale;
 		XMFLOAT4    vRotation;
-		XMFLOAT3    vTranslation;
+		XMFLOAT4    vTranslation;
 
 	}KEYFRAME;
 }

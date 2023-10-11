@@ -16,12 +16,15 @@ CModel::CModel(const CModel& rhs)
 	, m_vecMesh(rhs.m_vecMesh)
 	, m_iNumMaterails(rhs.m_iNumMaterails)
 	, m_vecMaterial(rhs.m_vecMaterial)
-	, m_vecBone(rhs.m_vecBone)
+	, m_iCurAnimationIndex(rhs.m_iCurAnimationIndex)
+	, m_iNumAnimation(rhs.m_iNumAnimation)
 {
-	for (auto& iter : m_vecBone)
-	{
-		Safe_AddRef(iter);
-	}
+	// 애니메이션과 뼈는 깊은 복제 하여 가진다.
+	for (auto& iter : rhs.m_vecAnimation)
+		m_vecAnimation.push_back(iter->Clone());
+	
+	for (auto& iter : rhs.m_vecBone)
+		m_vecBone.push_back(iter->Clone());
 
 	for (auto& iter : m_vecMaterial)
 	{
@@ -76,6 +79,8 @@ HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _ma
 	if (FAILED(Ready_Material(_strModleFilePath)))
 		return E_FAIL;
 
+	if (FAILED(Ready_Animation()))
+		return E_FAIL;
 
 
 	return S_OK;
@@ -83,6 +88,19 @@ HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _ma
 
 HRESULT CModel::Initialize_Clone(void* pArg)
 {
+	return S_OK;
+}
+
+HRESULT CModel::SetUp_Animation(_bool _bIsLoop, _uint _iAnimationIndex)
+{
+	/* 예외 처리 */
+	if (_iAnimationIndex >= m_iNumAnimation || _iAnimationIndex == m_iCurAnimationIndex)
+		return S_OK;
+
+	m_vecAnimation[m_iCurAnimationIndex]->ReSet();
+	m_iCurAnimationIndex = _iAnimationIndex;
+	m_vecAnimation[m_iCurAnimationIndex]->Set_Loop(_bIsLoop);
+
 	return S_OK;
 }
 
@@ -103,11 +121,14 @@ HRESULT CModel::Bind_MaterialTexture(CShader* _pShader, const char* _pConstantNa
 	return m_vecMaterial[iMaterialIndex].pTextures[_eType]->Bind_ShaderResource(_pShader, _pConstantName, 0);
 }
 
-HRESULT CModel::Play_Animation(_float fTimeDelta)
+HRESULT CModel::Play_Animation(_float _fTimeDelta)
 {
-	/* 뼈들의 TransformationMatrix를 애니메이션 상태에 맞도록 바꿔준다. */
-	// m_Animations[0]->Update_TransformationMatrix();
-	
+	/* 뼈들의 TransformationMatrix를 애니메이션 상태에 맞도록 바꿔준다. 
+	   (Animation -> Channel -> 시간에 맞는 KeyFrame)*/
+
+	/* 이 애니메이션에 사용되는 부모에 상대적인 자기 자신의 뼈를 갱신하고 */
+	m_vecAnimation[m_iCurAnimationIndex]->Update_TransformationMatrix(m_vecBone, _fTimeDelta);
+
 	/* 모든 뼈들의 CombinedTransformationMatrix를 갱신한다. */
 	for (size_t i = 0; i < m_vecBone.size(); ++i)
 	{
@@ -117,7 +138,7 @@ HRESULT CModel::Play_Animation(_float fTimeDelta)
 	return S_OK;
 }
 
-HRESULT CModel::Render(_uint iMeshIndex)
+HRESULT CModel::Render(_uint _iMeshIndex)
 {
 	// 메시별로 사용하는 재질 정보가 다를 수도 있기에 기존 방법은 폐기
 	//for (auto& iter : m_vecMesh)
@@ -128,7 +149,7 @@ HRESULT CModel::Render(_uint iMeshIndex)
 	//	}
 	//}
 
-	m_vecMesh[iMeshIndex]->Render();
+	m_vecMesh[_iMeshIndex]->Render();
 
 	return S_OK;
 }
@@ -236,7 +257,7 @@ HRESULT CModel::Ready_Animation()
 
 	for (size_t i = 0; i < m_iNumAnimation; ++i)
 	{
-		CAnimation* pAnimation = CAnimation::Create(m_pAIScene->mAnimations[i]);
+		CAnimation* pAnimation = CAnimation::Create(this, m_pAIScene->mAnimations[i]);
 		if (pAnimation == nullptr)
 			return E_FAIL;
 
@@ -294,6 +315,12 @@ CComponent* CModel::Clone(void* _pArg)
 void CModel::Free()
 {
 	__super::Free();
+
+	for (auto& iter : m_vecAnimation)
+	{
+		Safe_Release(iter);
+	}
+	m_vecAnimation.clear();
 
 	for (auto& iter : m_vecMaterial)
 	{

@@ -4,6 +4,14 @@ CBone::CBone()
 {
 }
 
+CBone::CBone(const CBone& rhs)
+	: m_TransformationMatrix(rhs.m_TransformationMatrix)
+	, m_CombinedTransformationMatrix(rhs.m_CombinedTransformationMatrix)
+	, m_iParentBoneIndex(rhs.m_iParentBoneIndex)
+{
+	strcpy_s(m_szName, rhs.m_szName);
+}
+
 HRESULT CBone::Initialize(const aiNode* _pAINode, _int _iParentBoneIndex)
 {
 	m_iParentBoneIndex = _iParentBoneIndex;
@@ -41,7 +49,6 @@ HRESULT CBone::Update_CombinedTransformationMatrix(const vector<class CBone*>& _
 			XMLoadFloat4x4(&_vecBone[m_iParentBoneIndex]->m_CombinedTransformationMatrix));
 	}
 
-
 	return S_OK;
 }
 
@@ -56,6 +63,11 @@ CBone* CBone::Create(const aiNode* _pAINode, _int _iParentBoneIndex)
 	}
 
 	return pInstance;
+}
+
+CBone* CBone::Clone()
+{
+	return new CBone(*this);
 }
 
 void CBone::Free()

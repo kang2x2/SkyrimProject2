@@ -60,7 +60,7 @@ void CLevel_GamePlay::AfterRender()
 
 HRESULT CLevel_GamePlay::Ready_Level()
 {
-	wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Skyrim";
+	wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Skyrim2";
 
 	// 파일을 열기 모드로 열기.
 	ifstream fileStream(filePath, ios::binary);
@@ -139,7 +139,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	FreeCameraDesc.fAspect = g_iWinSizeX / (_float)g_iWinSizeY;
 	FreeCameraDesc.fNear = 0.2f;
 	FreeCameraDesc.fFar = 1100.f;
-	FreeCameraDesc.fSpeedPerSec = 80.f;
+	FreeCameraDesc.fSpeedPerSec = 20.f;
 	FreeCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
 
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_FreeCamera"), &FreeCameraDesc)))

@@ -20,6 +20,7 @@
 
 using namespace DirectX;
 
+#include <iostream>
 #include <vector> /* 배열 */
 #include <list> /* 더블링크드리스트 */
 #include <map> /* 이진트리 */

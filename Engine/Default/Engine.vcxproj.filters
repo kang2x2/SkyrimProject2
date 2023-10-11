@@ -222,7 +222,7 @@
     <ClInclude Include="..\Public\Channel.h">
       <Filter>01. Utiltiy\03. Component\05. Model\02. Animation\Channel</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\File_Manager.h">
+    <ClInclude Include="..\Public\MyFile_Manager.h">
       <Filter>07. File</Filter>
     </ClInclude>
   </ItemGroup>
@@ -323,7 +323,7 @@
     <ClCompile Include="..\Private\Channel.cpp">
       <Filter>01. Utiltiy\03. Component\05. Model\02. Animation\Channel</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\File_Manager.cpp">
+    <ClCompile Include="..\Private\MyFile_Manager.cpp">
       <Filter>07. File</Filter>
     </ClCompile>
   </ItemGroup>

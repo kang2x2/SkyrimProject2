@@ -289,6 +289,8 @@ CGameObject* CCalculator::Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceCon
 	_float       fMinDist = 100000.f; // 카메라에서 가장 가까운 거리.
 	CGameObject* pProximateObj = nullptr; // 카메라에서 가장 가까운 오브젝트.
 
+	_float3 vIntersectionPos;
+
 	for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
 	{
 		// Layer 내부의 ObjList를 가져옴.
@@ -320,7 +322,6 @@ CGameObject* CCalculator::Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceCon
 				// 메시의 각 삼각형에 대해 교차 검사 수행
 				for (size_t idx = 0; idx < indices.size(); idx += 3)
 				{
-					_float3 vIntersectionPos;
 
 					_ulong idx0 = indices[idx];
 					_ulong idx1 = indices[idx + 1];
@@ -357,6 +358,10 @@ CGameObject* CCalculator::Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceCon
 			}
 		}
 	}
+
+	// cout << vIntersectionPos.x << endl;
+	// cout << vIntersectionPos.y << endl;
+	// cout << vIntersectionPos.z << endl;
 
 	Safe_Release(pGameInstance);
 

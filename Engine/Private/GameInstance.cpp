@@ -6,7 +6,7 @@
 #include "Level_Manager.h"
 #include "Object_Manager.h"
 #include "Light_Manager.h"
-#include "File_Manager.h"
+#include "MyFile_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -20,7 +20,7 @@ CGameInstance::CGameInstance()
 	, m_pComponent_Manager(CComponent_Manager::GetInstance())
 	, m_pLight_Manager(CLight_Manager::GetInstance())
 	, m_pPipeLine(CPipeLine::GetInstance())
-	, m_pFile_Manager(CFile_Manager::GetInstance())
+	, m_pMyFile_Manager(CMyFile_Manager::GetInstance())
 	
 {
 	Safe_AddRef(m_pGraphic_Device);
@@ -32,7 +32,7 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pComponent_Manager);
 	Safe_AddRef(m_pLight_Manager);
 	Safe_AddRef(m_pPipeLine);
-	Safe_AddRef(m_pFile_Manager);
+	Safe_AddRef(m_pMyFile_Manager);
 }
 
 /* GameInstance*/
@@ -316,24 +316,32 @@ _vector CGameInstance::Get_CamPosition_Vector() const
 
 HRESULT CGameInstance::Object_FileSave(ofstream& _outFile, _uint _iLevelIndex) const
 {
-	if (m_pFile_Manager == nullptr)
+	if (m_pMyFile_Manager == nullptr)
 		return E_FAIL;
 
-	return m_pFile_Manager->Object_FileSave(_outFile, _iLevelIndex);
+	return m_pMyFile_Manager->Object_FileSave(_outFile, _iLevelIndex);
 }
 
 HRESULT CGameInstance::Object_FileLoad(std::ifstream& _inFile, _uint _iLevelIndex)
 {
-	if (m_pFile_Manager == nullptr)
+	if (m_pMyFile_Manager == nullptr)
 		return E_FAIL;
 
-	return m_pFile_Manager->Object_FileLoad(_inFile, _iLevelIndex);
+	return m_pMyFile_Manager->Object_FileLoad(_inFile, _iLevelIndex);
+}
+
+HRESULT CGameInstance::Binary_OutFile(ofstream& _outFile, const char* _strFilePath, CModel::MODEL_TYPE _eType)
+{
+	if (m_pMyFile_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pMyFile_Manager->Binary_OutFile(_outFile, _strFilePath, _eType);
 }
 
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::GetInstance()->DestroyInstance();
-	CFile_Manager::GetInstance()->DestroyInstance();
+	CMyFile_Manager::GetInstance()->DestroyInstance();
 	CPipeLine::GetInstance()->DestroyInstance();
 	CLevel_Manager::GetInstance()->DestroyInstance();
 	CObject_Manager::GetInstance()->DestroyInstance();
@@ -356,5 +364,5 @@ void CGameInstance::Free()
 	Safe_Release(m_pInput_Device);
 	Safe_Release(m_pCalculator);
 	Safe_Release(m_pPipeLine);
-	Safe_Release(m_pFile_Manager);
+	Safe_Release(m_pMyFile_Manager);
 }

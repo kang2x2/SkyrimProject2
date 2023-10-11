@@ -19,21 +19,19 @@ public:
 	virtual HRESULT Initialize_Clone(void* pArg) override;
 
 public:
-	_uint Get_NumMeshes() const { // 매시 쉬 반환
-		return m_iNumMeshes;
-	}
-
-	_int  Get_BoneIndex(const char* _strBoneName) const; // 해당 이름의 뼈 수 반환
+	_uint Get_NumMeshes() const {  return m_iNumMeshes; } // 매시 수 반환
+	_int  Get_BoneIndex(const char* _strBoneName) const; // 해당 이름을 가지는 뼈의 인덱스 반환
 
 public:
 	vector<class CMesh*> Get_VecMesh() { return m_vecMesh; }
 	void				 Update_VI(const _fmatrix& _matPivot);
 
 public:
+	HRESULT SetUp_Animation(_bool _bIsLoop, _uint _iAnimationIndex);
 	HRESULT Bind_BondMatrices(class CShader* _pShader, _uint _iMeshIndex, const char* _strConstantName);
 	HRESULT Bind_MaterialTexture(class CShader* _pShader, const char* _pConstantName, _uint _iMeshIndex, aiTextureType _eType);
-	HRESULT Play_Animation(_float fTimeDelta);
-	HRESULT Render(_uint iMeshIndex);
+	HRESULT Play_Animation(_float _fTimeDelta);
+	HRESULT Render(_uint _iMeshIndex);
 
 private:
 	HRESULT Ready_Mesh(MODEL_TYPE _eType);
@@ -61,6 +59,7 @@ private:
 	vector<class CBone*>	m_vecBone; // 뼈들을 저장.
 
 	/* 애니메이션 */
+	_uint						m_iCurAnimationIndex = 0; /* 현재 선택된 애니메이션 인덱스. */
 	_uint						m_iNumAnimation = 0; /* 모델이 가지고 있는 애니메이션 수 */
 	vector<class CAnimation*>	m_vecAnimation; /* 모델이 가지고 있는 애니메이션 배열 */
 

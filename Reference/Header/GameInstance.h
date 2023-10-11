@@ -68,8 +68,9 @@ public: /* For. PipeLine */
 	_vector Get_CamPosition_Vector()const;
 
 public: /* For. File Manager */
-	virtual HRESULT Object_FileSave(ofstream & _outFile, _uint _iLevelIndex) const;
-	virtual HRESULT Object_FileLoad(std::ifstream & _inFile, _uint _iLevelIndex);
+	HRESULT Object_FileSave(ofstream & _outFile, _uint _iLevelIndex) const;
+	HRESULT Object_FileLoad(std::ifstream & _inFile, _uint _iLevelIndex);
+	HRESULT Binary_OutFile(ofstream & _outFile, const char* _strFilePath, CModel::MODEL_TYPE _eType);
 
 private:
 	class CGraphic_Device*		m_pGraphic_Device = nullptr;
@@ -81,7 +82,7 @@ private:
 	class CComponent_Manager*	m_pComponent_Manager = nullptr;
 	class CLight_Manager*		m_pLight_Manager = nullptr;
 	class CPipeLine*		    m_pPipeLine = nullptr;
-	class CFile_Manager*		m_pFile_Manager = nullptr;
+	class CMyFile_Manager*		m_pMyFile_Manager = nullptr;
 
 public:
 	static void Release_Engine();

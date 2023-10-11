@@ -32,6 +32,7 @@ public:
 	HRESULT Bind_BondMatrices(class CShader* _pShader, vector<class CBone*> _vecBone, const char* _strConstantName);
 
 private:
+	_char m_szName[MAX_PATH] = "";
 	_uint m_iMaterialIndex = 0;
 	_uint m_iNumBones = 0; // 이 메시를 구성하는 정점들이 몇 개 뼈의 영향을 받는지
 	/* 이 메시는 어떤 뼈들의 영향을 받는지. 뼈들의 인덱스 == 모델클래스가 들고 있는 뼈배열의 인덱스  */
