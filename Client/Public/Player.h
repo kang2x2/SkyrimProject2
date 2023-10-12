@@ -4,9 +4,6 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
-class CModel;
-class CShader;
-class CRenderer;
 class CTransform;
 END
 
@@ -14,6 +11,8 @@ BEGIN(Client)
 
 class CPlayer final : public CGameObject
 {
+public:
+	enum PARTS { PART_BODY, PART_WEAPON, PART_HAIR, PART_END };
 private:
 	CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	CPlayer(const CPlayer& rhs);
@@ -27,14 +26,14 @@ public:
 	virtual HRESULT Render();
 
 private:
-	CModel*			m_pModelCom = nullptr;
-	CShader*		m_pShaderCom = nullptr;
-	CRenderer*		m_pRendererCom = nullptr;
+	vector<class CGameObject*> m_vecPlayerPart;
+
 	CTransform*		m_pTransformCom = nullptr;
 
 	_uint			m_iAnimKeyIndex = 0;
 
 private:
+	HRESULT Ready_Part();
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResource();
 

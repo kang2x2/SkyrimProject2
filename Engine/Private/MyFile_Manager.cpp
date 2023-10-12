@@ -97,8 +97,43 @@ HRESULT CMyFile_Manager::Object_FileLoad(ifstream& _inFile, _uint _iLevelIndex)
 
 HRESULT CMyFile_Manager::Binary_OutFile(ofstream& _outFile, const char* _strFilePath, CModel::MODEL_TYPE _eType)
 {
-	int a = 0;
+	// 기본적인 플래그.
+	_uint iFlag = aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast;
+	// 매개로 들어온 타입이 NonAnim일 때 aiProcess_PreTransformVertices도 바인딩 해준다.
+	if (_eType == CModel::TYPE_NONANIM)
+		iFlag = iFlag | aiProcess_PreTransformVertices;
 
+	m_pAIScene = m_Importer.ReadFile(_strFilePath, iFlag);
+	if (m_pAIScene == nullptr)
+		return E_FAIL;
+
+	// ReadFile로 읽어온 데이터를 메시, 본, 애니메이션으로 나누어서 담자.
+	// 구조체로? 
+	Read_FBXMesh();
+	Read_FBXBone();
+	Read_FBXMaterial();
+	Read_FBXAnimation();
+
+	return S_OK;
+}
+
+HRESULT CMyFile_Manager::Read_FBXMesh()
+{
+	return S_OK;
+}
+
+HRESULT CMyFile_Manager::Read_FBXBone()
+{
+	return S_OK;
+}
+
+HRESULT CMyFile_Manager::Read_FBXMaterial()
+{
+	return S_OK;
+}
+
+HRESULT CMyFile_Manager::Read_FBXAnimation()
+{
 	return S_OK;
 }
 

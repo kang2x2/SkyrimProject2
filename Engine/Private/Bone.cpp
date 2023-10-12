@@ -22,6 +22,7 @@ HRESULT CBone::Initialize(const aiNode* _pAINode, _int _iParentBoneIndex)
 
 	// 행렬이 Col행렬로 되어있기에 Raw행렬로 전치 해주어야 함.
 	XMStoreFloat4x4(&m_TransformationMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_TransformationMatrix)));
+	XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMMatrixIdentity());
 
 	return S_OK;
 }

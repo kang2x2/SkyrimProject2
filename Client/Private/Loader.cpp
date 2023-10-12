@@ -12,6 +12,9 @@
 #include "Terrain.h"
 
 #include "Player.h"
+#include "Player_Body.h"
+
+#include "Weapon_IronSword.h"
 
 // Tool Level
 #include "Tool_Camera.h"
@@ -222,12 +225,23 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 	// ../Bin/Resource/Models/Skyrim/Skyrim_Player/Player_NonEquip_Stand.fbx
 	// XMMatrixScaling(0.01f, 0.01f, 0.01f) * 
 	//  * XMMatrixRotationY(XMConvertToRadians(180.0f))
-	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Player/Player_NonEquip_Stand.fbx", matInitialize, CModel::TYPE_ANIM))))
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_Body"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Player/Player_1Hand_Stand.fbx", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
-	Set_ProtoType_Mesh(LEVEL_GAMEPLAY);
+	/* Weapon */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Weapon_IronSword"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Weapon/Iron_LongSword/Iron_LongSword.fbx", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+
+	//matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Player/Player.fbx", matInitialize, CModel::TYPE_ANIM))))
+	//	return E_FAIL;
+
+
+	// Set_ProtoType_Mesh(LEVEL_GAMEPLAY);
 
 #pragma endregion
 
@@ -264,12 +278,20 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 	//	CTerrain::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
 
-	// Player
+	// Player 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_Body"),
+		CPlayer_Body::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
-	Set_ProtoType_Object();
+	// Weapon
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Weapon_IronSword"),
+		CWeapon_IronSword::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Set_ProtoType_Object();
 
 #pragma endregion
 

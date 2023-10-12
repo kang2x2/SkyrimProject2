@@ -22,6 +22,9 @@ public:
 	_uint Get_NumMeshes() const {  return m_iNumMeshes; } // 매시 수 반환
 	_int  Get_BoneIndex(const char* _strBoneName) const; // 해당 이름을 가지는 뼈의 인덱스 반환
 
+	class CBone* Get_BonePtr(const char* _strBoneName) const;
+	_float4x4 Get_PivotMatrix() const { return m_matPivot; }
+
 public:
 	vector<class CMesh*> Get_VecMesh() { return m_vecMesh; }
 	void				 Update_VI(const _fmatrix& _matPivot);

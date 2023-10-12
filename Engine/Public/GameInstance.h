@@ -45,6 +45,7 @@ public: /* For.Object_Manager */
 	HRESULT Add_ProtoObject(const wstring& _strProtoTypeTag, class CGameObject* _pGameObject);
 	HRESULT Add_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strProtoTypeTag, void* pArg = nullptr);
 	HRESULT Add_CloneObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strProtoTypeTag, const wstring & _strModelComTag, void* pArg = nullptr);
+	class CGameObject* Add_ClonePartObject(const wstring & _strPrototypeTag, void* _pArg);
 	HRESULT Delete_CloneObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strName);
 	class CGameObject* Find_CloneObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strName);
 	map<const wstring, class CLayer*>* Get_CloneObjectMapAry(_uint _iLevel);

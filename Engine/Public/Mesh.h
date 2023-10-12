@@ -29,7 +29,7 @@ public:
 	virtual HRESULT Initialize_Clone(void* _pArg) override;
 
 public:
-	HRESULT Bind_BondMatrices(class CShader* _pShader, vector<class CBone*> _vecBone, const char* _strConstantName);
+	HRESULT Bind_BondMatrices(class CShader* _pShader, vector<class CBone*>& _vecBone, const char* _strConstantName, _fmatrix PivotMatrix);
 
 private:
 	_char m_szName[MAX_PATH] = "";

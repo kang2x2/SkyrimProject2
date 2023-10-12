@@ -28,6 +28,15 @@ public: /* 파일 저장과 로드를 담당하는 함수들 */
 
 public: /* 바이너리 */
 	HRESULT    Binary_OutFile(ofstream& _outFile, const char* _strFilePath, CModel::MODEL_TYPE _eType);
+	
+	HRESULT    Read_FBXMesh();
+	HRESULT    Read_FBXBone();
+	HRESULT    Read_FBXMaterial();
+	HRESULT    Read_FBXAnimation();
+
+private:
+	Assimp::Importer	m_Importer; // FBX파일을 열어서 읽는다.
+	const aiScene* m_pAIScene = nullptr; // 읽고 얻은 데이터들을 보관한다.
 
 public:
 	virtual void Free() override;

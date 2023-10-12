@@ -103,6 +103,19 @@ HRESULT CObject_Manager::Add_CloneObject(_uint _iLevelIndex, const wstring& _str
 
 }
 
+CGameObject* CObject_Manager::Add_ClonePartObject(const wstring& _strPrototypeTag, void* _pArg)
+{
+	CGameObject* pProtoTypeObject = Find_ProtoObject(_strPrototypeTag);
+	if (nullptr == pProtoTypeObject)
+		return nullptr;
+
+	CGameObject* pCloneObject = pProtoTypeObject->Clone(_pArg);
+	if (nullptr == pCloneObject)
+		return nullptr;
+
+	return pCloneObject;
+}
+
 HRESULT CObject_Manager::Delete_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName)
 {
 	auto objLayer = m_mapLayer[_iLevelIndex].find(_strLayerTag);

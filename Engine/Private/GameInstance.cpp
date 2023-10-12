@@ -212,6 +212,14 @@ HRESULT CGameInstance::Add_CloneObject(_uint _iLevelIndex, const wstring& _strLa
 
 }
 
+CGameObject* CGameInstance::Add_ClonePartObject(const wstring& _strPrototypeTag, void* _pArg)
+{
+	if (m_pObject_Manager == nullptr)
+		return nullptr;
+
+	return m_pObject_Manager->Add_ClonePartObject(_strPrototypeTag, _pArg);
+}
+
 HRESULT CGameInstance::Delete_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName)
 {
 	if (m_pObject_Manager == nullptr)

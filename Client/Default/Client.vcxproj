@@ -200,11 +200,14 @@
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\Player.h" />
+    <ClInclude Include="..\Public\Player_Body.h" />
+    <ClInclude Include="..\Public\Player_Hair.h" />
     <ClInclude Include="..\Public\SkyrimTerrain.h" />
     <ClInclude Include="..\Public\StoneWork.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Terrain_Grid.h" />
     <ClInclude Include="..\Public\Tool_Camera.h" />
+    <ClInclude Include="..\Public\Weapon_IronSword.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
@@ -233,11 +236,14 @@
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
+    <ClCompile Include="..\Private\Player_Body.cpp" />
+    <ClCompile Include="..\Private\Player_Hair.cpp" />
     <ClCompile Include="..\Private\SkyrimTerrain.cpp" />
     <ClCompile Include="..\Private\StoneWork.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Terrain_Grid.cpp" />
     <ClCompile Include="..\Private\Tool_Camera.cpp" />
+    <ClCompile Include="..\Private\Weapon_IronSword.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>

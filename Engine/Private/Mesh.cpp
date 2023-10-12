@@ -93,17 +93,29 @@ HRESULT CMesh::Initialize_Clone(void* _pArg)
 	return S_OK;
 }
 
-HRESULT CMesh::Bind_BondMatrices(CShader* _pShader, vector<class CBone*> _vecBone, const char* _strConstantName)
+HRESULT CMesh::Bind_BondMatrices(CShader* _pShader, vector<class CBone*>& _vecBone, const char* _strConstantName, _fmatrix PivotMatrix)
 {
 	_float4x4 BoneMatrices[256];
 	ZeroMemory(BoneMatrices, sizeof(_float4x4) * 256);
 
 	// 뼈의 보정 행렬 * 부모 인덱스 뼈 행렬과 뼈 자신의 행렬을 곱한 행렬.
-	for (size_t i = 0; i < m_vecBoneIndex.size(); ++i)
+	//for (size_t i = 0; i < m_vecBoneIndex.size(); ++i)
+	//{
+	//	_float4x4 matBone = _vecBone[m_vecBoneIndex[i]]->Get_CombinedTransformationMatrix();
+	//	XMStoreFloat4x4(&BoneMatrices[i], XMLoadFloat4x4(&m_OffsetMatrices[i]) * XMLoadFloat4x4(&matBone));
+	//	//  * XMMatrixScaling(0.0025f, 0.005f, 0.005f)
+	//}
+
+	_uint		iIndex = 0;
+
+	for (auto iBoneIndex : m_vecBoneIndex)
 	{
-		_float4x4 matBone = _vecBone[m_vecBoneIndex[i]]->Get_CombinedTransformationMatrix();
-		XMStoreFloat4x4(&BoneMatrices[i], XMLoadFloat4x4(&m_OffsetMatrices[i]) * XMLoadFloat4x4(&matBone) * XMMatrixScaling(0.0025f, 0.005f, 0.005f));
+		_float4x4 matBone = _vecBone[iBoneIndex]->Get_CombinedTransformationMatrix();
+
+		XMStoreFloat4x4(&BoneMatrices[iIndex++],
+			XMLoadFloat4x4(&m_OffsetMatrices[iIndex]) * XMLoadFloat4x4(&matBone) * PivotMatrix);
 	}
+
 
 	return _pShader->Bind_Matrices(_strConstantName, BoneMatrices, m_iNumBones);
 }

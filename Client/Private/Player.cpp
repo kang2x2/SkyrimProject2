@@ -3,6 +3,9 @@
 
 #include "GameInstance.h"
 
+#include "Player_Body.h"
+#include "Weapon_IronSword.h"
+
 CPlayer::CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CGameObject(_pDevice, _pContext)
 {
@@ -23,8 +26,13 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Part()))
+		return E_FAIL;
+
 	m_bHasMesh = true;
+	m_bHasPart = true;
 	m_strName = TEXT("Player");
+	
 
 	return S_OK;
 }
@@ -34,33 +42,52 @@ void CPlayer::Tick(_float _fTimeDelta)
 	if (GetKeyState('Q') & 0x8000)
 	{
 		m_iAnimKeyIndex += 1;
-		m_pModelCom->SetUp_Animation(true, m_iAnimKeyIndex);
+
+		dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(true, m_iAnimKeyIndex);
 	}
 
 	if (GetKeyState('E') & 0x8000)
 	{
 		m_iAnimKeyIndex -= 1;
-		m_pModelCom->SetUp_Animation(true, m_iAnimKeyIndex);
+
+		dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(true, m_iAnimKeyIndex);
 	}
 
 	if (GetKeyState(VK_UP) & 0x8000)
+	{
 		m_pTransformCom->Go_Foward(_fTimeDelta);
+	}
 
 	if (GetKeyState(VK_DOWN) & 0x8000)
+	{
 		m_pTransformCom->Go_Backward(_fTimeDelta);
+	}
 
 	if (GetKeyState(VK_LEFT) & 0x8000)
+	{
 		m_pTransformCom->Go_Left(_fTimeDelta);
+	}
 
 	if (GetKeyState(VK_RIGHT) & 0x8000)
+	{
 		m_pTransformCom->Go_Right(_fTimeDelta);
+	}
 
-	m_pModelCom->Play_Animation(_fTimeDelta);
+	for (auto& iter : m_vecPlayerPart)
+	{
+		if (iter != nullptr)
+			iter->Tick(_fTimeDelta);
+	}
+
 }
 
 void CPlayer::LateTick(_float _fTimeDelta)
 {
-	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
+	for (auto& iter : m_vecPlayerPart)
+	{
+		if (iter != nullptr)
+			iter->LateTick(_fTimeDelta);
+	}
 }
 
 HRESULT CPlayer::Render()
@@ -68,41 +95,20 @@ HRESULT CPlayer::Render()
 	if (FAILED(Bind_ShaderResource()))
 		return E_FAIL;
 
-	// 메시 몇개
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (size_t i = 0; i < iNumMeshes; ++i)
+	for (auto& iter : m_vecPlayerPart)
 	{
-		if (FAILED(m_pModelCom->Bind_BondMatrices(m_pShaderCom, i, "g_BoneMatrices")))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if(FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Render(i)))
-			return E_FAIL;
+		if (iter != nullptr)
+			iter->Render();
 	}
-
 
 	return S_OK;
 }
 
 HRESULT CPlayer::Ready_Component()
 {
-	if(FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player"),
-		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
-		return E_FAIL;
-
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
-		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
-		return E_FAIL;
-
-	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC , TEXT("ProtoType_Component_Renderer"),
-		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
-		return E_FAIL;
+	CTransform::TRANSFORM_DESC		TransformDesc;
+	TransformDesc.fSpeedPerSec = 10000.f;
+	TransformDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
@@ -111,54 +117,40 @@ HRESULT CPlayer::Ready_Component()
 	return S_OK;
 }
 
-HRESULT CPlayer::Bind_ShaderResource()
+HRESULT CPlayer::Ready_Part()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	// 뷰, 투영 행렬과 카메라의 위치를 던져준다.
-	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ViewMatrix", CPipeLine::D3DTS_VIEW)))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ProjMatrix", CPipeLine::D3DTS_PROJ)))
-		return E_FAIL;
 
-	_float4 vCamPosition = pGameInstance->Get_CamPosition_Float4();
-	if(FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
-		return E_FAIL;
+	CGameObject* pPart = nullptr;
 
-	const LIGHT_DESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	if (pLightDesc == nullptr)
-		return E_FAIL;
+	/* For. Player Body */
+	CPlayer_Body::PART_DESC BodyPartDesc;
+	BodyPartDesc.pParentTransform = m_pTransformCom;
 
-	_uint		iPassIndex = 0;
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Body"), &BodyPartDesc);
+	if (pPart == nullptr)
+		return E_FAIL;
+	m_vecPlayerPart.push_back(pPart);
 
-	if (pLightDesc->eLightType == LIGHT_DESC::LIGHT_DIRECTIONAL)
-	{
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &pLightDesc->vLightDir, sizeof(_float4))))
-			return E_FAIL;
-		iPassIndex = 0;
-	}
-	else if (pLightDesc->eLightType == LIGHT_DESC::LIGHT_POINT)
-	{
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightPos", &pLightDesc->vLightPos, sizeof(_float4))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_fLightRange", &pLightDesc->fLightRange, sizeof(_float))))
-			return E_FAIL;
-		iPassIndex = 1;
-	}
+	/* For. Weapon */
+	CWeapon_IronSword::PART_DESC WeaponPartDesc;
+	WeaponPartDesc.pParentTransform = m_pTransformCom;
+	WeaponPartDesc.pSocketBone = dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("WEAPON");
+	WeaponPartDesc.matSocketPivot = dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
 
-	// 나머지 조명 연산에 필요한 데이터를 던져 줌
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Weapon_IronSword"), &WeaponPartDesc);
+	if (pPart == nullptr)
 		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
-		return E_FAIL;
+	m_vecPlayerPart.push_back(pPart);
 
 	Safe_Release(pGameInstance);
 
+	return S_OK;
+}
+
+HRESULT CPlayer::Bind_ShaderResource()
+{
 	return S_OK;
 }
 
@@ -192,8 +184,10 @@ void CPlayer::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pModelCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pRendererCom);
+	for (auto& iter : m_vecPlayerPart)
+		Safe_Release(iter);
+
+	m_vecPlayerPart.clear();
+
 	Safe_Release(m_pTransformCom);
 }

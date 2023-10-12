@@ -34,8 +34,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_FreeCamera"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Level()))
-		return E_FAIL;
+	//if (FAILED(Ready_Level()))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -139,7 +139,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	FreeCameraDesc.fAspect = g_iWinSizeX / (_float)g_iWinSizeY;
 	FreeCameraDesc.fNear = 0.2f;
 	FreeCameraDesc.fFar = 1100.f;
-	FreeCameraDesc.fSpeedPerSec = 20.f;
+	FreeCameraDesc.fSpeedPerSec = 100.f;
 	FreeCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
 
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_FreeCamera"), &FreeCameraDesc)))

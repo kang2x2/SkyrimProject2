@@ -16,6 +16,7 @@ public:
 	HRESULT Add_ProtoObject(const wstring& _strProtoTypeTag, class CGameObject* _pGameObject);
 	HRESULT Add_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strProtoTypeTag, void* pArg);
 	HRESULT Add_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strProtoTypeTag, const wstring& _strModelComTag, void* pArg);
+	class CGameObject* Add_ClonePartObject(const wstring& _strPrototypeTag, void* _pArg);
 	HRESULT Delete_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName);
 	void Tick(_float _fTimeDelta);
 	void LateTick(_float _fTimeDelta);

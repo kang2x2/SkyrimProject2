@@ -16,8 +16,8 @@ CModel::CModel(const CModel& rhs)
 	, m_vecMesh(rhs.m_vecMesh)
 	, m_iNumMaterails(rhs.m_iNumMaterails)
 	, m_vecMaterial(rhs.m_vecMaterial)
-	, m_iCurAnimationIndex(rhs.m_iCurAnimationIndex)
 	, m_iNumAnimation(rhs.m_iNumAnimation)
+	, m_matPivot(rhs.m_matPivot)
 {
 	// 애니메이션과 뼈는 깊은 복제 하여 가진다.
 	for (auto& iter : rhs.m_vecAnimation)
@@ -106,7 +106,7 @@ HRESULT CModel::SetUp_Animation(_bool _bIsLoop, _uint _iAnimationIndex)
 
 HRESULT CModel::Bind_BondMatrices(CShader* _pShader, _uint _iMeshIndex, const char* _strConstantName)
 {
-	return m_vecMesh[_iMeshIndex]->Bind_BondMatrices(_pShader, m_vecBone, _strConstantName);
+	return m_vecMesh[_iMeshIndex]->Bind_BondMatrices(_pShader, m_vecBone, _strConstantName, XMLoadFloat4x4(&m_matPivot));
 }
 
 HRESULT CModel::Bind_MaterialTexture(CShader* _pShader, const char* _pConstantName, _uint _iMeshIndex, aiTextureType _eType)
@@ -123,6 +123,10 @@ HRESULT CModel::Bind_MaterialTexture(CShader* _pShader, const char* _pConstantNa
 
 HRESULT CModel::Play_Animation(_float _fTimeDelta)
 {
+	/* Non Anim 모델이면 바로 return */
+	if (0 == m_iNumAnimation)
+		return S_OK;
+
 	/* 뼈들의 TransformationMatrix를 애니메이션 상태에 맞도록 바꿔준다. 
 	   (Animation -> Channel -> 시간에 맞는 KeyFrame)*/
 
@@ -276,6 +280,26 @@ _int CModel::Get_BoneIndex(const char* _strBoneName) const
 	}
 
 	return -1;
+}
+
+CBone* CModel::Get_BonePtr(const char* _strBoneName) const
+{
+	//auto	iter = find_if(m_vecBone.begin(), m_vecBone.end(), [&](CBone* pBone)
+	//	{
+	//		if (false == strcmp(pBone->Get_BoneName(), _strBoneName))
+	//			return true;
+	//		return false;
+	//	});
+	//
+	//return *iter;
+
+	for (size_t iBoneIndex = 0; iBoneIndex < m_vecBone.size(); ++iBoneIndex)
+	{
+		if (false == strcmp(m_vecBone[iBoneIndex]->Get_BoneName(), _strBoneName))
+			return m_vecBone[iBoneIndex];
+	}
+
+	return nullptr;
 }
 
 void CModel::Update_VI(const _fmatrix& _matPivot)

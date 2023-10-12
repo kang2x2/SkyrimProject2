@@ -40,17 +40,11 @@
     <Filter Include="02. GameObject\01. GamePlay">
       <UniqueIdentifier>{844e8e34-f120-4bd1-937a-869418031117}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\01. Terrain">
-      <UniqueIdentifier>{7bf92707-2698-41c0-9dc1-b6dcf5c16dc4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\00. Logo\99. BackGround">
       <UniqueIdentifier>{163fea8e-bd66-4375-9625-d26c58650695}</UniqueIdentifier>
     </Filter>
     <Filter Include="01. Level\98. Tool">
       <UniqueIdentifier>{cadf2af0-0b35-4091-b211-2d178ae27aa7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\99. Camera">
-      <UniqueIdentifier>{b7ddeb8a-dbcb-455f-891b-01d267bf7602}</UniqueIdentifier>
     </Filter>
     <Filter Include="96. IMGUI\Base">
       <UniqueIdentifier>{96e70ba4-5b58-4f52-878d-d11e742cdb72}</UniqueIdentifier>
@@ -61,12 +55,6 @@
     <Filter Include="96. IMGUI\01. ImGui_GamePlay">
       <UniqueIdentifier>{6d7753a0-b717-4111-976a-1dac6ce5f55d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. Player">
-      <UniqueIdentifier>{0a8bb210-b1c9-4183-8de3-dc2cbb5cfa6c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\03. SkyrimTerrain">
-      <UniqueIdentifier>{cd088392-98f1-43ef-a656-c7d86e2f3e04}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\99. Tool">
       <UniqueIdentifier>{dc414e22-1a72-4f82-8eb6-4c954cf7f371}</UniqueIdentifier>
     </Filter>
@@ -76,12 +64,6 @@
     <Filter Include="02. GameObject\99. Tool\00. Terrain">
       <UniqueIdentifier>{b6923e3d-1e14-4c77-85f6-c0be4029cac1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\04. Building">
-      <UniqueIdentifier>{610b7e19-d7e7-4cb6-bbef-1f676ea6027f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\05. StoneWork">
-      <UniqueIdentifier>{a12bbec8-e07a-47e2-aee8-4f7e89f5a785}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Level\01. Logo">
       <UniqueIdentifier>{a4d92cd7-66f6-458a-81d1-88f5152aa687}</UniqueIdentifier>
     </Filter>
@@ -90,6 +72,69 @@
     </Filter>
     <Filter Include="01. Level\00. Zero">
       <UniqueIdentifier>{4f34f59d-2a46-4ba1-ada7-a8da7092109f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject">
+      <UniqueIdentifier>{e05497c4-b118-49e0-9425-c35ab40c444f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject">
+      <UniqueIdentifier>{69f77692-08d7-4894-b133-ccfc0caded5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject">
+      <UniqueIdentifier>{3cce9b32-0226-4dee-bd2e-94f34993f7aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player">
+      <UniqueIdentifier>{0a8bb210-b1c9-4183-8de3-dc2cbb5cfa6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts">
+      <UniqueIdentifier>{dbeb029a-4cff-4d3b-9165-53f9fcb46b6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\04. Building">
+      <UniqueIdentifier>{610b7e19-d7e7-4cb6-bbef-1f676ea6027f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. StoneWork">
+      <UniqueIdentifier>{a12bbec8-e07a-47e2-aee8-4f7e89f5a785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\03. SkyrimTerrain">
+      <UniqueIdentifier>{cd088392-98f1-43ef-a656-c7d86e2f3e04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject">
+      <UniqueIdentifier>{f32ab3bd-76b2-44b0-bb2d-c8a998fb5442}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\99. Camera">
+      <UniqueIdentifier>{b7ddeb8a-dbcb-455f-891b-01d267bf7602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\01. Terrain">
+      <UniqueIdentifier>{7bf92707-2698-41c0-9dc1-b6dcf5c16dc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\01. Hair">
+      <UniqueIdentifier>{e27bce27-ebe4-4b44-a9dd-c3cff8afd00e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\02. Eye">
+      <UniqueIdentifier>{28318074-4b97-447d-aa1f-c99cce758d4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\03. Tail">
+      <UniqueIdentifier>{06192a36-3e11-4805-8b60-80a89644807a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\04. Mouse">
+      <UniqueIdentifier>{c7f1792c-498c-48fd-9b6b-18551a96abc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\00. Body">
+      <UniqueIdentifier>{465bf45a-a35c-41d0-a2b9-15d9b2b435ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon">
+      <UniqueIdentifier>{539ab7e2-78f3-4b0f-92bd-06e1ab3b2682}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand">
+      <UniqueIdentifier>{a4c202a1-9702-4170-a455-18a476f017ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\01. 2Hand">
+      <UniqueIdentifier>{35f1594b-0b57-4186-a420-271c92bef39e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\02. Bow">
+      <UniqueIdentifier>{f972224a-50b2-49f0-b5a7-8161d4111baa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor">
+      <UniqueIdentifier>{56b94b33-6dae-4dfe-b9cb-c6527f07ec04}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -154,13 +199,13 @@
       <Filter>96. IMGUI\Default</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Terrain.h">
-      <Filter>02. GameObject\01. GamePlay\01. Terrain</Filter>
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\01. Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CLevel_Tool.h">
       <Filter>01. Level\98. Tool</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Free_Camera.h">
-      <Filter>02. GameObject\01. GamePlay\99. Camera</Filter>
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ImGui_Base.h">
       <Filter>96. IMGUI\Base</Filter>
@@ -178,19 +223,28 @@
       <Filter>02. GameObject\99. Tool\99. Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player.h">
-      <Filter>02. GameObject\01. GamePlay\02. Player</Filter>
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SkyrimTerrain.h">
-      <Filter>02. GameObject\01. GamePlay\03. SkyrimTerrain</Filter>
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\03. SkyrimTerrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Building.h">
-      <Filter>02. GameObject\01. GamePlay\04. Building</Filter>
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\04. Building</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StoneWork.h">
-      <Filter>02. GameObject\01. GamePlay\05. StoneWork</Filter>
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. StoneWork</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Zero.h">
       <Filter>01. Level\00. Zero</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_Hair.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\01. Hair</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_Body.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\00. Body</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_IronSword.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -248,13 +302,13 @@
       <Filter>96. IMGUI\Default</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Terrain.cpp">
-      <Filter>02. GameObject\01. GamePlay\01. Terrain</Filter>
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\01. Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CLevel_Tool.cpp">
       <Filter>01. Level\98. Tool</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Free_Camera.cpp">
-      <Filter>02. GameObject\01. GamePlay\99. Camera</Filter>
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ImGui_Base.cpp">
       <Filter>96. IMGUI\Base</Filter>
@@ -272,19 +326,28 @@
       <Filter>02. GameObject\99. Tool\99. Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. Player</Filter>
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SkyrimTerrain.cpp">
-      <Filter>02. GameObject\01. GamePlay\03. SkyrimTerrain</Filter>
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\03. SkyrimTerrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Building.cpp">
-      <Filter>02. GameObject\01. GamePlay\04. Building</Filter>
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\04. Building</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StoneWork.cpp">
-      <Filter>02. GameObject\01. GamePlay\05. StoneWork</Filter>
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. StoneWork</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Zero.cpp">
       <Filter>01. Level\00. Zero</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_Hair.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\01. Hair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_Body.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\00. Body</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_IronSword.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
