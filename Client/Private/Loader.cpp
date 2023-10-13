@@ -93,9 +93,9 @@ _int CLoader::Loading()
 
 HRESULT CLoader::Loading_For_Level_Zero()
 {
-	m_strLoadingText = TEXT("Loading Mesh.");
-
-	Set_ProtoType_Mesh(LEVEL_ZERO);
+	//m_strLoadingText = TEXT("Loading Mesh.");
+	//
+	//Set_ProtoType_Mesh(LEVEL_ZERO);
 
 	m_strLoadingText = TEXT("Loading Complete");
 	m_bIsFinish = true;
@@ -129,7 +129,13 @@ HRESULT CLoader::Loading_For_Level_Tool()
 		CVIBuffer_Grid::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	Set_ProtoType_Mesh(LEVEL_TOOL);
+	//Set_ProtoType_Mesh(LEVEL_TOOL);
+
+	_matrix matInitialize = XMMatrixIdentity();
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_Body"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Building/BreezeHome", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
 
 	/* GameObject */
 
@@ -241,7 +247,7 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 	//	return E_FAIL;
 
 
-	// Set_ProtoType_Mesh(LEVEL_GAMEPLAY);
+	Set_ProtoType_Mesh(LEVEL_GAMEPLAY);
 
 #pragma endregion
 
@@ -291,7 +297,7 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 		CWeapon_IronSword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	// Set_ProtoType_Object();
+	 Set_ProtoType_Object();
 
 #pragma endregion
 

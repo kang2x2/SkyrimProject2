@@ -346,6 +346,14 @@ HRESULT CGameInstance::Binary_OutFile(ofstream& _outFile, const char* _strFilePa
 	return m_pMyFile_Manager->Binary_OutFile(_outFile, _strFilePath, _eType);
 }
 
+const CBin_AIScene* CGameInstance::Binary_InFile(const char* _strFilePath)
+{
+	if (m_pMyFile_Manager == nullptr)
+		return nullptr;
+
+	return m_pMyFile_Manager->Binary_InFile(_strFilePath);
+}
+
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::GetInstance()->DestroyInstance();

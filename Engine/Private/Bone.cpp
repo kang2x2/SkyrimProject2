@@ -12,10 +12,10 @@ CBone::CBone(const CBone& rhs)
 	strcpy_s(m_szName, rhs.m_szName);
 }
 
-HRESULT CBone::Initialize(const aiNode* _pAINode, _int _iParentBoneIndex)
+HRESULT CBone::Initialize(const CBin_AIScene::DESC_NODE* _pAINode, _int _iParentBoneIndex)
 {
 	m_iParentBoneIndex = _iParentBoneIndex;
-
+	// _pAINode = CHILDREN
 	strcpy_s(m_szName, _pAINode->mName.data);
 
 	memcpy(&m_TransformationMatrix, &_pAINode->mTransformation, sizeof(_float4x4));
@@ -53,7 +53,7 @@ HRESULT CBone::Update_CombinedTransformationMatrix(const vector<class CBone*>& _
 	return S_OK;
 }
 
-CBone* CBone::Create(const aiNode* _pAINode, _int _iParentBoneIndex)
+CBone* CBone::Create(const CBin_AIScene::DESC_NODE* _pAINode, _int _iParentBoneIndex)
 {
 	CBone* pInstance = new CBone();
 

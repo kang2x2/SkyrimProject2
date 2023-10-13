@@ -1,6 +1,8 @@
 #include "Animation.h"
 #include "Channel.h"
 
+#include "Bin_AIScene.h"
+
 CAnimation::CAnimation()
 {
 }
@@ -21,7 +23,7 @@ CAnimation::CAnimation(const CAnimation& rhs)
 		Safe_AddRef(iter);
 }
 
-HRESULT CAnimation::Initailze(const class CModel* _pModel, const aiAnimation* _pAiAnimation)
+HRESULT CAnimation::Initailze(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATION* _pAiAnimation)
 {
 	strcpy_s(m_szName, _pAiAnimation->mName.data);
 
@@ -41,7 +43,7 @@ HRESULT CAnimation::Initailze(const class CModel* _pModel, const aiAnimation* _p
 	{
 		/* 각 뼈들을 돌면서 정보를 생성해놓는다. */
 		/* 정보 : 이 뼈가 이 애니메이션 안에서 몇개의 동작을 가지는지 */
-		CChannel* pChannel = CChannel::Create(_pModel, _pAiAnimation->mChannels[i]);
+		CChannel* pChannel = CChannel::Create(_pModel, &_pAiAnimation->mChannels[i]);
 		if (pChannel == nullptr)
 			return E_FAIL;
 
@@ -84,7 +86,7 @@ void CAnimation::ReSet()
 		iter = 0;
 }
 
-CAnimation* CAnimation::Create(const class CModel* _pModel, const aiAnimation* _pAiAnimation)
+CAnimation* CAnimation::Create(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATION* _pAiAnimation)
 {
 	CAnimation* pInstance = new CAnimation();
 

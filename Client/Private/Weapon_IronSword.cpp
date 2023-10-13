@@ -98,7 +98,6 @@ HRESULT CWeapon_IronSword::Ready_Component()
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 

@@ -13,7 +13,7 @@ CMesh::CMesh(const CMesh& rhs)
 {
 }
 
-HRESULT CMesh::Initialize_ProtoType(const CModel* _pModel, const aiMesh* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType)
+HRESULT CMesh::Initialize_ProtoType(const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType)
 {
 	strcpy_s(m_szName, _pAIMesh->mName.data);
 
@@ -134,7 +134,7 @@ void CMesh::Update_VI(const _fmatrix& _matPivot)
 	Safe_Delete_Array(pVertices);
 }
 
-HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(const aiMesh* _pAIMesh, _fmatrix _matPivot)
+HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(const CBin_AIScene::DESC_MESH* _pAIMesh, _fmatrix _matPivot)
 {
 	VTX_NONANIMMESH* pVertices = new VTX_NONANIMMESH[m_iNumVertices];
 	ZeroMemory(pVertices, sizeof(VTX_NONANIMMESH) * m_iNumVertices);
@@ -170,7 +170,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(const aiMesh* _pAIMesh, _fmatrix _
 	return S_OK;
 }
 
-HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* _pModel, const aiMesh* _pAIMesh)
+HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh)
 {
 	VTX_ANIMMESH* pVertices = new VTX_ANIMMESH[m_iNumVertices];
 	ZeroMemory(pVertices, sizeof(VTX_ANIMMESH) * m_iNumVertices);
@@ -194,7 +194,8 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* _pModel, const aiMesh* 
 	for (size_t i = 0; i < m_iNumBones; ++i)
 	{
 		// 뼈 정보 가져오기.
-		aiBone* pAIBone = _pAIMesh->mBones[i];
+		CBin_AIScene::DESC_MESHBONE* pAIBone = &_pAIMesh->mBones[i];
+
 		/*  공통으로 사용되는 뼈대들을 각기다른 형태의 메시에게 적용하기위해서는
 			어느정도의 보정이 필요하다. */
 		// offset : 오차를 수정하는 어떤 값, 수정치 혹은 치수 보정.
@@ -270,7 +271,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* _pModel, const aiMesh* 
 	return S_OK;
 }
 
-CMesh* CMesh::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const CModel* _pModel, const aiMesh* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType)
+CMesh* CMesh::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType)
 {
 	CMesh* pInstance = new CMesh(_pDevice, _pContext);
 

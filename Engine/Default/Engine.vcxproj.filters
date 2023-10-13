@@ -112,6 +112,12 @@
     <Filter Include="07. File">
       <UniqueIdentifier>{463121a0-9070-49cd-87ef-caafd4d94e7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07. File\00. Data">
+      <UniqueIdentifier>{c9970d17-a16c-44b0-85d2-321dc8354113}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07. File\00. Data\00. BinFBX">
+      <UniqueIdentifier>{c86f7611-9e3d-424f-96e2-22128561d102}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -225,6 +231,9 @@
     <ClInclude Include="..\Public\MyFile_Manager.h">
       <Filter>07. File</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Bin_AIScene.h">
+      <Filter>07. File\00. Data\00. BinFBX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Graphic_Device.cpp">
@@ -325,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\MyFile_Manager.cpp">
       <Filter>07. File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bin_AIScene.cpp">
+      <Filter>07. File\00. Data\00. BinFBX</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

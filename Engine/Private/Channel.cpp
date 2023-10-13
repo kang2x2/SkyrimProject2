@@ -7,7 +7,7 @@ CChannel::CChannel()
 {
 }
 
-HRESULT CChannel::Initialize(const CModel* _pModel, const aiNodeAnim* _pAIChannel)
+HRESULT CChannel::Initialize(const CModel* _pModel, const CBin_AIScene::DESC_ANIMATIONCHANNEL* _pAIChannel)
 {
 	strcpy_s(m_szName, _pAIChannel->mNodeName.data);
 
@@ -123,7 +123,7 @@ void CChannel::Update_TransformationMatrix(_uint* _pCurKeyFrame, vector<class CB
 
 }
 
-CChannel* CChannel::Create(const class CModel* _pModel, const aiNodeAnim* _pAIChannel)
+CChannel* CChannel::Create(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATIONCHANNEL* _pAIChannel)
 {
 	CChannel* pInstance = new CChannel();
 

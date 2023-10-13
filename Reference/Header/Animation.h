@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Base.h"
+#include "Bin_AIScene.h"
 
 BEGIN(Engine)
 
@@ -12,7 +13,7 @@ private:
 	virtual ~CAnimation() = default;
 
 public:
-	HRESULT Initailze(const class CModel* _pModel, const aiAnimation* _pAiAnimation);
+	HRESULT Initailze(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATION* _pAiAnimation);
 	void Update_TransformationMatrix(vector<class CBone*>& _vecBone, _float _fTimeDelta);
 	void ReSet();
 public:
@@ -33,7 +34,7 @@ private:
 
 
 public:
-	static CAnimation* Create(const class CModel* _pModel, const aiAnimation* _pAiAnimation);
+	static CAnimation* Create(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATION* _pAiAnimation);
 	CAnimation* Clone();
 	virtual void Free() override;
 };

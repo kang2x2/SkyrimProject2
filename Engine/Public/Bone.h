@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Base.h"
+#include "Bin_AIScene.h"
 
 /*
 	1. aiScene		: 뼈의 상태를 가지고 있음.
@@ -21,7 +22,7 @@ private:
 	virtual ~CBone() = default;
 
 public:
-	HRESULT Initialize(const aiNode* _pAINode, _int _iParentBoneIndex);
+	HRESULT Initialize(const CBin_AIScene::DESC_NODE* _pAINode, _int _iParentBoneIndex);
 	HRESULT Update_CombinedTransformationMatrix(const vector<class CBone*>& _vecBone);
 
 public:
@@ -38,7 +39,7 @@ private:
 	_int			m_iParentBoneIndex = -1; // 부모 뼈의 인덱스(없으면 -1)
 
 public:
-	static CBone* Create(const aiNode* _pAINode, _int _iParentBoneIndex);
+	static CBone* Create(const CBin_AIScene::DESC_NODE* _pAINode, _int _iParentBoneIndex);
 	CBone* Clone();
 	virtual void Free() override;
 };
