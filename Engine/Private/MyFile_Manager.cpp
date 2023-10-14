@@ -113,15 +113,24 @@ HRESULT CMyFile_Manager::Binary_OutFile(ofstream& _outFile, const char* _strFile
 
 	if (FAILED(Write_FBXNode(_outFile)))
 	{
-		MSG_BOX("Fail Binary Write : Bone");
+		MSG_BOX("Fail Binary Write : RootNode");
 		return E_FAIL;
 	}
+	if (FAILED(Write_FBXChildrenNode(_outFile, m_pAIScene->mRootNode, -1)))
+	{
+		MSG_BOX("Fail Binary Write : ChildrenNode");
+		return E_FAIL;
+	}
+
+	unsigned int Escapevalue = static_cast<unsigned int>(9999);
+	_outFile.write(reinterpret_cast<const char*>(&Escapevalue), sizeof(unsigned int));
+
 	if (FAILED(Write_FBXMesh(_outFile, _eType)))
 	{
 		MSG_BOX("Fail Binary Write : Mesh");
 		return E_FAIL;
 	}
-	if (FAILED(Write_FBXMaterial(_outFile)))
+	if (FAILED(Write_FBXMaterial(_outFile, _strFilePath)))
 	{
 		MSG_BOX("Fail Binary Write : Material");
 		return E_FAIL;
@@ -139,284 +148,259 @@ HRESULT CMyFile_Manager::Binary_OutFile(ofstream& _outFile, const char* _strFile
 
 HRESULT CMyFile_Manager::Write_FBXNode(ofstream& _outFile)
 {
-	m_pBinAiScene->mRootNode.mNumChildren = m_pAIScene->mRootNode->mNumChildren;
-	m_pBinAiScene->mRootNode.mName = m_pAIScene->mRootNode->mName;
-	m_pBinAiScene->mRootNode.mTransformation = m_pAIScene->mRootNode->mTransformation;
-	
+	size_t iStrLength = 0;
+
 	/* Root Node */
-	_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mRootNode.mNumChildren), sizeof(unsigned int));
-	size_t iStrLength = m_pBinAiScene->mRootNode.mName.length;
+	unsigned int mParentIndex = -1;
+
+	_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mRootNode->mNumChildren), sizeof(unsigned int));
+	
+	iStrLength = m_pAIScene->mRootNode->mName.length;
 	_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
-	_outFile.write(reinterpret_cast<const char*>(m_pBinAiScene->mRootNode.mName.data), iStrLength * sizeof(char));
-	_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mRootNode.mTransformation), sizeof(aiMatrix4x4));
+	_outFile.write(reinterpret_cast<const char*>(m_pAIScene->mRootNode->mName.C_Str()), iStrLength * sizeof(char));
 
-	if (m_pBinAiScene->mRootNode.mNumChildren != 0)
-	{
-		m_pBinAiScene->mRootNode.mChildren = new CBin_AIScene::DESC_NODE[m_pBinAiScene->mRootNode.mNumChildren];
-
-		m_pBinAiScene->mRootNode.mChildren[0].mName = m_pAIScene->mRootNode->mChildren[0]->mName;
-		m_pBinAiScene->mRootNode.mChildren[0].mNumChildren = m_pAIScene->mRootNode->mChildren[0]->mNumChildren;
-		m_pBinAiScene->mRootNode.mChildren[0].mTransformation = m_pAIScene->mRootNode->mChildren[0]->mTransformation;
-		
-		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mRootNode->mChildren[0]->mNumChildren), sizeof(unsigned int));
-		size_t iStrLength = m_pBinAiScene->mRootNode.mName.length;
-		_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
-		_outFile.write(reinterpret_cast<const char*>(m_pAIScene->mRootNode->mChildren[0]->mName.data), iStrLength * sizeof(char));
-		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mRootNode->mChildren[0]->mTransformation), sizeof(aiMatrix4x4));
-
-		Write_FBXChildrenNode(_outFile, m_pAIScene->mRootNode->mChildren[0]);
-
-		delete[] m_pBinAiScene->mRootNode.mChildren;
-	}
+	_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mRootNode->mTransformation), sizeof(aiMatrix4x4));
+	_outFile.write(reinterpret_cast<const char*>(&mParentIndex), sizeof(unsigned int));
 
 	return S_OK;
 }
 
-HRESULT CMyFile_Manager::Write_FBXChildrenNode(ofstream& _outFile, aiNode* _node)
+HRESULT CMyFile_Manager::Write_FBXChildrenNode(ofstream& _outFile, aiNode* _pNode, unsigned int _iParentIndex)
 {
-	CBin_AIScene::DESC_NODE tempNode;
-
-	tempNode.mNumChildren = _node->mNumChildren;
-	tempNode.mName = _node->mName;
-	tempNode.mTransformation = _node->mTransformation;
-
-	_outFile.write(reinterpret_cast<const char*>(&tempNode.mNumChildren), sizeof(unsigned int));
-	size_t iStrLength = m_pBinAiScene->mRootNode.mName.length;
-	_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
-	_outFile.write(reinterpret_cast<const char*>(tempNode.mName.data), iStrLength * sizeof(char));
-	_outFile.write(reinterpret_cast<const char*>(&tempNode.mTransformation), sizeof(aiMatrix4x4));
-
-	for (size_t i = 0; i < tempNode.mNumChildren; ++i)
+	if (_pNode->mNumChildren > 0)
 	{
-		Write_FBXChildrenNode(_outFile, m_pAIScene->mRootNode->mChildren[i]);
-	}
+		_outFile.write(reinterpret_cast<const char*>(&_pNode->mNumChildren), sizeof(unsigned int));
+		
+		size_t iStrLength = _pNode->mName.length;
+		_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
+		_outFile.write(reinterpret_cast<const char*>(_pNode->mName.data), iStrLength * sizeof(char));
 
+		_outFile.write(reinterpret_cast<const char*>(&_pNode->mTransformation), sizeof(aiMatrix4x4));
+		_outFile.write(reinterpret_cast<const char*>(&_iParentIndex + 1), sizeof(unsigned int));
+
+		for (size_t i = 0; i < _pNode->mNumChildren; ++i)
+		{
+			Write_FBXChildrenNode(_outFile, _pNode->mChildren[i], _iParentIndex + 1);
+		}
+	}
 	return S_OK;
 }
 
 HRESULT CMyFile_Manager::Write_FBXMesh(ofstream& _outFile, CModel::MODEL_TYPE _eType)
 {
-	m_pBinAiScene->mNumMeshes = m_pAIScene->mNumMeshes;
+	_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mNumMeshes), sizeof(unsigned int));
+
 	size_t iStrLength = 0;
 
-	m_pBinAiScene->mMeshs = new CBin_AIScene::DESC_MESH[m_pBinAiScene->mNumMeshes];
-
 	/* 전체 메시 */
-	for (size_t i = 0; i < m_pBinAiScene->mNumMeshes; ++i)
+	for (size_t i = 0; i < m_pAIScene->mNumMeshes; ++i)
 	{
-		iStrLength = m_pBinAiScene->mMeshs[i].mName.length;
+		iStrLength = m_pAIScene->mMeshes[i]->mName.length;
 		_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
-		_outFile.write(reinterpret_cast<const char*>(m_pBinAiScene->mMeshs[i].mName.data), iStrLength * sizeof(char));
+		_outFile.write(reinterpret_cast<const char*>(m_pAIScene->mMeshes[i]->mName.data), iStrLength * sizeof(char));
 	}
 
 	/* 재질 */
-	for (size_t i = 0; i < m_pBinAiScene->mNumMeshes; ++i)
+	for (size_t i = 0; i < m_pAIScene->mNumMeshes; ++i)
 	{
-		_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mMaterialIndex), sizeof(unsigned int));
+		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mMaterialIndex), sizeof(unsigned int));
 	}
 
 	/* 메시 면 */
-	for (size_t i = 0; i < m_pBinAiScene->mNumMeshes; ++i)
+	for (size_t i = 0; i < m_pAIScene->mNumMeshes; ++i)
 	{
-		m_pBinAiScene->mMeshs[i].mNumFaces = m_pAIScene->mMeshes[i]->mNumFaces;
-		_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mNumFaces), sizeof(unsigned int));
+		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mNumFaces), sizeof(unsigned int));
 
-		m_pBinAiScene->mMeshs[i].mFaces = new CBin_AIScene::DESC_MESHFACE[m_pBinAiScene->mMeshs[i].mNumFaces];
-		
-		for (size_t j = 0; j < m_pBinAiScene->mMeshs[i].mNumFaces; ++j)
+		for (size_t j = 0; j < m_pAIScene->mMeshes[i]->mNumFaces; ++j)
 		{
-			m_pBinAiScene->mMeshs[i].mFaces[j].mIndices[0] = m_pAIScene->mMeshes[i]->mFaces[j].mIndices[0];
-			m_pBinAiScene->mMeshs[i].mFaces[j].mIndices[1] = m_pAIScene->mMeshes[i]->mFaces[j].mIndices[1];
-			m_pBinAiScene->mMeshs[i].mFaces[j].mIndices[2] = m_pAIScene->mMeshes[i]->mFaces[j].mIndices[2];
-			_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mFaces[j].mIndices), sizeof(unsigned int) * 3);
+			_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mNumFaces), sizeof(unsigned int) * 3);
 		}
-
-		delete[] m_pBinAiScene->mMeshs[i].mFaces;
 	}
 
 	/* 버텍스 */
-	for (size_t i = 0; i < m_pBinAiScene->mNumMeshes; ++i)
+	for (size_t i = 0; i < m_pAIScene->mNumMeshes; ++i)
 	{
-		m_pBinAiScene->mMeshs[i].mNumVertices = m_pAIScene->mMeshes[i]->mNumVertices;
-		_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mNumVertices), sizeof(unsigned int));
+		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mNumVertices), sizeof(unsigned int));
 		
-		m_pBinAiScene->mMeshs[i].mVertices = new aiVector3D[m_pBinAiScene->mMeshs[i].mNumVertices];
-		m_pBinAiScene->mMeshs[i].mNormals = new aiVector3D[m_pBinAiScene->mMeshs[i].mNumVertices];
-		m_pBinAiScene->mMeshs[i].mTextureCoords[0] = new aiVector3D[m_pBinAiScene->mMeshs[i].mNumVertices];
-		m_pBinAiScene->mMeshs[i].mTangents = new aiVector3D[m_pBinAiScene->mMeshs[i].mNumVertices];
-		
-		for (size_t j = 0; j < m_pBinAiScene->mMeshs[i].mNumVertices; ++j)
+		for (size_t j = 0; j < m_pAIScene->mMeshes[i]->mNumVertices; ++j)
 		{
-			m_pBinAiScene->mMeshs[i].mVertices[j] = m_pAIScene->mMeshes[i]->mVertices[j];
-			m_pBinAiScene->mMeshs[i].mNormals[j] = m_pAIScene->mMeshes[i]->mNormals[j];
-			m_pBinAiScene->mMeshs[i].mTextureCoords[0][j] = m_pAIScene->mMeshes[i]->mTextureCoords[0][j];
-			m_pBinAiScene->mMeshs[i].mTangents[j] = m_pAIScene->mMeshes[i]->mTangents[j];
-			
-			_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mVertices[j]), sizeof(_float3));
-			_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mNormals[j]), sizeof(_float3));
-			_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mTextureCoords[0][j]), sizeof(_float2));
-			_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mTangents[j]), sizeof(_float3));
+			_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mVertices[j]), sizeof(_float3));
+			_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mNormals[j]), sizeof(_float3));
+			_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mTextureCoords[0][j]), sizeof(_float2));
+			_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mTangents[j]), sizeof(_float3));
 		}
-
-		delete[] m_pBinAiScene->mMeshs[i].mVertices;
-		delete[] m_pBinAiScene->mMeshs[i].mNormals;
-		delete[] m_pBinAiScene->mMeshs[i].mTextureCoords[0];
-		delete[] m_pBinAiScene->mMeshs[i].mTangents;
 	}
 
 	/* 메시 본 */
 	if (_eType == CModel::TYPE_ANIM)
 	{
-		for (size_t i = 0; i < m_pBinAiScene->mNumMeshes; ++i)
+		for (size_t i = 0; i < m_pAIScene->mNumMeshes; ++i)
 		{
-			m_pBinAiScene->mMeshs[i].mBones = new CBin_AIScene::DESC_MESHBONE[m_pBinAiScene->mNumMeshes];
+			if (m_pAIScene->mMeshes[i]->mBones == nullptr)
+				continue;
 
-			_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mNumBones), sizeof(unsigned int));
-			for (size_t j = 0; j < m_pBinAiScene->mMeshs[i].mNumBones; ++j)
+			_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mNumBones), sizeof(unsigned int));
+
+			for (size_t j = 0; j < m_pAIScene->mMeshes[i]->mNumBones; ++j)
 			{
-				m_pBinAiScene->mMeshs[i].mBones[j].mOffsetMatrix = m_pAIScene->mMeshes[i]->mBones[j]->mOffsetMatrix;
-				_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mBones[j].mOffsetMatrix), sizeof(aiMatrix4x4));
+				if (m_pAIScene->mMeshes[i]->mBones[j] == nullptr)
+					continue;
 
-				m_pBinAiScene->mMeshs[i].mBones[j].mName = m_pAIScene->mMeshes[i]->mBones[j]->mName;
-				iStrLength = m_pBinAiScene->mMeshs[i].mBones[j].mName.length;
+				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mBones[j]->mOffsetMatrix), sizeof(aiMatrix4x4));
+
+				iStrLength = m_pAIScene->mMeshes[i]->mBones[j]->mName.length;
 				_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
-				_outFile.write(reinterpret_cast<const char*>(m_pBinAiScene->mMeshs[i].mBones[j].mName.data), iStrLength * sizeof(char));
+				_outFile.write(reinterpret_cast<const char*>(m_pAIScene->mMeshes[i]->mBones[j]->mName.data), iStrLength * sizeof(char));
 
-				m_pBinAiScene->mMeshs[i].mBones[j].mNumWeights = m_pAIScene->mMeshes[i]->mBones[j]->mNumWeights;
-				_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mBones[j].mNumWeights), sizeof(unsigned int));
+				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mBones[j]->mNumWeights), sizeof(unsigned int));
 
 				/* 메시 본 웨이트 */
-				m_pBinAiScene->mMeshs[i].mBones[j].mWeights = new CBin_AIScene::DESC_MESHBONEWEIGHT[m_pBinAiScene->mMeshs[i].mBones[j].mNumWeights];
-				for (size_t k = 0; k < m_pBinAiScene->mMeshs[i].mBones[j].mNumWeights; ++k)
+				for (size_t k = 0; k < m_pAIScene->mMeshes[i]->mBones[j]->mNumWeights; ++k)
 				{
-					m_pBinAiScene->mMeshs[i].mBones[j].mWeights[k].mVertexId = m_pBinAiScene->mMeshs[i].mBones[j].mWeights[k].mVertexId;
-					m_pBinAiScene->mMeshs[i].mBones[j].mWeights[k].mWeight = m_pBinAiScene->mMeshs[i].mBones[j].mWeights[k].mWeight;
-
-					_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mBones[j].mWeights[k].mVertexId), sizeof(unsigned int));
-					_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMeshs[i].mBones[j].mWeights[k].mWeight), sizeof(_float));
+					_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mBones[j]->mWeights[k].mVertexId), sizeof(unsigned int));
+					_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mMeshes[i]->mBones[j]->mWeights[k].mWeight), sizeof(_float));
 				}
-				delete[] m_pBinAiScene->mMeshs[i].mBones[j].mWeights;
 			}
-			delete[] m_pBinAiScene->mMeshs[i].mBones;
 		}
 	}
-
-	delete[] m_pBinAiScene->mMeshs;
 
 	return S_OK;
 }
 
-HRESULT CMyFile_Manager::Write_FBXMaterial(ofstream& _outFile)
+HRESULT CMyFile_Manager::Write_FBXMaterial(ofstream& _outFile, const char* _strFilePath)
 {
-	//m_pBinAiScene->mNumMaterials = m_pAIScene->mNumMaterials;
-	//
-	//for (size_t i = 0; i < m_pBinAiScene->mNumMaterials; ++i)
-	//{
-	//	m_pBinAiScene->mMaterials[i] = m_pAIScene->mMaterials[i];
-	//	_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mMaterials[i]), sizeof(aiMaterial));
-	//}
+	_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mNumMaterials), sizeof(unsigned int));
+
+	for (size_t i = 0; i < m_pAIScene->mNumMaterials; ++i)
+	{
+		aiMaterial* pMaterials = m_pAIScene->mMaterials[i];
+
+		for (size_t j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
+		{
+			aiString strTexturePath;
+
+			// 해당 재질 정보가 없으면 다음으로
+			aiReturn eReturn = pMaterials->GetTexture(aiTextureType(j), 0, &strTexturePath);
+			int iReturnNum = 0;
+			if (eReturn == aiReturn_SUCCESS)
+				iReturnNum = 1;
+
+			_outFile.write(reinterpret_cast<const char*>(&iReturnNum), sizeof(_int));
+			
+			if (FAILED(eReturn))
+				continue;
+
+			// 드라이브, 경로 추출
+			char			szDrive[MAX_PATH] = "";
+			char			szDirectory[MAX_PATH] = "";
+			_splitpath_s(_strFilePath, szDrive, MAX_PATH, szDirectory, MAX_PATH, nullptr, 0, nullptr, 0);
+
+			// 파일명.확장자 추출
+			char			szFileName[MAX_PATH] = "";
+			char			szExt[MAX_PATH] = "";
+			_splitpath_s(strTexturePath.data, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+			// 드라이브 복사 후 뒤에 경로, 파일명, 확장자를 이어 붙인다.
+			char			szTmp[MAX_PATH] = "";
+			strcpy_s(szTmp, szDrive);
+			strcat_s(szTmp, szDirectory);
+			strcat_s(szTmp, szFileName);
+			strcat_s(szTmp, szExt);
+
+			size_t iStrLength = strlen(szTmp); // strlen을 사용하여 문자열 길이 가져오기
+			_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
+			_outFile.write(szTmp, iStrLength * sizeof(char)); // 문자열 데이터를 저장
+		}
+	}
+
+
 
 	return S_OK;
 }
 
 HRESULT CMyFile_Manager::Write_FBXAnimation(ofstream& _outFile)
 {
-	m_pBinAiScene->m_iNumAnimation = m_pAIScene->mNumAnimations;
-
-	m_pBinAiScene->mAnimations = new CBin_AIScene::DESC_ANIMATION[m_pBinAiScene->m_iNumAnimation];
+	_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mNumAnimations), sizeof(unsigned int));
 
 	size_t iStrLength = 0;
-	for (size_t i = 0; i < m_pBinAiScene->m_iNumAnimation; ++i)
+	for (size_t i = 0; i < m_pAIScene->mNumAnimations; ++i)
 	{
-		m_pBinAiScene->mAnimations[i].mName = m_pAIScene->mAnimations[i]->mName;
-		iStrLength = m_pBinAiScene->mAnimations[i].mName.length;
+		iStrLength = m_pAIScene->mAnimations[i]->mName.length;
 		_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
-		_outFile.write(reinterpret_cast<const char*>(m_pBinAiScene->mAnimations[i].mName.data), iStrLength * sizeof(char));
+		_outFile.write(reinterpret_cast<const char*>(m_pAIScene->mAnimations[i]->mName.data), iStrLength * sizeof(char));
 		
-		m_pBinAiScene->mAnimations[i].mDuration = (_float)m_pAIScene->mAnimations[i]->mDuration;
-		m_pBinAiScene->mAnimations[i].mTicksPerSecond = (_float)m_pAIScene->mAnimations[i]->mTicksPerSecond;
-		m_pBinAiScene->mAnimations[i].mNumChannels = m_pAIScene->mAnimations[i]->mNumChannels;
+		m_pAIScene->mAnimations[i]->mDuration = (_float)m_pAIScene->mAnimations[i]->mDuration;
+		m_pAIScene->mAnimations[i]->mTicksPerSecond = (_float)m_pAIScene->mAnimations[i]->mTicksPerSecond;
 		
-		_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mAnimations[i].mDuration), sizeof(_float));
-		_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mAnimations[i].mTicksPerSecond), sizeof(_float));
-		_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mAnimations[i].mNumChannels), sizeof(unsigned int));
+		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mDuration), sizeof(_float));
+		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mTicksPerSecond), sizeof(_float));
+		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mNumChannels), sizeof(unsigned int));
 
-		m_pBinAiScene->mAnimations[i].mChannels = new CBin_AIScene::DESC_ANIMATIONCHANNEL[m_pBinAiScene->mAnimations[i].mNumChannels];
-
-		for (size_t j = 0; j < m_pBinAiScene->mAnimations[i].mNumChannels; ++j)
+		for (size_t j = 0; j < m_pAIScene->mAnimations[i]->mNumChannels; ++j)
 		{
-			m_pBinAiScene->mAnimations[i].mChannels[j].mNodeName = m_pAIScene->mAnimations[i]->mChannels[j]->mNodeName;
-			iStrLength = m_pBinAiScene->mAnimations[i].mChannels[j].mNodeName.length;
+			iStrLength = m_pAIScene->mAnimations[i]->mChannels[j]->mNodeName.length;
 			_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
-			_outFile.write(reinterpret_cast<const char*>(m_pBinAiScene->mAnimations[i].mChannels[j].mNodeName.data), iStrLength * sizeof(char));
+			_outFile.write(reinterpret_cast<const char*>(m_pAIScene->mAnimations[i]->mChannels[j]->mNodeName.data), iStrLength * sizeof(char));
 			
-			m_pBinAiScene->mAnimations[i].mChannels[j].mNumScalingKeys = m_pAIScene->mAnimations[i]->mChannels[j]->mNumScalingKeys;
-			m_pBinAiScene->mAnimations[i].mChannels[j].mNumRotationKeys = m_pAIScene->mAnimations[i]->mChannels[j]->mNumRotationKeys;
-			m_pBinAiScene->mAnimations[i].mChannels[j].mNumPositionKeys = m_pAIScene->mAnimations[i]->mChannels[j]->mNumPositionKeys;
-
-			_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mNumScalingKeys), sizeof(unsigned int));
-			_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mNumRotationKeys), sizeof(unsigned int));
-			_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mNumPositionKeys), sizeof(unsigned int));
+			_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mNumScalingKeys), sizeof(unsigned int));
+			_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mNumRotationKeys), sizeof(unsigned int));
+			_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mNumPositionKeys), sizeof(unsigned int));
 		
-			m_pBinAiScene->mAnimations[i].mChannels[j].mScalingKeys = new CBin_AIScene::DESC_CHANNELSCALEKEY[m_pBinAiScene->mAnimations[i].mChannels[j].mNumScalingKeys];
-			m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys = new CBin_AIScene::DESC_CHANNELROTKEY[m_pBinAiScene->mAnimations[i].mChannels[j].mNumRotationKeys];
-			m_pBinAiScene->mAnimations[i].mChannels[j].mPositionKeys = new CBin_AIScene::DESC_CHANNELPOSKEY[m_pBinAiScene->mAnimations[i].mChannels[j].mNumPositionKeys];
-
-			for (size_t k = 0; k < m_pBinAiScene->mAnimations[i].mChannels[j].mNumScalingKeys; ++k)
+			for (size_t k = 0; k < m_pAIScene->mAnimations[i]->mChannels[j]->mNumScalingKeys; ++k)
 			{
-				m_pBinAiScene->mAnimations[i].mChannels[j].mScalingKeys[k].mTime = (_float)m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mTime;
-				m_pBinAiScene->mAnimations[i].mChannels[j].mScalingKeys[k].mValue.x = m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue.x;
-				m_pBinAiScene->mAnimations[i].mChannels[j].mScalingKeys[k].mValue.y = m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue.y;
-				m_pBinAiScene->mAnimations[i].mChannels[j].mScalingKeys[k].mValue.z = m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue.z;
+				m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mTime = (_float)m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mTime;
 			
-				_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mScalingKeys[k].mTime), sizeof(_float));
-				_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mScalingKeys[k].mValue), sizeof(_float3));
+				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mTime), sizeof(_float));
+				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue), sizeof(_float3));
 			}
-			for (size_t k = 0; k < m_pBinAiScene->mAnimations[i].mChannels[j].mNumRotationKeys; ++k)
+			for (size_t k = 0; k < m_pAIScene->mAnimations[i]->mChannels[j]->mNumRotationKeys; ++k)
 			{
-				m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys[k].mTime = (_float)m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mTime;
-				m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys[k].mValue.x = m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mValue.x;
-				m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys[k].mValue.y = m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mValue.y;
-				m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys[k].mValue.z = m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mValue.z;
-				m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys[k].mValue.w = m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mValue.w;
+				m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mTime = (_float)m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mTime;
 			
-				_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys[k].mTime), sizeof(_float));
-				_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys[k].mValue), sizeof(_float4));
+				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mTime), sizeof(_float));
+				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mValue), sizeof(_float4));
 			}
-			for (size_t k = 0; k < m_pBinAiScene->mAnimations[i].mChannels[j].mNumPositionKeys; ++k)
+			for (size_t k = 0; k < m_pAIScene->mAnimations[i]->mChannels[j]->mNumPositionKeys; ++k)
 			{
-				m_pBinAiScene->mAnimations[i].mChannels[j].mPositionKeys[k].mTime = (_float)m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mTime;
-				m_pBinAiScene->mAnimations[i].mChannels[j].mPositionKeys[k].mValue.x = m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mValue.x;
-				m_pBinAiScene->mAnimations[i].mChannels[j].mPositionKeys[k].mValue.y = m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mValue.y;
-				m_pBinAiScene->mAnimations[i].mChannels[j].mPositionKeys[k].mValue.z = m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mValue.z;
+				m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mTime = (_float)m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mTime;
 			
-				_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mPositionKeys[k].mTime), sizeof(_float));
-				_outFile.write(reinterpret_cast<const char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mPositionKeys[k].mValue), sizeof(_float3));
+				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mTime), sizeof(_float));
+				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mValue), sizeof(_float3));
 			}
-
-			delete[] m_pBinAiScene->mAnimations[i].mChannels[j].mScalingKeys;
-			delete[] m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys;
-			delete[] m_pBinAiScene->mAnimations[i].mChannels[j].mPositionKeys;
 		}
 	}
-
-	delete[] m_pBinAiScene->mAnimations;
 
 	return S_OK;
 }
 
-const CBin_AIScene* CMyFile_Manager::Binary_InFile(const char* _strFilePath)
+const CBin_AIScene* CMyFile_Manager::Binary_InFile(const char* _strFilePath, CModel::MODEL_TYPE _eType)
 {
 	m_pBinAiScene = CBin_AIScene::Create();
+
 	// 파일을 열기 모드로 열기.
 	ifstream fileStream(_strFilePath, ios::binary);
 	if (fileStream.is_open()) {
 		// 파일 내용을 읽기.
-
-		Read_FBXNode(fileStream);
-		Read_FBXMesh(fileStream);
-		Read_FBXMaterial(fileStream);
-		Read_FBXAnimation(fileStream);
+		if (FAILED(Read_FBXNode(fileStream)))
+		{
+			MSG_BOX("Fail Read : RootNode");
+		}
+		//if (FAILED(Read_FBXChildrenNode(fileStream)))
+		//{
+		//	MSG_BOX("Fail Read : ChildrenNode");
+		//}
+		if (FAILED(Read_FBXMesh(fileStream, _eType)))
+		{
+			MSG_BOX("Fail Read : Mesh");
+		}
+		if (FAILED(Read_FBXMaterial(fileStream)))
+		{
+			MSG_BOX("Fail Read : Material");
+		}
+		if (FAILED(Read_FBXAnimation(fileStream)))
+		{
+			MSG_BOX("Fail Read : Animation");
+		}
 
 		fileStream.close();
 	}
@@ -430,88 +414,276 @@ const CBin_AIScene* CMyFile_Manager::Binary_InFile(const char* _strFilePath)
 HRESULT CMyFile_Manager::Read_FBXNode(ifstream& _inFile)
 {
 	size_t iStrLength = 0;
+	unsigned int iEscapeValue = 0;
 
-	_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mRootNode.mNumChildren), sizeof(unsigned int));
 
-	_inFile.read(reinterpret_cast<char*>(&iStrLength), sizeof(size_t));
-	char* newData = new char[iStrLength + 1];
-	_inFile.read(newData, iStrLength * sizeof(char));
-	newData[iStrLength] = '\0';
-	m_pBinAiScene->mRootNode.mName.Set(newData);
-	delete[] newData;
+	while (true) {
+		
+		streampos startPos = _inFile.tellg();
+		_inFile.read(reinterpret_cast<char*>(&iEscapeValue), sizeof(unsigned int));
+		if (iEscapeValue == 9999) 
+			break;
+		_inFile.seekg(startPos);
 
-	_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mRootNode.mTransformation), sizeof(aiMatrix4x4));
-	
-	m_pBinAiScene->mRootNode.mChildren = new CBin_AIScene::DESC_NODE[m_pBinAiScene->mRootNode.mNumChildren];
-	
-	_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mRootNode.mChildren[0].mNumChildren), sizeof(unsigned int));
-	
-	_inFile.read(reinterpret_cast<char*>(&iStrLength), sizeof(size_t));
-	newData = new char[iStrLength + 1];
-	_inFile.read(newData, iStrLength * sizeof(char));
-	newData[iStrLength] = '\0';
-	m_pBinAiScene->mRootNode.mChildren[0].mName.Set(newData);
-	delete[] newData;
+		CBin_AIScene::DESC_NODE tempRootNode;
 
-	_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mRootNode.mChildren[0].mTransformation), sizeof(aiMatrix4x4));
+		_inFile.read(reinterpret_cast<char*>(&tempRootNode.mNumChildren), sizeof(unsigned int));
 
-	// 자식 노드 읽어들이기
-	for (size_t i = 0; i < m_pBinAiScene->mRootNode.mNumChildren; ++i)
-	{
-		Read_FBXChildrenNode(_inFile, m_pBinAiScene->mRootNode.mChildren[i]);
+		_inFile.read(reinterpret_cast<char*>(&iStrLength), sizeof(size_t));
+		char* newData = new char[iStrLength + 1];
+		_inFile.read(newData, iStrLength * sizeof(char));
+		newData[iStrLength] = '\0';
+		tempRootNode.mName.Set(newData);
+		delete[] newData;
+
+		_inFile.read(reinterpret_cast<char*>(&tempRootNode.mTransformation), sizeof(aiMatrix4x4));
+		_inFile.read(reinterpret_cast<char*>(&tempRootNode.mParentIndex), sizeof(unsigned int));
+
+		m_pBinAiScene->mVecNode.push_back(tempRootNode);
+		
 	}
-
 	return S_OK;
 }
 
-HRESULT CMyFile_Manager::Read_FBXChildrenNode(ifstream& _inFile, CBin_AIScene::DESC_NODE _node)
+//HRESULT CMyFile_Manager::Read_FBXChildrenNode(ifstream& _inFile)
+//{
+//	CBin_AIScene::DESC_NODE tempNode;
+//	size_t iStrLength = 0;
+//
+//	_inFile.read(reinterpret_cast<char*>(&tempNode.mNumChildren), sizeof(unsigned int));
+//
+//	_inFile.read(reinterpret_cast<char*>(&iStrLength), sizeof(size_t));
+//	char* newData = new char[iStrLength + 1];
+//	_inFile.read(newData, iStrLength * sizeof(char));
+//	newData[iStrLength] = '\0';
+//	tempNode.mName.Set(newData);
+//	delete[] newData;
+//
+//	_inFile.read(reinterpret_cast<char*>(&tempNode.mTransformation), sizeof(aiMatrix4x4));
+//	_inFile.read(reinterpret_cast<char*>(&tempNode.mParentIndex), sizeof(unsigned int));
+//
+//	m_pBinAiScene->mVecNode.push_back(tempNode);
+//
+//	for (size_t i = 0; i < _node.mNumChildren; ++i)
+//	{
+//		Read_FBXChildrenNode(_inFile);
+//	}
+//
+//	return S_OK;
+//}
+
+HRESULT CMyFile_Manager::Read_FBXMesh(ifstream& _inFile, CModel::MODEL_TYPE _eType)
 {
-	CBin_AIScene::DESC_NODE tempNode;
 	size_t iStrLength = 0;
 
-	_inFile.read(reinterpret_cast<char*>(&_node.mNumChildren), sizeof(unsigned int));
+	_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mNumMeshes), sizeof(unsigned int));
 
-	_inFile.read(reinterpret_cast<char*>(&iStrLength), sizeof(size_t));
-	char* newData = new char[iStrLength + 1];
-	_inFile.read(newData, iStrLength * sizeof(char));
-	newData[iStrLength] = '\0';
-	_node.mName.Set(newData);
-	delete[] newData;
+	m_pBinAiScene->mMeshs = new CBin_AIScene::DESC_MESH[m_pBinAiScene->mNumMeshes];
 
-	_inFile.read(reinterpret_cast<char*>(&_node.mTransformation), sizeof(aiMatrix4x4));
-
-	_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mRootNode.mChildren[0].mNumChildren), sizeof(unsigned int));
-
-	_inFile.read(reinterpret_cast<char*>(&iStrLength), sizeof(size_t));
-	newData = new char[iStrLength + 1];
-	_inFile.read(newData, iStrLength * sizeof(char));
-	newData[iStrLength] = '\0';
-	m_pBinAiScene->mRootNode.mChildren[0].mName.Set(newData);
-	delete[] newData;
-
-	_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mRootNode.mChildren[0].mTransformation), sizeof(aiMatrix4x4));
-
-
-	for (size_t i = 0; i < _node.mNumChildren; ++i)
+	/* 전체 메시 */
+	for (size_t i = 0; i < m_pBinAiScene->mNumMeshes; ++i)
 	{
-		Read_FBXChildrenNode(_inFile, _node.mChildren[i]);
+		_inFile.read(reinterpret_cast<char*>(&iStrLength), sizeof(size_t));
+		char* newData = new char[iStrLength + 1];
+		_inFile.read(newData, iStrLength * sizeof(char));
+		newData[iStrLength] = '\0';
+		m_pBinAiScene->mMeshs[i].mName.Set(newData);
+		delete[] newData;
 	}
 
-	return S_OK;
-}
+	/* 재질 */
+	for (size_t i = 0; i < m_pBinAiScene->mNumMeshes; ++i)
+	{
+		_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mMaterialIndex), sizeof(unsigned int));
+	}
 
-HRESULT CMyFile_Manager::Read_FBXMesh(ifstream& _inFile)
-{
+	/* 메시 면 */
+	for (size_t i = 0; i < m_pBinAiScene->mNumMeshes; ++i)
+	{
+		_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mNumFaces), sizeof(unsigned int));
+
+		m_pBinAiScene->mMeshs[i].mFaces = new CBin_AIScene::DESC_MESHFACE[m_pBinAiScene->mMeshs[i].mNumFaces];
+
+		for (size_t j = 0; j < m_pBinAiScene->mMeshs[i].mNumFaces; ++j)
+		{
+			_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mFaces[j].mIndices), sizeof(unsigned int) * 3);
+		}
+
+		//delete[] m_pBinAiScene->mMeshs[i].mFaces;
+	}
+
+	/* 버텍스 */
+	for (size_t i = 0; i < m_pBinAiScene->mNumMeshes; ++i)
+	{
+		_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mNumVertices), sizeof(unsigned int));
+
+		m_pBinAiScene->mMeshs[i].mVertices = new aiVector3D[m_pBinAiScene->mMeshs[i].mNumVertices];
+		m_pBinAiScene->mMeshs[i].mNormals = new aiVector3D[m_pBinAiScene->mMeshs[i].mNumVertices];
+		m_pBinAiScene->mMeshs[i].mTextureCoords[0] = new aiVector3D[m_pBinAiScene->mMeshs[i].mNumVertices];
+		m_pBinAiScene->mMeshs[i].mTangents = new aiVector3D[m_pBinAiScene->mMeshs[i].mNumVertices];
+
+		for (size_t j = 0; j < m_pBinAiScene->mMeshs[i].mNumVertices; ++j)
+		{
+			_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mVertices[j]), sizeof(_float3));
+			_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mNormals[j]), sizeof(_float3));
+			_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mTextureCoords[0][j]), sizeof(_float2));
+			_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mTangents[j]), sizeof(_float3));
+		}
+
+		//delete[] m_pBinAiScene->mMeshs[i].mVertices;
+		//delete[] m_pBinAiScene->mMeshs[i].mNormals;
+		//delete[] m_pBinAiScene->mMeshs[i].mTextureCoords[0];
+		//delete[] m_pBinAiScene->mMeshs[i].mTangents;
+	}
+
+	/* 메시 본 */
+	if (_eType == CModel::TYPE_ANIM)
+	{
+		for (size_t i = 0; i < m_pBinAiScene->mNumMeshes; ++i)
+		{
+			//if (m_pBinAiScene->mMeshs[i]->mBones == nullptr)
+			//	continue;
+
+			_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mNumBones), sizeof(unsigned int));
+
+			m_pBinAiScene->mMeshs[i].mBones = new CBin_AIScene::DESC_MESHBONE[m_pBinAiScene->mMeshs[i].mNumBones];
+			for (size_t j = 0; j < m_pBinAiScene->mMeshs[i].mNumBones; ++j)
+			{
+				//if (m_pAIScene->mMeshes[i]->mBones[j] == nullptr)
+				//	continue;
+
+				_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mBones[j].mOffsetMatrix), sizeof(aiMatrix4x4));
+
+				_inFile.read(reinterpret_cast<char*>(&iStrLength), sizeof(size_t));
+				char* newData = new char[iStrLength + 1];
+				_inFile.read(newData, iStrLength * sizeof(char));
+				newData[iStrLength] = '\0';
+				m_pBinAiScene->mMeshs[i].mBones[j].mName.Set(newData);
+				delete[] newData;
+
+				_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mBones[j].mNumWeights), sizeof(unsigned int));
+
+				/* 메시 본 웨이트 */
+				m_pBinAiScene->mMeshs[i].mBones[j].mWeights = new CBin_AIScene::DESC_MESHBONEWEIGHT[m_pBinAiScene->mMeshs[i].mBones[j].mNumWeights];
+				for (size_t k = 0; k < m_pBinAiScene->mMeshs[i].mBones[j].mNumWeights; ++k)
+				{
+					_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mBones[j].mWeights[k].mVertexId), sizeof(unsigned int));
+					_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mMeshs[i].mBones[j].mWeights[k].mWeight), sizeof(_float));
+				}
+				//delete[] m_pBinAiScene->mMeshs[i].mBones[j].mWeights;
+			}
+			//delete[] m_pBinAiScene->mMeshs[i].mBones;
+		}
+	}
+
+	//delete[] m_pBinAiScene->mMeshs;
+
 	return S_OK;
 }
 
 HRESULT CMyFile_Manager::Read_FBXMaterial(ifstream& _inFile)
 {
+	_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mNumMaterials), sizeof(unsigned int));
+	
+	for (size_t i = 0; i < m_pBinAiScene->mNumMaterials; ++i)
+	{
+		CBin_AIScene::DESC_MATERIAL tempMaterial;
+
+		m_pBinAiScene->mMeshs = new CBin_AIScene::DESC_MESH[m_pBinAiScene->mNumMeshes];
+
+		for (size_t j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
+		{
+			_inFile.read(reinterpret_cast<char*>(&tempMaterial.mBIsReturn[j]), sizeof(_int));
+
+			if (!tempMaterial.mBIsReturn[j])
+				continue;
+
+			size_t iStrLength = 0;
+			_inFile.read(reinterpret_cast<char*>(&iStrLength), sizeof(size_t));
+
+			char* readBuffer = new char[iStrLength + 1];
+			_inFile.read(readBuffer, iStrLength * sizeof(char));
+			readBuffer[iStrLength] = '\0';
+
+			const char* constStr = readBuffer;
+
+			// delete[] readBuffer;
+
+			tempMaterial.mStrTextureFilePath[j] = constStr;
+			m_pBinAiScene->mMaterials.push_back(tempMaterial);
+		}
+	}
+
+
 	return S_OK;
 }
 
 HRESULT CMyFile_Manager::Read_FBXAnimation(ifstream& _inFile)
 {
+	size_t iStrLength = 0;
+
+	_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->m_iNumAnimation), sizeof(unsigned int));
+
+	m_pBinAiScene->mAnimations = new CBin_AIScene::DESC_ANIMATION[m_pBinAiScene->m_iNumAnimation];
+
+	for (size_t i = 0; i < m_pBinAiScene->m_iNumAnimation; ++i)
+	{
+		_inFile.read(reinterpret_cast<char*>(&iStrLength), sizeof(size_t));
+		char* newData = new char[iStrLength + 1];
+		_inFile.read(newData, iStrLength * sizeof(char));
+		newData[iStrLength] = '\0';
+		m_pBinAiScene->mAnimations[i].mName.Set(newData);
+		delete[] newData;
+
+		_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mAnimations[i].mDuration), sizeof(_float));
+		_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mAnimations[i].mTicksPerSecond), sizeof(_float));
+		_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mAnimations[i].mNumChannels), sizeof(unsigned int));
+
+		m_pBinAiScene->mAnimations[i].mChannels = new CBin_AIScene::DESC_ANIMATIONCHANNEL[m_pBinAiScene->mAnimations[i].mNumChannels];
+
+		for (size_t j = 0; j < m_pBinAiScene->mAnimations[i].mNumChannels; ++j)
+		{
+			_inFile.read(reinterpret_cast<char*>(&iStrLength), sizeof(size_t));
+			char* newData = new char[iStrLength + 1];
+			_inFile.read(newData, iStrLength * sizeof(char));
+			newData[iStrLength] = '\0';
+			m_pBinAiScene->mAnimations[i].mChannels[j].mNodeName.Set(newData);
+			delete[] newData;
+
+			_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mNumScalingKeys), sizeof(unsigned int));
+			_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mNumRotationKeys), sizeof(unsigned int));
+			_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mNumPositionKeys), sizeof(unsigned int));
+
+			m_pBinAiScene->mAnimations[i].mChannels[j].mScalingKeys = new CBin_AIScene::DESC_CHANNELSCALEKEY[m_pBinAiScene->mAnimations[i].mChannels[j].mNumScalingKeys];
+			m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys = new CBin_AIScene::DESC_CHANNELROTKEY[m_pBinAiScene->mAnimations[i].mChannels[j].mNumRotationKeys];
+			m_pBinAiScene->mAnimations[i].mChannels[j].mPositionKeys = new CBin_AIScene::DESC_CHANNELPOSKEY[m_pBinAiScene->mAnimations[i].mChannels[j].mNumPositionKeys];
+
+			for (size_t k = 0; k < m_pBinAiScene->mAnimations[i].mChannels[j].mNumScalingKeys; ++k)
+			{
+				_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mScalingKeys[k].mTime), sizeof(_float));
+				_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mScalingKeys[k].mValue), sizeof(_float3));
+			}
+			for (size_t k = 0; k < m_pBinAiScene->mAnimations[i].mChannels[j].mNumRotationKeys; ++k)
+			{
+				_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys[k].mTime), sizeof(_float));
+				_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys[k].mValue), sizeof(_float4));
+			}
+			for (size_t k = 0; k < m_pBinAiScene->mAnimations[i].mChannels[j].mNumPositionKeys; ++k)
+			{
+				_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mPositionKeys[k].mTime), sizeof(_float));
+				_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mAnimations[i].mChannels[j].mPositionKeys[k].mValue), sizeof(_float3));
+			}
+
+			//delete[] m_pBinAiScene->mAnimations[i].mChannels[j].mScalingKeys;
+			//delete[] m_pBinAiScene->mAnimations[i].mChannels[j].mRotationKeys;
+			//delete[] m_pBinAiScene->mAnimations[i].mChannels[j].mPositionKeys;
+		}
+		//delete[] m_pBinAiScene->mAnimations[i].mChannels;
+	}
+
+	//delete[] m_pBinAiScene->mAnimations;
+
+
 	return S_OK;
 }
 

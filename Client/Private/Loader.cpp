@@ -231,13 +231,21 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 	// ../Bin/Resource/Models/Skyrim/Skyrim_Player/Player_NonEquip_Stand.fbx
 	// XMMatrixScaling(0.01f, 0.01f, 0.01f) * 
 	//  * XMMatrixRotationY(XMConvertToRadians(180.0f))
+	// 
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_Body"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Player/Player_1Hand_Stand.fbx", matInitialize, CModel::TYPE_ANIM))))
+	//	return E_FAIL;
+
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_Body"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Player/Player_1Hand_Stand.fbx", matInitialize, CModel::TYPE_ANIM))))
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Player/Player_1Hand_Stand", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
 	/* Weapon */
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Weapon_IronSword"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Weapon/Iron_LongSword/Iron_LongSword.fbx", matInitialize, CModel::TYPE_NONANIM))))
+	//	return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Weapon_IronSword"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/Models/Skyrim/Skyrim_Weapon/Iron_LongSword/Iron_LongSword.fbx", matInitialize, CModel::TYPE_NONANIM))))
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/Iron_LongSword", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
 
@@ -247,7 +255,7 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 	//	return E_FAIL;
 
 
-	Set_ProtoType_Mesh(LEVEL_GAMEPLAY);
+	//Set_ProtoType_Mesh(LEVEL_GAMEPLAY);
 
 #pragma endregion
 
@@ -297,7 +305,7 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 		CWeapon_IronSword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	 Set_ProtoType_Object();
+	// Set_ProtoType_Object();
 
 #pragma endregion
 

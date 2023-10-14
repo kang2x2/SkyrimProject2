@@ -32,15 +32,15 @@ public: /* 바이너리 */
 	HRESULT    Binary_OutFile(ofstream& _outFile, const char* _strFilePath, CModel::MODEL_TYPE _eType);
 
 	HRESULT    Write_FBXNode(ofstream& _outFile);
-	HRESULT    Write_FBXChildrenNode(ofstream& _outFile, aiNode* _pNode);
+	HRESULT    Write_FBXChildrenNode(ofstream& _outFile, aiNode* _pNode, unsigned int _iParentIndex);
 	HRESULT    Write_FBXMesh(ofstream& _outFile, CModel::MODEL_TYPE _eType);
-	HRESULT    Write_FBXMaterial(ofstream& _outFile);
+	HRESULT    Write_FBXMaterial(ofstream& _outFile, const char* _strFilePath);
 	HRESULT    Write_FBXAnimation(ofstream& _outFile);
 
-	const CBin_AIScene* Binary_InFile(const char* _strFilePath);
+	const CBin_AIScene* Binary_InFile(const char* _strFilePath, CModel::MODEL_TYPE _eType);
 	HRESULT    Read_FBXNode(ifstream& _inFile);
-	HRESULT    Read_FBXChildrenNode(ifstream& _inFile, CBin_AIScene::DESC_NODE _node);
-	HRESULT    Read_FBXMesh(ifstream& _inFile);
+	HRESULT    Read_FBXChildrenNode(ifstream& _inFile);
+	HRESULT    Read_FBXMesh(ifstream& _inFile, CModel::MODEL_TYPE _eType);
 	HRESULT    Read_FBXMaterial(ifstream& _inFile);
 	HRESULT    Read_FBXAnimation(ifstream& _inFile);
 
@@ -50,6 +50,7 @@ private:
 	const aiScene* m_pAIScene = nullptr; // 읽고 얻은 데이터들을 보관한다.
 
 	CBin_AIScene* m_pBinAiScene = nullptr;
+	_uint		  m_iNodeIndex = 0;
 
 public:
 	virtual void Free() override;

@@ -71,7 +71,7 @@ HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _ma
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	m_pAIScene = pGameInstance->Binary_InFile(_strModleFilePath);
+	m_pAIScene = pGameInstance->Binary_InFile(_strModleFilePath, _eType);
 
 	Safe_Release(pGameInstance);
 
@@ -81,7 +81,8 @@ HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _ma
 	// DirectX로 그려낼 수 있게 데이터를 정리하는 부분
 	
 	/* 뼈 로드(최상위 부모 노드를 매개로 보낸다.) */
-	if (FAILED(Ready_Bone(&m_pAIScene->mRootNode, -1)))
+	//if (FAILED(Ready_Bone(&m_pAIScene->mVecNode[0], -1)))
+	if (FAILED(Ready_Bone()))
 		return E_FAIL;
 
 	/* 모델의 각 파츠 정점 정보를 로드. */
@@ -196,8 +197,8 @@ HRESULT CModel::Ready_Material(const char* _pModelFilePath)
 
 	for (size_t i = 0; i < m_iNumMaterails; ++i)
 	{
-		aiMaterial* pMaterials = m_pAIScene->mMaterials[i];
-
+		// aiMaterial* pMaterials = m_pAIScene->mMaterials[i];
+		aiMaterial* pMaterials = new aiMaterial;
 		// 초기화
 		MESH_MATERIAL MeshMaterial;
 		ZeroMemory(&MeshMaterial, sizeof(MeshMaterial));
@@ -244,26 +245,33 @@ HRESULT CModel::Ready_Material(const char* _pModelFilePath)
 	return S_OK;
 }
 
-HRESULT CModel::Ready_Bone(const CBin_AIScene::DESC_NODE* _pRootNode, _int _iParentBoneIndex)
-{
-	// 뼈 생성 (최상위 부모 노드가 가장 처음에 들어오기 때문에 매개로 -1을 받음)
-	CBone* pBone = CBone::Create(_pRootNode, _iParentBoneIndex);
-	if (pBone == nullptr)
-		return E_FAIL;
 
-	m_vecBone.push_back(pBone);
+//HRESULT CModel::Ready_Bone(const CBin_AIScene::DESC_NODE* _pRootNode, _int _iParentBoneIndex)
+HRESULT CModel::Ready_Bone()
+{
+	for (size_t i = 0; i < m_pAIScene->mVecNode.size(); ++i)
+	{
+		CBone* pBone = CBone::Create(&m_pAIScene->mVecNode[i], m_pAIScene->mVecNode[i].mParentIndex);
+		m_vecBone.push_back(pBone);
+	}
+
+	// 뼈 생성 (최상위 부모 노드가 가장 처음에 들어오기 때문에 매개로 -1을 받음)
+	//CBone* pBone = CBone::Create(_pRootNode, _iParentBoneIndex);
+	//if (pBone == nullptr)
+	//	return E_FAIL;
+	//
 
 	// 뼈의 부모 인덱스 설정.
-	_int iParentIndex = m_vecBone.size() - 1;
+	//_int iParentIndex = m_vecBone.size() - 1;
 
 	// 자식 노드 수 만큼 재귀 함수 수행하여 뼈 생성.
 	// 더 이상 생성 할 자식이 없을 때 까지 계속해서 재귀를 수행 할 것이다.
-	for (size_t i = 0; i < _pRootNode->mNumChildren; ++i)
-	{
-		// 재귀를 돌며 i번째 자식 노드를 생성한다.
-		// 부모의 인덱스는 반복문 이전에 세팅해 둔 인덱스가 될 것이다.
-		Ready_Bone(&_pRootNode->mChildren[i], iParentIndex);
-	}
+	//for (size_t i = 0; i < _pRootNode->mNumChildren; ++i)
+	//{
+	//	// 재귀를 돌며 i번째 자식 노드를 생성한다.
+	//	// 부모의 인덱스는 반복문 이전에 세팅해 둔 인덱스가 될 것이다.
+	//	Ready_Bone(&_pRootNode->mChildren[i], iParentIndex);
+	//}
 
 	return S_OK;
 }

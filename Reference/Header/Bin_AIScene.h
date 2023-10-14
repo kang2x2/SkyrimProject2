@@ -12,10 +12,10 @@ public:
 	// 노드
 	typedef struct tagNodeDesc
 	{
+		unsigned int				mParentIndex;
 		unsigned int				mNumChildren;
 		aiString					mName;
 		aiMatrix4x4					mTransformation;
-		tagNodeDesc*				mChildren;
 	}DESC_NODE;
 
 #pragma endregion
@@ -61,6 +61,13 @@ public:
 	}DESC_MESH;
 
 #pragma endregion
+
+#pragma region Material
+	typedef struct tagMaterialDesc
+	{
+		_int   mBIsReturn[AI_TEXTURE_TYPE_MAX];
+		const char* mStrTextureFilePath[AI_TEXTURE_TYPE_MAX];
+	}DESC_MATERIAL;
 
 #pragma region Animation
 
@@ -116,19 +123,16 @@ private:
 	virtual ~CBin_AIScene() = default;
 
 public:
-	DESC_NODE	mRootNode;
+	vector<DESC_NODE> mVecNode;
 
-	unsigned int	mNumMeshes;
+	unsigned int mNumMeshes;
 	DESC_MESH*		mMeshs;
 
-	// 노드와 메시는 최대한 필요한 정보만 받도록 해놨다.
-	// 마테리얼과 애니메이션은 최대한 한 번 내일 더 봐보자. 
 	unsigned int	mNumMaterials;
-	aiMaterial**	mMaterials;
+	vector<DESC_MATERIAL> mMaterials;
 
 	unsigned int	m_iNumAnimation;
 	DESC_ANIMATION*	mAnimations;
-
 public:
 	static CBin_AIScene* Create();
 	virtual void Free() override;

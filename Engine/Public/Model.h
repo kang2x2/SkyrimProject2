@@ -40,7 +40,8 @@ public:
 private:
 	HRESULT Ready_Mesh(MODEL_TYPE _eType);
 	HRESULT Ready_Material(const char* _pModelFilePath);
-	HRESULT Ready_Bone(const CBin_AIScene::DESC_NODE* _pRootNode, _int _iParentBoneIndex);
+	// HRESULT Ready_Bone(const CBin_AIScene::DESC_NODE* _pRootNode, _int _iParentBoneIndex);
+	HRESULT Ready_Bone();
 	HRESULT Ready_Animation();
 
 private:
