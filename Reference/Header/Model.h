@@ -40,8 +40,8 @@ public:
 private:
 	HRESULT Ready_Mesh(MODEL_TYPE _eType);
 	HRESULT Ready_Material(const char* _pModelFilePath);
-	// HRESULT Ready_Bone(const CBin_AIScene::DESC_NODE* _pRootNode, _int _iParentBoneIndex);
 	HRESULT Ready_Bone();
+	//HRESULT Ready_Bone(const CBin_AIScene::DESC_NODE _pRootNode, _int _iParentBoneIndex);
 	HRESULT Ready_Animation();
 
 private:
@@ -49,7 +49,7 @@ private:
 	// Assimp::Importer	m_Importer; // FBX파일을 열어서 읽는다.
 	// const aiScene*		m_pAIScene = nullptr; // 읽고 얻은 데이터들을 보관한다.
 
-	const class CBin_AIScene* m_pAIScene = nullptr;
+	class CBin_AIScene* m_pAIScene = nullptr;
 
 	/* 메시 */
 	_uint					m_iNumMeshes = 0; // numMeshes

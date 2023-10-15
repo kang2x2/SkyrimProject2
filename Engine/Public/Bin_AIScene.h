@@ -12,7 +12,7 @@ public:
 	// 노드
 	typedef struct tagNodeDesc
 	{
-		unsigned int				mParentIndex;
+		int							mParentIndex;
 		unsigned int				mNumChildren;
 		aiString					mName;
 		aiMatrix4x4					mTransformation;
@@ -35,7 +35,8 @@ public:
 		aiMatrix4x4			 mOffsetMatrix;
 		aiString			 mName;
 		unsigned int		 mNumWeights;
-		DESC_MESHBONEWEIGHT* mWeights;
+
+		vector<DESC_MESHBONEWEIGHT> mWeights;
 	}DESC_MESHBONE;
 
 	// 메시 면
@@ -47,17 +48,18 @@ public:
 	// 메시
 	typedef struct tagMeshDesc
 	{
+		aiString		mName;
 		unsigned int	mMaterialIndex;
 		unsigned int	mNumVertices;
 		unsigned int	mNumFaces;
 		unsigned int	mNumBones;
-		aiString		mName;
-		DESC_MESHFACE*	mFaces;
-		aiVector3D*		mVertices;
-		aiVector3D*		mNormals;
-		aiVector3D*		mTextureCoords[AI_MAX_NUMBER_OF_TEXTURECOORDS];
-		aiVector3D*		mTangents;
-		DESC_MESHBONE*	mBones;
+
+		vector<DESC_MESHFACE>   mFaces;
+		vector<aiVector3D>		mVertices;
+		vector<aiVector3D>		mNormals;
+		vector<vector<aiVector3D>>	mTextureCoords[AI_MAX_NUMBER_OF_TEXTURECOORDS];
+		vector<aiVector3D>		mTangents;
+		vector<DESC_MESHBONE>   mBones;
 	}DESC_MESH;
 
 #pragma endregion
@@ -66,7 +68,7 @@ public:
 	typedef struct tagMaterialDesc
 	{
 		_int   mBIsReturn[AI_TEXTURE_TYPE_MAX];
-		const char* mStrTextureFilePath[AI_TEXTURE_TYPE_MAX];
+		string mStrTextureFilePath[AI_TEXTURE_TYPE_MAX];
 	}DESC_MATERIAL;
 
 #pragma region Animation
@@ -98,10 +100,9 @@ public:
 		unsigned int	mNumRotationKeys;
 		unsigned int	mNumPositionKeys;
 
-		DESC_CHANNELSCALEKEY*	mScalingKeys;
-		DESC_CHANNELROTKEY*		mRotationKeys;
-		DESC_CHANNELPOSKEY*		mPositionKeys;
-
+		vector<DESC_CHANNELSCALEKEY>	mScalingKeys;
+		vector<DESC_CHANNELROTKEY>		mRotationKeys;
+		vector<DESC_CHANNELPOSKEY>		mPositionKeys;
 
 	}DESC_ANIMATIONCHANNEL;
 
@@ -112,7 +113,8 @@ public:
 		_float					mDuration;
 		_float					mTicksPerSecond;
 		unsigned int			mNumChannels;
-		DESC_ANIMATIONCHANNEL*  mChannels;
+
+		vector<DESC_ANIMATIONCHANNEL>  mChannels;
 
 	}DESC_ANIMATION;
 
@@ -123,16 +125,17 @@ private:
 	virtual ~CBin_AIScene() = default;
 
 public:
-	vector<DESC_NODE> mVecNode;
+	vector<DESC_NODE>		mVecNode;
 
-	unsigned int mNumMeshes;
-	DESC_MESH*		mMeshs;
+	unsigned int			mNumMeshes;
+	vector<DESC_MESH>		mMeshs;
 
-	unsigned int	mNumMaterials;
-	vector<DESC_MATERIAL> mMaterials;
+	unsigned int			mNumMaterials;
+	vector<DESC_MATERIAL>	mMaterials;
 
-	unsigned int	m_iNumAnimation;
-	DESC_ANIMATION*	mAnimations;
+	unsigned int			m_iNumAnimation;
+	vector<DESC_ANIMATION>	mAnimations;
+
 public:
 	static CBin_AIScene* Create();
 	virtual void Free() override;

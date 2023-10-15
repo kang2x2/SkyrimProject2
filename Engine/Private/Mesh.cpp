@@ -194,51 +194,51 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* _pModel, const CBin_AIS
 	for (size_t i = 0; i < m_iNumBones; ++i)
 	{
 		// 뼈 정보 가져오기.
-		CBin_AIScene::DESC_MESHBONE* pAIBone = &_pAIMesh->mBones[i];
+		CBin_AIScene::DESC_MESHBONE pAIBone = _pAIMesh->mBones[i];
 
 		/*  공통으로 사용되는 뼈대들을 각기다른 형태의 메시에게 적용하기위해서는
 			어느정도의 보정이 필요하다. */
 		// offset : 오차를 수정하는 어떤 값, 수정치 혹은 치수 보정.
 		_float4x4 matOffset; // 보정 행렬 생성
-		memcpy(&matOffset, &pAIBone->mOffsetMatrix, sizeof(_float4x4)); // 뼈의 offset행렬 복사.
+		memcpy(&matOffset, &pAIBone.mOffsetMatrix, sizeof(_float4x4)); // 뼈의 offset행렬 복사.
 		XMStoreFloat4x4(&matOffset, XMMatrixTranspose(XMLoadFloat4x4(&matOffset))); // 전치
 
 		m_OffsetMatrices.push_back(matOffset); // Push
 
-		_int iBoneIndex = _pModel->Get_BoneIndex(pAIBone->mName.data);
+		_int iBoneIndex = _pModel->Get_BoneIndex(pAIBone.mName.data);
 		if (iBoneIndex == -1)
 			return E_FAIL;
 
 		m_vecBoneIndex.push_back(iBoneIndex);
 
 		/* pAIBone->mNumWeights : 이 뼈는 몇개의 정점들에게 영향을 주는가? */
-		for (size_t j = 0; j < pAIBone->mNumWeights; ++j)
+		for (size_t j = 0; j < pAIBone.mNumWeights; ++j)
 		{
 			/*  pAIBone->mWeights[j].mVertexId : i번째 뼈가 j번째 영향을
 				pAIBone->mWeights[j].mVertexId 번째 정점에게 영향을 준다.  */
 			// 아직 영향을 받지 않아 0.f가 저장되어 있기에 영향력을 적용하자.(정보가 있는 축만)
-			if (pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.x == 0.f)
+			if (pVertices[pAIBone.mWeights[j].mVertexId].vBlendWeights.x == 0.f)
 			{
-				pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.x = i;
-				pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.x = pAIBone->mWeights[j].mWeight;
+				pVertices[pAIBone.mWeights[j].mVertexId].vBlendIndices.x = i;
+				pVertices[pAIBone.mWeights[j].mVertexId].vBlendWeights.x = pAIBone.mWeights[j].mWeight;
 			}
 
-			else if (pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.y == 0.f)
+			else if (pVertices[pAIBone.mWeights[j].mVertexId].vBlendWeights.y == 0.f)
 			{
-				pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.y = i;
-				pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.y = pAIBone->mWeights[j].mWeight;
+				pVertices[pAIBone.mWeights[j].mVertexId].vBlendIndices.y = i;
+				pVertices[pAIBone.mWeights[j].mVertexId].vBlendWeights.y = pAIBone.mWeights[j].mWeight;
 			}
 
-			else if (pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.z == 0.f)
+			else if (pVertices[pAIBone.mWeights[j].mVertexId].vBlendWeights.z == 0.f)
 			{
-				pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.z = i;
-				pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.z = pAIBone->mWeights[j].mWeight;
+				pVertices[pAIBone.mWeights[j].mVertexId].vBlendIndices.z = i;
+				pVertices[pAIBone.mWeights[j].mVertexId].vBlendWeights.z = pAIBone.mWeights[j].mWeight;
 			}
 
-			else if (pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.w == 0.f)
+			else if (pVertices[pAIBone.mWeights[j].mVertexId].vBlendWeights.w == 0.f)
 			{
-				pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.w = i;
-				pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.w = pAIBone->mWeights[j].mWeight;
+				pVertices[pAIBone.mWeights[j].mVertexId].vBlendIndices.w = i;
+				pVertices[pAIBone.mWeights[j].mVertexId].vBlendWeights.w = pAIBone.mWeights[j].mWeight;
 			}
 		}
 	}

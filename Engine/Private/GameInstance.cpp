@@ -346,7 +346,7 @@ HRESULT CGameInstance::Binary_OutFile(ofstream& _outFile, const char* _strFilePa
 	return m_pMyFile_Manager->Binary_OutFile(_outFile, _strFilePath, _eType);
 }
 
-const CBin_AIScene* CGameInstance::Binary_InFile(const char* _strFilePath, CModel::MODEL_TYPE _eType)
+CBin_AIScene* CGameInstance::Binary_InFile(const char* _strFilePath, CModel::MODEL_TYPE _eType)
 {
 	if (m_pMyFile_Manager == nullptr)
 		return nullptr;

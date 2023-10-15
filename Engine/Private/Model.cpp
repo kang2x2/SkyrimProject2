@@ -82,6 +82,7 @@ HRESULT CModel::Initialize_ProtoType(const char* _strModleFilePath, _fmatrix _ma
 	
 	/* 뼈 로드(최상위 부모 노드를 매개로 보낸다.) */
 	//if (FAILED(Ready_Bone(&m_pAIScene->mVecNode[0], -1)))
+	//if (FAILED(Ready_Bone(m_pAIScene->mVecNode[0], -1)))
 	if (FAILED(Ready_Bone()))
 		return E_FAIL;
 
@@ -198,39 +199,43 @@ HRESULT CModel::Ready_Material(const char* _pModelFilePath)
 	for (size_t i = 0; i < m_iNumMaterails; ++i)
 	{
 		// aiMaterial* pMaterials = m_pAIScene->mMaterials[i];
-		aiMaterial* pMaterials = new aiMaterial;
+		// aiMaterial* pMaterials = new aiMaterial;
 		// 초기화
 		MESH_MATERIAL MeshMaterial;
 		ZeroMemory(&MeshMaterial, sizeof(MeshMaterial));
 
 		for (size_t j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
 		{
-			aiString strTexturePath;
+			//aiString strTexturePath;
+			//
+			//// 해당 재질 정보가 없으면 다음으로
+			//if (FAILED(pMaterials->GetTexture(aiTextureType(j), 0, &strTexturePath)))
+			//	continue;
+			//
+			//// 드라이브, 경로 추출
+			//char			szDrive[MAX_PATH] = "";
+			//char			szDirectory[MAX_PATH] = "";
+			//_splitpath_s(_pModelFilePath, szDrive, MAX_PATH, szDirectory, MAX_PATH, nullptr, 0, nullptr, 0);
+			//
+			//// 파일명.확장자 추출
+			//char			szFileName[MAX_PATH] = "";
+			//char			szExt[MAX_PATH] = "";
+			//_splitpath_s(strTexturePath.data, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+			//
+			//// 드라이브 복사 후 뒤에 경로, 파일명, 확장자를 이어 붙인다.
+			//char			szTmp[MAX_PATH] = "";
+			//strcpy_s(szTmp, szDrive);
+			//strcat_s(szTmp, szDirectory);
+			//strcat_s(szTmp, szFileName);
+			//strcat_s(szTmp, szExt);
 
-			// 해당 재질 정보가 없으면 다음으로
-			if (FAILED(pMaterials->GetTexture(aiTextureType(j), 0, &strTexturePath)))
+			if (m_pAIScene->mMaterials[i].mBIsReturn[j] != 1)
 				continue;
-
-			// 드라이브, 경로 추출
-			char			szDrive[MAX_PATH] = "";
-			char			szDirectory[MAX_PATH] = "";
-			_splitpath_s(_pModelFilePath, szDrive, MAX_PATH, szDirectory, MAX_PATH, nullptr, 0, nullptr, 0);
-
-			// 파일명.확장자 추출
-			char			szFileName[MAX_PATH] = "";
-			char			szExt[MAX_PATH] = "";
-			_splitpath_s(strTexturePath.data, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
-
-			// 드라이브 복사 후 뒤에 경로, 파일명, 확장자를 이어 붙인다.
-			char			szTmp[MAX_PATH] = "";
-			strcpy_s(szTmp, szDrive);
-			strcat_s(szTmp, szDirectory);
-			strcat_s(szTmp, szFileName);
-			strcat_s(szTmp, szExt);
 
 			// 문자열 타입 변환 필요.
 			_tchar			szFullPath[MAX_PATH] = TEXT("");
-			MultiByteToWideChar(CP_ACP, 0, szTmp, strlen(szTmp), szFullPath, MAX_PATH);
+			MultiByteToWideChar(CP_ACP, 0, m_pAIScene->mMaterials[i].mStrTextureFilePath[j].c_str(), 
+				strlen(m_pAIScene->mMaterials[i].mStrTextureFilePath[j].c_str()), szFullPath, MAX_PATH);
 
 			// 위에서 조합한 경로로 텍스쳐를 불러온다.
 			MeshMaterial.pTextures[j] = CTexture::Create(m_pDevice, m_pContext, szFullPath);
@@ -246,7 +251,6 @@ HRESULT CModel::Ready_Material(const char* _pModelFilePath)
 }
 
 
-//HRESULT CModel::Ready_Bone(const CBin_AIScene::DESC_NODE* _pRootNode, _int _iParentBoneIndex)
 HRESULT CModel::Ready_Bone()
 {
 	for (size_t i = 0; i < m_pAIScene->mVecNode.size(); ++i)
@@ -388,6 +392,7 @@ void CModel::Free()
 	}
 	m_vecBone.clear();
 
+	Safe_Release(m_pAIScene);
 
 	// m_Importer.FreeScene();
 }

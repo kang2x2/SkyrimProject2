@@ -13,5 +13,8 @@ void CBin_AIScene::Free()
 {
 	__super::Free();
 
-
+	//for (size_t i = 0; i < mVecNode.size(); ++i)
+	//{
+	//	Safe_Release(mVecNode[i].mName);
+	//}
 }
