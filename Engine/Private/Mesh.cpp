@@ -155,7 +155,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(const CBin_AIScene::DESC_MESH* _pA
 		memcpy(&pVertices[i].vNormal, &_pAIMesh->mNormals[i], sizeof(_float3));
 		XMStoreFloat3(&pVertices[i].vNormal, XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), _matPivot));
 
-		memcpy(&pVertices[i].vTexcoord, &_pAIMesh->mTextureCoords[0][i], sizeof(_float2));
+		memcpy(&pVertices[i].vTexcoord, &_pAIMesh->mTextureCoords[i], sizeof(_float2));
 		memcpy(&pVertices[i].vTangent, &_pAIMesh->mTangents[i], sizeof(_float3));
 	}
 
@@ -181,7 +181,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* _pModel, const CBin_AIS
 	{
 		memcpy(&pVertices[i].vPosition, &_pAIMesh->mVertices[i], sizeof(_float3));
 		memcpy(&pVertices[i].vNormal, &_pAIMesh->mNormals[i], sizeof(_float3));
-		memcpy(&pVertices[i].vTexcoord, &_pAIMesh->mTextureCoords[0][i], sizeof(_float2));
+		memcpy(&pVertices[i].vTexcoord, &_pAIMesh->mTextureCoords[i], sizeof(_float2));
 		memcpy(&pVertices[i].vTangent, &_pAIMesh->mTangents[i], sizeof(_float3));
 
 		m_pPos[i] = pVertices[i].vPosition;

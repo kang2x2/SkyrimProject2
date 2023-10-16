@@ -145,8 +145,6 @@ HRESULT CMyFile_Manager::Write_FBXNode(ofstream& _outFile, aiNode* _pNode, unsig
 {
 	if (_pNode->mNumChildren > 0)
 	{
-		m_iNodeIndex += 1;
-
 		_outFile.write(reinterpret_cast<const char*>(&_iParentIndex), sizeof(int));
 
 		_outFile.write(reinterpret_cast<const char*>(&_pNode->mNumChildren), sizeof(unsigned int));
@@ -157,9 +155,13 @@ HRESULT CMyFile_Manager::Write_FBXNode(ofstream& _outFile, aiNode* _pNode, unsig
 
 		_outFile.write(reinterpret_cast<const char*>(&_pNode->mTransformation), sizeof(aiMatrix4x4));
 
+		m_vecIndex.push_back(1);
+
+		int iIndex = m_vecIndex.size() - 1;
+
 		for (size_t i = 0; i < _pNode->mNumChildren; ++i)
 		{
-			Write_FBXNode(_outFile, _pNode->mChildren[i], _iParentIndex + 1);
+			Write_FBXNode(_outFile, _pNode->mChildren[i], iIndex);
 		}
 	}
 	return S_OK;
@@ -295,11 +297,8 @@ HRESULT CMyFile_Manager::Write_FBXAnimation(ofstream& _outFile)
 		_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
 		_outFile.write(reinterpret_cast<const char*>(m_pAIScene->mAnimations[i]->mName.data), iStrLength * sizeof(char));
 		
-		m_pAIScene->mAnimations[i]->mDuration = (_float)m_pAIScene->mAnimations[i]->mDuration;
-		m_pAIScene->mAnimations[i]->mTicksPerSecond = (_float)m_pAIScene->mAnimations[i]->mTicksPerSecond;
-		
-		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mDuration), sizeof(_float));
-		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mTicksPerSecond), sizeof(_float));
+		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mDuration), sizeof(double));
+		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mTicksPerSecond), sizeof(double));
 		_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mNumChannels), sizeof(unsigned int));
 
 		for (size_t j = 0; j < m_pAIScene->mAnimations[i]->mNumChannels; ++j)
@@ -316,21 +315,21 @@ HRESULT CMyFile_Manager::Write_FBXAnimation(ofstream& _outFile)
 			{
 				m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mTime = (_float)m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mTime;
 			
-				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mTime), sizeof(_float));
+				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mTime), sizeof(double));
 				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue), sizeof(_float3));
 			}
 			for (size_t k = 0; k < m_pAIScene->mAnimations[i]->mChannels[j]->mNumRotationKeys; ++k)
 			{
 				m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mTime = (_float)m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mTime;
 			
-				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mTime), sizeof(_float));
+				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mTime), sizeof(double));
 				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mValue), sizeof(_float4));
 			}
 			for (size_t k = 0; k < m_pAIScene->mAnimations[i]->mChannels[j]->mNumPositionKeys; ++k)
 			{
 				m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mTime = (_float)m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mTime;
 			
-				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mTime), sizeof(_float));
+				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mTime), sizeof(double));
 				_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mValue), sizeof(_float3));
 			}
 		}
@@ -450,18 +449,16 @@ HRESULT CMyFile_Manager::Read_FBXMesh(ifstream& _inFile, CModel::MODEL_TYPE _eTy
 		/* 버텍스 */
 		for (size_t j = 0; j < tempMeshDesc.mNumVertices; ++j)
 		{
-			aiVector3D tempVertice, tempNormal, tempTexcoord, tempmTangent;
-			vector<aiVector3D> tempVexTexcoord;
+			aiVector3D tempVertice, tempNormal, tempmTangent;
+			_float2 tempTexcoord;
 			_inFile.read(reinterpret_cast<char*>(&tempVertice), sizeof(_float3));
 			_inFile.read(reinterpret_cast<char*>(&tempNormal), sizeof(_float3));
 			_inFile.read(reinterpret_cast<char*>(&tempTexcoord), sizeof(_float2));
 			_inFile.read(reinterpret_cast<char*>(&tempmTangent), sizeof(_float3));
 			
-			tempVexTexcoord.push_back(tempTexcoord);
-
 			tempMeshDesc.mVertices.push_back(tempVertice);
 			tempMeshDesc.mNormals.push_back(tempNormal);
-			tempMeshDesc.mTextureCoords[0].push_back(tempVexTexcoord);
+			tempMeshDesc.mTextureCoords.push_back(tempTexcoord);
 			tempMeshDesc.mTangents.push_back(tempmTangent);
 		}
 	
@@ -535,8 +532,6 @@ HRESULT CMyFile_Manager::Read_FBXAnimation(ifstream& _inFile)
 
 	_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->m_iNumAnimation), sizeof(unsigned int));
 
-	// m_pBinAiScene->mAnimations = new CBin_AIScene::DESC_ANIMATION[m_pBinAiScene->m_iNumAnimation];
-
 	for (size_t i = 0; i < m_pBinAiScene->m_iNumAnimation; ++i)
 	{
 		CBin_AIScene::DESC_ANIMATION tempAnimationDesc;
@@ -548,8 +543,9 @@ HRESULT CMyFile_Manager::Read_FBXAnimation(ifstream& _inFile)
 		tempAnimationDesc.mName.Set(newData);
 		delete[] newData;
 
-		_inFile.read(reinterpret_cast<char*>(&tempAnimationDesc.mDuration), sizeof(_float));
-		_inFile.read(reinterpret_cast<char*>(&tempAnimationDesc.mTicksPerSecond), sizeof(_float));
+		// duration, tickpersecont가 0이다. 확인하자.
+		_inFile.read(reinterpret_cast<char*>(&tempAnimationDesc.mDuration), sizeof(double));
+		_inFile.read(reinterpret_cast<char*>(&tempAnimationDesc.mTicksPerSecond), sizeof(double));
 		_inFile.read(reinterpret_cast<char*>(&tempAnimationDesc.mNumChannels), sizeof(unsigned int));
 
 		for (size_t j = 0; j < tempAnimationDesc.mNumChannels; ++j)
@@ -571,7 +567,7 @@ HRESULT CMyFile_Manager::Read_FBXAnimation(ifstream& _inFile)
 			{
 				CBin_AIScene::DESC_CHANNELSCALEKEY tempScaleDesc;
 
-				_inFile.read(reinterpret_cast<char*>(&tempScaleDesc.mTime), sizeof(_float));
+				_inFile.read(reinterpret_cast<char*>(&tempScaleDesc.mTime), sizeof(double));
 				_inFile.read(reinterpret_cast<char*>(&tempScaleDesc.mValue), sizeof(_float3));
 			
 				tempChannelDesc.mScalingKeys.push_back(tempScaleDesc);
@@ -580,7 +576,7 @@ HRESULT CMyFile_Manager::Read_FBXAnimation(ifstream& _inFile)
 			{
 				CBin_AIScene::DESC_CHANNELROTKEY tempRotDesc;
 
-				_inFile.read(reinterpret_cast<char*>(&tempRotDesc.mTime), sizeof(_float));
+				_inFile.read(reinterpret_cast<char*>(&tempRotDesc.mTime), sizeof(double));
 				_inFile.read(reinterpret_cast<char*>(&tempRotDesc.mValue), sizeof(_float4));
 			
 				tempChannelDesc.mRotationKeys.push_back(tempRotDesc);
@@ -589,7 +585,7 @@ HRESULT CMyFile_Manager::Read_FBXAnimation(ifstream& _inFile)
 			{
 				CBin_AIScene::DESC_CHANNELPOSKEY tempPosDesc;
 
-				_inFile.read(reinterpret_cast<char*>(&tempPosDesc.mTime), sizeof(_float));
+				_inFile.read(reinterpret_cast<char*>(&tempPosDesc.mTime), sizeof(double));
 				_inFile.read(reinterpret_cast<char*>(&tempPosDesc.mValue), sizeof(_float3));
 		
 				tempChannelDesc.mPositionKeys.push_back(tempPosDesc);

@@ -265,6 +265,8 @@ HRESULT CModel::Ready_Bone()
 	//	return E_FAIL;
 	//
 
+	// 	m_vecBone.push_back(pBone);
+
 	// 뼈의 부모 인덱스 설정.
 	//_int iParentIndex = m_vecBone.size() - 1;
 

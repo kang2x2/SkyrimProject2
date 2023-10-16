@@ -48,7 +48,7 @@ private:
 	const aiScene* m_pAIScene = nullptr; // 읽고 얻은 데이터들을 보관한다.
 
 	CBin_AIScene* m_pBinAiScene = nullptr;
-	_uint		  m_iNodeIndex = 0;
+	vector<int>	  m_vecIndex;
 
 
 public:

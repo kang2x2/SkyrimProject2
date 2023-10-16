@@ -57,7 +57,7 @@ public:
 		vector<DESC_MESHFACE>   mFaces;
 		vector<aiVector3D>		mVertices;
 		vector<aiVector3D>		mNormals;
-		vector<vector<aiVector3D>>	mTextureCoords[AI_MAX_NUMBER_OF_TEXTURECOORDS];
+		vector<_float2>		mTextureCoords;
 		vector<aiVector3D>		mTangents;
 		vector<DESC_MESHBONE>   mBones;
 	}DESC_MESH;
@@ -76,19 +76,19 @@ public:
 	// Ã¤³Î Å°(time, value)
 	typedef struct tagChannelScaleKeyDesc
 	{
-		_float		mTime;
+		double		mTime;
 		aiVector3D  mValue;
 	}DESC_CHANNELSCALEKEY;
 
 	typedef struct tagChannelRotKeyDesc
 	{
-		_float		 mTime;
+		double		 mTime;
 		aiQuaternion mValue;
 	}DESC_CHANNELROTKEY;
 
 	typedef struct tagChannelPosKeyDesc
 	{
-		_float		mTime;
+		double		mTime;
 		aiVector3D  mValue;
 	}DESC_CHANNELPOSKEY;
 
@@ -110,8 +110,8 @@ public:
 	typedef struct tagAnimationDesc
 	{
 		aiString				mName;
-		_float					mDuration;
-		_float					mTicksPerSecond;
+		double					mDuration;
+		double					mTicksPerSecond;
 		unsigned int			mNumChannels;
 
 		vector<DESC_ANIMATIONCHANNEL>  mChannels;
