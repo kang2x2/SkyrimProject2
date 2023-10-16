@@ -245,7 +245,7 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/Iron_LongSword/Iron_LongSword", matInitialize, CModel::TYPE_NONANIM))))
 	//	return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Weapon_IronSword"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/Iron_LongSword", matInitialize, CModel::TYPE_NONANIM))))
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/Iron_LongSword", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
 

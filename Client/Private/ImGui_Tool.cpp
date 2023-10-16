@@ -344,7 +344,7 @@ void CImGui_Tool::FindFolder()
 {
 	// 폴더 검색하여 findFileData에 저장.
 	WIN32_FIND_DATA findFileData;
-	HANDLE hFind = FindFirstFile(_T("../Bin/Resource/Models/Skyrim/*"), &findFileData);
+	HANDLE hFind = FindFirstFile(_T("../Bin/Resource/BinaryFBX/NonAnim/*"), &findFileData);
 
 	// 예외 처리
 	if (hFind == INVALID_HANDLE_VALUE) {
@@ -371,7 +371,7 @@ void CImGui_Tool::FindFile_FBX(const char* _FolderName)
 	CString findFileName;
 	CString FolderName = _FolderName;
 
-	musiccount.Format(_T("../Bin/Resource/Models/Skyrim/") + FolderName + _T("/*.fbx"));
+	musiccount.Format(_T("../Bin/Resource/BinaryFBX/NonAnim/") + FolderName + _T("/*.bin"));
 
 	// FindFirstFile 함수를 통해 검색하려고 하는 파일이 없을 경우 
 	// 핸들 값은 INVALID_HANDLE_VALUE 값을 가짐

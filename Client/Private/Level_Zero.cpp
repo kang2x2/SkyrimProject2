@@ -1,9 +1,5 @@
 #include "framework.h"
 
-#include <filesystem>
-#include <fstream>
-#include <commdlg.h>
-
 #include "Level_Zero.h"
 
 #include "GameInstance.h"
@@ -26,7 +22,7 @@ HRESULT CLevel_Zero::Tick(_float _fTimeDelta)
 		m_bIsBinarying = true;
 		SetWindowText(g_hWnd, TEXT("Bynarying..."));
 
-		Start_Binary();
+		FindFBX(TEXT("../Bin/Resource/Models/Skyrim/"));
 
 		SetWindowText(g_hWnd, TEXT("Bynary Complete!"));
 	}
@@ -42,71 +38,38 @@ HRESULT CLevel_Zero::LateTick(_float _fTimeDelta)
 	return S_OK;
 }
 
-void CLevel_Zero::Start_Binary()
+HRESULT CLevel_Zero::FindFBX(const wstring& _wStrFolderPath)
 {
-	// 폴더 검색하여 findFileData에 저장.
-	WIN32_FIND_DATA findFileData;
-	HANDLE hFind = FindFirstFile(_T("../Bin/Resource/Models/Skyrim/*"), &findFileData);
+	if (visitedDirectories.count(_wStrFolderPath) > 0)
+		return S_OK;
 
-	// 예외 처리
-	if (hFind == INVALID_HANDLE_VALUE) {
-		MSG_BOX("Fail Find : Skyrim Folder");
-		return;
-	}
-	do {
-		// 찾은게 폴더인지 검사.
-		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			if (_tcscmp(findFileData.cFileName, _T(".")) != 0 && _tcscmp(findFileData.cFileName, _T("..")) != 0) {
-			
-				Find_FBX(findFileData.cFileName);
+	visitedDirectories.insert(_wStrFolderPath);
 
+	for (const auto& entry : filesystem::directory_iterator(_wStrFolderPath))
+	{
+		if (filesystem::is_directory(entry))
+		{
+			FindFBX(entry.path());
+		}
+		else if (filesystem::is_regular_file(entry))
+		{
+			if (fileExtension == entry.path().extension() || fileExtension2 == entry.path().extension())
+			{
+				if (FAILED(ThrowFBX(entry.path())))
+					return E_FAIL;
 			}
 		}
-	} while (FindNextFile(hFind, &findFileData) != 0);
-
-	FindClose(hFind);
+	}
 }
 
-HRESULT CLevel_Zero::Find_FBX(CString _cStrFolderName)
+HRESULT CLevel_Zero::ThrowFBX(const wstring& _wStrFolderPath)
 {
 	HANDLE fileSearch;
 	WIN32_FIND_DATA wfd;
-	CString musiccount;
-	CString cStrPBXPath;
-	CString cStrFolderName = _cStrFolderName;
-	CModel::MODEL_TYPE eModelType = CModel::TYPE_END;
+	const wstring& cStrPBXPath = _wStrFolderPath;
+	CModel::MODEL_TYPE eModelType;
 
-
-	/* Anim, NonAnim을 구별 할 txt 파일을 먼저 찾는다. */
-	musiccount.Format(_T("../Bin/Resource/Models/Skyrim/") + cStrFolderName + _T("/*.txt"));
-
-	// FindFirstFile 함수를 통해 검색하려고 하는 파일이 없을 경우 
-	// 핸들 값은 INVALID_HANDLE_VALUE 값을 가짐
-	fileSearch = FindFirstFile(musiccount, &wfd);
-
-	if (fileSearch != INVALID_HANDLE_VALUE)
-	{
-		if (_tcscmp(wfd.cFileName, _T("00.NonAnim.txt")) == 0)
-			eModelType = CModel::TYPE_NONANIM;
-
-		else if (_tcscmp(wfd.cFileName, _T("00.Anim.txt")) == 0)
-			eModelType = CModel::TYPE_ANIM;
-
-		else
-		{
-			MSG_BOX("해당하는 txt 파일 못 찾음.");
-			return E_FAIL;
-		}
-	} 
-	else
-	{
-		MSG_BOX("Fail Find : Type.Txt");
-		return E_FAIL;
-	}
-
-	/* FBX 찾기 */
-	musiccount.Format(_T("../Bin/Resource/Models/Skyrim/") + cStrFolderName + _T("/*.fbx"));
-	fileSearch = FindFirstFile(musiccount, &wfd);
+	fileSearch = FindFirstFile(cStrPBXPath.c_str(), &wfd);
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -114,54 +77,64 @@ HRESULT CLevel_Zero::Find_FBX(CString _cStrFolderName)
 	// 찾는 파일이 있다면, 
 	if (fileSearch != INVALID_HANDLE_VALUE)
 	{
-		do
+		// Anim, NonAnim 판별하기
+		wstring animDir = L"/Anim\\";
+		wstring nonAnimDir = L"/NonAnim\\";
+
+		size_t animPos = cStrPBXPath.find(animDir);
+		size_t nonAnimPos = cStrPBXPath.find(nonAnimDir);
+
+		if (animPos != wstring::npos) {
+			wstring extractedPath = cStrPBXPath.substr(animPos + animDir.length());
+			eModelType = CModel::TYPE_ANIM;
+		}
+		else if (nonAnimPos != wstring::npos) {
+			wstring extractedPath = cStrPBXPath.substr(nonAnimPos + nonAnimDir.length());
+			eModelType = CModel::TYPE_NONANIM;
+		}
+		else
 		{
-			/* 확장자 자르기 */
-			CString cStrFBXName = CString(wfd.cFileName);
-			int lastDotPos = cStrFBXName.ReverseFind('.');
-			if (lastDotPos != -1) {
-				CString Extension = cStrFBXName.Right(cStrFBXName.GetLength() - lastDotPos - 1);
-				cStrFBXName = cStrFBXName.Left(lastDotPos);
-			}
-			else 
-			{
-				MSG_BOX("확장자를 찾을 수 없음. ");
-				return E_FAIL;
-			}
+			MSG_BOX("Anim, NonAnim 확인 불가.");
+			return E_FAIL;
+		}
+
+		/* 세이브 경로 지정 */
+		string StrSavePath = "../Bin/Resource/BinaryFBX/";
+
+		//if (eModelType == CModel::TYPE_ANIM)
+		//	StrSavePath += "Anim/";
+		//else if (eModelType == CModel::TYPE_NONANIM)
+		//	StrSavePath += "NonAnim/";
+
+		wstring originalPath = cStrPBXPath;
+		wstring pathToRemove = TEXT("../Bin/Resource/Models/Skyrim/");
+
+		size_t pos = originalPath.find(pathToRemove);
+
+		if (pos != std::wstring::npos) {
+			originalPath.erase(pos, pathToRemove.length());
+		}
 
 
-			/* CString -> const char* : FBX 경로 const char*로 변환. (strFBXPath) */
-			cStrPBXPath = "../Bin/Resource/Models/Skyrim/" + cStrFolderName + "/" + CString(wfd.cFileName);
-			const wchar_t* wStrModelPath = cStrPBXPath;
-				// wchar_t 배열을 UTF-8로 변환
-			int utf8Length = WideCharToMultiByte(CP_UTF8, 0, wStrModelPath, -1, nullptr, 0, nullptr, nullptr);
-			string strFBXPath(utf8Length, '\0');
-			WideCharToMultiByte(CP_UTF8, 0, wStrModelPath, -1, &strFBXPath[0], utf8Length, nullptr, nullptr);
+		wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+		// FBX 경로 변환
+		string strPath = converter.to_bytes(cStrPBXPath);
+		// 저장 경로 변환
+		string  ConvertPathToRemove = converter.to_bytes(originalPath);
 
-			/* 세이브 경로 지정 */
-			CString cStrSavePath = "../Bin/Resource/BinaryFBX/";
+		StrSavePath += ConvertPathToRemove;
 
-			if (eModelType == CModel::TYPE_ANIM)
-				cStrSavePath += "Anim/";
-			else if(eModelType == CModel::TYPE_NONANIM)
-				cStrSavePath += "NonAnim/";
 
-			cStrSavePath += cStrFolderName;
-			cStrSavePath += "/";
-			cStrSavePath += cStrFBXName;
+		/* FBX 바이너리화 시작 */
+		ofstream fileStream(StrSavePath, ios::binary);
+		if (fileStream.is_open())
+		{
+			pGameInstance->Binary_OutFile(fileStream, strPath.c_str(), eModelType);
 
-			/* FBX 바이너리화 시작 */
-			ofstream fileStream(cStrSavePath, ios::binary);
-			if (fileStream.is_open()) 
-			{
-				pGameInstance->Binary_OutFile(fileStream, strFBXPath.c_str(), eModelType);
-
-				fileStream.close();
-			}
-			else
-				MessageBox(g_hWnd, L"파일을 저장하는 중 오류가 발생했습니다.", L"저장 오류", MB_OK | MB_ICONERROR);
-		
-		} while (FindNextFile(fileSearch, &wfd));
+			fileStream.close();
+		}
+		else
+			MessageBox(g_hWnd, L"파일을 저장하는 중 오류가 발생했습니다.", L"저장 오류", MB_OK | MB_ICONERROR);
 
 		Safe_Release(pGameInstance);
 		// 파일 찾기 핸들 값 닫기	
@@ -188,3 +161,111 @@ void CLevel_Zero::Free()
 {
 	__super::Free();
 }
+
+
+
+/* HRESULT CLevel_Zero::ThrowFBX(CString _cStrFolderName)
+{
+	HANDLE fileSearch;
+	WIN32_FIND_DATA wfd;
+	CString musiccount;
+	CString cStrPBXPath;
+	CString cStrFolderName = _cStrFolderName;
+	CModel::MODEL_TYPE eModelType = CModel::TYPE_END;
+
+	// 일단 모델 폴더에서 anim, nonanim으로 나누어 두었다.
+	// 갔다와서 어떻게 경로 찾을지 확인하자
+
+	// Anim, NonAnim을 구별 할 txt 파일을 먼저 찾는다.
+musiccount.Format(_T("../Bin/Resource/Models/Skyrim/") + cStrFolderName + _T("/*.txt"));
+
+// FindFirstFile 함수를 통해 검색하려고 하는 파일이 없을 경우 
+// 핸들 값은 INVALID_HANDLE_VALUE 값을 가짐
+fileSearch = FindFirstFile(musiccount, &wfd);
+
+if (fileSearch != INVALID_HANDLE_VALUE)
+{
+	if (_tcscmp(wfd.cFileName, _T("00.NonAnim.txt")) == 0)
+		eModelType = CModel::TYPE_NONANIM;
+
+	else if (_tcscmp(wfd.cFileName, _T("00.Anim.txt")) == 0)
+		eModelType = CModel::TYPE_ANIM;
+
+	else
+	{
+		MSG_BOX("해당하는 txt 파일 못 찾음.");
+		return E_FAIL;
+	}
+}
+else
+{
+	MSG_BOX("Fail Find : Type.Txt");
+	return E_FAIL;
+}
+
+// FBX 찾기
+musiccount.Format(_T("../Bin/Resource/Models/Skyrim/") + cStrFolderName + _T("/*.fbx"));
+fileSearch = FindFirstFile(musiccount, &wfd);
+
+CGameInstance* pGameInstance = CGameInstance::GetInstance();
+Safe_AddRef(pGameInstance);
+
+// 찾는 파일이 있다면, 
+if (fileSearch != INVALID_HANDLE_VALUE)
+{
+	do
+	{
+		// 확장자 자르기
+		CString cStrFBXName = CString(wfd.cFileName);
+		int lastDotPos = cStrFBXName.ReverseFind('.');
+		if (lastDotPos != -1) {
+			CString Extension = cStrFBXName.Right(cStrFBXName.GetLength() - lastDotPos - 1);
+			cStrFBXName = cStrFBXName.Left(lastDotPos);
+		}
+		else
+		{
+			MSG_BOX("확장자를 찾을 수 없음. ");
+			return E_FAIL;
+		}
+
+
+		// CString -> const char* : FBX 경로 const char*로 변환. (strFBXPath)
+		cStrPBXPath = "../Bin/Resource/Models/Skyrim/" + cStrFolderName + "/" + CString(wfd.cFileName) + ".bin";
+		const wchar_t* wStrModelPath = cStrPBXPath;
+		// wchar_t 배열을 UTF-8로 변환
+		int utf8Length = WideCharToMultiByte(CP_UTF8, 0, wStrModelPath, -1, nullptr, 0, nullptr, nullptr);
+		string strFBXPath(utf8Length, '\0');
+		WideCharToMultiByte(CP_UTF8, 0, wStrModelPath, -1, &strFBXPath[0], utf8Length, nullptr, nullptr);
+
+		// 세이브 경로 지정 
+		CString cStrSavePath = "../Bin/Resource/BinaryFBX/";
+
+		if (eModelType == CModel::TYPE_ANIM)
+			cStrSavePath += "Anim/";
+		else if (eModelType == CModel::TYPE_NONANIM)
+			cStrSavePath += "NonAnim/";
+
+		cStrSavePath += cStrFolderName;
+		cStrSavePath += "/";
+		cStrSavePath += cStrFBXName;
+
+		// FBX 바이너리화 시작 
+		ofstream fileStream(cStrSavePath, ios::binary);
+		if (fileStream.is_open())
+		{
+			pGameInstance->Binary_OutFile(fileStream, strFBXPath.c_str(), eModelType);
+
+			fileStream.close();
+		}
+		else
+			MessageBox(g_hWnd, L"파일을 저장하는 중 오류가 발생했습니다.", L"저장 오류", MB_OK | MB_ICONERROR);
+
+	} while (FindNextFile(fileSearch, &wfd));
+
+	Safe_Release(pGameInstance);
+	// 파일 찾기 핸들 값 닫기	
+	FindClose(fileSearch);
+}
+
+return S_OK;
+} */
