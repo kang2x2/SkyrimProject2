@@ -101,22 +101,16 @@ HRESULT CLevel_Zero::ThrowFBX(const wstring& _wStrFolderPath)
 		/* 세이브 경로 지정 */
 		string StrSavePath = "../Bin/Resource/BinaryFBX/";
 
-		//if (eModelType == CModel::TYPE_ANIM)
-		//	StrSavePath += "Anim/";
-		//else if (eModelType == CModel::TYPE_NONANIM)
-		//	StrSavePath += "NonAnim/";
-
 		wstring originalPath = cStrPBXPath;
 		wstring pathToRemove = TEXT("../Bin/Resource/Models/Skyrim/");
 
 		size_t pos = originalPath.find(pathToRemove);
 
-		if (pos != std::wstring::npos) {
+		if (pos != wstring::npos) {
 			originalPath.erase(pos, pathToRemove.length());
 		}
 
-
-		wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+		wstring_convert<codecvt_utf8<wchar_t>, wchar_t> converter;
 		// FBX 경로 변환
 		string strPath = converter.to_bytes(cStrPBXPath);
 		// 저장 경로 변환
@@ -124,6 +118,32 @@ HRESULT CLevel_Zero::ThrowFBX(const wstring& _wStrFolderPath)
 
 		StrSavePath += ConvertPathToRemove;
 
+		// 확장자 자르기
+		size_t lastDotPos = StrSavePath.find_last_of('.');
+		if (lastDotPos != string::npos) {
+			// 확장자 추출
+			StrSavePath.substr(lastDotPos + 1);
+			// 확장자 제외한 파일 이름 추출
+			StrSavePath = StrSavePath.substr(0, lastDotPos);
+		}
+		else {
+			MSG_BOX("확장자가 없거나 확인 불가.");
+			return E_FAIL;
+		}
+
+		/* 폴더 경로 생성 */
+		/* 파일명 자르고 폴더까지만 남기기 */
+		string StrPath = filesystem::path(StrSavePath).remove_filename().string(); 
+		filesystem::path directory = filesystem::path(StrPath).parent_path();
+
+		// 폴더가 존재하지 않는 경우, 폴더를 생성
+		if (!filesystem::exists(directory)) {
+			/* 예외 처리*/
+			if (!filesystem::create_directories(directory)) {
+				MSG_BOX("폴더 생성 실패.");
+				return E_FAIL;
+			}
+		}
 
 		/* FBX 바이너리화 시작 */
 		ofstream fileStream(StrSavePath, ios::binary);
