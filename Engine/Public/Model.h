@@ -66,7 +66,9 @@ private:
 	vector<class CBone*>	m_vecBone; // 뼈들을 저장.
 
 	/* 애니메이션 */
+	_bool						m_bIsChanging = false; 
 	_uint						m_iCurAnimationIndex = 0; /* 현재 선택된 애니메이션 인덱스. */
+	_uint						m_iNextAnimationIndex = 0; /* 변해야 할 애니메이션 인덱스. */
 	_uint						m_iNumAnimation = 0; /* 모델이 가지고 있는 애니메이션 수 */
 	vector<class CAnimation*>	m_vecAnimation; /* 모델이 가지고 있는 애니메이션 배열 */
 

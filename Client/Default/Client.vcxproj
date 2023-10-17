@@ -199,6 +199,7 @@
     <ClInclude Include="..\Public\Level_Zero.h" />
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
+    <ClInclude Include="..\Public\Part_Base.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\Player_Body.h" />
     <ClInclude Include="..\Public\Player_Hair.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="..\Private\Level_Zero.cpp" />
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
+    <ClCompile Include="..\Private\Part_Base.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\Player_Body.cpp" />
     <ClCompile Include="..\Private\Player_Hair.cpp" />

@@ -1,8 +1,5 @@
 #include "framework.h"
 #include <iostream>
-#include <filesystem>
-#include <commdlg.h>
-#include <fstream>
 
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
@@ -279,12 +276,10 @@ void CImGui_Tool::LayOut_FBX_List()
 					for (size_t i = 0; i < m_vecAfterFileList.size(); ++i)
 					{
 						free((void*)m_vecAfterFileList[i].m_strFileName);
-						free((void*)m_vecAfterFileList[i].m_strFBXPath);
 					}
-					m_vecFilePathList.clear();
 					m_vecAfterFileList.clear();
 					m_vecBeforeFileList.clear();
-					FindFile_FBX(m_vecAfterFolderList[i]);
+					Ready_FindFBX(m_vecAfterFolderList[i]);
 					ChangeType_File();
 				}
 			}
@@ -363,49 +358,71 @@ void CImGui_Tool::FindFolder()
 
 	FindClose(hFind);
 }
-void CImGui_Tool::FindFile_FBX(const char* _FolderName)
+void CImGui_Tool::Ready_FindFBX(const char* _FolderName)
 {
-	HANDLE fileSearch;
-	WIN32_FIND_DATA wfd;
-	CString musiccount;
-	CString findFileName;
+	wstring wStrFindPath;
 	CString FolderName = _FolderName;
+	
+	wStrFindPath = TEXT("../Bin/Resource/BinaryFBX/NonAnim/") + FolderName + TEXT("/");
 
-	musiccount.Format(_T("../Bin/Resource/BinaryFBX/NonAnim/") + FolderName + _T("/*.bin"));
+	Find_FileFBX(wStrFindPath);
+
+	//HANDLE fileSearch;
+	//WIN32_FIND_DATA wfd;
+	//CString musiccount;
+	//CString findFileName;
+	//CString FolderName = _FolderName;
+
+	//musiccount.Format(_T("../Bin/Resource/BinaryFBX/NonAnim/") + FolderName + _T("/*"));
 
 	// FindFirstFile 함수를 통해 검색하려고 하는 파일이 없을 경우 
 	// 핸들 값은 INVALID_HANDLE_VALUE 값을 가짐
-	fileSearch = FindFirstFile(musiccount, &wfd);
+	//fileSearch = FindFirstFile(musiccount, &wfd);
 
 	// 찾는 파일이 있다면, 
-	if (fileSearch != INVALID_HANDLE_VALUE)
+	//if (fileSearch != INVALID_HANDLE_VALUE)
+	//{
+	//	do
+	//	{
+	//		if (!(wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+	//		{
+	//			findFileName.Format(_T("%s"), wfd.cFileName); // findFileName에 파일 이름 저장
+	//
+	//			LPCTSTR lpcStr = (LPCTSTR)findFileName;
+	//			wstring wstrName(lpcStr);
+	//
+	//			m_vecBeforeFileList.push_back(lpcStr);
+	//		}
+	//	} while (FindNextFile(fileSearch, &wfd));
+	//
+	//	// 파일 찾기 핸들 값 닫기	
+	//	FindClose(fileSearch);
+	//}
+}
+
+HRESULT CImGui_Tool::Find_FileFBX(const wstring& _wStrPath)
+{
+	if (visitedDirectories.count(_wStrPath) > 0)
+		return S_OK;
+
+	visitedDirectories.insert(_wStrPath);
+
+	for (const auto& entry : filesystem::directory_iterator(_wStrPath))
 	{
-		do
+		if (filesystem::is_directory(entry))
 		{
-			// 경로 저장 위함.
-			CString FolderPath = "../Bin/Resource/Models/Skyrim/"; +FolderName;
-
-			findFileName.Format(_T("%s"), wfd.cFileName); // findFileName에 파일 이름 저장
-			
-			LPCTSTR lpcStr = (LPCTSTR)findFileName;
-			wstring wstrName(lpcStr);
-
-			m_vecBeforeFileList.push_back(lpcStr);
-
-			// 파일 경로 저장
-			FolderPath += "/";
-			FolderPath += findFileName;
-
-			lpcStr = (LPCTSTR)FolderPath;
-			wstring wstrPath(lpcStr);
-
-			m_vecFilePathList.push_back(lpcStr);
-
-		} while (FindNextFile(fileSearch, &wfd));
-
-		// 파일 찾기 핸들 값 닫기	
-		FindClose(fileSearch);
+			Find_FileFBX(entry.path());
+		}
+		else if (filesystem::is_regular_file(entry))
+		{
+			if (TEXT(".bin") == entry.path().extension())
+			{
+				m_vecBeforeFileList.push_back(entry.path().stem());
+			}
+		}
 	}
+
+	return S_OK;
 }
 
 void CImGui_Tool::Empty_Content()
@@ -422,9 +439,7 @@ void CImGui_Tool::Empty_Content()
 	for (size_t i = 0; i < m_vecAfterFileList.size(); ++i)
 	{
 		free((void*)m_vecAfterFileList[i].m_strFileName);
-		free((void*)m_vecAfterFileList[i].m_strFBXPath);
 	}
-	m_vecFilePathList.clear();
 	m_vecAfterFileList.clear();
 	m_vecBeforeFileList.clear();
 
@@ -449,7 +464,6 @@ void CImGui_Tool::ChangeType_File()
 	{
 		wstring_convert<codecvt_utf8<wchar_t>> converter;
 		string tempStr = converter.to_bytes(m_vecBeforeFileList[i]);
-		string tempPath = converter.to_bytes(m_vecFilePathList[i]);
 
 		TOOL_AFTER_FILEDESC tempFile;
 		tempFile.m_bCheck = false;
@@ -474,7 +488,6 @@ void CImGui_Tool::ChangeType_File()
 
 		//
 		tempFile.m_strFileName = strdup(tempStr.c_str()); // strdup을 사용하여 복사
-		tempFile.m_strFBXPath = strdup(tempPath.c_str()); // strdup을 사용하여 복사
 		m_vecAfterFileList.push_back(tempFile); 
 		// strdup를 사용하여 복사하면 메모리도 같이 할당 됨. 나중에 꼭 해제해줘야 함.
 	}
@@ -763,9 +776,7 @@ void CImGui_Tool::Free()
 	for (size_t i = 0; i < m_vecAfterFileList.size(); ++i)
 	{
 		free((void*)m_vecAfterFileList[i].m_strFileName);
-		free((void*)m_vecAfterFileList[i].m_strFBXPath);
 	}
-	m_vecFilePathList.clear();
 	m_vecAfterFileList.clear();
 	m_vecBeforeFileList.clear();
 	// 

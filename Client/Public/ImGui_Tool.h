@@ -1,5 +1,10 @@
 #pragma once
 
+#include <filesystem>
+#include <set>
+#include <fstream>
+#include <commdlg.h>
+
 #include "Client_Defines.h"
 #include "ImGui_Base.h"
 #include "imgui.h"
@@ -12,7 +17,6 @@ public:
 	typedef struct tagAfterFileDesc
 	{
 		const char* m_strFileName;
-		const char* m_strFBXPath;
 		wstring m_strObjTag;
 		wstring m_strComTag;
 		_bool	m_bCheck = false;
@@ -49,7 +53,8 @@ private:
 
 	// FindFile
 	void	FindFolder();
-	void    FindFile_FBX(const char* _FolderName);
+	void	Ready_FindFBX(const char* _FolderName);
+	HRESULT Find_FileFBX(const wstring& _wStrPath);
 
 	// Empty Folder & File
 	void	Empty_Content();
@@ -93,10 +98,11 @@ private:
 	_bool showFBXListShow = true;
 
 	// 파일 배열
+	set<filesystem::path> visitedDirectories;
+
 	vector<wstring> m_vecBeforeFolderList; // 검색된 폴더 이름 저장.
 	vector<const char*> m_vecAfterFolderList; // 검색된 폴더 이름 const char* 형변환.
 
-	vector<wstring> m_vecFilePathList; // 파일 경로 저장.
 	vector<wstring> m_vecBeforeFileList; // 변환 전 파일 이름 리스트
 	vector<TOOL_AFTER_FILEDESC> m_vecAfterFileList; // 변환 후 파일 정보 리스트
 

@@ -246,6 +246,9 @@
     <ClInclude Include="..\Public\Weapon_IronSword.h">
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Part_Base.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -348,6 +351,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Weapon_IronSword.cpp">
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Part_Base.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

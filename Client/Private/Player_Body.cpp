@@ -4,12 +4,12 @@
 #include "GameInstance.h"
 
 CPlayer_Body::CPlayer_Body(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CGameObject(_pDevice, _pContext)
+	: CPart_Base(_pDevice, _pContext)
 {
 }
 
 CPlayer_Body::CPlayer_Body(const CPlayer_Body& rhs)
-	: CGameObject(rhs)
+	: CPart_Base(rhs)
 {
 }
 
@@ -20,13 +20,6 @@ HRESULT CPlayer_Body::Initialize_ProtoType()
 
 HRESULT CPlayer_Body::Initialize_Clone(void* _pArg)
 {
-	if (_pArg != nullptr)
-	{
-		PART_DESC* pPartDesc = (PART_DESC*)_pArg;
-		m_pParentTransform = pPartDesc->pParentTransform;
-		Safe_AddRef(m_pParentTransform);
-	}
-
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
@@ -40,7 +33,7 @@ void CPlayer_Body::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
-	XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
+	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CPlayer_Body::LateTick(_float _fTimeDelta)
@@ -74,22 +67,6 @@ HRESULT CPlayer_Body::Render()
 	return S_OK;
 }
 
-CBone* CPlayer_Body::Get_SocketBonePtr(const char* _pBoneName)
-{
-	if (m_pModelCom == nullptr)
-		return nullptr;
-
-	return m_pModelCom->Get_BonePtr(_pBoneName);
-}
-
-_float4x4 CPlayer_Body::Get_SocketPivotMatrix()
-{
-	if(m_pModelCom == nullptr)
-		return _float4x4();
-
-	return m_pModelCom->Get_PivotMatrix();
-}
-
 void CPlayer_Body::Set_AnimationIndex(_bool _bIsLoop, _uint _iAnimIndex)
 {
 	m_pModelCom->SetUp_Animation(_bIsLoop, _iAnimIndex);
@@ -110,7 +87,7 @@ HRESULT CPlayer_Body::Ready_Component()
 		return E_FAIL;
 
 	CTransform::TRANSFORM_DESC		TransformDesc;
-	TransformDesc.fSpeedPerSec = 10000.f;
+	TransformDesc.fSpeedPerSec = 10.f;
 	TransformDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
@@ -125,7 +102,7 @@ HRESULT CPlayer_Body::Bind_ShaderResource()
 	//if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
 	//	return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_matWorld)))
 		return E_FAIL;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

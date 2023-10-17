@@ -134,7 +134,7 @@ HRESULT CPlayer::Ready_Part()
 	m_vecPlayerPart.push_back(pPart);
 
 	/* For. Weapon */
-	CWeapon_IronSword::PART_DESC WeaponPartDesc;
+	CWeapon_IronSword::WEAPON_DESC WeaponPartDesc;
 	WeaponPartDesc.pParentTransform = m_pTransformCom;
 	WeaponPartDesc.pSocketBone = dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("WEAPON");
 	WeaponPartDesc.matSocketPivot = dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();

@@ -113,9 +113,10 @@ HRESULT CLevel_Zero::ThrowFBX(const wstring& _wStrFolderPath)
 		wstring_convert<codecvt_utf8<wchar_t>, wchar_t> converter;
 		// FBX 경로 변환
 		string strPath = converter.to_bytes(cStrPBXPath);
-		// 저장 경로 변환
+		// 잘라낸 저장 경로 변환 
 		string  ConvertPathToRemove = converter.to_bytes(originalPath);
 
+		// 잘라낸 저장 경로 기존 저장 경로에 합치기.
 		StrSavePath += ConvertPathToRemove;
 
 		// 확장자 자르기
@@ -131,7 +132,10 @@ HRESULT CLevel_Zero::ThrowFBX(const wstring& _wStrFolderPath)
 			return E_FAIL;
 		}
 
-		/* 폴더 경로 생성 */
+		// 확장자 추가
+		StrSavePath += ".bin";
+
+		/* 폴더 경로 생성(객체 파일을 폴더 별로 저장하기 위함) */
 		/* 파일명 자르고 폴더까지만 남기기 */
 		string StrPath = filesystem::path(StrSavePath).remove_filename().string(); 
 		filesystem::path directory = filesystem::path(StrPath).parent_path();

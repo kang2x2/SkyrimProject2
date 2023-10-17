@@ -5,12 +5,12 @@
 #include "Bone.h"
 
 CWeapon_IronSword::CWeapon_IronSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CGameObject(_pDevice, _pContext)
+	: CPart_Base(_pDevice, _pContext)
 {
 }
 
 CWeapon_IronSword::CWeapon_IronSword(const CWeapon_IronSword& rhs)
-	: CGameObject(rhs)
+	: CPart_Base(rhs)
 {
 }
 
@@ -23,18 +23,21 @@ HRESULT CWeapon_IronSword::Initialize_Clone(void* _pArg)
 {
 	if (nullptr != _pArg)
 	{
-		PART_DESC* pPartDesc = (PART_DESC*)_pArg;
-		m_pParentTransform = pPartDesc->pParentTransform;
-		Safe_AddRef(m_pParentTransform);
+		WEAPON_DESC* pWeaponDesc = (WEAPON_DESC*)_pArg;
 
-		m_pSocketBone = pPartDesc->pSocketBone;
+		m_pSocketBone = pWeaponDesc->pSocketBone;
 		Safe_AddRef(m_pSocketBone);
 
-		m_matSocketPivot = pPartDesc->matSocketPivot;
+		m_matSocketPivot = pWeaponDesc->matSocketPivot;
+
+		if (FAILED(__super::Initialize_Clone(_pArg)))
+			return E_FAIL;
 	}
 
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
+
+	m_pTransformCom->Set_Scaling(_float3(0.1f, 0.1f, 0.1f));
 
 	m_strName = TEXT("IronSword");
 
@@ -44,12 +47,16 @@ HRESULT CWeapon_IronSword::Initialize_Clone(void* _pArg)
 void CWeapon_IronSword::Tick(_float _fTimeDelta)
 {
 	/* 내 행렬 * (소캣 뼈의 컴바인드 행렬 * 소캣의 행렬 * 페어런트의 월드 행렬) */
+	_float4x4 matSocketCombined = m_pSocketBone->Get_CombinedTransformationMatrix();
 
-	_float4x4 matSocketBone = m_pSocketBone->Get_CombinedTransformationMatrix();
+	_matrix		WorldMatrix = XMLoadFloat4x4(&matSocketCombined) *
+		XMLoadFloat4x4(&m_matSocketPivot);
 
-	XMStoreFloat4x4(&m_matWorld, m_pTransformCom->Get_WorldMatrix() 
-		* XMLoadFloat4x4(&matSocketBone) * XMLoadFloat4x4(&m_matSocketPivot)
-		* m_pParentTransform->Get_WorldMatrix());
+	WorldMatrix.r[0] = XMVector3Normalize(WorldMatrix.r[0]);
+	WorldMatrix.r[1] = XMVector3Normalize(WorldMatrix.r[1]);
+	WorldMatrix.r[2] = XMVector3Normalize(WorldMatrix.r[2]);
+
+	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix() * WorldMatrix);
 }
 
 void CWeapon_IronSword::LateTick(_float _fTimeDelta)

@@ -76,6 +76,19 @@ void CAnimation::Update_TransformationMatrix(vector<class CBone*>& _vecBone, _fl
 		m_vecChannel[i]->Update_TransformationMatrix(&m_vecCurKeyFrame[i], _vecBone, m_fTrackPosition);
 }
 
+_bool CAnimation::Change_TransformationMatrix(vector<class CBone*>& _vecBone, const KEYFRAME& _destKeyFrame, _float _fTimeDelta)
+{
+	m_fTrackPosition += 0.2f * _fTimeDelta;
+
+	if (m_fTrackPosition >= 50.f)
+		return true;
+
+	for (size_t i = 0; i < m_vecChannel.size(); ++i)
+		m_vecChannel[i]->Change_TransformationMatrix(&m_vecCurKeyFrame[i], _vecBone, m_fTrackPosition, _destKeyFrame);
+
+	return false;
+}
+
 void CAnimation::ReSet()
 {
 	m_fTrackPosition = 0.f;
@@ -84,6 +97,7 @@ void CAnimation::ReSet()
 
 	for (auto& iter : m_vecCurKeyFrame)
 		iter = 0;
+
 }
 
 CAnimation* CAnimation::Create(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATION* _pAiAnimation)

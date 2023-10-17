@@ -14,6 +14,10 @@ private:
 public:
 	HRESULT Initialize(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATIONCHANNEL* _pAIChannel);
 	void Update_TransformationMatrix(_uint* _pCurKeyFrame, vector<class CBone*>& _vecBone, _float _fTrackPosition);
+	void Change_TransformationMatrix(_uint* _pCurKeyFrame, vector<class CBone*>& _vecBone, _float _fTrackPosition, const KEYFRAME& _destKeyFrame);
+
+public:
+	const KEYFRAME& Get_InitState() { return m_vecKeyFrame[0]; }
 
 private:
 	_char				m_szName[MAX_PATH] = ""; /* ª¿¿« ¿Ã∏ß */

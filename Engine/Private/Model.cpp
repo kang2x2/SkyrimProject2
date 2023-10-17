@@ -106,19 +106,6 @@ HRESULT CModel::Initialize_Clone(void* pArg)
 	return S_OK;
 }
 
-HRESULT CModel::SetUp_Animation(_bool _bIsLoop, _uint _iAnimationIndex)
-{
-	/* 예외 처리 */
-	if (_iAnimationIndex >= m_iNumAnimation || _iAnimationIndex == m_iCurAnimationIndex)
-		return S_OK;
-
-	m_vecAnimation[m_iCurAnimationIndex]->ReSet();
-	m_iCurAnimationIndex = _iAnimationIndex;
-	m_vecAnimation[m_iCurAnimationIndex]->Set_Loop(_bIsLoop);
-
-	return S_OK;
-}
-
 HRESULT CModel::Bind_BondMatrices(CShader* _pShader, _uint _iMeshIndex, const char* _strConstantName)
 {
 	return m_vecMesh[_iMeshIndex]->Bind_BondMatrices(_pShader, m_vecBone, _strConstantName, XMLoadFloat4x4(&m_matPivot));
@@ -136,6 +123,29 @@ HRESULT CModel::Bind_MaterialTexture(CShader* _pShader, const char* _pConstantNa
 	return m_vecMaterial[iMaterialIndex].pTextures[_eType]->Bind_ShaderResource(_pShader, _pConstantName, 0);
 }
 
+HRESULT CModel::SetUp_Animation(_bool _bIsLoop, _uint _iAnimationIndex)
+{
+	/* 예외 처리 */
+	if (_iAnimationIndex >= m_iNumAnimation || _iAnimationIndex == m_iCurAnimationIndex)
+		return S_OK;
+
+	// 리셋 하기 전 보간
+	if (!m_vecAnimation[m_iCurAnimationIndex]->Get_Finish())
+	{
+		m_iNextAnimationIndex = _iAnimationIndex;
+		m_vecAnimation[m_iNextAnimationIndex]->Set_Loop(_bIsLoop);
+		m_bIsChanging = true;
+	}
+	else
+	{
+		m_vecAnimation[m_iCurAnimationIndex]->ReSet();
+		m_iCurAnimationIndex = _iAnimationIndex;
+		m_vecAnimation[m_iCurAnimationIndex]->Set_Loop(_bIsLoop);
+	}
+
+	return S_OK;
+}
+
 HRESULT CModel::Play_Animation(_float _fTimeDelta)
 {
 	/* Non Anim 모델이면 바로 return */
@@ -146,7 +156,14 @@ HRESULT CModel::Play_Animation(_float _fTimeDelta)
 	   (Animation -> Channel -> 시간에 맞는 KeyFrame)*/
 
 	/* 이 애니메이션에 사용되는 부모에 상대적인 자기 자신의 뼈를 갱신하고 */
-	m_vecAnimation[m_iCurAnimationIndex]->Update_TransformationMatrix(m_vecBone, _fTimeDelta);
+	if (!m_bIsChanging)
+	{
+		m_vecAnimation[m_iCurAnimationIndex]->Update_TransformationMatrix(m_vecBone, _fTimeDelta);
+	}
+	else if (m_bIsChanging)
+	{
+		m_vecAnimation[m_iCurAnimationIndex]->Change_TransformationMatrix(m_vecBone, m_vecAnimation[m_iNextAnimationIndex]->Get_InitChannel(), _fTimeDelta);
+	}
 
 	/* 모든 뼈들의 CombinedTransformationMatrix를 갱신한다. */
 	for (size_t i = 0; i < m_vecBone.size(); ++i)

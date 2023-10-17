@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "Part_Base.h"
 
 BEGIN(Engine)
 
@@ -15,15 +15,14 @@ END
 
 BEGIN(Client)
 
-class CWeapon_IronSword final : public CGameObject
+class CWeapon_IronSword final : public CPart_Base
 {
 public:
-	typedef struct tagPartDesc
+	typedef struct tagPartDesc : public CPart_Base::PART_DESC
 	{
-		CTransform* pParentTransform;
 		CBone*		pSocketBone = nullptr;
 		_float4x4	matSocketPivot;
-	}PART_DESC;
+	}WEAPON_DESC;
 
 private:
 	CWeapon_IronSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
@@ -42,15 +41,8 @@ public:
 	HRESULT Bind_ShaderResources();
 
 private:
-	CModel*			m_pModelCom = nullptr;
-	CRenderer*		m_pRendererCom = nullptr;
-	CShader*		m_pShaderCom = nullptr;
-	CTransform*		m_pTransformCom = nullptr;
-
-	CTransform*		m_pParentTransform = nullptr;
-	CBone*			m_pSocketBone = nullptr;
-	_float4x4		m_matSocketPivot;
-	_float4x4		m_matWorld;
+	CBone*		m_pSocketBone =  nullptr;
+	_float4x4	m_matSocketPivot;
 
 public:
 	static CWeapon_IronSword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
