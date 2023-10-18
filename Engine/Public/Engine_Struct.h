@@ -37,6 +37,14 @@ namespace Engine
 		class CTexture* pTextures[AI_TEXTURE_TYPE_MAX];
 	}MESH_MATERIAL;
 
+	typedef struct ENGINE_DLL tagVertex_Position_Cell
+	{
+		XMFLOAT3 vPosition;
+
+		static const unsigned int				iNumElements = 1;
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
+	}VTXPOSCELL;
+
 	typedef struct ENGINE_DLL tagVertex_Position_Color
 	{
 		XMFLOAT3	vPosition;

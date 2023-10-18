@@ -39,23 +39,16 @@ void CFree_Camera::Tick(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	// 키 입력
-	if (pGameInstance->Get_DIKeyState(DIK_W) & 0x80)
-	{
-		m_pTransformCom->Go_Foward(_fTimeDelta);
-	}
-	if (pGameInstance->Get_DIKeyState(DIK_S) & 0x80)
-	{
-		m_pTransformCom->Go_Backward(_fTimeDelta);
-	}
-	if (pGameInstance->Get_DIKeyState(DIK_A) & 0x80)
-	{
-		m_pTransformCom->Go_Left(_fTimeDelta);
-	}
-	if (pGameInstance->Get_DIKeyState(DIK_D) & 0x80)
-	{
-		m_pTransformCom->Go_Right(_fTimeDelta);
-	}
+	_float4 PlayerPos = {};
+
+	XMStoreFloat4(&PlayerPos, dynamic_cast<CTransform*>
+		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY,
+			TEXT("Layer_Player"), TEXT("Player"))
+			-> Get_Component(TEXT("Com_Transform")))
+		->Get_State(CTransform::STATE_POSITION));
+
+	vAt = PlayerPos;
+
 
 	// 마우스 입력
 	_long mouseMove = 0l;

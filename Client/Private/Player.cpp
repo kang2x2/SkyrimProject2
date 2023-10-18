@@ -39,39 +39,41 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 
 void CPlayer::Tick(_float _fTimeDelta)
 {
-	if (GetKeyState('Q') & 0x8000)
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_DIKeyDown('Q'))
 	{
 		m_iAnimKeyIndex += 1;
 
 		dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(true, m_iAnimKeyIndex);
 	}
 
-	if (GetKeyState('E') & 0x8000)
+	if (pGameInstance->Get_DIKeyDown('E'))
 	{
 		m_iAnimKeyIndex -= 1;
 
 		dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(true, m_iAnimKeyIndex);
 	}
 
-	if (GetKeyState(VK_UP) & 0x8000)
+	// Å° ÀÔ·Â
+	if (pGameInstance->Get_DIKeyState(DIK_W) & 0x80)
 	{
 		m_pTransformCom->Go_Foward(_fTimeDelta);
 	}
-
-	if (GetKeyState(VK_DOWN) & 0x8000)
+	if (pGameInstance->Get_DIKeyState(DIK_S) & 0x80)
 	{
 		m_pTransformCom->Go_Backward(_fTimeDelta);
 	}
-
-	if (GetKeyState(VK_LEFT) & 0x8000)
+	if (pGameInstance->Get_DIKeyState(DIK_A) & 0x80)
 	{
 		m_pTransformCom->Go_Left(_fTimeDelta);
 	}
-
-	if (GetKeyState(VK_RIGHT) & 0x8000)
+	if (pGameInstance->Get_DIKeyState(DIK_D) & 0x80)
 	{
 		m_pTransformCom->Go_Right(_fTimeDelta);
 	}
+
 
 	for (auto& iter : m_vecPlayerPart)
 	{
@@ -79,6 +81,7 @@ void CPlayer::Tick(_float _fTimeDelta)
 			iter->Tick(_fTimeDelta);
 	}
 
+	Safe_Release(pGameInstance);
 }
 
 void CPlayer::LateTick(_float _fTimeDelta)
@@ -107,7 +110,7 @@ HRESULT CPlayer::Render()
 HRESULT CPlayer::Ready_Component()
 {
 	CTransform::TRANSFORM_DESC		TransformDesc;
-	TransformDesc.fSpeedPerSec = 10000.f;
+	TransformDesc.fSpeedPerSec = 10.f;
 	TransformDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),

@@ -45,10 +45,27 @@ HRESULT Engine::CInput_Device::Ready_Input_Device(HINSTANCE hInst, HWND hWnd)
 	// 장치에 대한 access 버전을 받아오는 함수
 	m_pMouse->Acquire();
 
+	ZeroMemory(m_byKeyState, sizeof(_byte) * 256);
 
 	return S_OK;
 }
 
+
+_bool CInput_Device::Get_DIKeyDown(_ubyte byKeyID)
+{
+	// 눌린 적 없고 지금 눌렀으면
+	if (m_curKey != byKeyID && GetKeyState(byKeyID) & 0x80)
+	{
+		m_curKey = byKeyID;
+		return true;
+	}
+
+	if (m_curKey == byKeyID && !(GetKeyState(byKeyID) & 0x80))
+		m_curKey = 0;
+
+	return false;
+
+}
 
 _bool CInput_Device::Get_DIMouseDown(MOUSEKEYSTATE eMouse)
 {

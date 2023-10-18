@@ -17,14 +17,15 @@ private:
 public:
 	HRESULT Initailze(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATION* _pAiAnimation);
 	void Update_TransformationMatrix(vector<class CBone*>& _vecBone, _float _fTimeDelta);
-	_bool Change_TransformationMatrix(vector<class CBone*>& _vecBone, const KEYFRAME& _destKeyFrame, _float _fTimeDelta);
+	_bool Change_TransformationMatrix(vector<class CBone*>& _vecBone, const vector<CChannel*>& _destVecChannel, _float _fTimeDelta);
 	void ReSet();
 
 public:
 	void  Set_Loop(_bool _bIsLoop) { m_bIsLoop = _bIsLoop; }
 	
+	void  Reset_TrackPosition() { m_fTrackPosition = 0; }
 	_bool Get_Finish() { return m_bIsFinish; }
-	const KEYFRAME& Get_InitChannel() { return m_vecChannel[0]->Get_InitState(); }
+	const vector<CChannel*>& Get_Channel() { return m_vecChannel; }
 private:
 	_float			m_fDuration = 0.f; // 총 길이라고 생각하자.
 	_float			m_fTickPerSecond = 0.f; // 재생 속도?
@@ -35,7 +36,7 @@ private:
 	/* 애니메이션이 구동해야 하는 뼈의 정보들 */
 	_char					m_szName[MAX_PATH] = "";
 	_uint					m_iNumChannel = 0;
-	vector<CChannel*> m_vecChannel;
+	vector<CChannel*>		m_vecChannel;
 	vector<_uint>			m_vecCurKeyFrame; // 각 채널이 가지는 키프레임. 따로 보관한다.
 
 

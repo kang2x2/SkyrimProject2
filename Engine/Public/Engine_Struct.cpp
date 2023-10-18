@@ -2,6 +2,11 @@
 
 namespace Engine
 {
+	const D3D11_INPUT_ELEMENT_DESC VTXPOSCELL::Elements[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }, /* 위치벡터에 대한 묘사. */
+	};
+
 	const D3D11_INPUT_ELEMENT_DESC VTXPOSTEX::Elements[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }, /* 위치벡터에 대한 묘사. */

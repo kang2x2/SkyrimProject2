@@ -132,6 +132,7 @@ HRESULT CModel::SetUp_Animation(_bool _bIsLoop, _uint _iAnimationIndex)
 	// 리셋 하기 전 보간
 	if (!m_vecAnimation[m_iCurAnimationIndex]->Get_Finish())
 	{
+		m_vecAnimation[m_iCurAnimationIndex]->Reset_TrackPosition();
 		m_iNextAnimationIndex = _iAnimationIndex;
 		m_vecAnimation[m_iNextAnimationIndex]->Set_Loop(_bIsLoop);
 		m_bIsChanging = true;
@@ -162,7 +163,11 @@ HRESULT CModel::Play_Animation(_float _fTimeDelta)
 	}
 	else if (m_bIsChanging)
 	{
-		m_vecAnimation[m_iCurAnimationIndex]->Change_TransformationMatrix(m_vecBone, m_vecAnimation[m_iNextAnimationIndex]->Get_InitChannel(), _fTimeDelta);
+		if (m_vecAnimation[m_iCurAnimationIndex]->Change_TransformationMatrix(m_vecBone, m_vecAnimation[m_iNextAnimationIndex]->Get_Channel(), _fTimeDelta))
+		{
+			m_bIsChanging = false;
+			m_iCurAnimationIndex = m_iNextAnimationIndex;
+		}
 	}
 
 	/* 모든 뼈들의 CombinedTransformationMatrix를 갱신한다. */

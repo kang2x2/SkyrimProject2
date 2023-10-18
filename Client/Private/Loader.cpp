@@ -277,7 +277,7 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 	//	CTerrain::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
 
-	// Player 
+	// 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;

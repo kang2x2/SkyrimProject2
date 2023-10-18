@@ -20,6 +20,9 @@ HRESULT CPlayer_Body::Initialize_ProtoType()
 
 HRESULT CPlayer_Body::Initialize_Clone(void* _pArg)
 {
+	if (FAILED(__super::Initialize_Clone(_pArg)))
+		return E_FAIL;
+
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
@@ -33,7 +36,7 @@ void CPlayer_Body::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
-	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix());
+	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
 }
 
 void CPlayer_Body::LateTick(_float _fTimeDelta)
@@ -86,12 +89,8 @@ HRESULT CPlayer_Body::Ready_Component()
 		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
-	CTransform::TRANSFORM_DESC		TransformDesc;
-	TransformDesc.fSpeedPerSec = 10.f;
-	TransformDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
-
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
-		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
+		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
 		return E_FAIL;
 
 	return S_OK;

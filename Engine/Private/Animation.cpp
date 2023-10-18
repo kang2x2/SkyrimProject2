@@ -76,15 +76,20 @@ void CAnimation::Update_TransformationMatrix(vector<class CBone*>& _vecBone, _fl
 		m_vecChannel[i]->Update_TransformationMatrix(&m_vecCurKeyFrame[i], _vecBone, m_fTrackPosition);
 }
 
-_bool CAnimation::Change_TransformationMatrix(vector<class CBone*>& _vecBone, const KEYFRAME& _destKeyFrame, _float _fTimeDelta)
+_bool CAnimation::Change_TransformationMatrix(vector<class CBone*>& _vecBone, const vector<CChannel*>& _destVecChannel, _float _fTimeDelta)
 {
-	m_fTrackPosition += 0.2f * _fTimeDelta;
+	m_fTrackPosition += m_fTickPerSecond * _fTimeDelta;
 
-	if (m_fTrackPosition >= 50.f)
+	if (m_fTrackPosition >= 0.2f)
 		return true;
 
 	for (size_t i = 0; i < m_vecChannel.size(); ++i)
-		m_vecChannel[i]->Change_TransformationMatrix(&m_vecCurKeyFrame[i], _vecBone, m_fTrackPosition, _destKeyFrame);
+	{
+		if (m_vecChannel[i]->Get_BoneIndex() == _destVecChannel[i]->Get_BoneIndex())
+		{
+			m_vecChannel[i]->Change_TransformationMatrix(&m_vecCurKeyFrame[i], _vecBone, m_fTrackPosition, _destVecChannel[i]->Get_FisrtKeyFrame());
+		}
+	}
 
 	return false;
 }

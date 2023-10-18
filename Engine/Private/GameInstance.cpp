@@ -111,6 +111,15 @@ HRESULT CGameInstance::Present()
 	return m_pGraphic_Device->Present();
 }
 
+/* For. Input Device */
+_bool CGameInstance::Get_DIKeyDown(_ubyte byKeyID)
+{
+	if (m_pInput_Device == nullptr)
+		return false;
+
+	return m_pInput_Device->Get_DIKeyDown(byKeyID);
+}
+
 _byte CGameInstance::Get_DIKeyState(_ubyte byKeyID)
 {
 	if (nullptr == m_pInput_Device)

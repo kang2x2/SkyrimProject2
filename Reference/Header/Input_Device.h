@@ -20,6 +20,7 @@ private:
 	virtual ~CInput_Device(void) = default;
 
 public:
+	_bool   Get_DIKeyDown(_ubyte byKeyID);
 	_byte	Get_DIKeyState(_ubyte byKeyID) { return m_byKeyState[byKeyID]; }
 	_byte	Get_DIMouseState(MOUSEKEYSTATE eMouse) { return m_tMouseState.rgbButtons[eMouse]; }
 	_bool   Get_DIMouseDown(MOUSEKEYSTATE eMouse);
@@ -40,6 +41,7 @@ private:
 	LPDIRECTINPUTDEVICE8	m_pMouse = nullptr;
 
 private:
+	_byte					m_curKey = 0;
 	_byte					m_byKeyState[256];		// 키보드에 있는 모든 키값을 저장하기 위한 변수
 	
 	DIMOUSESTATE			m_tMouseState;

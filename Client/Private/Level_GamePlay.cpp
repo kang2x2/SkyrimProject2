@@ -131,7 +131,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	// 구조체 생성
 	CFree_Camera::FREE_CAMERA_DESC FreeCameraDesc;
 	ZeroMemory(&FreeCameraDesc, sizeof FreeCameraDesc);
-	
+		
 	FreeCameraDesc.fMouseSensitive = 0.2f;
 	FreeCameraDesc.vEye = _float4(0.f, 10.f, -8.f, 1.f);
 	FreeCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
