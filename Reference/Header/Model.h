@@ -20,7 +20,7 @@ public:
 	virtual HRESULT Initialize_Clone(void* pArg) override;
 
 public:
-	_uint Get_NumMeshes() const {  return m_iNumMeshes; } // 매시 수 반환
+	_uint Get_NumMeshes() const { return m_iNumMeshes; } // 매시 수 반환
 	_int  Get_BoneIndex(const char* _strBoneName) const; // 해당 이름을 가지는 뼈의 인덱스 반환
 
 	class CBone* Get_BonePtr(const char* _strBoneName) const;
@@ -28,10 +28,11 @@ public:
 
 public:
 	vector<class CMesh*> Get_VecMesh() { return m_vecMesh; }
+	_bool				 Get_IsAnimationFin();
 	void				 Update_VI(const _fmatrix& _matPivot);
 
 public:
-	HRESULT SetUp_Animation(_bool _bIsLoop, _uint _iAnimationIndex);
+	HRESULT SetUp_Animation(_bool _bIsLoop, string _strAnimationName);
 	HRESULT Bind_BondMatrices(class CShader* _pShader, _uint _iMeshIndex, const char* _strConstantName);
 	HRESULT Bind_MaterialTexture(class CShader* _pShader, const char* _pConstantName, _uint _iMeshIndex, aiTextureType _eType);
 	HRESULT Play_Animation(_float _fTimeDelta);
@@ -67,6 +68,7 @@ private:
 
 	/* 애니메이션 */
 	_bool						m_bIsChanging = false; 
+	_bool						m_bIsFindAnimation = false;
 	_uint						m_iCurAnimationIndex = 0; /* 현재 선택된 애니메이션 인덱스. */
 	_uint						m_iNextAnimationIndex = 0; /* 변해야 할 애니메이션 인덱스. */
 	_uint						m_iNumAnimation = 0; /* 모델이 가지고 있는 애니메이션 수 */

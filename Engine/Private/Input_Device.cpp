@@ -54,17 +54,56 @@ HRESULT Engine::CInput_Device::Ready_Input_Device(HINSTANCE hInst, HWND hWnd)
 _bool CInput_Device::Get_DIKeyDown(_ubyte byKeyID)
 {
 	// 눌린 적 없고 지금 눌렀으면
-	if (m_curKey != byKeyID && GetKeyState(byKeyID) & 0x80)
+	//if (m_curKey != byKeyID && GetKeyState(byKeyID) & 0x80)
+	//{
+	//	m_curKey = byKeyID;
+	//	return true;
+	//}
+	//
+	//if (m_curKey == byKeyID && !(GetKeyState(byKeyID) & 0x80))
+	//	m_curKey = 0;
+
+	if (!m_byKeyState[byKeyID] && (GetAsyncKeyState(byKeyID) & 0x8000))
 	{
-		m_curKey = byKeyID;
+		m_byKeyState[byKeyID] = !m_byKeyState[byKeyID];
 		return true;
 	}
 
-	if (m_curKey == byKeyID && !(GetKeyState(byKeyID) & 0x80))
-		m_curKey = 0;
+	for (int i = 0; i < 256; ++i)
+	{
+		if (m_byKeyState[i] && !(GetAsyncKeyState(i) & 0x8000))
+			m_byKeyState[i] = !m_byKeyState[i];
+	}
 
 	return false;
 
+}
+
+_bool CInput_Device::Get_DIKeyUp(_ubyte byKeyID)
+{
+	// 이전에 눌린 적이 있고, 현재는 눌리지 않은 경우
+	if (m_byKeyState[byKeyID] && !(GetAsyncKeyState(byKeyID) & 0x8000))
+	{
+		m_byKeyState[byKeyID] = !m_byKeyState[byKeyID];
+		return true;
+	}
+
+	for (int i = 0; i < 256; ++i)
+	{
+		if (!m_byKeyState[byKeyID] && (GetAsyncKeyState(byKeyID) & 0x8000))
+			m_byKeyState[i] = !m_byKeyState[i];
+	}
+
+
+	return false;
+}
+
+_bool CInput_Device::Get_DIKeyPress(_ubyte byKeyID)
+{
+	if (GetAsyncKeyState(byKeyID) & 0x8000)
+		return true;
+
+	return false;
 }
 
 _bool CInput_Device::Get_DIMouseDown(MOUSEKEYSTATE eMouse)
@@ -85,7 +124,7 @@ _bool CInput_Device::Get_DIMouseDown(MOUSEKEYSTATE eMouse)
 void Engine::CInput_Device::Update_InputDev(void)
 {
 	/* 매 프레임마다 키보드와 마우스의 상태를 저장해준다. */
-	m_pKeyBoard->GetDeviceState(256, m_byKeyState);
+	//m_pKeyBoard->GetDeviceState(256, m_byKeyState);
 	m_pMouse->GetDeviceState(sizeof(m_tMouseState), &m_tMouseState);
 }
 

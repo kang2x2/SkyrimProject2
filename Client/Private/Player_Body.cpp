@@ -27,7 +27,6 @@ HRESULT CPlayer_Body::Initialize_Clone(void* _pArg)
 		return E_FAIL;
 
 	m_strName = TEXT("Player_Body");
-	m_pModelCom->SetUp_Animation(true, 0);
 
 	return S_OK;
 }
@@ -70,10 +69,16 @@ HRESULT CPlayer_Body::Render()
 	return S_OK;
 }
 
-void CPlayer_Body::Set_AnimationIndex(_bool _bIsLoop, _uint _iAnimIndex)
+void CPlayer_Body::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName)
 {
-	m_pModelCom->SetUp_Animation(_bIsLoop, _iAnimIndex);
+	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName);
 }
+
+_bool CPlayer_Body::Get_IsAnimationFin()
+{
+	return m_pModelCom->Get_IsAnimationFin();
+}
+
 
 HRESULT CPlayer_Body::Ready_Component()
 {

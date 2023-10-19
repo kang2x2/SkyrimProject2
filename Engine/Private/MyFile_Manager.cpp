@@ -541,7 +541,15 @@ HRESULT CMyFile_Manager::Read_FBXAnimation(ifstream& _inFile)
 		_inFile.read(newData, iStrLength * sizeof(char));
 		newData[iStrLength] = '\0';
 		tempAnimationDesc.mName.Set(newData);
+
+		/* 애니메이션 이름 편집 */
+		if (string(tempAnimationDesc.mName.C_Str()).find("Armature|") == 0) {
+			tempAnimationDesc.mName = aiString(std::string(tempAnimationDesc.mName.C_Str()).substr(9).c_str());
+		}
+
 		delete[] newData;
+
+
 
 		// duration, tickpersecont가 0이다. 확인하자.
 		_inFile.read(reinterpret_cast<char*>(&tempAnimationDesc.mDuration), sizeof(double));

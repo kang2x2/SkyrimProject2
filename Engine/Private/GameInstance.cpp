@@ -120,6 +120,22 @@ _bool CGameInstance::Get_DIKeyDown(_ubyte byKeyID)
 	return m_pInput_Device->Get_DIKeyDown(byKeyID);
 }
 
+_bool CGameInstance::Get_DIKeyUp(_ubyte byKeyID)
+{
+	if (m_pInput_Device == nullptr)
+		return false;
+
+	return m_pInput_Device->Get_DIKeyUp(byKeyID);
+}
+
+_bool CGameInstance::Get_DIKeyPress(_ubyte byKeyID)
+{
+	if (m_pInput_Device == nullptr)
+		return false;
+
+	return m_pInput_Device->Get_DIKeyPress(byKeyID);
+}
+
 _byte CGameInstance::Get_DIKeyState(_ubyte byKeyID)
 {
 	if (nullptr == m_pInput_Device)

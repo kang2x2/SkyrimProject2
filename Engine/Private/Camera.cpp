@@ -48,6 +48,8 @@ HRESULT CCamera::Initialize_Clone(void* pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vEye)); // 위치
 	m_pTransformCom->LookAt(XMLoadFloat4(&vAt)); // 바라볼 지점 혹은 대상
 
+	matView = m_pTransformCom->Get_WorldMatrix_Inverse();
+
 	return S_OK;
 }
 
@@ -62,7 +64,7 @@ void CCamera::Tick(_float _fTimeDelta)
 
 	/* 카메라 월드행렬의 역행렬 == 뷰스페이스 변환행렬. */
 	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
-	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_VIEW, m_pTransformCom->Get_WorldMatrix_Inverse());
+	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_VIEW, matView);
 	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_PROJ, XMMatrixPerspectiveFovLH(fFovY, fAspect, fNear, fFar));
 }
 

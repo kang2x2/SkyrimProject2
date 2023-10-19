@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+#include "StateManager_Player.h"
+
 #include "Player_Body.h"
 #include "Weapon_IronSword.h"
 
@@ -29,11 +31,13 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	if (FAILED(Ready_Part()))
 		return E_FAIL;
 
+	if (FAILED(Ready_State()))
+		return E_FAIL;
+
 	m_bHasMesh = true;
 	m_bHasPart = true;
 	m_strName = TEXT("Player");
 	
-
 	return S_OK;
 }
 
@@ -42,38 +46,7 @@ void CPlayer::Tick(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown('Q'))
-	{
-		m_iAnimKeyIndex += 1;
-
-		dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(true, m_iAnimKeyIndex);
-	}
-
-	if (pGameInstance->Get_DIKeyDown('E'))
-	{
-		m_iAnimKeyIndex -= 1;
-
-		dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(true, m_iAnimKeyIndex);
-	}
-
-	// Å° ÀÔ·Â
-	if (pGameInstance->Get_DIKeyState(DIK_W) & 0x80)
-	{
-		m_pTransformCom->Go_Foward(_fTimeDelta);
-	}
-	if (pGameInstance->Get_DIKeyState(DIK_S) & 0x80)
-	{
-		m_pTransformCom->Go_Backward(_fTimeDelta);
-	}
-	if (pGameInstance->Get_DIKeyState(DIK_A) & 0x80)
-	{
-		m_pTransformCom->Go_Left(_fTimeDelta);
-	}
-	if (pGameInstance->Get_DIKeyState(DIK_D) & 0x80)
-	{
-		m_pTransformCom->Go_Right(_fTimeDelta);
-	}
-
+	m_pStateManager->Update(_fTimeDelta);
 
 	for (auto& iter : m_vecPlayerPart)
 	{
@@ -86,6 +59,8 @@ void CPlayer::Tick(_float _fTimeDelta)
 
 void CPlayer::LateTick(_float _fTimeDelta)
 {
+	m_pStateManager->Late_Update();
+
 	for (auto& iter : m_vecPlayerPart)
 	{
 		if (iter != nullptr)
@@ -107,10 +82,27 @@ HRESULT CPlayer::Render()
 	return S_OK;
 }
 
+HRESULT CPlayer::Set_State(PLAYERSTATE _eState)
+{
+	m_pStateManager->Set_State(_eState);
+
+	return S_OK;
+}
+
+_bool CPlayer::Get_IsAnimationFin()
+{
+	return dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_IsAnimationFin();
+}
+
+void CPlayer::Play_Animation(_bool _bIsLoop, string _strAnimationName)
+{
+	dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName);
+}
+
 HRESULT CPlayer::Ready_Component()
 {
 	CTransform::TRANSFORM_DESC		TransformDesc;
-	TransformDesc.fSpeedPerSec = 10.f;
+	TransformDesc.fSpeedPerSec = 0.5f;
 	TransformDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
@@ -148,6 +140,13 @@ HRESULT CPlayer::Ready_Part()
 	m_vecPlayerPart.push_back(pPart);
 
 	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Ready_State()
+{
+	m_pStateManager = CStateManager_Player::Create(this, m_pTransformCom);
 
 	return S_OK;
 }
@@ -193,4 +192,5 @@ void CPlayer::Free()
 	m_vecPlayerPart.clear();
 
 	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pStateManager);
 }

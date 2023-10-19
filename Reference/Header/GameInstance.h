@@ -26,6 +26,8 @@ public : /* For.Graphic_Device */
 
 public: /* For. InputDevice */
 	_bool   Get_DIKeyDown(_ubyte byKeyID);
+	_bool   Get_DIKeyUp(_ubyte byKeyID);
+	_bool   Get_DIKeyPress(_ubyte byKeyID);
 	_byte	Get_DIKeyState(_ubyte byKeyID);
 	_byte	Get_DIMouseState(CInput_Device::MOUSEKEYSTATE eMouse);
 	_long	Get_DIMouseMove(CInput_Device::MOUSEMOVESTATE eMouseState);

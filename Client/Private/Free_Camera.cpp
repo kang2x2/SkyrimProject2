@@ -2,6 +2,7 @@
 #include "Free_Camera.h"
 
 #include "GameInstance.h"
+#include "PipeLine.h"
 
 CFree_Camera::CFree_Camera(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CCamera(_pDevice, _pContext)
@@ -27,7 +28,6 @@ HRESULT CFree_Camera::Initialize_Clone(void* pArg)
 	if (FAILED(__super::Initialize_Clone(pArg)))
 		return E_FAIL;
 
-
 	m_bHasMesh = false;
 	m_strName = TEXT("GamePlay_FreeCamera");
 
@@ -39,39 +39,47 @@ void CFree_Camera::Tick(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	_float4 PlayerPos = {};
-
+	/* Player 위치 얻어와서 at과 eye 설정. */
 	XMStoreFloat4(&PlayerPos, dynamic_cast<CTransform*>
 		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY,
 			TEXT("Layer_Player"), TEXT("Player"))
-			-> Get_Component(TEXT("Com_Transform")))
+			->Get_Component(TEXT("Com_Transform")))
 		->Get_State(CTransform::STATE_POSITION));
 
 	vAt = PlayerPos;
+	XMStoreFloat4(&vEye, XMLoadFloat4(&PlayerPos) + XMVectorSet(0.0f, 4.0f, -4.0f, 0.0f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vEye)); 
 
+	/* 마우스 입력 */
+	_long mouseX = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_X);
+	_long mouseY = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_Y);
 
-	// 마우스 입력
-	_long mouseMove = 0l;
+	/* X와 Y 회전 각도 계산 후 누적 */ 
+	m_fRotationX = (_float)(mouseX) * rotationSpeed * _fTimeDelta;
+	m_fRotationY = (_float)(mouseY) * rotationSpeed * _fTimeDelta;
 
-	// 일반적인 y축으로 회전 할 것. 
-	if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_X)) // (y축을 회전하면 x축이 움직이기에.)
-	{
-		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), mouseMove * m_fMouseSensitive * _fTimeDelta);
-	}
+	m_fCurrotationX -= m_fRotationX;
+	m_fCurrotationY -= m_fRotationY;
 
-	// 카메라 월드 행렬의 right 축을 기준으로 회전할 것.
-	if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_Y))
-	{
-		m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), mouseMove * m_fMouseSensitive * _fTimeDelta);
-	}
+	/* 뷰 행렬을 회전시키기 위한 회전 행렬 생성 */
+	_matrix rotationMatrixX = XMMatrixRotationY(m_fCurrotationX);
+	_matrix rotationMatrixY = XMMatrixRotationX(m_fCurrotationY);
+	//_matrix rotationMatrixY = XMMatrixRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), m_fCurrotationY);
+
+	/* 뷰 행렬을 현재의 뷰 행렬에 곱해 회전 적용 */
+	_matrix viewMatrix = XMMatrixLookAtLH(XMLoadFloat4(&vEye), XMLoadFloat4(&vAt), XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+	matView = viewMatrix;
+	// rotationMatrixX * rotationMatrixY *  // tlqkf 나중에
+	__super::Tick(_fTimeDelta);
+
 
 	Safe_Release(pGameInstance);
-
-	__super::Tick(_fTimeDelta);
 }
 
 void CFree_Camera::LateTick(_float _fTimeDelta)
 {
+	m_fRotationX = 0.f;
+	m_fRotationY = 0.f;
 }
 
 CFree_Camera* CFree_Camera::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)

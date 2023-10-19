@@ -23,11 +23,13 @@ public:
 public:
 	void  Set_Loop(_bool _bIsLoop) { m_bIsLoop = _bIsLoop; }
 	
+	_char* Get_AnimationName() { return m_szName; }
 	void  Reset_TrackPosition() { m_fTrackPosition = 0; }
 	_bool Get_Finish() { return m_bIsFinish; }
 	const vector<CChannel*>& Get_Channel() { return m_vecChannel; }
 private:
 	_float			m_fDuration = 0.f; // 총 길이라고 생각하자.
+	_float			m_fChangeDuration = 0.f; // 애니메이션 변환 시 재생 위치
 	_float			m_fTickPerSecond = 0.f; // 재생 속도?
 	_float			m_fTrackPosition = 0.f; // 애니메이션 현재 재생 위치.
 	_bool			m_bIsLoop = false; // 루프 변수(무한히 재생 할 애니메이션 판별)

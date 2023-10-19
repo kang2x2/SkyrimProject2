@@ -113,6 +113,11 @@ void CChannel::Update_TransformationMatrix(_uint* _pCurKeyFrame, vector<class CB
 		XMStoreFloat4(&vTranslation, XMVectorLerp(vSourTranslate, vDestTranslate, fRatio));
 	}
 
+	/* 애니메이션 간 보간을 위해 실시간으로 저장. */
+	vCurScale = vScale;
+	vCurRotation = vRotation;
+	vCurTranslation = vTranslation;
+
 	/* 아핀 행렬 생성 : 크 * 자 * 이 행렬이다. */
 	/* 중간의 vectorSet은 객체가 어떤 지점을 기준으로 변환을 할 것인지 설정한다 .*/
 	_matrix matTransformation = XMMatrixAffineTransformation(XMLoadFloat3(&vScale),
@@ -123,42 +128,34 @@ void CChannel::Update_TransformationMatrix(_uint* _pCurKeyFrame, vector<class CB
 
 }
 
-_bool CChannel::Change_TransformationMatrix(_uint* _pCurKeyFrame, vector<class CBone*>& _vecBone, _float _fTrackPosition, const KEYFRAME& _destKeyFrame)
+_bool CChannel::Change_TransformationMatrix(vector<class CBone*>& _vecBone, const KEYFRAME& _destKeyFrame)
 {
 	_float3 vScale;
 	_float4 vRotation;
 	_float4 vTranslation;
 
-	if (_fTrackPosition >= 0.2f)
-	{
-		return true;
-	}
+	/* 스케일 */
+	_vector vSourScale = XMLoadFloat3(&vCurScale);
+	_vector vDestScale = XMLoadFloat3(&_destKeyFrame.vScale);
+	XMStoreFloat3(&vScale, XMVectorLerp(vSourScale, vDestScale, 5.f));
 
-	else
-	{
-		/* 스케일 */
-		_vector vSourScale = XMLoadFloat3(&m_vecKeyFrame[*_pCurKeyFrame].vScale);
-		_vector vDestScale = XMLoadFloat3(&_destKeyFrame.vScale);
-		XMStoreFloat3(&vScale, XMVectorLerp(vSourScale, vDestScale, 0.2f));
+	/* 회전 */
+	_vector vSourRot = XMLoadFloat4(&vCurRotation);
+	_vector vDestRot = XMLoadFloat4(&_destKeyFrame.vRotation);
+	XMStoreFloat4(&vRotation, XMQuaternionSlerp(vSourRot, vDestRot, 5.f));
 
-		/* 회전 */
-		_vector vSourRot = XMLoadFloat4(&m_vecKeyFrame[*_pCurKeyFrame].vRotation);
-		_vector vDestRot = XMLoadFloat4(&_destKeyFrame.vRotation);
-		XMStoreFloat4(&vRotation, XMQuaternionSlerp(vSourRot, vDestRot, 0.2f));
+	/* 위치 */
+	_vector vSourTranslate = XMLoadFloat4(&vCurTranslation);
+	_vector vDestTranslate = XMLoadFloat4(&_destKeyFrame.vTranslation);
+	XMStoreFloat4(&vTranslation, XMVectorLerp(vSourTranslate, vDestTranslate, 5.f));
 
-		/* 위치 */
-		_vector vSourTranslate = XMLoadFloat4(&m_vecKeyFrame[*_pCurKeyFrame].vTranslation);
-		_vector vDestTranslate = XMLoadFloat4(&_destKeyFrame.vTranslation);
-		XMStoreFloat4(&vTranslation, XMVectorLerp(vSourTranslate, vDestTranslate, 0.2f));
+	/* 아핀 행렬 생성 : 크 * 자 * 이 행렬이다. */
+	/* 중간의 vectorSet은 객체가 어떤 지점을 기준으로 변환을 할 것인지 설정한다 .*/
+	_matrix matTransformation = XMMatrixAffineTransformation(XMLoadFloat3(&vScale),
+		XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&vRotation), XMLoadFloat4(&vTranslation));
 
-		/* 아핀 행렬 생성 : 크 * 자 * 이 행렬이다. */
-		/* 중간의 vectorSet은 객체가 어떤 지점을 기준으로 변환을 할 것인지 설정한다 .*/
-		_matrix matTransformation = XMMatrixAffineTransformation(XMLoadFloat3(&vScale),
-			XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&vRotation), XMLoadFloat4(&vTranslation));
-
-		/* 최종적으로 변환된 행렬을 이 애니메이션을 구동하는 모델의 메시가 가지는 뼈에게 전달한다. */
-		_vecBone[m_iBoneIndex]->Set_TransformationMatrix(matTransformation);
-	}
+	/* 최종적으로 변환된 행렬을 이 애니메이션을 구동하는 모델의 메시가 가지는 뼈에게 전달한다. */
+	_vecBone[m_iBoneIndex]->Set_TransformationMatrix(matTransformation);
 
 	return false;
 }

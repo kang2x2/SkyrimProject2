@@ -23,6 +23,9 @@ private:
 	virtual ~CPlayer_Body() = default;
 
 public:
+	_bool Get_IsAnimationFin();
+
+public:
 	virtual HRESULT Initialize_ProtoType(); // 원본
 	virtual HRESULT Initialize_Clone(void* pArg); // 사본
 	virtual void	Tick(_float _fTimeDelta);
@@ -30,7 +33,7 @@ public:
 	virtual HRESULT Render();
 
 public:
-	void Set_AnimationIndex(_bool _bIsLoop, _uint _iAnimIndex);
+	void Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName);
 
 private:
 	HRESULT Ready_Component();

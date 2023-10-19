@@ -50,7 +50,7 @@ void CWeapon_IronSword::Tick(_float _fTimeDelta)
 	_float4x4 matSocketCombined = m_pSocketBone->Get_CombinedTransformationMatrix();
 
 	_matrix		WorldMatrix = XMLoadFloat4x4(&matSocketCombined) *
-		XMLoadFloat4x4(&m_matSocketPivot);
+		XMLoadFloat4x4(&m_matSocketPivot) * m_pParentTransform->Get_WorldMatrix();
 
 	WorldMatrix.r[0] = XMVector3Normalize(WorldMatrix.r[0]);
 	WorldMatrix.r[1] = XMVector3Normalize(WorldMatrix.r[1]);

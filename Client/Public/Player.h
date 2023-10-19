@@ -3,8 +3,11 @@
 #include "Client_Defines.h"
 #include "GameObject.h"
 
+
 BEGIN(Engine)
+
 class CTransform;
+
 END
 
 BEGIN(Client)
@@ -25,16 +28,24 @@ public:
 	virtual void	LateTick(_float _fTimeDelta);
 	virtual HRESULT Render();
 
+public:
+	HRESULT Set_State(PLAYERSTATE _eState);
+	_bool   Get_IsAnimationFin();
+	void	Play_Animation(_bool _bIsLoop, string _strAnimationName);
+
 private:
-	vector<class CGameObject*> m_vecPlayerPart;
+	vector<class CGameObject*>  m_vecPlayerPart;
 
-	CTransform*		m_pTransformCom = nullptr;
+	CTransform*				    m_pTransformCom = nullptr;
+	class CStateManager_Player*		m_pStateManager = nullptr;
 
-	_uint			m_iAnimKeyIndex = 0;
+	_uint					    m_iAnimKeyIndex = 0;
 
 private:
 	HRESULT Ready_Part();
 	HRESULT Ready_Component();
+	HRESULT Ready_State();
+
 	HRESULT Bind_ShaderResource();
 
 public:

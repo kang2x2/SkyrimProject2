@@ -14,7 +14,7 @@ private:
 public:
 	HRESULT Initialize(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATIONCHANNEL* _pAIChannel);
 	void Update_TransformationMatrix(_uint* _pCurKeyFrame, vector<class CBone*>& _vecBone, _float _fTrackPosition);
-	_bool Change_TransformationMatrix(_uint* _pCurKeyFrame, vector<class CBone*>& _vecBone, _float _fTrackPosition, const KEYFRAME& _destKeyFrame);
+	_bool Change_TransformationMatrix(vector<class CBone*>& _vecBone, const KEYFRAME& _destKeyFrame);
 
 public:
 	const _uint Get_BoneIndex() { return m_iBoneIndex; }
@@ -30,6 +30,11 @@ private:
 	_uint				m_iBoneIndex = 0;
 
 	vector<KEYFRAME>	m_vecKeyFrame; /* keyframe : 특정 시간에 표현해야 할 뼈의 상태 */
+
+	/* 애니메이션 간의 보간을 위해 실시간으로 저장하는 현재 상태 */
+	XMFLOAT3			vCurScale = {};
+	XMFLOAT4			vCurRotation = {};
+	XMFLOAT4			vCurTranslation = {};
 
 public:
 	static CChannel* Create(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATIONCHANNEL* _pAIChannel);

@@ -38,7 +38,7 @@ void CTool_Camera::Tick(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyState(DIK_P))
+	if (pGameInstance->Get_DIKeyDown('P'))
 	{
 		m_bIsStop = !m_bIsStop;
 	}
@@ -48,19 +48,19 @@ void CTool_Camera::Tick(_float _fTimeDelta)
 #pragma region KeyBoard
 
 		// 키 입력
-		if (pGameInstance->Get_DIKeyState(DIK_W) & 0x80)
+		if (pGameInstance->Get_DIKeyPress('W'))
 		{
 			m_pTransformCom->Go_Foward(_fTimeDelta);
 		}
-		if (pGameInstance->Get_DIKeyState(DIK_S) & 0x80)
+		if (pGameInstance->Get_DIKeyPress('S'))
 		{
 			m_pTransformCom->Go_Backward(_fTimeDelta);
 		}
-		if (pGameInstance->Get_DIKeyState(DIK_A) & 0x80)
+		if (pGameInstance->Get_DIKeyPress('A'))
 		{
 			m_pTransformCom->Go_Left(_fTimeDelta);
 		}
-		if (pGameInstance->Get_DIKeyState(DIK_D) & 0x80)
+		if (pGameInstance->Get_DIKeyPress('D'))
 		{
 			m_pTransformCom->Go_Right(_fTimeDelta);
 		}
@@ -76,7 +76,7 @@ void CTool_Camera::Tick(_float _fTimeDelta)
 			_long mouseMove = 0l;
 
 			// Shift 안 눌리고 휠만 : 회전
-			if (!pGameInstance->Get_DIKeyState(DIK_LSHIFT))
+			if (!pGameInstance->Get_DIKeyPress(VK_LSHIFT))
 			{
 				// 일반적인 y축으로 회전 할 것. 
 				if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_X)) // (y축을 회전하면 x축이 움직이기에.)
@@ -88,7 +88,7 @@ void CTool_Camera::Tick(_float _fTimeDelta)
 			}
 
 			// Shift + MouseWheel = 카메라 이동.
-			if (pGameInstance->Get_DIKeyState(DIK_LSHIFT) & 0x80)
+			if (pGameInstance->Get_DIKeyPress(VK_LSHIFT))
 			{
 				_long mouseMove = 0l;
 
@@ -117,14 +117,16 @@ void CTool_Camera::Tick(_float _fTimeDelta)
 
 			if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_WHEEL))
 			{
-				if (mouseMove < 0 && pGameInstance->Get_DIKeyState(DIK_LCONTROL))
+				if (mouseMove < 0 && pGameInstance->Get_DIKeyPress(VK_LCONTROL))
 					m_pTransformCom->Zoom_Out(_fTimeDelta);
-				else if (mouseMove > 0 && pGameInstance->Get_DIKeyState(DIK_LCONTROL))
+				else if (mouseMove > 0 && pGameInstance->Get_DIKeyPress(VK_LCONTROL))
 					m_pTransformCom->Zoom_In(_fTimeDelta);
 			}
 
 		}
 	}
+
+	matView = m_pTransformCom->Get_WorldMatrix_Inverse();
 
 	Safe_Release(pGameInstance);
 

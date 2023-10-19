@@ -21,6 +21,8 @@ private:
 
 public:
 	_bool   Get_DIKeyDown(_ubyte byKeyID);
+	_bool   Get_DIKeyUp(_ubyte byKeyID);
+	_bool   Get_DIKeyPress(_ubyte byKeyID);
 	_byte	Get_DIKeyState(_ubyte byKeyID) { return m_byKeyState[byKeyID]; }
 	_byte	Get_DIMouseState(MOUSEKEYSTATE eMouse) { return m_tMouseState.rgbButtons[eMouse]; }
 	_bool   Get_DIMouseDown(MOUSEKEYSTATE eMouse);
@@ -42,7 +44,7 @@ private:
 
 private:
 	_byte					m_curKey = 0;
-	_byte					m_byKeyState[256];		// 키보드에 있는 모든 키값을 저장하기 위한 변수
+	_bool					m_byKeyState[256];		// 키보드에 있는 모든 키값을 저장하기 위한 변수
 	
 	DIMOUSESTATE			m_tMouseState;
 	_byte					m_curMouseKey = MKS_END; // 가장 마지막에 눌린 마우스 버튼.

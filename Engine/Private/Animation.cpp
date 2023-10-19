@@ -9,6 +9,7 @@ CAnimation::CAnimation()
 
 CAnimation::CAnimation(const CAnimation& rhs)
 	: m_fDuration(rhs.m_fDuration)
+	, m_fChangeDuration(rhs.m_fChangeDuration)
 	, m_fTickPerSecond(rhs.m_fTickPerSecond)
 	, m_fTrackPosition(rhs.m_fTrackPosition)
 	, m_bIsLoop(rhs.m_bIsLoop)
@@ -80,14 +81,16 @@ _bool CAnimation::Change_TransformationMatrix(vector<class CBone*>& _vecBone, co
 {
 	m_fTrackPosition += m_fTickPerSecond * _fTimeDelta;
 
-	if (m_fTrackPosition >= 0.2f)
+	if (m_fTrackPosition >= 5.f)
+	{
 		return true;
+	}
 
 	for (size_t i = 0; i < m_vecChannel.size(); ++i)
 	{
 		if (m_vecChannel[i]->Get_BoneIndex() == _destVecChannel[i]->Get_BoneIndex())
 		{
-			m_vecChannel[i]->Change_TransformationMatrix(&m_vecCurKeyFrame[i], _vecBone, m_fTrackPosition, _destVecChannel[i]->Get_FisrtKeyFrame());
+			m_vecChannel[i]->Change_TransformationMatrix(_vecBone, _destVecChannel[i]->Get_FisrtKeyFrame());
 		}
 	}
 
@@ -102,7 +105,6 @@ void CAnimation::ReSet()
 
 	for (auto& iter : m_vecCurKeyFrame)
 		iter = 0;
-
 }
 
 CAnimation* CAnimation::Create(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATION* _pAiAnimation)

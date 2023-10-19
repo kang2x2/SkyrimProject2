@@ -123,26 +123,45 @@ HRESULT CModel::Bind_MaterialTexture(CShader* _pShader, const char* _pConstantNa
 	return m_vecMaterial[iMaterialIndex].pTextures[_eType]->Bind_ShaderResource(_pShader, _pConstantName, 0);
 }
 
-HRESULT CModel::SetUp_Animation(_bool _bIsLoop, _uint _iAnimationIndex)
+HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName)
 {
+	m_bIsFindAnimation = false;
+	_int iAnimationIndex = -1;
+
 	/* 예외 처리 */
-	if (_iAnimationIndex >= m_iNumAnimation || _iAnimationIndex == m_iCurAnimationIndex)
+	/* 이미 진행 중인 애니메이션인지 */
+	if(!strcmp(m_vecAnimation[m_iCurAnimationIndex]->Get_AnimationName(), _strAnimationName.c_str()))
 		return S_OK;
 
+	/* 존재하는 애니메이션인지 */
+	for (size_t i = 0; i < m_iNumAnimation; ++i)
+	{
+		if (!strcmp(m_vecAnimation[i]->Get_AnimationName(), _strAnimationName.c_str()))
+		{
+			iAnimationIndex = i;
+			m_bIsFindAnimation = true;
+			break;
+		}
+	}
+
+	if (!m_bIsFindAnimation)
+		return S_OK;
+
+
 	// 리셋 하기 전 보간
-	if (!m_vecAnimation[m_iCurAnimationIndex]->Get_Finish())
-	{
-		m_vecAnimation[m_iCurAnimationIndex]->Reset_TrackPosition();
-		m_iNextAnimationIndex = _iAnimationIndex;
-		m_vecAnimation[m_iNextAnimationIndex]->Set_Loop(_bIsLoop);
-		m_bIsChanging = true;
-	}
-	else
-	{
+	//if (!m_vecAnimation[m_iCurAnimationIndex]->Get_Finish())
+	//{
+	//	m_vecAnimation[m_iCurAnimationIndex]->ReSet();
+	//	m_iNextAnimationIndex = _iAnimationIndex;
+	//	m_vecAnimation[m_iNextAnimationIndex]->Set_Loop(_bIsLoop);
+	//	m_bIsChanging = true;
+	//}
+	//else
+	//{
 		m_vecAnimation[m_iCurAnimationIndex]->ReSet();
-		m_iCurAnimationIndex = _iAnimationIndex;
+		m_iCurAnimationIndex = iAnimationIndex;
 		m_vecAnimation[m_iCurAnimationIndex]->Set_Loop(_bIsLoop);
-	}
+	//}
 
 	return S_OK;
 }
@@ -349,6 +368,11 @@ CBone* CModel::Get_BonePtr(const char* _strBoneName) const
 	}
 
 	return nullptr;
+}
+
+_bool CModel::Get_IsAnimationFin()
+{
+	return m_vecAnimation[m_iCurAnimationIndex]->Get_Finish();
 }
 
 void CModel::Update_VI(const _fmatrix& _matPivot)

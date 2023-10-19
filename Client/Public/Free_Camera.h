@@ -27,6 +27,14 @@ public:
 private:
 	_float			m_fMouseSensitive = 0.f;
 
+	_float4			PlayerPos = {};
+	_float			m_fRotationX = 0.f;
+	_float			m_fRotationY = 0.f;
+	_float			m_fCurrotationX = 0.f;
+	_float			m_fCurrotationY = 0.f;
+	_float			rotationSpeed = 0.2f; // 회전 속도 (마우스 입력에 따라 조절 가능)
+
+
 public:
 	static CFree_Camera* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* pArg) override;

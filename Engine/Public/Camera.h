@@ -19,6 +19,7 @@ public:
 	{
 		_float4 vEye, vAt;
 		_float  fFovY, fAspect, fNear, fFar;
+		_matrix matView;
 	}CAMERA_DESC;
 
 protected:
@@ -38,6 +39,7 @@ protected:
 
 	_float4 vEye, vAt;
 	_float  fFovY, fAspect, fNear, fFar;
+	_matrix matView;
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

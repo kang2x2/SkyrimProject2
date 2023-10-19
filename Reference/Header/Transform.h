@@ -40,6 +40,9 @@ public:
 
 	void Set_WorldMatrix(const _matrix& _matrix);
 
+	/* 속도 제어 */
+	void Set_Speed(_float _fSpeed) { m_fSpeedPerSec = _fSpeed; }
+
 	// 월드 행렬 반환
 	_float4x4 Get_WorldMatrix_Float4x4() const
 	{
