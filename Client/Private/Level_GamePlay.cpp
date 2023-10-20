@@ -9,7 +9,7 @@
 #include "IMGui_Manager.h"
 #include "GameInstance.h"
 
-#include "Free_Camera.h"
+#include "PlayerCamera_Free.h"
 
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
@@ -31,7 +31,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	//if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain"))))
 	//	return E_FAIL;
 
-	if (FAILED(Ready_Layer_Camera(TEXT("Layer_FreeCamera"))))
+	if (FAILED(Ready_Layer_Camera(TEXT("Layer_PlayerCamera"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Level()))
@@ -55,7 +55,7 @@ HRESULT CLevel_GamePlay::LateTick(_float _fTimeDelta)
 void CLevel_GamePlay::AfterRender()
 {
 	// ImGui 弊府扁
-	CIMGui_Manager::GetInstance()->Frame();
+	// CIMGui_Manager::GetInstance()->Frame();
 }
 
 HRESULT CLevel_GamePlay::Ready_Level()
@@ -129,7 +129,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	Safe_AddRef(pGameInstance);
 
 	// 备炼眉 积己
-	CFree_Camera::FREE_CAMERA_DESC FreeCameraDesc;
+	CPlayerCamera_Free::FREE_PLAYERCAMERA_DESC FreeCameraDesc;
 	ZeroMemory(&FreeCameraDesc, sizeof FreeCameraDesc);
 		
 	FreeCameraDesc.fMouseSensitive = 0.2f;
@@ -142,7 +142,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	FreeCameraDesc.fSpeedPerSec = 100.f;
 	FreeCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_FreeCamera"), &FreeCameraDesc)))
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_FreePlayerCamera"), &FreeCameraDesc)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

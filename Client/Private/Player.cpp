@@ -38,6 +38,8 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	m_bHasPart = true;
 	m_strName = TEXT("Player");
 	
+	Play_Animation(true, "Idle");
+
 	return S_OK;
 }
 

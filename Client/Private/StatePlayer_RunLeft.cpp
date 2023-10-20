@@ -19,7 +19,6 @@ HRESULT CStatePlayer_RunLeft::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 void CStatePlayer_RunLeft::Update(_float _fTimeDelta)
 {
 	m_pPlayerTransform->Go_Left(_fTimeDelta);
-	dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "RunLeft");
 }
 
 void CStatePlayer_RunLeft::Late_Update()
@@ -29,6 +28,7 @@ void CStatePlayer_RunLeft::Late_Update()
 
 	if (pGameInstance->Get_DIKeyUp('A'))
 	{
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "Idle");
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
 	}
 

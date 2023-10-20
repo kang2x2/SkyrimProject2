@@ -18,13 +18,15 @@ HRESULT CStatePlayerOH_PAttack::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayerOH_PAttack::Update(_float _fTimeDelta)
 {
-	dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "PowerAttack");
 }
 
 void CStatePlayerOH_PAttack::Late_Update()
 {
 	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin())
+	{
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "Idle");
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
+	}
 }
 
 CStatePlayerOH_PAttack* CStatePlayerOH_PAttack::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform)

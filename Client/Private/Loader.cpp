@@ -7,7 +7,7 @@
 #include "BackGround.h"
 
 // GamePlay Level
-#include "Free_Camera.h"
+#include "PlayerCamera_Free.h"
 
 #include "Terrain.h"
 
@@ -269,8 +269,8 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 	m_strLoadingText = TEXT("Loading ProtoType_GameObject.");
 
 	// Camera
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FreeCamera"),
-		CFree_Camera::Create(m_pDevice, m_pContext))))
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FreePlayerCamera"),
+		CPlayerCamera_Free::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Terrain

@@ -128,8 +128,10 @@ void CChannel::Update_TransformationMatrix(_uint* _pCurKeyFrame, vector<class CB
 
 }
 
-_bool CChannel::Change_TransformationMatrix(vector<class CBone*>& _vecBone, const KEYFRAME& _destKeyFrame)
+_bool CChannel::Change_TransformationMatrix(vector<class CBone*>& _vecBone, const KEYFRAME& _destKeyFrame, _float _fChangeTrackPosition)
 {
+	_float fRatio = _fChangeTrackPosition / 0.2f;
+		
 	_float3 vScale;
 	_float4 vRotation;
 	_float4 vTranslation;
@@ -137,17 +139,17 @@ _bool CChannel::Change_TransformationMatrix(vector<class CBone*>& _vecBone, cons
 	/* 스케일 */
 	_vector vSourScale = XMLoadFloat3(&vCurScale);
 	_vector vDestScale = XMLoadFloat3(&_destKeyFrame.vScale);
-	XMStoreFloat3(&vScale, XMVectorLerp(vSourScale, vDestScale, 5.f));
+	XMStoreFloat3(&vScale, XMVectorLerp(vSourScale, vDestScale, fRatio));
 
 	/* 회전 */
 	_vector vSourRot = XMLoadFloat4(&vCurRotation);
 	_vector vDestRot = XMLoadFloat4(&_destKeyFrame.vRotation);
-	XMStoreFloat4(&vRotation, XMQuaternionSlerp(vSourRot, vDestRot, 5.f));
+	XMStoreFloat4(&vRotation, XMQuaternionSlerp(vSourRot, vDestRot, fRatio));
 
 	/* 위치 */
 	_vector vSourTranslate = XMLoadFloat4(&vCurTranslation);
 	_vector vDestTranslate = XMLoadFloat4(&_destKeyFrame.vTranslation);
-	XMStoreFloat4(&vTranslation, XMVectorLerp(vSourTranslate, vDestTranslate, 5.f));
+	XMStoreFloat4(&vTranslation, XMVectorLerp(vSourTranslate, vDestTranslate, fRatio));
 
 	/* 아핀 행렬 생성 : 크 * 자 * 이 행렬이다. */
 	/* 중간의 vectorSet은 객체가 어떤 지점을 기준으로 변환을 할 것인지 설정한다 .*/

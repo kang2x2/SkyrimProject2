@@ -14,7 +14,7 @@ private:
 public:
 	HRESULT Initialize(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATIONCHANNEL* _pAIChannel);
 	void Update_TransformationMatrix(_uint* _pCurKeyFrame, vector<class CBone*>& _vecBone, _float _fTrackPosition);
-	_bool Change_TransformationMatrix(vector<class CBone*>& _vecBone, const KEYFRAME& _destKeyFrame);
+	_bool Change_TransformationMatrix(vector<class CBone*>& _vecBone, const KEYFRAME& _destKeyFrame, _float _fChangeTrackPosition);
 
 public:
 	const _uint Get_BoneIndex() { return m_iBoneIndex; }

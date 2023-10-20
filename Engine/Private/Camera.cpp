@@ -64,7 +64,7 @@ void CCamera::Tick(_float _fTimeDelta)
 
 	/* 카메라 월드행렬의 역행렬 == 뷰스페이스 변환행렬. */
 	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
-	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_VIEW, matView);
+	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_VIEW, m_pTransformCom->Get_WorldMatrix_Inverse());
 	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_PROJ, XMMatrixPerspectiveFovLH(fFovY, fAspect, fNear, fFar));
 }
 

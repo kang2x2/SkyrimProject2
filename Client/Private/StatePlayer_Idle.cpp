@@ -20,7 +20,6 @@ HRESULT CStatePlayer_Idle::Initialize(CGameObject* _pPlayer, CTransform* _pPlaye
 void CStatePlayer_Idle::Update(_float _fTimeDelta)
 {
 	m_pPlayerTransform->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(0.f));
-	dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "Idle");
 
 	Key_Input(_fTimeDelta);
 }
@@ -37,26 +36,47 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 
 	/* 이동 */
 	if (pGameInstance->Get_DIKeyPress('W'))
+	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_F);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "RunFoward");
+	}
 
 	if (pGameInstance->Get_DIKeyPress('S'))
+	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_B);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "RunBackward");
+	}
 
 	if (pGameInstance->Get_DIKeyPress('A'))
+	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_L);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "RunLeft");
+	}
 
 	if (pGameInstance->Get_DIKeyPress('D'))
+	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_R);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "RunRight");
+	}
 
 	/* 공격 */
 	if (pGameInstance->Get_DIKeyDown('Z'))
+	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_LATTACK);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "LeftAttack");
+	}
 
 	if (pGameInstance->Get_DIKeyDown('X'))
+	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RATTACK);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "RightAttack");
+	}
 
 	if (pGameInstance->Get_DIKeyDown('R'))
+	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_PATTACK);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "PowerAttack");
+	}
 
 	Safe_Release(pGameInstance);
 

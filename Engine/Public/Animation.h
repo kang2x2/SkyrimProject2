@@ -19,6 +19,7 @@ public:
 	void Update_TransformationMatrix(vector<class CBone*>& _vecBone, _float _fTimeDelta);
 	_bool Change_TransformationMatrix(vector<class CBone*>& _vecBone, const vector<CChannel*>& _destVecChannel, _float _fTimeDelta);
 	void ReSet();
+	void Ready_ChangeAnimation();
 
 public:
 	void  Set_Loop(_bool _bIsLoop) { m_bIsLoop = _bIsLoop; }
@@ -29,9 +30,9 @@ public:
 	const vector<CChannel*>& Get_Channel() { return m_vecChannel; }
 private:
 	_float			m_fDuration = 0.f; // 총 길이라고 생각하자.
-	_float			m_fChangeDuration = 0.f; // 애니메이션 변환 시 재생 위치
 	_float			m_fTickPerSecond = 0.f; // 재생 속도?
 	_float			m_fTrackPosition = 0.f; // 애니메이션 현재 재생 위치.
+	_float			m_fCnageTrackPosition = 0.f; // 애니메이션 간 변환 시 재생 위치.
 	_bool			m_bIsLoop = false; // 루프 변수(무한히 재생 할 애니메이션 판별)
 	_bool			m_bIsFinish = false; // 애니메이션이 끝났는지 확인.
 

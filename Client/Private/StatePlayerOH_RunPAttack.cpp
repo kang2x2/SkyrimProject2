@@ -19,13 +19,15 @@ HRESULT CStatePlayerOH_RunPAttack::Initialize(CGameObject* _pPlayer, CTransform*
 void CStatePlayerOH_RunPAttack::Update(_float _fTimeDelta)
 {
 	m_pPlayerTransform->Go_Foward(_fTimeDelta);
-	dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "RunPowerAttack");
 }
 
 void CStatePlayerOH_RunPAttack::Late_Update()
 {
 	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin())
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_F);
+	{
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "Idle");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
+	}
 }
 
 CStatePlayerOH_RunPAttack* CStatePlayerOH_RunPAttack::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform)

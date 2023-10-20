@@ -149,19 +149,19 @@ HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName)
 
 
 	// 리셋 하기 전 보간
-	//if (!m_vecAnimation[m_iCurAnimationIndex]->Get_Finish())
-	//{
-	//	m_vecAnimation[m_iCurAnimationIndex]->ReSet();
-	//	m_iNextAnimationIndex = _iAnimationIndex;
-	//	m_vecAnimation[m_iNextAnimationIndex]->Set_Loop(_bIsLoop);
-	//	m_bIsChanging = true;
-	//}
-	//else
-	//{
+	if (!m_vecAnimation[m_iCurAnimationIndex]->Get_Finish())
+	{
+		m_iNextAnimationIndex = iAnimationIndex;
+		m_vecAnimation[m_iNextAnimationIndex]->Set_Loop(_bIsLoop);
+		m_vecAnimation[m_iCurAnimationIndex]->Ready_ChangeAnimation();
+		m_bIsChanging = true;
+	}
+	else
+	{
 		m_vecAnimation[m_iCurAnimationIndex]->ReSet();
 		m_iCurAnimationIndex = iAnimationIndex;
 		m_vecAnimation[m_iCurAnimationIndex]->Set_Loop(_bIsLoop);
-	//}
+	}
 
 	return S_OK;
 }
