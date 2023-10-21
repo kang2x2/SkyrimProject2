@@ -128,6 +128,8 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 
 		if (m_pSelectObject != nullptr)
 			m_pSelectObject = nullptr;
+
+		m_fRotValue = 0.f;
 	}
 
 	ImGui::Text("Pick Pos : X(%f) Y(%f) Z(%f)", ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
@@ -672,6 +674,8 @@ HRESULT CImGui_Tool::Select_Object()
 
 	XMStoreFloat4(&objPos, pTransform->Get_State(CTransform::STATE_POSITION));
 
+	Key_Input(pTransform);
+
 	ImGui::Text("PosX   ");
 	ImGui::SameLine();
 	if (ImGui::DragFloat("##PosX", &objPos.x, 1.f))
@@ -702,11 +706,6 @@ HRESULT CImGui_Tool::Select_Object()
 	if (ImGui::DragFloat("##ScaleZ", &objScale.z, 0.1f, 0.1f, 100.f))
 		pTransform->Set_Scaling(objScale);
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-
-
 	_float  fRotSpeed = 0.f;
 
 	// ImGui에 자체적으로 마우스를 입력 상태를 확인하는 함수가 있네?
@@ -721,23 +720,26 @@ HRESULT CImGui_Tool::Select_Object()
 		}
 	}
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 	ImGui::Text("RotX   ");
 	ImGui::SameLine();
-	if (ImGui::DragFloat("##RotX", &vRotation.x, 0.1f, 100.f))
+	if (ImGui::DragFloat("##RotX", &vRotation.x, 0.01f, 100.f))
 	{
 		pTransform->Turn(pTransform->Get_State(CTransform::STATE_UP), pGameInstance->Compute_TimeDelta(TEXT("Timer_60")), fRotSpeed);
 	}
 
 	ImGui::Text("RotY   ");
 	ImGui::SameLine();
-	if (ImGui::DragFloat("##RotY", &vRotation.y, 0.1f, 100.f))
+	if (ImGui::DragFloat("##RotY", &vRotation.y, 0.01f, 100.f))
 	{
 		pTransform->Turn(pTransform->Get_State(CTransform::STATE_RIGHT), pGameInstance->Compute_TimeDelta(TEXT("Timer_60")), fRotSpeed);
 	}
 
 	ImGui::Text("RotZ   ");
 	ImGui::SameLine();
-	if (ImGui::DragFloat("##RotZ", &vRotation.z, 0.1f, 100.f))
+	if (ImGui::DragFloat("##RotZ", &vRotation.z, 0.01f, 100.f))
 	{
 		pTransform->Turn(pTransform->Get_State(CTransform::STATE_LOOK), pGameInstance->Compute_TimeDelta(TEXT("Timer_60")), fRotSpeed -15.f);
 	}
@@ -745,7 +747,71 @@ HRESULT CImGui_Tool::Select_Object()
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
 
+void CImGui_Tool::Key_Input(class CTransform* _pTransform)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	
+	_float4 objPos;
+	_float3 objScale = _pTransform->Get_Scaled();
+
+	XMStoreFloat4(&objPos, _pTransform->Get_State(CTransform::STATE_POSITION));
+
+	/* x */
+	if (!pGameInstance->Get_DIKeyPress(VK_LCONTROL) && pGameInstance->Get_DIKeyDown('X'))
+	{
+		objPos.x += 1.f;
+		_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
+	}
+	else if (pGameInstance->Get_DIKeyPress(VK_LCONTROL) && pGameInstance->Get_DIKeyDown('X'))
+	{
+		objPos.x -= 1.f;
+		_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
+	}
+
+	/* y */
+	if (!pGameInstance->Get_DIKeyPress(VK_LCONTROL) && pGameInstance->Get_DIKeyDown('Y'))
+	{
+		objPos.y += 1.f;
+		_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
+	}
+	else if (pGameInstance->Get_DIKeyPress(VK_LCONTROL) && pGameInstance->Get_DIKeyDown('Y'))
+	{
+		objPos.y -= 1.f;
+		_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
+	}
+
+	/* z */
+	if (!pGameInstance->Get_DIKeyPress(VK_LCONTROL) && pGameInstance->Get_DIKeyDown('Z'))
+	{
+		objPos.z += 1.f;
+		_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
+	}
+	else if (pGameInstance->Get_DIKeyPress(VK_LCONTROL) && pGameInstance->Get_DIKeyDown('Z'))
+	{
+		objPos.z -= 1.f;
+		_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
+	}
+
+	_pTransform->Get_State(CTransform::STATE_UP);
+
+	/* x 회전 */
+	if (!pGameInstance->Get_DIKeyPress(VK_LCONTROL) && pGameInstance->Get_DIKeyDown('R'))
+	{
+		m_fRotValue += 11.25f;
+		_pTransform->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(m_fRotValue));
+	}
+
+	else if (pGameInstance->Get_DIKeyPress(VK_LCONTROL) && pGameInstance->Get_DIKeyDown('R'))
+	{
+		m_fRotValue -= 11.25f;
+		_pTransform->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(m_fRotValue));
+	}
+
+
+	Safe_Release(pGameInstance);
 }
 
 CImGui_Tool* CImGui_Tool::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)

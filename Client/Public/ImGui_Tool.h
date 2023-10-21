@@ -63,10 +63,12 @@ private:
 	void    ChangeType_Folder();
 	void    ChangeType_File();
 
-	// Create Object
+	// Custom Object
 	HRESULT	Create_Object();
 	HRESULT	Delete_Object();
 	HRESULT	Select_Object();
+
+	void	Key_Input(class CTransform* _pTransform);
 
 	// Save / Load
 	void    File_Save();
@@ -117,6 +119,8 @@ private:
 	_bool				 m_bDeleteMode = false;
 	_bool				 m_bSelectMode = false;	
 	_bool				 m_bDelete = false; // gui의 모든 작업이 끝나고 객체를 삭제하기 위함.
+
+	_float			     m_fRotValue = 0.f; // 오브젝트 회전을 위한 변수.
 
 	// 레이아웃 범위 밖에서만 클라이언트 작업을 수행하기 위함.
 	vector<TOOL_LAYOUTDESC> m_vecLayOut;
