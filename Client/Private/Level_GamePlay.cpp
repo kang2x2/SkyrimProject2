@@ -10,6 +10,7 @@
 #include "GameInstance.h"
 
 #include "PlayerCamera_Free.h"
+#include "Player.h"
 
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
@@ -25,7 +26,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Playher(TEXT("Layer_Player"))))
+	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
 	//if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain"))))
@@ -122,6 +123,19 @@ HRESULT CLevel_GamePlay::Ready_Light()
 	return S_OK;
 }
 
+HRESULT CLevel_GamePlay::Ready_Layer_Player(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 {
 	/* 원형객체를 복제하여 사본객체를 생성하고 레이어에 추가한다. */
@@ -132,6 +146,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	CPlayerCamera_Free::FREE_PLAYERCAMERA_DESC FreeCameraDesc;
 	ZeroMemory(&FreeCameraDesc, sizeof FreeCameraDesc);
 		
+	FreeCameraDesc.pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
 	FreeCameraDesc.fMouseSensitive = 0.2f;
 	FreeCameraDesc.vEye = _float4(0.f, 10.f, -8.f, 1.f);
 	FreeCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
@@ -145,6 +160,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_FreePlayerCamera"), &FreeCameraDesc)))
 		return E_FAIL;
 
+	// 추후 카메라 추가.(전투, 1인칭)
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -157,19 +174,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_Terrain(const wstring& _strLayerTag)
 	Safe_AddRef(pGameInstance);
 
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Terrain"))))
-		return E_FAIL;
-
-	Safe_Release(pGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CLevel_GamePlay::Ready_Layer_Playher(const wstring& _strLayerTag)
-{
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

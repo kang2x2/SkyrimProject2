@@ -18,6 +18,11 @@ HRESULT CStatePlayer_RunFoward::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayer_RunFoward::Update(_float _fTimeDelta)
 {
+	m_pPlayerTransform->Set_State(CTransform::STATE_LOOK, dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+	
+	// 여기서 내적(플레이어도 회전시켜야 한다.)
+	// m_pPlayerTransform->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-45.0f));
+
 	m_pPlayerTransform->Go_Foward(_fTimeDelta);
 
 	Key_Input(_fTimeDelta);
@@ -34,7 +39,7 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 	
 	if (pGameInstance->Get_DIKeyUp('W'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "Idle");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
 	}
 

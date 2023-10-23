@@ -120,6 +120,9 @@ HRESULT CModel::Bind_MaterialTexture(CShader* _pShader, const char* _pConstantNa
 	if (iMaterialIndex >= m_iNumMaterails)
 		return E_FAIL;
 
+	if (m_vecMaterial[iMaterialIndex].pTextures[_eType] == nullptr)
+		return E_FAIL;
+
 	return m_vecMaterial[iMaterialIndex].pTextures[_eType]->Bind_ShaderResource(_pShader, _pConstantName, 0);
 }
 

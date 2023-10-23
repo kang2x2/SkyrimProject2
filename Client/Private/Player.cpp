@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 
+#include "PlayerCamera_Free.h"
 #include "StateManager_Player.h"
 
 #include "Player_Body.h"
@@ -38,7 +39,7 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	m_bHasPart = true;
 	m_strName = TEXT("Player");
 	
-	Play_Animation(true, "Idle");
+	Play_Animation(true, "mt_idle");
 
 	return S_OK;
 }
@@ -101,6 +102,16 @@ void CPlayer::Play_Animation(_bool _bIsLoop, string _strAnimationName)
 	dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName);
 }
 
+//void CPlayer::Set_CamLook(const _vector& _vPlayerLook)
+//{
+//	m_pPlayerCams[m_eCurCamMode]->Set_CamLook(_vPlayerLook);
+//}
+
+const _vector& CPlayer::Get_PlayerCamLook()
+{
+	return m_pPlayerCams[m_eCurCamMode]->Get_CamLook();
+}
+
 HRESULT CPlayer::Ready_Component()
 {
 	CTransform::TRANSFORM_DESC		TransformDesc;
@@ -115,7 +126,7 @@ HRESULT CPlayer::Ready_Component()
 }
 
 HRESULT CPlayer::Ready_Part()
-{
+{	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 

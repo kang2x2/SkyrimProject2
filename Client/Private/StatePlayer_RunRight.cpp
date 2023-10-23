@@ -28,7 +28,7 @@ void CStatePlayer_RunRight::Late_Update()
 
 	if (pGameInstance->Get_DIKeyUp('D'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "Idle");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
 	}
 

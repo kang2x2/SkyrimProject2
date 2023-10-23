@@ -184,6 +184,15 @@
     <Filter Include="03. State\00. Player\01. State\03. Attack\03. RunPowerAttack">
       <UniqueIdentifier>{616fe159-34d9-4a5d-8dde-b60a2ece5f3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam">
+      <UniqueIdentifier>{898e95c2-11b7-4a82-bcc6-0e23bdd10530}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\99. Camera\01. BattleCam">
+      <UniqueIdentifier>{109653fc-ab4f-4b9b-a29c-5c9b523a5a97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\99. Camera\02. 1stCam">
+      <UniqueIdentifier>{a7bf27e7-1937-4711-bcc6-4168dd2e31d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -251,9 +260,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\CLevel_Tool.h">
       <Filter>01. Level\98. Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\PlayerCamera_Free.h">
-      <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ImGui_Base.h">
       <Filter>96. IMGUI\Base</Filter>
@@ -327,6 +333,9 @@
     <ClInclude Include="..\Public\StatePlayerOH_RunPAttack.h">
       <Filter>03. State\00. Player\01. State\03. Attack\03. RunPowerAttack</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\PlayerCamera_Free.h">
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -387,9 +396,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\CLevel_Tool.cpp">
       <Filter>01. Level\98. Tool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\PlayerCamera_Free.cpp">
-      <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ImGui_Base.cpp">
       <Filter>96. IMGUI\Base</Filter>
@@ -462,6 +468,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_RunPAttack.cpp">
       <Filter>03. State\00. Player\01. State\03. Attack\03. RunPowerAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PlayerCamera_Free.cpp">
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

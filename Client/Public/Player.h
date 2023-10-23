@@ -7,6 +7,7 @@
 BEGIN(Engine)
 
 class CTransform;
+class CCamera;
 
 END
 
@@ -16,6 +17,7 @@ class CPlayer final : public CGameObject
 {
 public:
 	enum PARTS { PART_BODY, PART_WEAPON, PART_HAIR, PART_END };
+	enum PLAYERCAMERA { CAM_FREE, CAM_BATTLE, CAM_1ST, CAM_END };
 private:
 	CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	CPlayer(const CPlayer& rhs);
@@ -30,16 +32,29 @@ public:
 
 public:
 	HRESULT Set_State(PLAYERSTATE _eState);
+	
 	_bool   Get_IsAnimationFin();
 	void	Play_Animation(_bool _bIsLoop, string _strAnimationName);
+	
+	void	Set_PlayerCam(CCamera* _pCam, PLAYERCAMERA _eCamType)
+	{ 
+		m_pPlayerCams[_eCamType] = _pCam;
+	}
+
+	const _vector& Get_PlayerCamLook();
+	// void Set_CamLook(const _vector& _vPlayerLook);
 
 private:
-	vector<class CGameObject*>  m_vecPlayerPart;
+	vector<class CGameObject*>		m_vecPlayerPart;
 
-	CTransform*				    m_pTransformCom = nullptr;
+	CTransform*						m_pTransformCom = nullptr;
+	CCamera*						m_pPlayerCams[CAM_END];
 	class CStateManager_Player*		m_pStateManager = nullptr;
 
-	_uint					    m_iAnimKeyIndex = 0;
+	PLAYERCAMERA					m_eCurCamMode = CAM_FREE;
+	_uint							m_iAnimKeyIndex = 0;
+
+
 
 private:
 	HRESULT Ready_Part();

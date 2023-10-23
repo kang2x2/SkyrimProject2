@@ -18,6 +18,9 @@ HRESULT CStatePlayer_RunBackward::Initialize(CGameObject* _pPlayer, CTransform* 
 
 void CStatePlayer_RunBackward::Update(_float _fTimeDelta)
 {
+	// m_pPlayerTransform->Set_State(CTransform::STATE_LOOK, dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+	m_pPlayerTransform->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(45.0f));
+
 	m_pPlayerTransform->Go_Backward(_fTimeDelta);
 }
 
@@ -28,7 +31,7 @@ void CStatePlayer_RunBackward::Late_Update()
 
 	if (pGameInstance->Get_DIKeyUp('S'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "Idle");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
 	}
 

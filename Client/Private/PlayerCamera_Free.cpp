@@ -22,6 +22,7 @@ HRESULT CPlayerCamera_Free::Initialize_Clone(void* pArg)
 {
 	FREE_PLAYERCAMERA_DESC* FreeCameraDesc = (FREE_PLAYERCAMERA_DESC*)pArg;
 
+	m_pPlayer	      = FreeCameraDesc->pPlayer;
 	m_fMouseSensitive = FreeCameraDesc->fMouseSensitive;
 
 	if (FAILED(__super::Initialize_Clone(pArg)))
@@ -39,6 +40,8 @@ HRESULT CPlayerCamera_Free::Initialize_Clone(void* pArg)
 			->Get_Component(TEXT("Com_Transform")));
 
 	Safe_Release(pGameInstance);
+
+	m_pPlayer->Set_PlayerCam(this, CPlayer::CAM_FREE);
 
 	return S_OK;
 }

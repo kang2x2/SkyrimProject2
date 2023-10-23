@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Camera.h"
+#include "Player.h"
 
 BEGIN(Engine)
 
@@ -16,6 +17,7 @@ class CPlayerCamera_Free final : public CCamera
 public:
 	typedef struct tagFREE_PLAYERCAMERA_DESC : public CCamera::CAMERA_DESC
 	{
+		CPlayer*		pPlayer = nullptr;
 		_float			fMouseSensitive = 0.f;
 	}FREE_PLAYERCAMERA_DESC;
 
@@ -38,6 +40,7 @@ private:
 	_float			rotationSpeed = 0.1f; // 회전 속도 (마우스 입력에 따라 조절 가능)
 
 	/* 플레이어를 기준으로 카메라를 제어하기 위한 변수들 */
+	CPlayer*		m_pPlayer = nullptr;
 	CTransform*		m_pPlayerTransform = nullptr;
 
 	_matrix			m_matAccumulateRotX = XMMatrixIdentity();

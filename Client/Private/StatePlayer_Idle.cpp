@@ -38,25 +38,25 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIKeyPress('W'))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_F);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "RunFoward");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
 	}
 
 	if (pGameInstance->Get_DIKeyPress('S'))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_B);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "RunBackward");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runbackward");
 	}
 
 	if (pGameInstance->Get_DIKeyPress('A'))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_L);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "RunLeft");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runleft");
 	}
 
 	if (pGameInstance->Get_DIKeyPress('D'))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_R);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "RunRight");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runright");
 	}
 
 	/* АјАн */
