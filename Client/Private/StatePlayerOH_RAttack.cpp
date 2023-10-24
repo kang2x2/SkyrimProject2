@@ -24,7 +24,7 @@ void CStatePlayerOH_RAttack::Late_Update()
 {
 	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin())
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "Idle");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
 	}
 }

@@ -22,6 +22,7 @@ public:
 	virtual		 HRESULT Initialize(CGameObject * _pPlayer, CTransform * _pPlayerTransform);
 	virtual void Update(_float _fTimeDelta);
 	virtual void Late_Update();
+	virtual void Key_Input(_float _fTimeDelta);
 
 public:
 	static CStatePlayer_RunLeft* Create(CGameObject * _pPlayer, CTransform * _pPlayerTransform);

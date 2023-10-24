@@ -226,6 +226,26 @@ void CTransform::LookAt(_fvector _vPoint)
 	Set_State(STATE_LOOK, vLook);
 }
 
+void CTransform::SetLook(_fvector _vPoint)
+{
+	// 크기 받아옴. (길이를 1로 초기화 하고 연산하기 때문에 크기가 망가질 수 있어 보관.)
+	_float3 vScaled = Get_Scaled();
+
+	_float4 vPoint = {};
+	XMStoreFloat4(&vPoint, _vPoint);
+	vPoint.y = 0;
+
+
+	_vector vPosition = Get_State(STATE_POSITION);
+	_vector vLook = XMVector3Normalize(XMLoadFloat4(&vPoint)) * vScaled.z; // 방향 구하기
+	_vector vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook)) * vScaled.x;
+	_vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight)) * vScaled.y;
+
+	Set_State(STATE_RIGHT, vRight);
+	Set_State(STATE_UP, vUp);
+	Set_State(STATE_LOOK, vLook);
+}
+
 void CTransform::Chase(_fvector _vPoint, _float _fTimeDelta, _float _fMargin)
 {
 	// 포지션 가져오기

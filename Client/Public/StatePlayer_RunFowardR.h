@@ -12,20 +12,20 @@ END
 
 BEGIN(Client)
 
-class CStatePlayer_RunRight final : public CState_Player
+class CStatePlayer_RunFowardR final : public CState_Player
 {
 private:
-	CStatePlayer_RunRight();
-	virtual ~CStatePlayer_RunRight() = default;
+	CStatePlayer_RunFowardR();
+	virtual ~CStatePlayer_RunFowardR() = default;
 
 public:
-	virtual		 HRESULT Initialize(CGameObject * _pPlayer, CTransform * _pPlayerTransform);
+	virtual		 HRESULT Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform);
 	virtual void Update(_float _fTimeDelta);
 	virtual void Late_Update();
 	virtual void Key_Input(_float _fTimeDelta);
 
 public:
-	static CStatePlayer_RunRight* Create(CGameObject * _pPlayer, CTransform * _pPlayerTransform);
+	static CStatePlayer_RunFowardR* Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform);
 	virtual void Free() override;
 };
 
