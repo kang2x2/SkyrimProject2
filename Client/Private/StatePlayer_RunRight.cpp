@@ -45,7 +45,7 @@ void CStatePlayer_RunRight::Key_Input(_float _fTimeDelta)
 		}
 		else
 		{
-			m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+			// m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 			dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
 			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
 		}
@@ -58,6 +58,7 @@ void CStatePlayer_RunRight::Key_Input(_float _fTimeDelta)
 	else if (pGameInstance->Get_DIKeyDown('S'))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_B);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runbackward");
 	}
 
 	Safe_Release(pGameInstance);

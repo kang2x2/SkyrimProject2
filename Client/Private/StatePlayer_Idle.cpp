@@ -35,20 +35,22 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	/* 이동 */
-	if (pGameInstance->Get_DIKeyPress('W'))
+	if (pGameInstance->Get_DIKeyDown('W'))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_F);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
 	}
 
-	if (pGameInstance->Get_DIKeyPress('S'))
+	if (pGameInstance->Get_DIKeyDown('S'))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_B);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runbackward");
 	}
 
-	if (pGameInstance->Get_DIKeyPress('A'))
+	if (pGameInstance->Get_DIKeyDown('A'))
 	{
+		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+
 		_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-90.f));
 		_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
 
@@ -61,8 +63,10 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	// 애니메이션 체인징 상태 끝났는지 확인하고 상태 전환하는 코드 추가.
 	// 왼, 오 회전상태에서 멈추면 완전히 멈췄다가 정면을 봐야 한다.
 
-	if (pGameInstance->Get_DIKeyPress('D'))
+	if (pGameInstance->Get_DIKeyDown('D'))
 	{
+		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+
 		_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(90.f));
 		_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
 

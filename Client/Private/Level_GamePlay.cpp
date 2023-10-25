@@ -23,6 +23,9 @@ HRESULT CLevel_GamePlay::Initialize()
 	// CIMGui_Manager ÃÊ±âÈ­
 	CIMGui_Manager::GetInstance()->Initialize(m_pDevice, m_pContext, LEVEL_GAMEPLAY);
 
+	if (FAILED(Ready_Level()))
+		return E_FAIL;
+
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
@@ -35,13 +38,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_PlayerCamera"))))
 		return E_FAIL;
 
-
-
 	//if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain"))))
 	//	return E_FAIL;
-
-	if (FAILED(Ready_Level()))
-		return E_FAIL;
 
 	return S_OK;
 }

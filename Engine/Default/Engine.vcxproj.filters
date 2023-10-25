@@ -43,12 +43,6 @@
     <Filter Include="01. Utiltiy\01. Level\Manager">
       <UniqueIdentifier>{0cf0cce7-1328-4aeb-9969-5ea8593c4153}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Utiltiy\02. Object\Manager">
-      <UniqueIdentifier>{be399d4d-323b-4c3f-8a13-336a34eb8ced}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Utiltiy\02. Object\Manager\Layer">
-      <UniqueIdentifier>{21972f58-e11a-4bf9-b37c-810c07e55f82}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Utiltiy\03. Component">
       <UniqueIdentifier>{e61166d1-eee8-4d79-bf13-498ffd7fac5f}</UniqueIdentifier>
     </Filter>
@@ -75,9 +69,6 @@
     </Filter>
     <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\01. Terrain">
       <UniqueIdentifier>{10c6f500-ff32-412d-b6f9-75b74a87193b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Utiltiy\02. Object\Camera">
-      <UniqueIdentifier>{45b87d8a-3833-4e35-a6eb-fcbe17ba3163}</UniqueIdentifier>
     </Filter>
     <Filter Include="01. Utiltiy\04. PipeLine">
       <UniqueIdentifier>{ffc15ddc-0f08-4c49-b6b2-13b92a2be372}</UniqueIdentifier>
@@ -145,6 +136,18 @@
     <Filter Include="09. ShaderFile">
       <UniqueIdentifier>{feba1161-47e4-4186-866c-1d45168dff53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utiltiy\02. Object\01. Camera">
+      <UniqueIdentifier>{45b87d8a-3833-4e35-a6eb-fcbe17ba3163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\02. Object\00. Manager">
+      <UniqueIdentifier>{be399d4d-323b-4c3f-8a13-336a34eb8ced}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\02. Object\00. Manager\Layer">
+      <UniqueIdentifier>{21972f58-e11a-4bf9-b37c-810c07e55f82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\02. Object\02. LandObject">
+      <UniqueIdentifier>{588b0ad8-d999-434c-bd1b-4a9a4e6ad467}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -187,10 +190,10 @@
       <Filter>01. Utiltiy\02. Object</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Object_Manager.h">
-      <Filter>01. Utiltiy\02. Object\Manager</Filter>
+      <Filter>01. Utiltiy\02. Object\00. Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Layer.h">
-      <Filter>01. Utiltiy\02. Object\Manager\Layer</Filter>
+      <Filter>01. Utiltiy\02. Object\00. Manager\Layer</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Component.h">
       <Filter>01. Utiltiy\03. Component</Filter>
@@ -220,7 +223,7 @@
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\01. Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Camera.h">
-      <Filter>01. Utiltiy\02. Object\Camera</Filter>
+      <Filter>01. Utiltiy\02. Object\01. Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PipeLine.h">
       <Filter>01. Utiltiy\04. PipeLine</Filter>
@@ -282,6 +285,9 @@
     <ClInclude Include="..\Bin\ShaderFile\Engine_Shader_Defines.hpp">
       <Filter>09. ShaderFile</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\LandObject.h">
+      <Filter>01. Utiltiy\02. Object\02. LandObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Graphic_Device.cpp">
@@ -309,10 +315,10 @@
       <Filter>01. Utiltiy\02. Object</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Object_Manager.cpp">
-      <Filter>01. Utiltiy\02. Object\Manager</Filter>
+      <Filter>01. Utiltiy\02. Object\00. Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Layer.cpp">
-      <Filter>01. Utiltiy\02. Object\Manager\Layer</Filter>
+      <Filter>01. Utiltiy\02. Object\00. Manager\Layer</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Component.cpp">
       <Filter>01. Utiltiy\03. Component</Filter>
@@ -345,7 +351,7 @@
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\01. Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Camera.cpp">
-      <Filter>01. Utiltiy\02. Object\Camera</Filter>
+      <Filter>01. Utiltiy\02. Object\01. Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PipeLine.cpp">
       <Filter>01. Utiltiy\04. PipeLine</Filter>
@@ -403,6 +409,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Cube.cpp">
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\05. Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LandObject.cpp">
+      <Filter>01. Utiltiy\02. Object\02. LandObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
