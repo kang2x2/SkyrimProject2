@@ -193,6 +193,9 @@
     <Filter Include="03. State\00. Player\01. State\02. Run\02. Right">
       <UniqueIdentifier>{e60cc967-8479-4bfc-81c7-4e44f3be23d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\02. Sky">
+      <UniqueIdentifier>{74d6e1ba-a77b-4e72-9fe7-bca7a2e01e79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -336,6 +339,9 @@
     <ClInclude Include="..\Public\PlayerCamera_Free.h">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Sky.h">
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\02. Sky</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -472,6 +478,9 @@
     <ClCompile Include="..\Private\PlayerCamera_Free.cpp">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Sky.cpp">
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\02. Sky</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -492,6 +501,9 @@
       <Filter>97. ShaderFile</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFile\Shader_VtxAnimMesh.hlsl">
+      <Filter>97. ShaderFile</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFile\Shader_VtxCube.hlsl">
       <Filter>97. ShaderFile</Filter>
     </FxCompile>
   </ItemGroup>

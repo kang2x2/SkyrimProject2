@@ -61,6 +61,15 @@ namespace Engine
 
 	}VTXPOSTEX;
 
+	typedef struct ENGINE_DLL tagVertex_Position_Cube_Texcoord
+	{
+		XMFLOAT3		vPosition;
+		XMFLOAT3		vTexcoord;
+
+		static const unsigned int				iNumElements = 2;
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
+	}VTXCUBE;
+
 	typedef struct ENGINE_DLL tagVertex_Position_Normal_Texcoord
 	{
 		XMFLOAT3		vPosition;

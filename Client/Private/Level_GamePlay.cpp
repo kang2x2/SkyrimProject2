@@ -26,14 +26,19 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Sky(TEXT("Layer_Sky"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain"))))
-	//	return E_FAIL;
-
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_PlayerCamera"))))
 		return E_FAIL;
+
+
+
+	//if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain"))))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Level()))
 		return E_FAIL;
@@ -163,6 +168,19 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	// 추후 카메라 추가.(전투, 1인칭)
 
 	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_Sky(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstace = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstace);
+	
+	if (FAILED(pGameInstace->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Sky"))))
+		return E_FAIL;
+	
+	Safe_Release(pGameInstace);
 
 	return S_OK;
 }

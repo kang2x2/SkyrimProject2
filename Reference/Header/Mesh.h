@@ -40,7 +40,7 @@ private:
 	vector<_uint> m_vecBoneIndex;
 	vector<_float4x4> m_OffsetMatrices;
 
-	// 픽킹용.
+	// 위치 저장용.
 	_float3* m_pPos = nullptr;
 	vector<_ulong> m_vecIndex;
 

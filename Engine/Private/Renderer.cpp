@@ -22,7 +22,7 @@ HRESULT CRenderer::Add_RenderGroup(RENDERGROUP _eGroup, CGameObject* _pCloneObje
 	if (_eGroup >= RG_END)
 		return E_FAIL;
 
-	m_ltRenderObj->push_back(_pCloneObject);
+	m_ltRenderObj[_eGroup].push_back(_pCloneObject);
 
 	Safe_AddRef(_pCloneObject);
 

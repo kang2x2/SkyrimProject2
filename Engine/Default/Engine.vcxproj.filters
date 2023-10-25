@@ -136,6 +136,15 @@
     <Filter Include="07. State\00. Player">
       <UniqueIdentifier>{5e2745c3-5863-4615-821e-9c776b95e487}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\04. Collision">
+      <UniqueIdentifier>{e4447fe5-b972-4802-8c17-2205353b8f44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\05. Cube">
+      <UniqueIdentifier>{8b246ecf-d872-4c64-92cc-d5c62d5de0ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09. ShaderFile">
+      <UniqueIdentifier>{feba1161-47e4-4186-866c-1d45168dff53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -264,6 +273,15 @@
     <ClInclude Include="..\Public\State_Player.h">
       <Filter>07. State\00. Player</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Collision.h">
+      <Filter>01. Utiltiy\03. Component\01. VIBuffer\04. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Cube.h">
+      <Filter>01. Utiltiy\03. Component\01. VIBuffer\05. Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Bin\ShaderFile\Engine_Shader_Defines.hpp">
+      <Filter>09. ShaderFile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Graphic_Device.cpp">
@@ -379,6 +397,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player.cpp">
       <Filter>07. State\00. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Collision.cpp">
+      <Filter>01. Utiltiy\03. Component\01. VIBuffer\04. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Cube.cpp">
+      <Filter>01. Utiltiy\03. Component\01. VIBuffer\05. Cube</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
