@@ -48,7 +48,7 @@ private:
 	_matrix			matRot = XMMatrixIdentity();
 
 	_float4			m_vPlayerPos = {};
-	_float3			m_vRelativeCamPos = { 0.f, 2.f, -4.f };
+	_float3			m_vRelativeCamPos = { 0.f, 4.f, -3.f };
 
 public:
 	static CPlayerCamera_Free* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

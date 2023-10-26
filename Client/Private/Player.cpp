@@ -114,9 +114,9 @@ const _vector& CPlayer::Get_PlayerCamLook()
 
 HRESULT CPlayer::Ready_Component()
 {
-	CTransform::TRANSFORM_DESC		TransformDesc;
-	TransformDesc.fSpeedPerSec = 0.5f;
-	TransformDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
+	//CTransform::TRANSFORM_DESC		TransformDesc;
+	//TransformDesc.fSpeedPerSec = 0.5f;
+	//TransformDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
@@ -132,6 +132,8 @@ HRESULT CPlayer::Ready_Part()
 
 	CGameObject* pPart = nullptr;
 
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
+	m_pTransformCom->Set_Scaling(_float3(0.0013f, 0.0013f, 0.0013f));
 	/* For. Player Body */
 	CPlayer_Body::PART_DESC BodyPartDesc;
 	BodyPartDesc.pParentTransform = m_pTransformCom;

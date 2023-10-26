@@ -9,6 +9,12 @@
 #include "ImGui_Base.h"
 #include "imgui.h"
 
+BEGIN(Engine)
+
+class CNavigation;
+
+END
+
 BEGIN(Client)
 
 class CImGui_Tool final : public CImGui_Base
@@ -29,6 +35,11 @@ public:
 		ImVec2		 m_vEndLayOutPos;
 	}TOOL_LAYOUTDESC;
 
+	typedef struct tagToolCellDesc
+	{
+		_float3 fCellPos[3];
+	}TOOL_CELLDESC;
+
 private:
 	CImGui_Tool();
 	virtual ~CImGui_Tool() = default;
@@ -41,11 +52,13 @@ private:
 	// Mouse
 	HRESULT	LayOut_Mouse();
 	// main
-	void	LayOut_Object();
+	void	LayOut_Main();
 	// Save / Load
 	void	LayOut_SaveLoad();
 	// Object Create / Delete
 	void	LayOut_Object_PickMode();
+	// Navigation
+	void	LayOut_Navigation();
 
 	// Object Content
 	void    LayOut_FBX_List();
@@ -114,13 +127,21 @@ private:
 	// 선택된 오브젝트
 	class CGameObject*   m_pSelectObject = nullptr;
 
-	// 생성, 삭제, 선택 모드
-	_bool				 m_bCreateMode = false;
-	_bool				 m_bDeleteMode = false;
-	_bool				 m_bSelectMode = false;	
+	// Object 생성, 삭제, 선택 모드
+	_bool				 m_bObjCreateMode = false;
+	_bool				 m_bObjDeleteMode = false;
+	_bool				 m_bObjSelectMode = false;	
 	_bool				 m_bDelete = false; // gui의 모든 작업이 끝나고 객체를 삭제하기 위함.
 
 	_float			     m_fRotValue = 0.f; // 오브젝트 회전을 위한 변수.
+
+	// Navigation Cell 
+	_bool				 m_bCellCreateMode = false;
+	_bool				 m_bCellDeleteMode = false;
+
+	_uint					 m_iCellClickIdx = 0;
+	TOOL_CELLDESC			 m_CellPoint;
+	vector<TOOL_CELLDESC>	 m_vecCell;
 
 	// 레이아웃 범위 밖에서만 클라이언트 작업을 수행하기 위함.
 	vector<TOOL_LAYOUTDESC> m_vecLayOut;

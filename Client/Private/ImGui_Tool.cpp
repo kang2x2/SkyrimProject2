@@ -42,9 +42,9 @@ void CImGui_Tool::Frame()
 		ImGui::NewFrame();
 
 		LayOut_Mouse();
-		LayOut_Object();
+		LayOut_Main();
 		LayOut_SaveLoad();
-
+		LayOut_Navigation();
 
 		if (m_bDelete)
 		{
@@ -85,6 +85,7 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 	// 레이아웃 범위 밖에서만 수행.
 	if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON) && Check_LayOut_Range(MousePos))
 	{
+#pragma region Object
 		CTerrain_Grid* pTerrainGrid = dynamic_cast<CTerrain_Grid*>(pGameInstance->Find_CloneObject(LEVEL_TOOL, TEXT("Layer_Terrain"), TEXT("Tool_GridTerrain")));
 
 		CVIBuffer_Grid* pGridBuffer = dynamic_cast<CVIBuffer_Grid*>(pGameInstance->Find_ProtoType(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid")));
@@ -92,9 +93,9 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 
 		ResultPickPos = pGameInstance->Picking_Terrain(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos, LEVEL_TOOL);
 
-		if (m_bCreateMode)
+		if (m_bObjCreateMode)
 			Create_Object();
-		if (m_bDeleteMode)
+		if (m_bObjDeleteMode)
 		{
 			if (!m_bDelete)
 			{
@@ -108,28 +109,56 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 			}
 
 		}
-		if (m_bSelectMode)
+		if (m_bObjSelectMode)
 		{
 			m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
 		}
+#pragma endregion
+
+
+#pragma region Navigation
+
+		if (m_bCellCreateMode)
+		{
+			// 찍어서 저장해라.
+			m_CellPoint.fCellPos[m_iCellClickIdx] = ResultPickPos;
+			m_iCellClickIdx += 1;
+
+			// 3번 찍었으면 담아라.
+			if (m_iCellClickIdx > 2)
+			{
+				m_vecCell.push_back(m_CellPoint);
+				m_iCellClickIdx = 0;
+
+				CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				Safe_AddRef(pGameInstance);
+
+				m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
+
+				pGameInstance->Add_Cell(m_CellPoint.fCellPos, 
+					dynamic_cast<CTransform*>(m_pSelectObject->Get_Component(TEXT("Com_Transform")))
+				->Get_WorldMatrix());
+
+				Safe_Release(pGameInstance);
+			}
+		}
+
+#pragma endregion
 
 	}
 
 	if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_RBUTTON))
 	{
-		if (m_bCreateMode)
-			m_bCreateMode = false;
-
-		if (m_bDeleteMode)
-			m_bDeleteMode = false;
-
-		if (m_bSelectMode)
-			m_bSelectMode = false;
-
-		if (m_pSelectObject != nullptr)
+			m_bObjCreateMode = false;
+			m_bObjDeleteMode = false;
+			m_bObjSelectMode = false;
 			m_pSelectObject = nullptr;
 
-		m_fRotValue = 0.f;
+			m_bCellCreateMode = false;
+			m_bCellDeleteMode = false;
+
+			m_iCellClickIdx = 0;
+			m_fRotValue = 0.f;
 	}
 
 	ImGui::Text("Pick Pos : X(%f) Y(%f) Z(%f)", ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
@@ -176,31 +205,40 @@ void CImGui_Tool::LayOut_Object_PickMode()
 	{
 		if (m_pCurFile != nullptr)
 		{
-			m_bCreateMode = true;
-			m_bDeleteMode = false;
-			m_bSelectMode = false;
+			m_bObjCreateMode = true;
+			m_bObjDeleteMode = false;
+			m_bObjSelectMode = false;
 			m_pSelectObject = nullptr;
+
+			m_bCellCreateMode = false;
+			m_bCellDeleteMode = false;
 		}
 	}
 	if (ImGui::Button("Delete"))
 	{
-		m_bCreateMode = false;
-		m_bDeleteMode = true;
-		m_bSelectMode = false;
+		m_bObjCreateMode = false;
+		m_bObjDeleteMode = true;
+		m_bObjSelectMode = false;
 		m_pSelectObject = nullptr;
+
+		m_bCellCreateMode = false;
+		m_bCellDeleteMode = false;
 	}
 	if (ImGui::Button("Select"))
 	{
-		m_bCreateMode = false;
-		m_bDeleteMode = false;
-		m_bSelectMode = true;
+		m_bObjCreateMode = false;
+		m_bObjDeleteMode = false;
+		m_bObjSelectMode = true;
+
+		m_bCellCreateMode = false;
+		m_bCellDeleteMode = false;
 	}
 
-	if (m_bCreateMode)
+	if (m_bObjCreateMode)
 		ImGui::Text("Cur Mode : Create");
-	else if (m_bDeleteMode)
+	else if (m_bObjDeleteMode)
 		ImGui::Text("Cur Mode : Delete");
-	else if (m_bSelectMode)
+	else if (m_bObjSelectMode)
 		ImGui::Text("Cur Mode : Select");
 	else
 		ImGui::Text("Cur Mode : None");
@@ -208,7 +246,52 @@ void CImGui_Tool::LayOut_Object_PickMode()
 	ImGui::End();
 }
 
-void CImGui_Tool::LayOut_Object()
+void CImGui_Tool::LayOut_Navigation()
+{
+	const char* strLayOutName = "Navigation Mode";
+
+	ImGui::Begin("Navigation Mode");
+
+	// 범위 밖에서만 수행하기 위한 레이아웃 범위 저장.
+	Add_LayOut_Array(strLayOutName, ImGui::GetWindowPos(), ImGui::GetWindowSize());
+
+	if (ImGui::Button("Create"))
+	{
+		m_bCellCreateMode = true;
+		m_bCellDeleteMode = false;
+		m_pSelectObject = nullptr;
+
+		m_bObjCreateMode = false;
+		m_bObjDeleteMode = false;
+		m_bObjSelectMode = false;
+
+		m_iCellClickIdx = 0;
+	}
+	if (ImGui::Button("Delete"))
+	{
+		m_bCellCreateMode = false;
+		m_bCellDeleteMode = true;
+		m_pSelectObject = nullptr;
+
+		m_bObjCreateMode = false;
+		m_bObjDeleteMode = false;
+		m_bObjSelectMode = false;
+
+		m_iCellClickIdx = 0;
+	}
+
+	if (m_bCellCreateMode)
+		ImGui::Text("Cur Mode : Create");
+	else if (m_bCellDeleteMode)
+		ImGui::Text("Cur Mode : Delete");
+	else
+		ImGui::Text("Cur Mode : None");
+
+	ImGui::End();
+
+}
+
+void CImGui_Tool::LayOut_Main()
 {
 	const char* strLayOutName = "FBX Object LayOut";
 
@@ -654,7 +737,7 @@ HRESULT CImGui_Tool::Create_Object()
 }
 HRESULT CImGui_Tool::Delete_Object()
 {
-	if (m_pSelectObject != nullptr && m_bDeleteMode)
+	if (m_pSelectObject != nullptr && m_bObjDeleteMode)
 	{
 		Safe_Release(m_pSelectObject);
 		m_pSelectObject = nullptr;
