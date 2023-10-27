@@ -7,6 +7,7 @@ BEGIN(Engine)
 
 class CGameObject;
 class CTransform;
+class CNavigation;
 
 END
 
@@ -19,13 +20,13 @@ private:
 	virtual ~CStatePlayer_RunRight() = default;
 
 public:
-	virtual		 HRESULT Initialize(CGameObject * _pPlayer, CTransform * _pPlayerTransform);
+	virtual		 HRESULT Initialize(CGameObject * _pPlayer, CTransform * _pPlayerTransform, CNavigation* _pPlayerNavigation);
 	virtual void Update(_float _fTimeDelta);
 	virtual void Late_Update();
 	virtual void Key_Input(_float _fTimeDelta);
 
 public:
-	static CStatePlayer_RunRight* Create(CGameObject * _pPlayer, CTransform * _pPlayerTransform);
+	static CStatePlayer_RunRight* Create(CGameObject * _pPlayer, CTransform * _pPlayerTransform, CNavigation* _pPlayerNavigation);
 	virtual void Free() override;
 };
 

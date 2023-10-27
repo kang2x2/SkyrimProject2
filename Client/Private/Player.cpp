@@ -39,7 +39,7 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	m_bHasPart = true;
 	m_strName = TEXT("Player");
 	
-	Play_Animation(true, "mt_idle");
+	Play_Animation(true, "1hm_idle");
 
 	return S_OK;
 }
@@ -82,6 +82,10 @@ HRESULT CPlayer::Render()
 			iter->Render();
 	}
 
+#ifdef _DEBUG
+	m_pNavigationCom->Render();
+#endif
+
 	return S_OK;
 }
 
@@ -114,12 +118,21 @@ const _vector& CPlayer::Get_PlayerCamLook()
 
 HRESULT CPlayer::Ready_Component()
 {
-	//CTransform::TRANSFORM_DESC		TransformDesc;
-	//TransformDesc.fSpeedPerSec = 0.5f;
+	CTransform::TRANSFORM_DESC		TransformDesc;
+	TransformDesc.fSpeedPerSec = 0.5f;
 	//TransformDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
-		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
+		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom), *TransformDesc))
+		return E_FAIL;
+
+	/* Com_Navigation */
+
+	CNavigation::DESC_NAVIGATION		NavigationDesc;
+	NavigationDesc.iCurIndex = 0;
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
+		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -161,7 +174,7 @@ HRESULT CPlayer::Ready_Part()
 
 HRESULT CPlayer::Ready_State()
 {
-	m_pStateManager = CStateManager_Player::Create(this, m_pTransformCom);
+	m_pStateManager = CStateManager_Player::Create(this, m_pTransformCom, m_pNavigationCom);
 
 	return S_OK;
 }
@@ -206,6 +219,7 @@ void CPlayer::Free()
 
 	m_vecPlayerPart.clear();
 
+	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pStateManager);
 }

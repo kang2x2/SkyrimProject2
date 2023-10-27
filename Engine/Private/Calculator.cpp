@@ -17,7 +17,7 @@ CCalculator::CCalculator()
 
 }
 
-_float3 CCalculator::Picking_Terrain(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, CGameObject* _pTerrain, const _float3* _vec, _uint _iLevel)
+_float3 CCalculator::Picking_Position(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, CGameObject* _pTerrain, const _float3* _vec, _uint _iLevel)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -72,8 +72,10 @@ _float3 CCalculator::Picking_Terrain(ID3D11Device* _pDevice, ID3D11DeviceContext
 			// 여기서 메시가 없는 것들은 거름.
 			if (!obj->Get_IsHasMesh())
 				continue;
-			// Terrain 레이어만 검사.
-			if (obj->Get_ObjFileDesc().m_strLayerTag != TEXT("Layer_Skyrim_WhiteRun_Terrain"))
+			// Terrain, Building, StoneWork 레이어만 검사.
+			if (obj->Get_ObjFileDesc().m_strLayerTag != TEXT("Layer_Skyrim_WhiteRun_Building") &&
+				obj->Get_ObjFileDesc().m_strLayerTag != TEXT("Layer_Skyrim_WhiteRun_StoneWork")&&
+				obj->Get_ObjFileDesc().m_strLayerTag != TEXT("Layer_Skyrim_WhiteRun_Terrain"))
 				continue;
 
 			// 해당 객체의 월드 행렬을 얻어오기 위함.
@@ -137,12 +139,12 @@ _float3 CCalculator::Picking_Terrain(ID3D11Device* _pDevice, ID3D11DeviceContext
 
 	Safe_Release(pGameInstance);
 
-	if (!bIsPickObj) // 픽킹된 터레인 오브젝트가 없다는 뜻. 그리드로 넘어간다.
+	if (!bIsPickObj) // 픽킹된 객체가 없다는 뜻. 그리드로 넘어간다.
 		return Picking_Grid(_pDevice, _pContext, _WinMousePos, _pTerrain, _vec);
 	else
 		return fProximatePos;
-
 }
+
 _float3 CCalculator::Picking_Grid(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext,
 	const POINT& _WinMousePos, CGameObject* _pTerrain, const _float3* _vec) const
 {

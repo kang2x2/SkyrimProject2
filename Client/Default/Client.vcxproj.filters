@@ -196,6 +196,9 @@
     <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\02. Sky">
       <UniqueIdentifier>{74d6e1ba-a77b-4e72-9fe7-bca7a2e01e79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\03. Navigation">
+      <UniqueIdentifier>{a49993d1-1957-4caf-aa91-896a908b54f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -342,6 +345,9 @@
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\02. Sky</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Navigation_Client.h">
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\03. Navigation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -480,6 +486,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\02. Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Navigation_Client.cpp">
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\03. Navigation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

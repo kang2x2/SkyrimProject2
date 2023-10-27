@@ -10,9 +10,9 @@ CStatePlayer_Idle::CStatePlayer_Idle()
 {
 }
 
-HRESULT CStatePlayer_Idle::Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform)
+HRESULT CStatePlayer_Idle::Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
 {
-	__super::Initialize(_pPlayer, _pPlayerTransform);
+	__super::Initialize(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 
 	return S_OK;
 }
@@ -38,13 +38,13 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIKeyDown('W'))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_F);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runforward");
 	}
 
 	if (pGameInstance->Get_DIKeyDown('S'))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_B);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runbackward");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runbackward");
 	}
 
 	if (pGameInstance->Get_DIKeyDown('A'))
@@ -57,7 +57,7 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 		m_pPlayerTransform->SetLook(vPlayerLook);
 
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_L);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runforward");
 	}
 
 	// 애니메이션 체인징 상태 끝났는지 확인하고 상태 전환하는 코드 추가.
@@ -73,7 +73,7 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 		m_pPlayerTransform->SetLook(vPlayerLook);
 
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_R);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runforward");
 	}
 
 	/* 공격 나중에 조건문 추가 */
@@ -99,11 +99,11 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 
 }
 
-CStatePlayer_Idle* CStatePlayer_Idle::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform)
+CStatePlayer_Idle* CStatePlayer_Idle::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
 {
 	CStatePlayer_Idle* pInstance = new CStatePlayer_Idle();
 
-	if (FAILED(pInstance->Initialize(_pPlayer, _pPlayerTransform)))
+	if (FAILED(pInstance->Initialize(_pPlayer, _pPlayerTransform, _pPlayerNavigation)))
 	{
 		MSG_BOX("Fail Create : CStatePlayer_Idle");
 		Safe_Release(pInstance);

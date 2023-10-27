@@ -38,6 +38,11 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_PlayerCamera"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Navigation_Cleint(TEXT("Layer_Navigation_Client"))))
+		return E_FAIL;
+
+
+
 	//if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain"))))
 	//	return E_FAIL;
 
@@ -64,6 +69,7 @@ void CLevel_GamePlay::AfterRender()
 
 HRESULT CLevel_GamePlay::Ready_Level()
 {
+#pragma region Object
 	wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Skyrim2";
 
 	// 파일을 열기 모드로 열기.
@@ -85,6 +91,7 @@ HRESULT CLevel_GamePlay::Ready_Level()
 		MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
 		return E_FAIL;
 	}
+#pragma endregion
 
 	return S_OK;
 }
@@ -159,6 +166,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	FreeCameraDesc.fFar = 1100.f;
 	FreeCameraDesc.fSpeedPerSec = 100.f;
 	FreeCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
+	FreeCameraDesc.fZoomPerSec = 500.f;
 
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_FreePlayerCamera"), &FreeCameraDesc)))
 		return E_FAIL;
@@ -166,6 +174,20 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	// 추후 카메라 추가.(전투, 1인칭)
 
 	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_Navigation_Cleint(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstace = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstace);
+
+	if (FAILED(pGameInstace->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Navigation_Client"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstace);
+
 
 	return S_OK;
 }

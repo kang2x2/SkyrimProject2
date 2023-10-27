@@ -38,7 +38,7 @@ public : /* For.Timer_Manager */
 	HRESULT Add_Timer(const wstring & strTimerTag);
 
 public: /* For.Calculator */
-	_float3 Picking_Terrain(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, class CGameObject* _pTerrain, const _float3 * _vec, _uint _iLevel);
+	_float3 Picking_Position(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, class CGameObject* _pTerrain, const _float3 * _vec, _uint _iLevel);
 	CGameObject* Picking_Object(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, _uint _iLevel);
 
 public: /* For.Level_Manager */
@@ -74,6 +74,8 @@ public: /* For. PipeLine */
 public: /* For. File Manager */
 	HRESULT Object_FileSave(ofstream & _outFile, _uint _iLevelIndex) const;
 	HRESULT Object_FileLoad(std::ifstream & _inFile, _uint _iLevelIndex);
+	HRESULT Cell_FileSave(ofstream & _outFile, CNavigation * _pNavigation);
+	HRESULT Cell_FileLoad(ifstream & _inFile, class CNavigation* _pNavigation);
 	HRESULT Binary_OutFile(ofstream & _outFile, const char* _strFilePath, CModel::MODEL_TYPE _eType);
 	CBin_AIScene* Binary_InFile(const char* _strFilePath, CModel::MODEL_TYPE _eType);
 

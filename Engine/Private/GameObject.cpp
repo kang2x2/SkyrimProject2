@@ -32,6 +32,10 @@ HRESULT CGameObject::Initialize_Clone(_uint _iLevel, const wstring& _strModelCom
 	return S_OK;
 }
 
+void CGameObject::PriorityTick(_float _fTimeDelta)
+{
+}
+
 void CGameObject::Tick(_float _fTimeDelta)
 {
 }

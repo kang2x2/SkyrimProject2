@@ -9,6 +9,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Transform.h"
+#include "Navigation.h"
 
 BEGIN(Engine)
 

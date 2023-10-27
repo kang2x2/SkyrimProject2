@@ -9,9 +9,9 @@ CStatePlayer_RunFoward::CStatePlayer_RunFoward()
 {
 }
 
-HRESULT CStatePlayer_RunFoward::Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform)
+HRESULT CStatePlayer_RunFoward::Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
 {
-	__super::Initialize(_pPlayer, _pPlayerTransform);
+	__super::Initialize(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 
 	return S_OK;
 }
@@ -19,7 +19,7 @@ HRESULT CStatePlayer_RunFoward::Initialize(CGameObject* _pPlayer, CTransform* _p
 void CStatePlayer_RunFoward::Update(_float _fTimeDelta)
 {
 	m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-	m_pPlayerTransform->Go_Foward(_fTimeDelta);
+	m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 
 	Key_Input(_fTimeDelta);
 }
@@ -57,7 +57,7 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 
 		else
 		{
-			dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
+			dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
 			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
 		}
 	}
@@ -68,7 +68,7 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 		_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
 		
 		m_pPlayerTransform->SetLook(vPlayerLook);
-		m_pPlayerTransform->Go_Left(_fTimeDelta);
+		m_pPlayerTransform->Go_Left(_fTimeDelta, m_pPlayerNavigation);
 	}
 
 	if (pGameInstance->Get_DIKeyPress('D'))
@@ -77,7 +77,7 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 		_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
 
 		m_pPlayerTransform->SetLook(vPlayerLook);
-		m_pPlayerTransform->Go_Right(_fTimeDelta);
+		m_pPlayerTransform->Go_Right(_fTimeDelta, m_pPlayerNavigation);
 	}
 
 	if (pGameInstance->Get_DIKeyDown('R'))
@@ -89,11 +89,11 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-CStatePlayer_RunFoward* CStatePlayer_RunFoward::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform)
+CStatePlayer_RunFoward* CStatePlayer_RunFoward::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
 {
 	CStatePlayer_RunFoward* pInstance = new CStatePlayer_RunFoward();
 
-	if (FAILED(pInstance->Initialize(_pPlayer, _pPlayerTransform)))
+	if (FAILED(pInstance->Initialize(_pPlayer, _pPlayerTransform, _pPlayerNavigation)))
 	{
 		MSG_BOX("Fail Create : CStatePlayer_RunFoward");
 		Safe_Release(pInstance);

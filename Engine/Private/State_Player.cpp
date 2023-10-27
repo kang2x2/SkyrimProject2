@@ -4,13 +4,14 @@ CState_Player::CState_Player()
 {
 }
 
-HRESULT CState_Player::Initialize(CGameObject* _pPlayer, class CTransform* _pPlayerTransform)
+HRESULT CState_Player::Initialize(CGameObject* _pPlayer, class CTransform* _pPlayerTransform, class CNavigation* _pPlayerNavigation)
 {
 	if (_pPlayer == nullptr)
 		return E_FAIL;
 
 	m_pPlayer = _pPlayer;
 	m_pPlayerTransform = _pPlayerTransform;
+	m_pPlayerNavigation = _pPlayerNavigation;
 
 	return S_OK;
 }

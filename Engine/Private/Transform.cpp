@@ -1,5 +1,6 @@
 #include "Transform.h"
 #include "Shader.h"
+#include "Navigation.h"
 
 CTransform::CTransform(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CComponent(_pDevice, _pContext)
@@ -90,45 +91,56 @@ HRESULT CTransform::Bind_ShaderResources(CShader* _pShader, const char* _pConsta
 	return _pShader->Bind_Matrix(_pConstantName, &m_WorldMatrix);
 }
 
-void CTransform::Go_Foward(_float _fTimeDelta)
+void CTransform::Go_Foward(_float _fTimeDelta, CNavigation* _pNavigation)
 {
 	_vector vLook = Get_State(STATE_LOOK);
 	_vector vPosition = Get_State(STATE_POSITION);
 
 	vPosition += XMVector3Normalize(vLook) * m_fSpeedPerSec * _fTimeDelta;
 
-	Set_State(STATE_POSITION, vPosition);
+	/* TRUE ==  네비게이션에게 나 진짜 움직여도 되는지 검사 */
+	if (nullptr == _pNavigation ||
+		true == _pNavigation->IsMove(vPosition))
+		Set_State(STATE_POSITION, vPosition);
 }
 
-void CTransform::Go_Backward(_float _fTimeDelta)
+void CTransform::Go_Backward(_float _fTimeDelta, CNavigation* _pNavigation)
 {
 	_vector vLook = Get_State(STATE_LOOK);
 	_vector vPosition = Get_State(STATE_POSITION);
 
 	vPosition -= XMVector3Normalize(vLook) * m_fSpeedPerSec * _fTimeDelta;
 
-	Set_State(STATE_POSITION, vPosition);
-
+	/* TRUE ==  네비게이션에게 나 진짜 움직여도 되는지 검사 */
+	if (nullptr == _pNavigation ||
+		true == _pNavigation->IsMove(vPosition))
+		Set_State(STATE_POSITION, vPosition);
 }
 
-void CTransform::Go_Left(_float _fTimeDelta)
+void CTransform::Go_Left(_float _fTimeDelta, CNavigation* _pNavigation)
 {
 	_vector vRight = Get_State(STATE_RIGHT);
 	_vector vPosition = Get_State(STATE_POSITION);
 
 	vPosition -= XMVector3Normalize(vRight) * m_fSpeedPerSec * _fTimeDelta;
 
-	Set_State(STATE_POSITION, vPosition);
+	/* TRUE ==  네비게이션에게 나 진짜 움직여도 되는지 검사 */
+	if (nullptr == _pNavigation ||
+		true == _pNavigation->IsMove(vPosition))
+		Set_State(STATE_POSITION, vPosition);
 }
 
-void CTransform::Go_Right(_float _fTimeDelta)
+void CTransform::Go_Right(_float _fTimeDelta, CNavigation* _pNavigation)
 {
 	_vector vRight = Get_State(STATE_RIGHT);
 	_vector vPosition = Get_State(STATE_POSITION);
 
 	vPosition += XMVector3Normalize(vRight) * m_fSpeedPerSec * _fTimeDelta;
 
-	Set_State(STATE_POSITION, vPosition);
+	/* TRUE ==  네비게이션에게 나 진짜 움직여도 되는지 검사 */
+	if (nullptr == _pNavigation ||
+		true == _pNavigation->IsMove(vPosition))
+		Set_State(STATE_POSITION, vPosition);
 }
 
 void CTransform::Go_Up(_float _fTimeDelta)

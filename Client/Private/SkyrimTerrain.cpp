@@ -2,6 +2,7 @@
 #include "SkyrimTerrain.h"
 
 #include "GameInstance.h"
+#include "Mesh.h"
 
 CSkyrimTerrain::CSkyrimTerrain(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CGameObject(_pDevice, _pContext)
@@ -32,23 +33,22 @@ HRESULT CSkyrimTerrain::Initialize_Clone(_uint _iLevel, const wstring& _strModel
 	if (FAILED(Ready_Component(_iLevel)))
 		return E_FAIL;
 
-	// 받아온 행렬의 정보를 저장 후 세팅
-	//_float4x4 _matInit;
-	//XMStoreFloat4x4(&_matInit, (*pMatPivot));
-	//_float3 vScale = { _matInit._11, _matInit._22, _matInit._33 };
-	//
-	//_vector vPos = pMatPivot->r[3];
-	//
-	//m_pTransformCom->Set_Scaling(vScale);
-	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 	m_pTransformCom->Set_WorldMatrix(*pMatPivot);
-	// 메시의 정점 정보도 같이 업데이트 해준다.
-	//m_pModelCom->Update_VI(*pMatPivot);
+
+	//if (FAILED(Ready_Cell()))
+	//	return E_FAIL;
+
+	//m_pNavigationCom->SetUp_Neighbors();
 
 	m_bHasMesh = true;
 	m_strName = TEXT("SkyrimTerrain");
 
 	return S_OK;
+}
+
+void CSkyrimTerrain::PriorityTick(_float _fTimeDelta)
+{
+	// m_pNavigationCom->Update();
 }
 
 void CSkyrimTerrain::Tick(_float _fTimeDelta)
@@ -77,6 +77,9 @@ HRESULT CSkyrimTerrain::Render()
 		m_pModelCom->Render(i);
 	}
 
+//#ifdef _DEBUG
+//	m_pNavigationCom->Render();
+//#endif
 
 	return S_OK;
 }
@@ -98,6 +101,46 @@ HRESULT CSkyrimTerrain::Ready_Component(_uint _iLevel)
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
 		return E_FAIL;
+
+	//if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
+	//	TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom)))
+	//	return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CSkyrimTerrain::Ready_Cell()
+{
+	//vector<CMesh*> vecMesh = m_pModelCom->Get_VecMesh();
+	//
+	//for (size_t i = 0; i < vecMesh.size(); ++i)
+	//{
+	//	// 정점과 인덱스 정보를 얻어옴.
+	//	const _float3* pPos = vecMesh[i]->Get_VtxPos();
+	//	const vector<_ulong>& indices = vecMesh[i]->Get_Indices();
+	//
+	//	// 메시의 각 삼각형에 대해 교차 검사 수행
+	//	for (size_t idx = 0; idx < indices.size(); idx += 3)
+	//	{
+	//		_float3 vIntersectionPos;
+	//
+	//		_ulong idx0 = indices[idx];
+	//		_ulong idx1 = indices[idx + 1];
+	//		_ulong idx2 = indices[idx + 2];
+	//
+	//		// 각 삼각형을 구성하는 세 개의 정점을 가져옴
+	//		_float3 vertex0 = pPos[idx0];
+	//		_float3 vertex1 = pPos[idx1];
+	//		_float3 vertex2 = pPos[idx2];
+	//
+	//		_float3 vectex[3];
+	//		vectex[0] = pPos[idx0];
+	//		vectex[1] = pPos[idx1];
+	//		vectex[2] = pPos[idx2];
+	//
+	//		m_pNavigationCom->Add_Cell(vectex);
+	//	}
+	//}
 
 	return S_OK;
 }
@@ -202,4 +245,5 @@ void CSkyrimTerrain::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pNavigationCom);
 }

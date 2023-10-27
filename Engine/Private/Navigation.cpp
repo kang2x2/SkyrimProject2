@@ -28,34 +28,37 @@ CNavigation::CNavigation(const CNavigation& rhs)
 
 HRESULT CNavigation::Initialize_ProtoType(const wstring& _strNaviMeshPath)
 {
-	_ulong		dwByte = 0;
-	HANDLE		hFile = CreateFile(_strNaviMeshPath.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-	if (0 == hFile)
-		return E_FAIL;
-
-	while (true)
+	if (StrCmpW(_strNaviMeshPath.c_str(), TEXT("")))
 	{
-		_float3		vPoints[CCell::POINT_END] = {};
-
-		ReadFile(hFile, vPoints, sizeof(_float3) * CCell::POINT_END, &dwByte, nullptr);
-
-		if (0 == dwByte)
-			break;
-
-		CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, m_vecCell.size());
-		if (nullptr == pCell)
+		_ulong		dwByte = 0;
+		HANDLE		hFile = CreateFile(_strNaviMeshPath.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+		if (0 == hFile)
 			return E_FAIL;
 
-		m_vecCell.push_back(pCell);
+		while (true)
+		{
+			_float3		vPoints[CCell::POINT_END] = {};
+
+			ReadFile(hFile, vPoints, sizeof(_float3) * CCell::POINT_END, &dwByte, nullptr);
+
+			if (0 == dwByte)
+				break;
+
+			CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, m_vecCell.size());
+			if (nullptr == pCell)
+				return E_FAIL;
+
+			m_vecCell.push_back(pCell);
+		}
+
+		CloseHandle(hFile);
+
+		if (FAILED(SetUp_Neighbors()))
+			return E_FAIL;
 	}
 
-	CloseHandle(hFile);
-
-	if (FAILED(SetUp_Neighbors()))
-		return E_FAIL;
-
 #ifdef _DEBUG
-	m_pShaderCom = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Cell.hlsl"), VTXPOSCELL::Elements, VTXPOSCELL::iNumElements);
+	m_pShaderCom = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Cell.hlsl"), VTXPOSCELL::Elements, VTXPOSCELL::iNumElements);
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
 #endif
@@ -76,14 +79,14 @@ HRESULT CNavigation::Initialize_Clone(void* _pArg)
 	return S_OK;
 }
 
-void CNavigation::Update(_fmatrix _matWorld)
+void CNavigation::Update()
 {
-	XMStoreFloat4x4(&m_matWorld, _matWorld);
+	XMStoreFloat4x4(&m_matWorld, XMMatrixIdentity());
 
 	for (auto& iter : m_vecCell)
 	{
 		if (iter != nullptr)
-			iter->Update(_matWorld);
+			iter->Update(XMLoadFloat4x4(&m_matWorld));
 	}
 }
 
@@ -91,7 +94,7 @@ _bool CNavigation::IsMove(_fvector _vPoint)
 {
 	_int		iNeighborIndex = 0;
 
-	if (true == m_vecCell[m_iCurIndex]->IsOut(_vPoint, XMLoadFloat4x4(&m_matWorld), &iNeighborIndex))
+	if (m_vecCell[m_iCurIndex]->IsOut(_vPoint, XMLoadFloat4x4(&m_matWorld), &iNeighborIndex))
 	{
 		/* 나간 방향에 이웃셀이 있으면 움직여야해! */
 		if (-1 != iNeighborIndex)
@@ -115,6 +118,64 @@ _bool CNavigation::IsMove(_fvector _vPoint)
 	}
 	else
 		return true;
+}
+
+HRESULT CNavigation::Add_Cell(_float3 _vMeshPos[3])
+{
+	// 0.2
+	/* 스냅 설정.(가까우면 붙이기) */
+	for (size_t i = 0; i < CCell::POINT_END; ++i)
+	{
+		for (size_t j = 0; j < m_vecCell.size(); ++j)
+		{
+			for (size_t k = 0; k < CCell::POINT_END; ++k)
+			{
+				_float fDx = fabsf(m_vecCell[j]->Get_LocalPoints(k)->x - _vMeshPos[i].x);
+				_float fDy = fabsf(m_vecCell[j]->Get_LocalPoints(k)->y - _vMeshPos[i].y);
+				_float fDz = fabsf(m_vecCell[j]->Get_LocalPoints(k)->z - _vMeshPos[i].z);
+
+				if (fDx <= 0.2f && fDy <= 0.2f && fDz <= 0.2f)
+				{
+					_vMeshPos[i] = *m_vecCell[j]->Get_LocalPoints(k);
+					break;
+				}
+			}
+		}
+	}
+
+	/* 시계방향 설정. */
+	_float Value1 = (_vMeshPos[0].x * _vMeshPos[1].z) + (_vMeshPos[1].x * _vMeshPos[2].z) + (_vMeshPos[2].x * _vMeshPos[0].z);
+	_float Value2 = (_vMeshPos[1].x * _vMeshPos[0].z) + (_vMeshPos[2].x * _vMeshPos[1].z) + (_vMeshPos[0].x * _vMeshPos[2].z);
+	_float Result = Value1 - Value2;
+
+	if (Result > 0)
+	{
+		_float3 temp = _vMeshPos[0];
+		_float3 dest = _vMeshPos[2];
+
+		_vMeshPos[0] = dest;
+		_vMeshPos[2] = temp;
+	}
+
+	/* 셀에 추가. */
+	CCell* pCell = CCell::Create(m_pDevice, m_pContext, _vMeshPos, m_vecCell.size());
+	if (nullptr == pCell)
+		return E_FAIL;
+
+	m_vecCell.push_back(pCell);
+
+	if (FAILED(SetUp_Neighbors()))
+		return E_FAIL;
+}
+
+HRESULT CNavigation::Cell_PopBack()
+{
+	CCell* pCell = m_vecCell.back();
+	Safe_Release(pCell);
+
+	m_vecCell.pop_back();
+
+	return S_OK;
 }
 
 #ifdef _DEBUG
@@ -145,7 +206,7 @@ HRESULT CNavigation::Render()
 		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLineColor", &vColor, sizeof(_float4))))
 			return E_FAIL;
 
-		_float		fHeight = 0.f;
+		_float		fHeight = 0.05f;
 		if (FAILED(m_pShaderCom->Bind_RawValue("g_fHeight", &fHeight, sizeof(_float))))
 			return E_FAIL;
 
@@ -242,4 +303,7 @@ void CNavigation::Free()
 #ifdef _DEBUG
 	Safe_Release(m_pShaderCom);
 #endif
+
+	for (auto& pCell : m_vecCell)
+		Safe_Release(pCell);
 }

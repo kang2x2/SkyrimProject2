@@ -8,6 +8,7 @@ BEGIN(Engine)
 
 class CTransform;
 class CCamera;
+class CNavigation;
 
 END
 
@@ -48,6 +49,7 @@ private:
 	vector<class CGameObject*>		m_vecPlayerPart;
 
 	CTransform*						m_pTransformCom = nullptr;
+	CNavigation*					m_pNavigationCom = nullptr;
 	CCamera*						m_pPlayerCams[CAM_END];
 	class CStateManager_Player*		m_pStateManager = nullptr;
 

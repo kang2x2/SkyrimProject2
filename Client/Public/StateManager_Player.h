@@ -17,7 +17,7 @@ public:
 	CState_Player* Get_State(PLAYERSTATE _eState);
 
 public:
-	HRESULT Initialize(class CGameObject* _pPlayer, class CTransform* _pPlayerTransform);
+	HRESULT Initialize(class CGameObject* _pPlayer, class CTransform* _pPlayerTransform, class CNavigation* _pPlayerNavigation);
 	HRESULT Set_State(PLAYERSTATE _eState);
 
 public:
@@ -30,7 +30,7 @@ private:
 	vector<class CState_Player*> m_vecPlayerState; /* »óÅÂµé */
 
 public:
-	static CStateManager_Player* Create(class CGameObject* _pPlayer, class CTransform* _pPlayerTransform);
+	static CStateManager_Player* Create(class CGameObject* _pPlayer, class CTransform* _pPlayerTransform, class CNavigation* _pPlayerNavigation);
 	virtual void Free() override;
 };
 

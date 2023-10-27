@@ -72,10 +72,10 @@ public:
 	HRESULT Bind_ShaderResources(class CShader* _pShader, const char* _pConstantName);
 
 public:
-	void Go_Foward(_float _fTimeDelta);
-	void Go_Backward(_float _fTimeDelta);
-	void Go_Left(_float _fTimeDelta);
-	void Go_Right(_float _fTimeDelta);
+	void Go_Foward(_float _fTimeDelta, class CNavigation* _pNavigation = nullptr);
+	void Go_Backward(_float _fTimeDelta, class CNavigation* _pNavigation = nullptr);
+	void Go_Left(_float _fTimeDelta, class CNavigation* _pNavigation = nullptr);
+	void Go_Right(_float _fTimeDelta, class CNavigation* _pNavigation = nullptr);
 	void Go_Up(_float _fTimeDelta);
 	void Go_Down(_float _fTimeDelta);
 

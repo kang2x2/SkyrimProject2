@@ -9,16 +9,16 @@ CStatePlayer_RunRight::CStatePlayer_RunRight()
 {
 }
 
-HRESULT CStatePlayer_RunRight::Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform)
+HRESULT CStatePlayer_RunRight::Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
 {
-	__super::Initialize(_pPlayer, _pPlayerTransform);
+	__super::Initialize(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 
 	return S_OK;
 }
 
 void CStatePlayer_RunRight::Update(_float _fTimeDelta)
 {
-	m_pPlayerTransform->Go_Foward(_fTimeDelta);
+	m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 
 	Key_Input(_fTimeDelta);
 }
@@ -46,7 +46,7 @@ void CStatePlayer_RunRight::Key_Input(_float _fTimeDelta)
 		else
 		{
 			// m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-			dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
+			dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
 			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
 		}
 	}
@@ -58,17 +58,17 @@ void CStatePlayer_RunRight::Key_Input(_float _fTimeDelta)
 	else if (pGameInstance->Get_DIKeyDown('S'))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_B);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runbackward");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runbackward");
 	}
 
 	Safe_Release(pGameInstance);
 }
 
-CStatePlayer_RunRight* CStatePlayer_RunRight::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform)
+CStatePlayer_RunRight* CStatePlayer_RunRight::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
 {
 	CStatePlayer_RunRight* pInstance = new CStatePlayer_RunRight();
 
-	if (FAILED(pInstance->Initialize(_pPlayer, _pPlayerTransform)))
+	if (FAILED(pInstance->Initialize(_pPlayer, _pPlayerTransform, _pPlayerNavigation)))
 	{
 		MSG_BOX("Fail Create : CStatePlayer_RunRight");
 		Safe_Release(pInstance);

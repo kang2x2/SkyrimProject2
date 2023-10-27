@@ -17,10 +17,17 @@ private:
 	virtual ~CNavigation() = default;
 
 public:
+	vector<class CCell*> Get_VecCell() { return m_vecCell; }
+
+public:
 	virtual HRESULT Initialize_ProtoType(const wstring& _strNaviMeshPath);
 	virtual HRESULT Initialize_Clone(void* _pArg);
-	void  Update(_fmatrix _matWorld);
+	void  Update();
 	_bool IsMove(_fvector _vPoint);
+
+	HRESULT Add_Cell(_float3 _vMeshPos[3]);
+	HRESULT Cell_PopBack();
+	HRESULT SetUp_Neighbors();
 
 #ifdef _DEBUG
 public:
@@ -28,7 +35,7 @@ public:
 #endif
 
 private:
-	static _float4x4		m_matWorld;
+	static _float4x4				m_matWorld;
 	_int					m_iCurIndex = -1;
 	vector<class CCell*>	m_vecCell;
 
@@ -37,11 +44,8 @@ private:
 	class CShader*			m_pShaderCom = nullptr;
 #endif
 
-private:
-	HRESULT SetUp_Neighbors();
-
 public:
-	static CNavigation* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const wstring& _strNaviMeshPath);
+	static CNavigation* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const wstring& _strNaviMeshPath = TEXT(""));
 	virtual CComponent* Clone(void* _pArg) override;
 	virtual void Free() override;
 };

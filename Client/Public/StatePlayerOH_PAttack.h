@@ -7,6 +7,7 @@ BEGIN(Engine)
 
 class CGameObject;
 class CTransform;
+class CNavigation;
 
 END
 
@@ -19,12 +20,12 @@ private:
 	virtual ~CStatePlayerOH_PAttack() = default;
 
 public:
-	virtual		 HRESULT Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform);
+	virtual		 HRESULT Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
 	virtual void Update(_float _fTimeDelta);
 	virtual void Late_Update();
 
 public:
-	static CStatePlayerOH_PAttack* Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform);
+	static CStatePlayerOH_PAttack* Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
 	virtual void Free() override;
 };
 

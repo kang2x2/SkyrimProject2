@@ -12,6 +12,9 @@
 #include "VIBuffer_Grid.h"
 #include "Terrain_Grid.h"
 
+// 마우스 좌표에서 메뉴바 y높이 제외하기 위함.
+// int iMenuBarHeight = GetSystemMetrics(SM_CYMENU);
+
 CImGui_Tool::CImGui_Tool()
 {
 }
@@ -30,6 +33,8 @@ HRESULT CImGui_Tool::Initialize(ID3D11Device* _pDevice, ID3D11DeviceContext* _pC
 	ImGui_ImplWin32_Init(g_hWnd);
 	ImGui_ImplDX11_Init(m_pDevice, m_pContext);
 
+	m_pNavigationCom = CNavigation::Create(m_pDevice, m_pContext);
+
 	return S_OK;
 }
 
@@ -43,7 +48,8 @@ void CImGui_Tool::Frame()
 
 		LayOut_Mouse();
 		LayOut_Main();
-		LayOut_SaveLoad();
+		LayOut_ObjSaveLoad();
+		LayOut_CellSaveLoad();
 		LayOut_Navigation();
 
 		if (m_bDelete)
@@ -58,7 +64,11 @@ void CImGui_Tool::Frame()
 
 			m_bDelete = false;
 		}
-
+	
+		m_pNavigationCom->Update();
+#ifdef _DEBUG
+		m_pNavigationCom->Render();
+#endif
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	}
@@ -91,7 +101,7 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 		CVIBuffer_Grid* pGridBuffer = dynamic_cast<CVIBuffer_Grid*>(pGameInstance->Find_ProtoType(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid")));
 		const _float3* pTerrainVtxPos = pGridBuffer->Get_VtxPos();
 
-		ResultPickPos = pGameInstance->Picking_Terrain(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos, LEVEL_TOOL);
+		ResultPickPos = pGameInstance->Picking_Position(m_pDevice, m_pContext, MousePos, pTerrainGrid, pTerrainVtxPos, LEVEL_TOOL);
 
 		if (m_bObjCreateMode)
 			Create_Object();
@@ -127,21 +137,12 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 			// 3번 찍었으면 담아라.
 			if (m_iCellClickIdx > 2)
 			{
-				m_vecCell.push_back(m_CellPoint);
+				m_pNavigationCom->Add_Cell(m_CellPoint.fCellPos);
 				m_iCellClickIdx = 0;
-
-				CGameInstance* pGameInstance = CGameInstance::GetInstance();
-				Safe_AddRef(pGameInstance);
-
-				m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
-
-				pGameInstance->Add_Cell(m_CellPoint.fCellPos, 
-					dynamic_cast<CTransform*>(m_pSelectObject->Get_Component(TEXT("Com_Transform")))
-				->Get_WorldMatrix());
-
-				Safe_Release(pGameInstance);
 			}
 		}
+
+		
 
 #pragma endregion
 
@@ -155,7 +156,6 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 			m_pSelectObject = nullptr;
 
 			m_bCellCreateMode = false;
-			m_bCellDeleteMode = false;
 
 			m_iCellClickIdx = 0;
 			m_fRotValue = 0.f;
@@ -169,9 +169,9 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 
 	return S_OK;
 }
-void CImGui_Tool::LayOut_SaveLoad()
+void CImGui_Tool::LayOut_ObjSaveLoad()
 {
-	const char* strLayOutName = "Save/Load";
+	const char* strLayOutName = "Obj Save/Load";
 
 	ImGui::Begin(strLayOutName);
 
@@ -180,18 +180,41 @@ void CImGui_Tool::LayOut_SaveLoad()
 
 	if (ImGui::Button("Save"))
 	{
-		File_Save();
+		ObjFile_Save();
 	}
 
 	ImGui::SameLine();
 
 	if (ImGui::Button("Load"))
 	{
-		File_Load();
+		ObjFile_Load();
 	}
 
 	ImGui::End();
 }
+void CImGui_Tool::LayOut_CellSaveLoad()
+{
+	const char* strLayOutName = "Cell Save/Load";
+
+	ImGui::Begin(strLayOutName);
+
+	// 범위 밖에서만 수행하기 위한 레이아웃 범위 저장.
+	Add_LayOut_Array(strLayOutName, ImGui::GetWindowPos(), ImGui::GetWindowSize());
+
+	if (ImGui::Button("Save"))
+	{
+		CellFile_Save();
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Load"))
+	{
+		CellFile_Load();
+	}
+	ImGui::End();
+}
+
 void CImGui_Tool::LayOut_Object_PickMode()
 {
 	const char* strLayOutName = "Pick Mode";
@@ -211,7 +234,6 @@ void CImGui_Tool::LayOut_Object_PickMode()
 			m_pSelectObject = nullptr;
 
 			m_bCellCreateMode = false;
-			m_bCellDeleteMode = false;
 		}
 	}
 	if (ImGui::Button("Delete"))
@@ -222,7 +244,6 @@ void CImGui_Tool::LayOut_Object_PickMode()
 		m_pSelectObject = nullptr;
 
 		m_bCellCreateMode = false;
-		m_bCellDeleteMode = false;
 	}
 	if (ImGui::Button("Select"))
 	{
@@ -231,7 +252,6 @@ void CImGui_Tool::LayOut_Object_PickMode()
 		m_bObjSelectMode = true;
 
 		m_bCellCreateMode = false;
-		m_bCellDeleteMode = false;
 	}
 
 	if (m_bObjCreateMode)
@@ -258,7 +278,6 @@ void CImGui_Tool::LayOut_Navigation()
 	if (ImGui::Button("Create"))
 	{
 		m_bCellCreateMode = true;
-		m_bCellDeleteMode = false;
 		m_pSelectObject = nullptr;
 
 		m_bObjCreateMode = false;
@@ -269,21 +288,22 @@ void CImGui_Tool::LayOut_Navigation()
 	}
 	if (ImGui::Button("Delete"))
 	{
-		m_bCellCreateMode = false;
-		m_bCellDeleteMode = true;
-		m_pSelectObject = nullptr;
-
-		m_bObjCreateMode = false;
-		m_bObjDeleteMode = false;
-		m_bObjSelectMode = false;
+		//m_bCellCreateMode = false;
+		//m_pSelectObject = nullptr;
+		//
+		//m_bObjCreateMode = false;
+		//m_bObjDeleteMode = false;
+		//m_bObjSelectMode = false;
 
 		m_iCellClickIdx = 0;
+		if (m_pNavigationCom->Get_VecCell().size() > 0)
+		{
+			m_pNavigationCom->Cell_PopBack();
+		}
 	}
 
 	if (m_bCellCreateMode)
 		ImGui::Text("Cur Mode : Create");
-	else if (m_bCellDeleteMode)
-		ImGui::Text("Cur Mode : Delete");
 	else
 		ImGui::Text("Cur Mode : None");
 
@@ -582,7 +602,7 @@ void CImGui_Tool::ChangeType_File()
 	m_bFindFBX = false;
 }
 
-void CImGui_Tool::File_Save()
+void CImGui_Tool::ObjFile_Save()
 {
 	// 작업을 하고 나면 작업한 경로가 최종 저장 되어 추후 작업 시 문제가 됨.
 	// 그러니 경로를 저장해놓고 모든 작업이 끝나면 경로를 지금 저장한 경로로 다시 초기화한다.
@@ -633,7 +653,7 @@ void CImGui_Tool::File_Save()
 
 	SetCurrentDirectory(originalPath);
 }
-void CImGui_Tool::File_Load()
+void CImGui_Tool::ObjFile_Load()
 {
 	// 작업을 하고 나면 작업한 경로가 최종 저장 되어 추후 작업 시 문제가 됨.
 	// 그러니 경로를 저장해놓고 모든 작업이 끝나면 경로를 지금 저장한 경로로 다시 초기화한다.
@@ -668,6 +688,106 @@ void CImGui_Tool::File_Load()
 			Safe_AddRef(pGameInstance);
 
 			pGameInstance->Object_FileLoad(fileStream ,LEVEL_TOOL);
+
+			Safe_Release(pGameInstance);
+
+			fileStream.close();
+			MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
+		}
+		else {
+			MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
+		}
+	}
+
+	SetCurrentDirectory(originalPath);
+}
+
+void CImGui_Tool::CellFile_Save()
+{
+	// 작업을 하고 나면 작업한 경로가 최종 저장 되어 추후 작업 시 문제가 됨.
+	// 그러니 경로를 저장해놓고 모든 작업이 끝나면 경로를 지금 저장한 경로로 다시 초기화한다.
+	TCHAR originalPath[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, originalPath);
+
+	OPENFILENAME OFN;
+	TCHAR filePathName[MAX_PATH] = L"";
+	TCHAR lpstrFile[MAX_PATH] = L"";
+	static TCHAR filter[] = L"텍스트 파일 (*.txt)\0*.txt\0모든 파일 (*.*)\0*.*\0";
+
+	memset(&OFN, 0, sizeof(OPENFILENAME));
+	OFN.lStructSize = sizeof(OPENFILENAME);
+	OFN.hwndOwner = g_hWnd;
+	OFN.lpstrFilter = filter;
+	OFN.lpstrFile = lpstrFile;
+	OFN.nMaxFile = MAX_PATH;
+	OFN.lpstrInitialDir = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\";
+	OFN.Flags = OFN_OVERWRITEPROMPT; // 덮어쓰기 여부를 묻는 대화 상자를 표시
+
+	if (GetSaveFileName(&OFN) != 0) {
+		wsprintf(filePathName, L"%s 파일을 저장하겠습니까?", OFN.lpstrFile);
+		MessageBox(g_hWnd, filePathName, L"저장 선택", MB_OK);
+
+		wstring filePath = OFN.lpstrFile;
+
+		// 파일 내용을 저장할 변수에 원하는 내용을 할당.
+
+		// 파일을 쓰기 모드로 열기.
+		ofstream fileStream(filePath, ios::binary);
+		if (fileStream.is_open()) {
+			// 파일 내용을 파일에 쓰기.
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			pGameInstance->Cell_FileSave(fileStream, m_pNavigationCom);
+
+			Safe_Release(pGameInstance);
+
+			fileStream.close();
+			MessageBox(g_hWnd, L"파일이 성공적으로 저장되었습니다.", L"저장 완료", MB_OK);
+		}
+		else {
+			MessageBox(g_hWnd, L"파일을 저장하는 중 오류가 발생했습니다.", L"저장 오류", MB_OK | MB_ICONERROR);
+		}
+	}
+
+	SetCurrentDirectory(originalPath);
+}
+void CImGui_Tool::CellFile_Load()
+{
+	// 작업을 하고 나면 작업한 경로가 최종 저장 되어 추후 작업 시 문제가 됨.
+// 그러니 경로를 저장해놓고 모든 작업이 끝나면 경로를 지금 저장한 경로로 다시 초기화한다.
+	TCHAR originalPath[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, originalPath);
+
+	OPENFILENAME OFN;
+	TCHAR filePathName[100] = L"";
+	TCHAR lpstrFile[100] = L"";
+	static TCHAR filter[] = L"모든 파일\0*.*\0텍스트 파일\0*.txt\0fbx 파일\0*.fbx";
+
+	memset(&OFN, 0, sizeof(OPENFILENAME));
+	OFN.lStructSize = sizeof(OPENFILENAME);
+	OFN.hwndOwner = g_hWnd;
+	OFN.lpstrFilter = filter;
+	OFN.lpstrFile = lpstrFile;
+	OFN.nMaxFile = 100;
+	OFN.lpstrInitialDir = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\";
+
+	if (GetOpenFileName(&OFN) != 0) {
+		wsprintf(filePathName, L"%s 파일을 열겠습니까?", OFN.lpstrFile);
+		MessageBox(g_hWnd, filePathName, L"열기 선택", MB_OK);
+
+		wstring filePath = OFN.lpstrFile;
+
+		// 파일을 열기 모드로 열기.
+		ifstream fileStream(filePath, ios::binary);
+		if (fileStream.is_open()) {
+			// 파일 내용을 읽기.
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			pGameInstance->Cell_FileLoad(fileStream, m_pNavigationCom);
 
 			Safe_Release(pGameInstance);
 
@@ -761,17 +881,17 @@ HRESULT CImGui_Tool::Select_Object()
 
 	ImGui::Text("PosX   ");
 	ImGui::SameLine();
-	if (ImGui::DragFloat("##PosX", &objPos.x, 1.f))
+	if (ImGui::DragFloat("##PosX", &objPos.x, 0.1f))
 		pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
 
 	ImGui::Text("PosY   ");
 	ImGui::SameLine();
-	if (ImGui::DragFloat("##PosY", &objPos.y, 1.f))
+	if (ImGui::DragFloat("##PosY", &objPos.y, 0.1f))
 		pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
 
 	ImGui::Text("PosZ   ");
 	ImGui::SameLine();
-	if (ImGui::DragFloat("##PosZ", &objPos.z, 1.f))
+	if (ImGui::DragFloat("##PosZ", &objPos.z, 0.1f))
 		pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&objPos));
 
 	ImGui::Text("ScaleX ");
@@ -796,10 +916,10 @@ HRESULT CImGui_Tool::Select_Object()
 	{
 		ImVec2 dragDelta = ImGui::GetMouseDragDelta(0); // 드래그 변위라고 한다.
 		if (dragDelta.x > 0.0f) { // 오른쪽 드래그
-			fRotSpeed += 20.f;
+			fRotSpeed += 1.f;
 		}
 		else if (dragDelta.x < 0.0f) { // 왼쪽 드래그
-			fRotSpeed -= 20.f;
+			fRotSpeed -= 1.f;
 		}
 	}
 
@@ -932,6 +1052,8 @@ void CImGui_Tool::Free()
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
+
+	Safe_Release(m_pNavigationCom);
 
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();

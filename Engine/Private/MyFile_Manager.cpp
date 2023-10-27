@@ -8,6 +8,9 @@
 #include "Transform.h"
 #include "Model.h"
 
+#include "Navigation.h"
+#include "Cell.h"
+
 #include "Bin_AIScene.h"
 
 IMPLEMENT_SINGLETON(CMyFile_Manager)
@@ -93,6 +96,37 @@ HRESULT CMyFile_Manager::Object_FileLoad(ifstream& _inFile, _uint _iLevelIndex)
 	}
 
 	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CMyFile_Manager::Cell_FileSave(ofstream& _outFile, CNavigation* _pNavigation)
+{
+	vector<CCell*> vecCell = _pNavigation->Get_VecCell();
+
+	for (size_t i = 0; i < vecCell.size(); ++i)
+	{
+		_float3			vPoints[3];
+
+		ZeroMemory(vPoints, sizeof(_float3));
+		vPoints[0] = *vecCell[i]->Get_LocalPoints(CCell::POINT_A);
+		vPoints[1] = *vecCell[i]->Get_LocalPoints(CCell::POINT_B);
+		vPoints[2] = *vecCell[i]->Get_LocalPoints(CCell::POINT_C);
+		_outFile.write(reinterpret_cast<const char*>(vPoints), sizeof(_float3) * 3);
+	}
+
+	return S_OK;
+}
+
+HRESULT CMyFile_Manager::Cell_FileLoad(ifstream& _inFile, class CNavigation* _pNavigation)
+{
+	_float3			vPoints[3];
+
+	// while (!_inFile.eof()) : 다 읽고 나서도 쓰레기를 한 번 더 읽어서 위험. 아래와 같이 하자.
+	while (_inFile.read(reinterpret_cast<char*>(vPoints), sizeof(_float3) * 3))
+	{
+		_pNavigation->Add_Cell(vPoints);
+	}
 
 	return S_OK;
 }

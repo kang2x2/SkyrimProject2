@@ -54,7 +54,8 @@ private:
 	// main
 	void	LayOut_Main();
 	// Save / Load
-	void	LayOut_SaveLoad();
+	void	LayOut_ObjSaveLoad();
+	void	LayOut_CellSaveLoad();
 	// Object Create / Delete
 	void	LayOut_Object_PickMode();
 	// Navigation
@@ -84,8 +85,10 @@ private:
 	void	Key_Input(class CTransform* _pTransform);
 
 	// Save / Load
-	void    File_Save();
-	void    File_Load();
+	void    ObjFile_Save();
+	void    ObjFile_Load();
+	void	CellFile_Save();
+	void	CellFile_Load();
 
 	// RangeCheck(레이아웃 범위 밖에서만 피킹 가능하도록)
 	void    Add_LayOut_Array(const char* _strName, ImVec2 _LayOutPos, ImVec2 _LayOutSize);
@@ -137,11 +140,11 @@ private:
 
 	// Navigation Cell 
 	_bool				 m_bCellCreateMode = false;
-	_bool				 m_bCellDeleteMode = false;
 
 	_uint					 m_iCellClickIdx = 0;
 	TOOL_CELLDESC			 m_CellPoint;
-	vector<TOOL_CELLDESC>	 m_vecCell;
+	CNavigation*			 m_pNavigationCom = nullptr;
+
 
 	// 레이아웃 범위 밖에서만 클라이언트 작업을 수행하기 위함.
 	vector<TOOL_LAYOUTDESC> m_vecLayOut;

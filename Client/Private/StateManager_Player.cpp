@@ -18,39 +18,39 @@ CStateManager_Player::CStateManager_Player()
 {
 }
 
-HRESULT CStateManager_Player::Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform)
+HRESULT CStateManager_Player::Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
 {
 	if (_pPlayer == nullptr)
 		return E_FAIL;
 
 	/* Idle */
-	CState_Player* pState = CStatePlayer_Idle::Create(_pPlayer, _pPlayerTransform);
+	CState_Player* pState = CStatePlayer_Idle::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
 	/* Run */
-	pState = CStatePlayer_RunFoward::Create(_pPlayer, _pPlayerTransform);
+	pState = CStatePlayer_RunFoward::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
-	pState = CStatePlayer_RunBackward::Create(_pPlayer, _pPlayerTransform);
+	pState = CStatePlayer_RunBackward::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
-	pState = CStatePlayer_RunLeft::Create(_pPlayer, _pPlayerTransform);
+	pState = CStatePlayer_RunLeft::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
-	pState = CStatePlayer_RunRight::Create(_pPlayer, _pPlayerTransform);
+	pState = CStatePlayer_RunRight::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
 	/* Attack */
-	pState = CStatePlayerOH_LAttack::Create(_pPlayer, _pPlayerTransform);
+	pState = CStatePlayerOH_LAttack::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
-	pState = CStatePlayerOH_RAttack::Create(_pPlayer, _pPlayerTransform);
+	pState = CStatePlayerOH_RAttack::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
-	pState = CStatePlayerOH_PAttack::Create(_pPlayer, _pPlayerTransform);
+	pState = CStatePlayerOH_PAttack::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
-	pState = CStatePlayerOH_RunPAttack::Create(_pPlayer, _pPlayerTransform);
+	pState = CStatePlayerOH_RunPAttack::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 	
 	m_pCurState = m_vecPlayerState.front();
@@ -80,11 +80,11 @@ void CStateManager_Player::Late_Update()
 	m_pCurState->Late_Update();
 }
 
-CStateManager_Player* CStateManager_Player::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform)
+CStateManager_Player* CStateManager_Player::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, class CNavigation* _pPlayerNavigation)
 {
 	CStateManager_Player* pInstance = new CStateManager_Player();
 
-	if (FAILED(pInstance->Initialize(_pPlayer, _pPlayerTransform)))
+	if (FAILED(pInstance->Initialize(_pPlayer, _pPlayerTransform, _pPlayerNavigation)))
 	{
 		MSG_BOX("Fail Create : CStateManager_Player");
 		Safe_Release(pInstance);

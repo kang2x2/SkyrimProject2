@@ -11,7 +11,7 @@ protected:
 	virtual ~CState_Player() = default;
 
 public:
-	virtual HRESULT Initialize(class CGameObject* _pPlayer, class CTransform* _pPlayerTransform);
+	virtual HRESULT Initialize(class CGameObject* _pPlayer, class CTransform* _pPlayerTransform, class CNavigation* _pPlayerNavigation);
 
 public:
 	virtual void Update(_float _fTimeDelta);
@@ -22,6 +22,7 @@ public:
 protected:
 	class CGameObject* m_pPlayer = nullptr;
 	class CTransform*  m_pPlayerTransform = nullptr;
+	class CNavigation* m_pPlayerNavigation = nullptr;
 
 public:
 	virtual void Free() override;

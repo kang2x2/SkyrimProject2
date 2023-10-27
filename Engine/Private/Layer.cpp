@@ -39,6 +39,15 @@ HRESULT CLayer::Delete_CloneObject(const wstring& _strName)
 	return S_OK;
 }
 
+void CLayer::PriorityTick(_float _fTimeDelta)
+{
+	for (auto& iter : m_ltCloneObj)
+	{
+		if (iter != nullptr)
+			iter->PriorityTick(_fTimeDelta);
+	}
+}
+
 void CLayer::Tick(_float _fTimeDelta)
 {
 	for (auto& iter : m_ltCloneObj)

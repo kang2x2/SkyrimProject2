@@ -67,6 +67,8 @@ void CGameInstance::Tick(_float _fTimeDelta)
 {	
 	m_pInput_Device->Update_InputDev();
 
+	m_pObject_Manager->PriorityTick(_fTimeDelta);
+
 	m_pObject_Manager->Tick(_fTimeDelta);
 	m_pLevel_Manager->Tick(_fTimeDelta);
 
@@ -186,12 +188,12 @@ HRESULT CGameInstance::Add_Timer(const wstring& strTimerTag)
 }
 
 // Calculator
-_float3 CGameInstance::Picking_Terrain(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, CGameObject* _pTerrain, const _float3* _vec, _uint _iLevel)
+_float3 CGameInstance::Picking_Position(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, CGameObject* _pTerrain, const _float3* _vec, _uint _iLevel)
 {
 	if (m_pCalculator == nullptr)
 		return _float3();
 
-	return m_pCalculator->Picking_Terrain(_pDevice, _pContext, _WinMousePos, _pTerrain, _vec, _iLevel);
+	return m_pCalculator->Picking_Position(_pDevice, _pContext, _WinMousePos, _pTerrain, _vec, _iLevel);
 }
 
 CGameObject* CGameInstance::Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, _uint _iLevel)
@@ -347,6 +349,7 @@ _vector CGameInstance::Get_CamPosition_Vector() const
 	return m_pPipeLine->Get_CamPosition_Vector();
 }
 
+/* File Manager */
 HRESULT CGameInstance::Object_FileSave(ofstream& _outFile, _uint _iLevelIndex) const
 {
 	if (m_pMyFile_Manager == nullptr)
@@ -361,6 +364,22 @@ HRESULT CGameInstance::Object_FileLoad(std::ifstream& _inFile, _uint _iLevelInde
 		return E_FAIL;
 
 	return m_pMyFile_Manager->Object_FileLoad(_inFile, _iLevelIndex);
+}
+
+HRESULT CGameInstance::Cell_FileSave(ofstream& _outFile, CNavigation* _pNavigation)
+{
+	if (m_pMyFile_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pMyFile_Manager->Cell_FileSave(_outFile, _pNavigation);
+}
+
+HRESULT CGameInstance::Cell_FileLoad(ifstream& _inFile, class CNavigation* _pNavigation)
+{
+	if (m_pMyFile_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pMyFile_Manager->Cell_FileLoad(_inFile, _pNavigation);
 }
 
 HRESULT CGameInstance::Binary_OutFile(ofstream& _outFile, const char* _strFilePath, CModel::MODEL_TYPE _eType)

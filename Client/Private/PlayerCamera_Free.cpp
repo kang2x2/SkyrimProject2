@@ -43,11 +43,15 @@ HRESULT CPlayerCamera_Free::Initialize_Clone(void* pArg)
 
 	m_pPlayer->Set_PlayerCam(this, CPlayer::CAM_FREE);
 
+	m_vRelativeCamPos = { 0.f, 4.f, -3.f };
+
 	return S_OK;
 }
 
 void CPlayerCamera_Free::Tick(_float _fTimeDelta)
 {
+	Zoom(_fTimeDelta);
+
 	/* 실시간으로 Player 위치 받아온다. */
 	XMStoreFloat4(&m_vPlayerPos, m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
 	XMStoreFloat4(&vEye, XMLoadFloat4(&m_vPlayerPos) + XMVectorSet(m_vRelativeCamPos.x, m_vRelativeCamPos.y, m_vRelativeCamPos.z, 0.f));
@@ -85,6 +89,23 @@ void CPlayerCamera_Free::Tick(_float _fTimeDelta)
 
 void CPlayerCamera_Free::LateTick(_float _fTimeDelta)
 {
+}
+
+void CPlayerCamera_Free::Zoom(_float _fTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_long mouseMove = 0l;
+	if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_WHEEL))
+	{
+		if (mouseMove < 0)
+			m_pTransformCom->Zoom_Out(_fTimeDelta);
+		else if (mouseMove > 0)
+			m_pTransformCom->Zoom_In(_fTimeDelta);
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 CPlayerCamera_Free* CPlayerCamera_Free::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)

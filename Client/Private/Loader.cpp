@@ -8,7 +8,7 @@
 
 // GamePlay Level
 #include "PlayerCamera_Free.h"
-
+#include "Navigation_Client.h"
 #include "Terrain.h"
 #include "Sky.h"
 
@@ -123,6 +123,13 @@ HRESULT CLoader::Loading_For_Level_Tool()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNonAnimMesh.hlsl"), VTX_NONANIMMESH::Elements, VTX_NONANIMMESH::iNumElements))))
 		return E_FAIL;
 
+#pragma region Navigation
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Celltest")))))
+		return E_FAIL;
+
+#pragma endregion
 
 	/* Mesh*/
 	m_strLoadingText = TEXT("Loading Mesh.");
@@ -133,10 +140,6 @@ HRESULT CLoader::Loading_For_Level_Tool()
 	Set_ProtoType_Mesh(LEVEL_TOOL);
 
 	_matrix matInitialize = XMMatrixIdentity();
-
-	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_Body"),
-	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Building/BreezeHome.bin", matInitialize, CModel::TYPE_ANIM))))
-	//	return E_FAIL;
 
 	/* GameObject */
 
@@ -247,7 +250,7 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 
 	/* Weapon */
 	matInitialize = XMMatrixIdentity();
-	// matInitialize = XMMatrixRotationX(XMConvertToRadians(-90.f));
+	matInitialize = XMMatrixRotationY(XMConvertToRadians(-90.f));
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Weapon_IronSword"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/IronSword/Iron_LongSword.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
@@ -317,6 +320,22 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 	Set_ProtoType_Object();
 
 #pragma endregion
+
+#pragma region Navigation
+	m_strLoadingText = TEXT("Loading ProtoType_Navigation.");
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Celltest")))))
+		return E_FAIL;
+
+	// Navigation Client
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Navigation_Client"),
+		CNavigation_Client::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+#pragma endregion
+
+
 
 	Safe_Release(pGameInstance);
 
@@ -529,8 +548,8 @@ HRESULT CLoader::Set_ProtoType_Mesh(LEVELID _eLevel)
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Building/CastleBridge/CastleBridge.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_CasTleEntrance01"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Building/CasTleEntrance01/CasTleEntrance01.bin", matInitialize, CModel::TYPE_NONANIM))))
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_CastleEntrance01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Building/CastleEntrance01/CastleEntrance01.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 	
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_CastleMainBuilding01"),
@@ -1047,7 +1066,27 @@ HRESULT CLoader::Set_ProtoType_Object()
 		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Castle"),
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CastleEntrance01"),
+		CBuilding::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CastleMainBuilding01"),
+		CBuilding::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CastleStoneTower01"),
+		CBuilding::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CastleStoneTower01Porch"),
+		CBuilding::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CastleStoneTower01Porchint"),
+		CBuilding::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CastleStoneTowerTop01"),
 		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
@@ -1063,7 +1102,7 @@ HRESULT CLoader::Set_ProtoType_Object()
 		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HalloftheDead"),
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HalloFtheDead01"),
 		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 

@@ -9,9 +9,9 @@ CStatePlayerOH_PAttack::CStatePlayerOH_PAttack()
 {
 }
 
-HRESULT CStatePlayerOH_PAttack::Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform)
+HRESULT CStatePlayerOH_PAttack::Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
 {
-	__super::Initialize(_pPlayer, _pPlayerTransform);
+	__super::Initialize(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 
 	return S_OK;
 }
@@ -24,16 +24,16 @@ void CStatePlayerOH_PAttack::Late_Update()
 {
 	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin())
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
 	}
 }
 
-CStatePlayerOH_PAttack* CStatePlayerOH_PAttack::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform)
+CStatePlayerOH_PAttack* CStatePlayerOH_PAttack::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
 {
 	CStatePlayerOH_PAttack* pInstance = new CStatePlayerOH_PAttack();
 
-	if (FAILED(pInstance->Initialize(_pPlayer, _pPlayerTransform)))
+	if (FAILED(pInstance->Initialize(_pPlayer, _pPlayerTransform, _pPlayerNavigation)))
 	{
 		MSG_BOX("Fail Create : CStatePlayerOH_PAttack");
 		Safe_Release(pInstance);

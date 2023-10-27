@@ -128,6 +128,15 @@ HRESULT CObject_Manager::Delete_CloneObject(_uint _iLevelIndex, const wstring& _
 	return S_OK;
 }
 
+void CObject_Manager::PriorityTick(_float _fTimeDelta)
+{
+	for (size_t i = 0; i < m_iLevelNum; ++i)
+	{
+		for (auto& iter : m_mapLayer[i])
+			iter.second->PriorityTick(_fTimeDelta);
+	}
+}
+
 void CObject_Manager::Tick(_float _fTimeDelta)
 {
 	for (size_t i = 0; i < m_iLevelNum; ++i)

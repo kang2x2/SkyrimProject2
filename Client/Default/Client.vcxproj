@@ -188,6 +188,7 @@
     <ClInclude Include="..\Public\Building.h" />
     <ClInclude Include="..\Public\CLevel_Tool.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\Navigation_Client.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\StatePlayerOH_LAttack.h" />
     <ClInclude Include="..\Public\PlayerCamera_Free.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Building.cpp" />
     <ClCompile Include="..\Private\CLevel_Tool.cpp" />
+    <ClCompile Include="..\Private\Navigation_Client.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\StatePlayerOH_LAttack.cpp" />
     <ClCompile Include="..\Private\PlayerCamera_Free.cpp" />
