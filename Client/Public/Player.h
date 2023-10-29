@@ -42,7 +42,7 @@ public:
 		m_pPlayerCams[_eCamType] = _pCam;
 	}
 
-	const _vector& Get_PlayerCamLook();
+	const _vector Get_PlayerCamLook();
 	// void Set_CamLook(const _vector& _vPlayerLook);
 
 private:

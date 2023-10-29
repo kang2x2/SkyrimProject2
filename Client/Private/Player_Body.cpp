@@ -26,6 +26,7 @@ HRESULT CPlayer_Body::Initialize_Clone(void* _pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
+	// m_pTransformCom->Set_Scaling(_float3(0.0013f, 0.0013f, 0.0013f));
 	m_strName = TEXT("Player_Body");
 
 	return S_OK;
@@ -35,7 +36,10 @@ void CPlayer_Body::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
-	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
+	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix());
+
+	/* aabb오리지널 바운딩 * 행렬을 해서 실제 충돌하기위한 데이터(aabb)에게 전달한다.*/
+	m_pColliderCom->Update(XMLoadFloat4x4(&m_matWorld));
 }
 
 void CPlayer_Body::LateTick(_float _fTimeDelta)
@@ -65,6 +69,11 @@ HRESULT CPlayer_Body::Render()
 		if (FAILED(m_pModelCom->Render(i)))
 			return E_FAIL;
 	}
+
+#ifdef _DEBUG
+	/* 콜라이더를 그릴 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
+	m_pColliderCom->Render();
+#endif
 
 	return S_OK;
 }
@@ -97,6 +106,16 @@ HRESULT CPlayer_Body::Ready_Component()
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
 		return E_FAIL;
+
+	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
+
+	AABBDesc.vExtents = _float3(0.3f, 0.7f, 0.3f );
+	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
+		TEXT("Com_Collider_AABB"), (CComponent**)&m_pColliderCom, &AABBDesc)))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -185,6 +204,7 @@ void CPlayer_Body::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pParentTransform);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pRendererCom);

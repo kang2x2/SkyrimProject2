@@ -37,8 +37,9 @@ HRESULT CWeapon_IronSword::Initialize_Clone(void* _pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Scaling(_float3(0.1f, 0.1f, 0.1f));
-
+	m_pTransformCom->Set_Scaling(_float3(0.01f, 0.01f, 0.01f));
+	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
+	// matInitialize = XMMatrixRotationY(XMConvertToRadians(-90.f));
 	m_strName = TEXT("IronSword");
 
 	return S_OK;
@@ -50,13 +51,13 @@ void CWeapon_IronSword::Tick(_float _fTimeDelta)
 	_float4x4 matSocketCombined = m_pSocketBone->Get_CombinedTransformationMatrix();
 
 	_matrix		WorldMatrix = XMLoadFloat4x4(&matSocketCombined) *
-		XMLoadFloat4x4(&m_matSocketPivot) * m_pParentTransform->Get_WorldMatrix();
+		XMLoadFloat4x4(&m_matSocketPivot);
 
 	WorldMatrix.r[0] = XMVector3Normalize(WorldMatrix.r[0]);
 	WorldMatrix.r[1] = XMVector3Normalize(WorldMatrix.r[1]);
 	WorldMatrix.r[2] = XMVector3Normalize(WorldMatrix.r[2]);
 
-	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix() * WorldMatrix);
+ 	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix() * WorldMatrix);
 }
 
 void CWeapon_IronSword::LateTick(_float _fTimeDelta)

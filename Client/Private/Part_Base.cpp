@@ -61,7 +61,7 @@ HRESULT CPart_Base::Render()
 
 HRESULT CPart_Base::Compute_RenderMatrix(_fmatrix ChildMatrix)
 {
-	XMStoreFloat4x4(&m_matWorld, m_pTransformCom->Get_WorldMatrix() * ChildMatrix);
+	XMStoreFloat4x4(&m_matWorld, ChildMatrix * m_pParentTransform->Get_WorldMatrix());
 
 	return S_OK;
 }

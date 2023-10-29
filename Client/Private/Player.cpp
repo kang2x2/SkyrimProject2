@@ -111,7 +111,7 @@ void CPlayer::Play_Animation(_bool _bIsLoop, string _strAnimationName)
 //	m_pPlayerCams[m_eCurCamMode]->Set_CamLook(_vPlayerLook);
 //}
 
-const _vector& CPlayer::Get_PlayerCamLook()
+const _vector CPlayer::Get_PlayerCamLook()
 {
 	return m_pPlayerCams[m_eCurCamMode]->Get_CamLook();
 }
@@ -123,17 +123,20 @@ HRESULT CPlayer::Ready_Component()
 	//TransformDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
-		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom), *TransformDesc))
+		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom), &TransformDesc))
 		return E_FAIL;
 
 	/* Com_Navigation */
 
-	CNavigation::DESC_NAVIGATION		NavigationDesc;
-	NavigationDesc.iCurIndex = 0;
+#ifdef _DEBUG
+	//CNavigation::DESC_NAVIGATION		NavigationDesc;
+	//NavigationDesc.iCurIndex = 0;
+	//
+	//if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
+	//	TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
+	//	return E_FAIL;
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
-		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
-		return E_FAIL;
+#endif
 
 	return S_OK;
 }
@@ -146,7 +149,6 @@ HRESULT CPlayer::Ready_Part()
 	CGameObject* pPart = nullptr;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
-	m_pTransformCom->Set_Scaling(_float3(0.0013f, 0.0013f, 0.0013f));
 	/* For. Player Body */
 	CPlayer_Body::PART_DESC BodyPartDesc;
 	BodyPartDesc.pParentTransform = m_pTransformCom;
@@ -159,8 +161,8 @@ HRESULT CPlayer::Ready_Part()
 	/* For. Weapon */
 	CWeapon_IronSword::WEAPON_DESC WeaponPartDesc;
 	WeaponPartDesc.pParentTransform = m_pTransformCom;
-	WeaponPartDesc.pSocketBone = dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("WEAPON");
-	WeaponPartDesc.matSocketPivot = dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
+	WeaponPartDesc.pSocketBone = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("WEAPON");
+	WeaponPartDesc.matSocketPivot = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
 
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Weapon_IronSword"), &WeaponPartDesc);
 	if (pPart == nullptr)
@@ -219,7 +221,10 @@ void CPlayer::Free()
 
 	m_vecPlayerPart.clear();
 
+#ifdef _DEBUG
 	Safe_Release(m_pNavigationCom);
-	Safe_Release(m_pTransformCom);
+#endif
+
+	// Safe_Release(m_pTransformCom);
 	Safe_Release(m_pStateManager);
 }

@@ -243,7 +243,7 @@ void CTransform::SetLook(_fvector _vPoint)
 	// 크기 받아옴. (길이를 1로 초기화 하고 연산하기 때문에 크기가 망가질 수 있어 보관.)
 	_float3 vScaled = Get_Scaled();
 
-	_float4 vPoint = {};
+	_float4 vPoint = {0.f, 0.f, 0.f, 0.f};
 	XMStoreFloat4(&vPoint, _vPoint);
 	vPoint.y = 0;
 

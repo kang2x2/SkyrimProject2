@@ -27,7 +27,8 @@ public:
 	_vector Get_State(STATE _eState)
 	{
 		//  XMLoadFloat4x4 : float4x4를 XMMATRIX로 치환.
-		return XMLoadFloat4x4(&m_WorldMatrix).r[_eState];
+		XMMATRIX worldMatrix = XMLoadFloat4x4(&m_WorldMatrix);
+		return worldMatrix.r[_eState];
 	}
 	_float3 Get_Scaled();
 	// _vector가 아닌 _fvector와 같이 알파벳이 붙은 vector const 형이다.

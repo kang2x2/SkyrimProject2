@@ -148,6 +148,24 @@
     <Filter Include="01. Utiltiy\02. Object\02. LandObject">
       <UniqueIdentifier>{588b0ad8-d999-434c-bd1b-4a9a4e6ad467}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utiltiy\03. Component\07. Collider">
+      <UniqueIdentifier>{ddc14793-64c7-4e7c-a7ad-8aac21037878}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\03. Component\07. Collider\00. DebugDraw">
+      <UniqueIdentifier>{2f85204b-4a50-4cd6-b94a-418fe7403aa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\03. Component\07. Collider\01. Bounding">
+      <UniqueIdentifier>{360301ea-f505-4530-8f19-6ceeb4b16bc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\03. Component\07. Collider\01. Bounding\00. AABB">
+      <UniqueIdentifier>{f0bd7e2d-1b91-4cb6-8558-0c680d87fc23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\03. Component\07. Collider\01. Bounding\01. OBB">
+      <UniqueIdentifier>{6200a365-9bb6-4e0a-9245-f53c1f53cc86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\03. Component\07. Collider\01. Bounding\02. Sphere">
+      <UniqueIdentifier>{51ea4b61-c991-40fe-b1f9-0eb90ed6bdbf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -160,9 +178,6 @@
       <Filter>99. Define</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Engine_Struct.h">
-      <Filter>99. Define</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Engine_Typedef.h">
       <Filter>99. Define</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Graphic_Device.h">
@@ -288,6 +303,27 @@
     <ClInclude Include="..\Public\LandObject.h">
       <Filter>01. Utiltiy\02. Object\02. LandObject</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\DebugDraw.h">
+      <Filter>01. Utiltiy\03. Component\07. Collider\00. DebugDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Collider.h">
+      <Filter>01. Utiltiy\03. Component\07. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding.h">
+      <Filter>01. Utiltiy\03. Component\07. Collider\01. Bounding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding_AABB.h">
+      <Filter>01. Utiltiy\03. Component\07. Collider\01. Bounding\00. AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Engine_Typedef.h">
+      <Filter>99. Define</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding_OBB.h">
+      <Filter>01. Utiltiy\03. Component\07. Collider\01. Bounding\01. OBB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding_Sphere.h">
+      <Filter>01. Utiltiy\03. Component\07. Collider\01. Bounding\02. Sphere</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Graphic_Device.cpp">
@@ -412,6 +448,24 @@
     </ClCompile>
     <ClCompile Include="..\Private\LandObject.cpp">
       <Filter>01. Utiltiy\02. Object\02. LandObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DebugDraw.cpp">
+      <Filter>01. Utiltiy\03. Component\07. Collider\00. DebugDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Collider.cpp">
+      <Filter>01. Utiltiy\03. Component\07. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding.cpp">
+      <Filter>01. Utiltiy\03. Component\07. Collider\01. Bounding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding_AABB.cpp">
+      <Filter>01. Utiltiy\03. Component\07. Collider\01. Bounding\00. AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding_OBB.cpp">
+      <Filter>01. Utiltiy\03. Component\07. Collider\01. Bounding\01. OBB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding_Sphere.cpp">
+      <Filter>01. Utiltiy\03. Component\07. Collider\01. Bounding\02. Sphere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

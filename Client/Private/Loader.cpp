@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+#include "Collider.h"
+
 // Logo Level
 #include "BackGround.h"
 
@@ -226,6 +228,18 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 
 #pragma endregion
 
+#pragma region Collider
+
+	m_strLoadingText = TEXT("Loading Collider.");
+
+	/* For.Prototype_Component_Collider_AABB */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
+		return E_FAIL;
+
+
+#pragma endregion
+
 #pragma region Mesh
 	/* Mesh */
 	m_strLoadingText = TEXT("Loading Mesh.");
@@ -243,14 +257,13 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 
 	/* Player */
 	//  * XMMatrixTranslation(1.f, -1.3f, 12.f)
-	// matInitialize = XMMatrixScaling(0.002f, 0.002f, 0.002f);
+	matInitialize = XMMatrixScaling(0.0013f, 0.0013f, 0.0013f);
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_Body"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Player/Player_1Hand_Stand.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
 	/* Weapon */
 	matInitialize = XMMatrixIdentity();
-	matInitialize = XMMatrixRotationY(XMConvertToRadians(-90.f));
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Weapon_IronSword"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/IronSword/Iron_LongSword.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;

@@ -32,7 +32,7 @@ HRESULT CChannel::Initialize(const CModel* _pModel, const CBin_AIScene::DESC_ANI
 		if (_pAIChannel->mNumScalingKeys > i)
 		{
 			memcpy(&vScale, &_pAIChannel->mScalingKeys[i].mValue, sizeof(_float3));
-			tKeyFrame.fTime = _pAIChannel->mScalingKeys[i].mTime;
+			tKeyFrame.fTime = (_float)_pAIChannel->mScalingKeys[i].mTime;
 		}
 
 		if (_pAIChannel->mNumRotationKeys > i)
@@ -44,7 +44,7 @@ HRESULT CChannel::Initialize(const CModel* _pModel, const CBin_AIScene::DESC_ANI
 			vRotation.y = _pAIChannel->mRotationKeys[i].mValue.y;
 			vRotation.z = _pAIChannel->mRotationKeys[i].mValue.z;
 			vRotation.w = _pAIChannel->mRotationKeys[i].mValue.w;
-			tKeyFrame.fTime = _pAIChannel->mRotationKeys[i].mTime;
+			tKeyFrame.fTime = (_float)_pAIChannel->mRotationKeys[i].mTime;
 		}
 
 		if (_pAIChannel->mNumPositionKeys > i)
@@ -52,7 +52,7 @@ HRESULT CChannel::Initialize(const CModel* _pModel, const CBin_AIScene::DESC_ANI
 			memcpy(&vTranslation, &_pAIChannel->mPositionKeys[i].mValue, sizeof(_float3));
 			/* _pAIChannel의 위치 키의 값은 vector3형식의 타입이기에 w는 1로 직접 초기화 해야 한다. */
 			vTranslation.w = 1.f;
-			tKeyFrame.fTime = _pAIChannel->mPositionKeys[i].mTime;
+			tKeyFrame.fTime = (_float)_pAIChannel->mPositionKeys[i].mTime;
 		}
 
 		tKeyFrame.vScale = vScale;
@@ -80,7 +80,7 @@ void CChannel::Update_TransformationMatrix(_uint* _pCurKeyFrame, vector<class CB
 	/* 현재 트랙이 마지막 키 프레임이 넘어가면 마지막 뼈의 상태를 유지. */
 	if (_fTrackPosition >= tLastKeyFrame.fTime)
 	{
-		*_pCurKeyFrame = m_vecKeyFrame.size() - 1;
+		*_pCurKeyFrame = (_uint)m_vecKeyFrame.size() - 1;
 		vScale = tLastKeyFrame.vScale;
 		vRotation = tLastKeyFrame.vRotation;
 		vTranslation = _float4(tLastKeyFrame.vTranslation.x, tLastKeyFrame.vTranslation.y, tLastKeyFrame.vTranslation.z, 1.f );

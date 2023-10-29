@@ -9,6 +9,7 @@ class CBone;
 class CModel;
 class CRenderer;
 class CShader;
+class CCollider;
 class CTransform;
 
 END
@@ -38,6 +39,9 @@ public:
 private:
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResource();
+
+private:
+	CCollider* m_pColliderCom = nullptr;
 
 public:
 	static CPlayer_Body* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

@@ -191,7 +191,7 @@ HRESULT CMyFile_Manager::Write_FBXNode(ofstream& _outFile, aiNode* _pNode, unsig
 
 		m_vecIndex.push_back(1);
 
-		int iIndex = m_vecIndex.size() - 1;
+		int iIndex = (_int)m_vecIndex.size() - 1;
 
 		for (size_t i = 0; i < _pNode->mNumChildren; ++i)
 		{

@@ -16,8 +16,8 @@ CGameInstance::CGameInstance()
 	, m_pInput_Device(CInput_Device::GetInstance())
 	, m_pCalculator(CCalculator::GetInstance())
 	, m_pLevel_Manager(CLevel_Manager::GetInstance())
-	, m_pObject_Manager(CObject_Manager::GetInstance())
 	, m_pComponent_Manager(CComponent_Manager::GetInstance())
+	, m_pObject_Manager(CObject_Manager::GetInstance())
 	, m_pLight_Manager(CLight_Manager::GetInstance())
 	, m_pPipeLine(CPipeLine::GetInstance())
 	, m_pMyFile_Manager(CMyFile_Manager::GetInstance())
@@ -28,8 +28,8 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pInput_Device);
 	Safe_AddRef(m_pCalculator);
 	Safe_AddRef(m_pLevel_Manager);
-	Safe_AddRef(m_pObject_Manager);
 	Safe_AddRef(m_pComponent_Manager);
+	Safe_AddRef(m_pObject_Manager);
 	Safe_AddRef(m_pLight_Manager);
 	Safe_AddRef(m_pPipeLine);
 	Safe_AddRef(m_pMyFile_Manager);

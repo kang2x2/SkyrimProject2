@@ -11,6 +11,11 @@
 #include "Transform.h"
 #include "Navigation.h"
 
+#include "Collider.h"
+#include "Bounding_AABB.h"
+#include "Bounding_OBB.h"
+#include "Bounding_Sphere.h"
+
 BEGIN(Engine)
 
 /* 컴포넌트들의 원본만 보관하는 Manager이며 
