@@ -143,8 +143,19 @@ HRESULT CLoader::Loading_For_Level_Tool()
 
 	_matrix matInitialize = XMMatrixIdentity();
 
-	/* GameObject */
+#pragma region Collider
 
+	m_strLoadingText = TEXT("Loading Collider.");
+
+	/* For.Prototype_Component_Collider_AABB */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
+		return E_FAIL;
+
+#pragma endregion
+
+
+#pragma region GameObject
 	// Camera
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_ToolCamera"),
 		CTool_Camera::Create(m_pDevice, m_pContext))))
@@ -155,6 +166,8 @@ HRESULT CLoader::Loading_For_Level_Tool()
 		return E_FAIL;
 
 	Set_ProtoType_Object();
+
+#pragma endregion
 
 	/* ·Îµù ³¡ */
 	Safe_Release(pGameInstance);

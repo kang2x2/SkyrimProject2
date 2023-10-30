@@ -15,7 +15,12 @@ HRESULT CBounding_OBB::Initialize(const BOUNDING_DESC* _pDesc)
 
 	BOUNDING_OBB_DESC* pOBBDesc = (BOUNDING_OBB_DESC*)_pDesc;
 
-	m_pOBB_Original = new BoundingOrientedBox(pOBBDesc->vCenter, pOBBDesc->vExtents, pOBBDesc->vRotation);
+	_float4		vRotation;
+
+	XMStoreFloat4(&vRotation, XMQuaternionRotationRollPitchYaw(XMConvertToRadians(pOBBDesc->vDegree.x), XMConvertToRadians(pOBBDesc->vDegree.y), XMConvertToRadians(pOBBDesc->vDegree.z)));
+
+
+	m_pOBB_Original = new BoundingOrientedBox(pOBBDesc->vCenter, pOBBDesc->vExtents, vRotation);
 	m_pOBB = new BoundingOrientedBox(*m_pOBB_Original);
 
 	return S_OK;

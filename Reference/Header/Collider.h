@@ -38,6 +38,8 @@ private:
 	/* Vertex, Index Buffer를 생성하고 그리는 기능을 제공하는 객체.  */
 	PrimitiveBatch<DirectX::VertexPositionColor>* m_pBatch =  nullptr;
 	BasicEffect*								  m_pEffect =  nullptr;
+	ID3D11InputLayout*							  m_pInputLayout = nullptr;
+
 #endif
 
 public:

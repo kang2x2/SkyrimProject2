@@ -166,6 +166,12 @@
     <Filter Include="01. Utiltiy\03. Component\07. Collider\01. Bounding\02. Sphere">
       <UniqueIdentifier>{51ea4b61-c991-40fe-b1f9-0eb90ed6bdbf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\03. Navi_Cell\Outline">
+      <UniqueIdentifier>{87aaba10-08d8-4d51-bf84-6af59ce78859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\03. Navi_Cell\Fill">
+      <UniqueIdentifier>{622f9b7a-d69a-488e-ad6a-be6b0d7a9951}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -285,9 +291,6 @@
     <ClInclude Include="..\Public\Cell.h">
       <Filter>01. Utiltiy\03. Component\06. Navigation\01. Cell</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\VIBuffer_Cell.h">
-      <Filter>01. Utiltiy\03. Component\01. VIBuffer\03. Navi_Cell</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_Player.h">
       <Filter>07. State\00. Player</Filter>
     </ClInclude>
@@ -323,6 +326,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\Bounding_Sphere.h">
       <Filter>01. Utiltiy\03. Component\07. Collider\01. Bounding\02. Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Cell_Outline.h">
+      <Filter>01. Utiltiy\03. Component\01. VIBuffer\03. Navi_Cell\Outline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Cell_Fill.h">
+      <Filter>01. Utiltiy\03. Component\01. VIBuffer\03. Navi_Cell\Fill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -434,9 +443,6 @@
     <ClCompile Include="..\Private\Cell.cpp">
       <Filter>01. Utiltiy\03. Component\06. Navigation\01. Cell</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\VIBuffer_Cell.cpp">
-      <Filter>01. Utiltiy\03. Component\01. VIBuffer\03. Navi_Cell</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_Player.cpp">
       <Filter>07. State\00. Player</Filter>
     </ClCompile>
@@ -466,6 +472,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Bounding_Sphere.cpp">
       <Filter>01. Utiltiy\03. Component\07. Collider\01. Bounding\02. Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Cell_Outline.cpp">
+      <Filter>01. Utiltiy\03. Component\01. VIBuffer\03. Navi_Cell\Outline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Cell_Fill.cpp">
+      <Filter>01. Utiltiy\03. Component\01. VIBuffer\03. Navi_Cell\Fill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

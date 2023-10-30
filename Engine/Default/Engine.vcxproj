@@ -219,7 +219,8 @@
     <ClInclude Include="..\Public\Timer_Manager.h" />
     <ClInclude Include="..\Public\Transform.h" />
     <ClInclude Include="..\Public\VIBuffer.h" />
-    <ClInclude Include="..\Public\VIBuffer_Cell.h" />
+    <ClInclude Include="..\Public\VIBuffer_Cell_Fill.h" />
+    <ClInclude Include="..\Public\VIBuffer_Cell_Outline.h" />
     <ClInclude Include="..\Public\VIBuffer_Collision.h" />
     <ClInclude Include="..\Public\VIBuffer_Cube.h" />
     <ClInclude Include="..\Public\VIBuffer_Grid.h" />
@@ -267,7 +268,8 @@
     <ClCompile Include="..\Private\Timer_Manager.cpp" />
     <ClCompile Include="..\Private\Transform.cpp" />
     <ClCompile Include="..\Private\VIBuffer.cpp" />
-    <ClCompile Include="..\Private\VIBuffer_Cell.cpp" />
+    <ClCompile Include="..\Private\VIBuffer_Cell_Fill.cpp" />
+    <ClCompile Include="..\Private\VIBuffer_Cell_Outline.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Collision.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Cube.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Grid.cpp" />

@@ -1,12 +1,14 @@
 #include "Cell.h"
-#include "VIBuffer_Cell.h"
+#include "VIBuffer_Cell_Outline.h"
+#include "VIBuffer_Cell_Fill.h"
 
 CCell::CCell(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: m_pDevice(_pDevice)
 	, m_pContext(_pContext)
 {
 #ifdef _DEBUG
-	Safe_AddRef(m_pVIBufferCom);
+	Safe_AddRef(m_pVIBufferOutCom);
+	Safe_AddRef(m_pVIBufferInCom);
 #endif
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pContext);
@@ -32,8 +34,12 @@ HRESULT CCell::Initialize(const _float3* _pPoints, _uint _iIndex)
 	}
 
 #ifdef _DEBUG
-	m_pVIBufferCom = CVIBuffer_Cell::Create(m_pDevice, m_pContext, m_localPoints);
-	if (nullptr == m_pVIBufferCom)
+	m_pVIBufferOutCom = CVIBuffer_Cell_Outline::Create(m_pDevice, m_pContext, m_localPoints);
+	if (nullptr == m_pVIBufferOutCom)
+		return E_FAIL;
+
+	m_pVIBufferInCom = CVIBuffer_Cell_Fill::Create(m_pDevice, m_pContext, m_localPoints);
+	if (nullptr == m_pVIBufferInCom)
 		return E_FAIL;
 #endif
 
@@ -96,9 +102,13 @@ _bool CCell::IsOut(_fvector _vPoints, _fmatrix _matWorld, _int* _pINeighborIndex
 }
 
 #ifdef _DEBUG
-HRESULT CCell::Render()
+HRESULT CCell::Render(CELLRENDER_TYPE _eType)
 {
-	m_pVIBufferCom->Render();
+	if(_eType == CELL_OUTLINE)
+		m_pVIBufferOutCom->Render();
+
+	else if (_eType == CELL_FILL)
+		m_pVIBufferInCom->Render();
 
 	return S_OK;
 }
@@ -122,7 +132,8 @@ void CCell::Free()
 	__super::Free();
 
 #ifdef _DEBUG
-	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pVIBufferOutCom);
+	Safe_Release(m_pVIBufferInCom);
 #endif
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);

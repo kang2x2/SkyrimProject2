@@ -10,7 +10,7 @@ public:
 	typedef struct tagBoundingOBBDesc : public CBounding::BOUNDING_DESC
 	{
 		_float3		vExtents;
-		_float4		vRotation;
+		_float3		vDegree;
 	}BOUNDING_OBB_DESC;
 
 private:

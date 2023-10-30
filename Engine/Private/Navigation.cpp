@@ -122,7 +122,6 @@ _bool CNavigation::IsMove(_fvector _vPoint)
 
 HRESULT CNavigation::Add_Cell(_float3 _vMeshPos[3])
 {
-	// 0.2
 	/* 스냅 설정.(가까우면 붙이기) */
 	for (size_t i = 0; i < CCell::POINT_END; ++i)
 	{
@@ -202,6 +201,7 @@ HRESULT CNavigation::Render()
 
 	if (-1 == m_iCurIndex)
 	{
+#pragma region Outline
 		vColor = _float4(0.f, 1.f, 0.f, 1.f);
 		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLineColor", &vColor, sizeof(_float4))))
 			return E_FAIL;
@@ -216,8 +216,27 @@ HRESULT CNavigation::Render()
 		for (auto& iter : m_vecCell)
 		{
 			if (nullptr != iter)
-				iter->Render();
+				iter->Render(CCell::CELL_OUTLINE);
 		}
+#pragma endregion 
+
+#pragma region Fill
+		vColor = _float4(0.f, 1.f, 0.f, 0.2f);
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLineColor", &vColor, sizeof(_float4))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_fHeight", &fHeight, sizeof(_float))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Begin(0)))
+			return E_FAIL;
+
+		for (auto& iter : m_vecCell)
+		{
+			if (nullptr != iter)
+				iter->Render(CCell::CELL_FILL);
+		}
+#pragma endregion
 	}
 	else
 	{
@@ -232,7 +251,7 @@ HRESULT CNavigation::Render()
 		if (FAILED(m_pShaderCom->Begin(0)))
 			return E_FAIL;
 
-		m_vecCell[m_iCurIndex]->Render();
+		m_vecCell[m_iCurIndex]->Render(CCell::CELL_OUTLINE);
 	}
 
 	return S_OK;
@@ -268,6 +287,34 @@ HRESULT CNavigation::SetUp_Neighbors()
 	}
 
 	return S_OK;
+}
+
+_vector CNavigation::Set_OnCell(_fvector _vWorldPos)
+{
+	/* 
+	1. 월드 포스 받아온다.
+	2. m_vecCell[m_iCurIndex]의 위치의 셀 타기.
+	3. */
+
+	_float3 PosA = *m_vecCell[m_iCurIndex]->Get_LocalPoints(CCell::POINT_A);
+	_float3 PosB = *m_vecCell[m_iCurIndex]->Get_LocalPoints(CCell::POINT_B);
+	_float3 PosC = *m_vecCell[m_iCurIndex]->Get_LocalPoints(CCell::POINT_C);
+
+	_float fWidth = XMVectorGetX(_vWorldPos) - PosA.x;
+	_float fDepth = PosA.z - XMVectorGetZ(_vWorldPos);
+
+	_vector vPlane;
+
+	vPlane = XMPlaneFromPoints(XMLoadFloat3(&PosA),
+		XMLoadFloat3(&PosB), XMLoadFloat3(&PosC));
+
+	_float fY = ((-XMVectorGetX(vPlane) * XMVectorGetX(_vWorldPos)
+		- (XMVectorGetZ(vPlane) * XMVectorGetZ(_vWorldPos))
+		- XMVectorGetW(vPlane))) / XMVectorGetY(vPlane);
+
+	_fvector vResultWorldPos = XMVectorSetY(_vWorldPos, fY);
+
+	return vResultWorldPos;
 }
 
 CNavigation* CNavigation::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const wstring& _strNaviMeshPath)

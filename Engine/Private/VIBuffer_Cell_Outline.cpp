@@ -1,16 +1,16 @@
-#include "VIBuffer_Cell.h"
+#include "VIBuffer_Cell_Outline.h"
 
-CVIBuffer_Cell::CVIBuffer_Cell(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CVIBuffer_Cell_Outline::CVIBuffer_Cell_Outline(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CVIBuffer(_pDevice, _pContext)
 {
 }
 
-CVIBuffer_Cell::CVIBuffer_Cell(const CVIBuffer_Cell& rhs)
+CVIBuffer_Cell_Outline::CVIBuffer_Cell_Outline(const CVIBuffer_Cell_Outline& rhs)
 	: CVIBuffer(rhs)
 {
 }
 
-HRESULT CVIBuffer_Cell::Initialize_ProtoType(const _float3* _Points)
+HRESULT CVIBuffer_Cell_Outline::Initialize_ProtoType(const _float3* _Points)
 {
 	m_iStride = sizeof(VTXPOSCELL); // 버텍스 하나 사이즈
 	m_iNumVertices = 3;
@@ -78,38 +78,38 @@ HRESULT CVIBuffer_Cell::Initialize_ProtoType(const _float3* _Points)
 
 }
 
-HRESULT CVIBuffer_Cell::Initialize_Clone(void* pArg)
+HRESULT CVIBuffer_Cell_Outline::Initialize_Clone(void* pArg)
 {
 	return S_OK;
 }
 
-CVIBuffer_Cell* CVIBuffer_Cell::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const _float3* _Points)
+CVIBuffer_Cell_Outline* CVIBuffer_Cell_Outline::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const _float3* _Points)
 {
-	CVIBuffer_Cell* pInstance = new CVIBuffer_Cell(_pDevice, _pContext);
+	CVIBuffer_Cell_Outline* pInstance = new CVIBuffer_Cell_Outline(_pDevice, _pContext);
 
 	if (FAILED(pInstance->Initialize_ProtoType(_Points)))
 	{
-		MSG_BOX("Fail Create : CVIBuffer_Cell");
+		MSG_BOX("Fail Create : CVIBuffer_Cell_Outline");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CComponent* CVIBuffer_Cell::Clone(void* _pArg)
+CComponent* CVIBuffer_Cell_Outline::Clone(void* _pArg)
 {
-	CVIBuffer_Cell* pInstance = new CVIBuffer_Cell(*this);
+	CVIBuffer_Cell_Outline* pInstance = new CVIBuffer_Cell_Outline(*this);
 
 	if (FAILED(pInstance->Initialize_Clone(_pArg)))
 	{
-		MSG_BOX("Fail Clone : CVIBuffer_Cell");
+		MSG_BOX("Fail Clone : CVIBuffer_Cell_Outline");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CVIBuffer_Cell::Free()
+void CVIBuffer_Cell_Outline::Free()
 {
 	__super::Free();
 }

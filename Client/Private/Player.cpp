@@ -57,6 +57,9 @@ void CPlayer::Tick(_float _fTimeDelta)
 			iter->Tick(_fTimeDelta);
 	}
 
+	_vector	vPosition = m_pNavigationCom->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
 	Safe_Release(pGameInstance);
 }
 
@@ -129,12 +132,12 @@ HRESULT CPlayer::Ready_Component()
 	/* Com_Navigation */
 
 #ifdef _DEBUG
-	//CNavigation::DESC_NAVIGATION		NavigationDesc;
-	//NavigationDesc.iCurIndex = 0;
-	//
-	//if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
-	//	TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
-	//	return E_FAIL;
+	CNavigation::DESC_NAVIGATION		NavigationDesc;
+	NavigationDesc.iCurIndex = 0;
+	
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
+		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
+		return E_FAIL;
 
 #endif
 

@@ -13,10 +13,17 @@ CCollider::CCollider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 
 CCollider::CCollider(const CCollider& rhs)
 	: CComponent(rhs)
+#ifdef _DEBUG
 	, m_pBatch(rhs.m_pBatch)
 	, m_pEffect(rhs.m_pEffect)
+	, m_pInputLayout(rhs.m_pInputLayout)
+#endif
 	, m_eColliderType(rhs.m_eColliderType)
+
 {
+#ifdef _DEBUG
+	Safe_AddRef(m_pInputLayout);
+#endif
 }
 
 HRESULT CCollider::Initialize_ProtoType(COLLIDER_TYPE _eType)
@@ -29,6 +36,15 @@ HRESULT CCollider::Initialize_ProtoType(COLLIDER_TYPE _eType)
 
 	m_pEffect = new BasicEffect(m_pDevice);
 	m_pEffect->SetVertexColorEnabled(true);
+
+	const void* pShaderByteCode = nullptr;
+	size_t		iShaderByteCodeLength = 0;
+
+	m_pEffect->GetVertexShaderBytecode(&pShaderByteCode, &iShaderByteCodeLength);
+
+	if (FAILED(m_pDevice->CreateInputLayout(VertexPositionColor::InputElements, VertexPositionColor::InputElementCount, pShaderByteCode, iShaderByteCodeLength, &m_pInputLayout)))
+		return E_FAIL;
+
 #endif
 
 	return S_OK;
@@ -85,6 +101,7 @@ HRESULT CCollider::Render()
 
 	Safe_Release(pPipeLine);
 
+	m_pContext->IASetInputLayout(m_pInputLayout);
 	m_pEffect->Apply(m_pContext);
 
 	m_pBatch->Begin();
@@ -131,6 +148,9 @@ void CCollider::Free()
 	Safe_Release(m_pBounding);
 
 #ifdef _DEBUG
+
+	Safe_Release(m_pInputLayout);
+
 	if (!m_isCloned)
 	{
 		Safe_Delete(m_pBatch);

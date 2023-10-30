@@ -29,6 +29,9 @@ public:
 	HRESULT Cell_PopBack();
 	HRESULT SetUp_Neighbors();
 
+public:
+	_vector Set_OnCell(_fvector _vWorldPos);
+
 #ifdef _DEBUG
 public:
 	HRESULT Render();

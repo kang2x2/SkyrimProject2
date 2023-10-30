@@ -26,19 +26,12 @@ HRESULT CSkyrimTerrain::Initialize_Clone(void* pArg)
 
 HRESULT CSkyrimTerrain::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag, void* pArg)
 {
-	_matrix* pMatPivot = (_matrix*)pArg;
+	pMatPivot = (_matrix*)pArg;
 
 	m_strModelComTag = _strModelComTag;
 
 	if (FAILED(Ready_Component(_iLevel)))
 		return E_FAIL;
-
-	m_pTransformCom->Set_WorldMatrix(*pMatPivot);
-
-	//if (FAILED(Ready_Cell()))
-	//	return E_FAIL;
-
-	//m_pNavigationCom->SetUp_Neighbors();
 
 	m_bHasMesh = true;
 	m_strName = TEXT("SkyrimTerrain");
@@ -53,6 +46,7 @@ void CSkyrimTerrain::PriorityTick(_float _fTimeDelta)
 
 void CSkyrimTerrain::Tick(_float _fTimeDelta)
 {
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CSkyrimTerrain::LateTick(_float _fTimeDelta)
@@ -77,9 +71,9 @@ HRESULT CSkyrimTerrain::Render()
 		m_pModelCom->Render(i);
 	}
 
-//#ifdef _DEBUG
-//	m_pNavigationCom->Render();
-//#endif
+#ifdef _DEBUG
+	// m_pColliderCom->Render();
+#endif
 
 	return S_OK;
 }
@@ -102,9 +96,16 @@ HRESULT CSkyrimTerrain::Ready_Component(_uint _iLevel)
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
 		return E_FAIL;
 
-	//if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
-	//	TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom)))
-	//	return E_FAIL;
+	m_pTransformCom->Set_WorldMatrix(*pMatPivot);
+
+	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
+
+	AABBDesc.vExtents = _float3(0.5f, 1.5f, 2.0f);
+	AABBDesc.vCenter = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
+		TEXT("Com_Collider_AABB"), (CComponent**)&m_pColliderCom, &AABBDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -241,6 +242,7 @@ void CSkyrimTerrain::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);

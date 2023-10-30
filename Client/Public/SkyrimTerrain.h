@@ -9,6 +9,7 @@ class CShader;
 class CRenderer;
 class CTransform;
 class CNavigation;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -35,6 +36,10 @@ private:
 	CRenderer*		m_pRendererCom = nullptr;
 	CTransform*		m_pTransformCom = nullptr;
 	CNavigation*	m_pNavigationCom = nullptr;
+	CCollider*		m_pColliderCom = nullptr;
+
+private:
+	_matrix* pMatPivot;
 
 private:
 	HRESULT Ready_Component(_uint _iLevel);

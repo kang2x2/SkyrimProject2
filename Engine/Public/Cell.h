@@ -9,7 +9,7 @@ class CCell final : public CBase
 public:
 	enum CELLPOINT { POINT_A, POINT_B, POINT_C, POINT_END };
 	enum CELLLINE  { LINE_AB, LINE_BC, LINE_CA, LINE_END };
-
+	enum CELLRENDER_TYPE  { CELL_OUTLINE, CELL_FILL, CELL_END };
 private:
 	CCell(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual ~CCell() = default;
@@ -29,14 +29,15 @@ public:
 
 #ifdef _DEBUG
 public:
-	HRESULT Render();
+	HRESULT Render(CELLRENDER_TYPE _eType);
 #endif
 
 private:
 	ID3D11Device*				m_pDevice = nullptr;
 	ID3D11DeviceContext*		m_pContext = nullptr;
 #ifdef _DEBUG
-	class CVIBuffer_Cell*		m_pVIBufferCom = nullptr;
+	class CVIBuffer_Cell_Outline*	m_pVIBufferOutCom = nullptr;
+	class CVIBuffer_Cell_Fill*		m_pVIBufferInCom = nullptr;
 #endif
 
 	_uint					m_iIndex = 0; // 자기 번호(인덱스)
