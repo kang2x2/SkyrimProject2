@@ -172,6 +172,15 @@
     <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\03. Navi_Cell\Fill">
       <UniqueIdentifier>{622f9b7a-d69a-488e-ad6a-be6b0d7a9951}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\06. Instancing">
+      <UniqueIdentifier>{6d2c6b81-108b-4888-8180-8db1ea74e56b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\00. Point">
+      <UniqueIdentifier>{277c1961-6157-4af9-8693-a6db0c354394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect">
+      <UniqueIdentifier>{94c4df9a-6863-4d8c-bdee-c7a1bb307e23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -333,6 +342,12 @@
     <ClInclude Include="..\Public\VIBuffer_Cell_Fill.h">
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\03. Navi_Cell\Fill</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Instancing.h">
+      <Filter>01. Utiltiy\03. Component\01. VIBuffer\06. Instancing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Rect_Instance.h">
+      <Filter>01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Graphic_Device.cpp">
@@ -478,6 +493,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Cell_Fill.cpp">
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\03. Navi_Cell\Fill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Instancing.cpp">
+      <Filter>01. Utiltiy\03. Component\01. VIBuffer\06. Instancing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Rect_Instance.cpp">
+      <Filter>01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

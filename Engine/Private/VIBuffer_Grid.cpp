@@ -30,9 +30,9 @@ HRESULT CVIBuffer_Grid::Initialize_ProtoType(_uint _iTerrainWidth, _uint _iTerra
 	VTXPOSCOL* pVertices = new VTXPOSCOL[m_iNumVertices];
 	ZeroMemory(pVertices, sizeof(VTXPOSCOL) * m_iNumVertices);
 
-	for (size_t i = 0; i < m_iNumVerticesZ; ++i)
+	for (_uint i = 0; i < m_iNumVerticesZ; ++i)
 	{
-		for (size_t j = 0; j < m_iNumVerticesX; ++j)
+		for (_uint j = 0; j < m_iNumVerticesX; ++j)
 		{
 			_uint iIndex = i * m_iNumVerticesX + j;
 
@@ -45,16 +45,16 @@ HRESULT CVIBuffer_Grid::Initialize_ProtoType(_uint _iTerrainWidth, _uint _iTerra
 
 #pragma endregion
 
-#pragma Index Buffer
+#pragma region Index Buffer
 
 	_uint* pIndices = new _uint[m_iNumIndices];
 	ZeroMemory(pIndices, sizeof(_uint) * m_iNumIndices);
 
 	_uint iNumIndices = 0;
 
-	for (size_t i = 0; i < m_iNumVerticesZ - 1; ++i)
+	for (_uint i = 0; i < m_iNumVerticesZ - 1; ++i)
 	{
-		for (size_t j = 0; j < m_iNumVerticesX - 1; ++j)
+		for (_uint j = 0; j < m_iNumVerticesX - 1; ++j)
 		{
 			_uint iIndex = i * m_iNumVerticesX + j;
 

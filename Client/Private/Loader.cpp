@@ -13,6 +13,7 @@
 #include "Navigation_Client.h"
 #include "Terrain.h"
 #include "Sky.h"
+#include "ParticleRect.h"
 
 #include "Player.h"
 #include "Player_Body.h"
@@ -239,6 +240,11 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/SkyBox/Sky_%d.dds"), 4))))
 		return E_FAIL;
 
+	/* Snow */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Snow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Snow/Snow.png"), 1))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region Collider
@@ -264,8 +270,13 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 		return E_FAIL;
 
 	/* VIBuffer_Cube */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Cube"),
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_VIBuffer_Cube"),
 		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* VIBuffer_Rect_Instance */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_VIBuffer_Rect_Instance"),
+		CVIBuffer_Rect_Instance::Create(m_pDevice, m_pContext, 30))))
 		return E_FAIL;
 
 	/* Player */
@@ -305,8 +316,13 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 		return E_FAIL;
 
 	/* Shader_VtxCube */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxCube"),
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxCube"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxCube.hlsl"), VTXCUBE::Elements, VTXCUBE::iNumElements))))
+		return E_FAIL;
+
+	/* Shader_Rect_Instance */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_Rect_Instance"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Rect_Instance.hlsl"), VTX_RECT_INSTANCE::Elements, VTX_RECT_INSTANCE::iNumElements))))
 		return E_FAIL;
 
 #pragma endregion
@@ -323,6 +339,11 @@ HRESULT CLoader::Loading_For_Level_GamePlay()
 	// Sky
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Sky"),
 		CSky::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Particle
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Particle_Rect"),
+		CParticleRect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Terrain

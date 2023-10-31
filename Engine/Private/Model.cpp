@@ -137,7 +137,7 @@ HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName)
 		return S_OK;
 
 	/* 존재하는 애니메이션인지 */
-	for (size_t i = 0; i < m_iNumAnimation; ++i)
+	for (_uint i = 0; i < m_iNumAnimation; ++i)
 	{
 		if (!strcmp(m_vecAnimation[i]->Get_AnimationName(), _strAnimationName.c_str()))
 		{

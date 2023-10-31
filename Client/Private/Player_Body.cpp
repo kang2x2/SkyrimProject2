@@ -55,7 +55,7 @@ HRESULT CPlayer_Body::Render()
 	// 메시 몇개
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-	for (size_t i = 0; i < iNumMeshes; ++i)
+	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
 		if (FAILED(m_pModelCom->Bind_BondMatrices(m_pShaderCom, i, "g_BoneMatrices")))
 			return E_FAIL;

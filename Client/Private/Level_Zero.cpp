@@ -60,6 +60,8 @@ HRESULT CLevel_Zero::FindFBX(const wstring& _wStrFolderPath)
 			}
 		}
 	}
+
+	return S_OK;
 }
 
 HRESULT CLevel_Zero::ThrowFBX(const wstring& _wStrFolderPath)

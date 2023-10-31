@@ -44,9 +44,9 @@ HRESULT CVIBuffer_Terrain::Initialize_ProtoType(const wstring& _strHeightMapFile
 	VTXNORTEX* pVertices = new VTXNORTEX[m_iNumVertices];
 	ZeroMemory(pVertices, sizeof(VTXNORTEX) * m_iNumVertices);
 
-	for (size_t i = 0; i < m_iNumVerticesZ; i++)
+	for (_uint i = 0; i < m_iNumVerticesZ; i++)
 	{
-		for (size_t j = 0; j < m_iNumVerticesX; j++)
+		for (_uint j = 0; j < m_iNumVerticesX; j++)
 		{
 			_uint		iIndex = i * m_iNumVerticesX + j;
 			
@@ -55,7 +55,7 @@ HRESULT CVIBuffer_Terrain::Initialize_ProtoType(const wstring& _strHeightMapFile
 				x = j
 				y = 비트 연산으로 구한 높이에서 낮아지길 원할 수록 높은 수를 나눈다.
 				z = i */
-			pVertices[iIndex].vPosition = _float3(j, (pPixel[iIndex] & 0x000000ff) / 10.f, i);
+			pVertices[iIndex].vPosition = _float3((float)j, (pPixel[iIndex] & 0x000000ff) / 10.f, (float)i);
 
 			// 누적 시킬 것이기에 0으로 초기화.
 			pVertices[iIndex].vNormal = _float3(0.f, 0.f, 0.f); 
@@ -78,7 +78,7 @@ HRESULT CVIBuffer_Terrain::Initialize_ProtoType(const wstring& _strHeightMapFile
 
 	for (size_t i = 0; i < m_iNumVerticesZ - 1; ++i)
 	{
-		for (size_t j = 0; j < m_iNumVerticesX - 1; ++j)
+		for (_uint j = 0; j < m_iNumVerticesX - 1; ++j)
 		{
 			_uint iIndex = i * m_iNumVerticesX + j;
 

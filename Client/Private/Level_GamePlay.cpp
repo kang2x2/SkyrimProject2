@@ -23,8 +23,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	// CIMGui_Manager ÃÊ±âÈ­
 	CIMGui_Manager::GetInstance()->Initialize(m_pDevice, m_pContext, LEVEL_GAMEPLAY);
 
-	if (FAILED(Ready_Level()))
-		return E_FAIL;
+	//if (FAILED(Ready_Level()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
@@ -41,7 +41,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Navigation_Cleint(TEXT("Layer_Navigation_Client"))))
 		return E_FAIL;
 
-
+	if (FAILED(Ready_Layer_Particle(TEXT("Layer_Particle"))))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain"))))
 	//	return E_FAIL;
@@ -217,6 +218,17 @@ HRESULT CLevel_GamePlay::Ready_Layer_Terrain(const wstring& _strLayerTag)
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_Particle(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Particle_Rect"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
 }
 
 CLevel_GamePlay* CLevel_GamePlay::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)

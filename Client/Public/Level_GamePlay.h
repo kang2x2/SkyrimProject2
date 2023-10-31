@@ -28,6 +28,7 @@ private:
 	HRESULT Ready_Layer_Navigation_Cleint(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Sky(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Terrain(const wstring& _strLayerTag);
+	HRESULT Ready_Layer_Particle(const wstring& _strLayerTag);
 
 public:
 	static CLevel_GamePlay* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

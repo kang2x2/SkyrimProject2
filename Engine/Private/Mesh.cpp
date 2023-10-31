@@ -191,7 +191,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* _pModel, const CBin_AIS
 
 	/* 뼈로부터 어떤 정점에게 값을 채워야하는지를 알아본다? */
 	/* 각각의 뼈들은 어떤 정점들에게 영향을 주는가? */
-	for (size_t i = 0; i < m_iNumBones; ++i)
+	for (uint32_t i = 0; i < m_iNumBones; ++i)
 	{
 		// 뼈 정보 가져오기.
 		CBin_AIScene::DESC_MESHBONE pAIBone = _pAIMesh->mBones[i];

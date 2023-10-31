@@ -199,6 +199,12 @@
     <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\03. Navigation">
       <UniqueIdentifier>{a49993d1-1957-4caf-aa91-896a908b54f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\04. ParticleObject">
+      <UniqueIdentifier>{279fe604-6a99-42ea-803f-66cbbd9bc985}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\04. ParticleObject\00. Rect">
+      <UniqueIdentifier>{48c8af1f-974b-48ff-9abe-6b1f41783822}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -348,6 +354,9 @@
     <ClInclude Include="..\Public\Navigation_Client.h">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\03. Navigation</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\ParticleRect.h">
+      <Filter>02. GameObject\01. GamePlay\04. ParticleObject\00. Rect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -490,6 +499,9 @@
     <ClCompile Include="..\Private\Navigation_Client.cpp">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\03. Navigation</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\ParticleRect.cpp">
+      <Filter>02. GameObject\01. GamePlay\04. ParticleObject\00. Rect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -513,6 +525,9 @@
       <Filter>97. ShaderFile</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFile\Shader_VtxCube.hlsl">
+      <Filter>97. ShaderFile</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFile\Shader_Rect_Instance.hlsl">
       <Filter>97. ShaderFile</Filter>
     </FxCompile>
   </ItemGroup>

@@ -46,7 +46,7 @@ void CNavigation_Client::Tick(_float _fTimeDelta)
 
 void CNavigation_Client::LateTick(_float _fTimeDelta)
 {
-	m_pRendererCom->Add_RenderGroup(CRenderer::RG_PRIORITY, this);
+	m_pRendererCom->Add_RenderGroup(CRenderer::RG_BLEND, this);
 }
 
 HRESULT CNavigation_Client::Render()

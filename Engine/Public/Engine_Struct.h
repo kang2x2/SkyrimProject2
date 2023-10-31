@@ -111,6 +111,32 @@ namespace Engine
 
 	}VTX_ANIMMESH;
 
+	typedef struct ENGINE_DLL tagVertex_Instance
+	{
+		XMFLOAT4		vRight;
+		XMFLOAT4		vUp;
+		XMFLOAT4		vLook;
+		XMFLOAT4		vTranslation;
+
+		/* 셰이더에 이러한 정점이 잘 들어가냐? 라는 검증을 위해 */
+		/* 이 정점 뿐만아니라 그리기용 정점도 같이 받아야되지. */
+		/*static const unsigned int				iNumElements = 4;
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];*/
+	}VTXINSTANCE;
+
+	typedef struct ENGINE_DLL tagVertex_Rect_Instance
+	{
+		static const unsigned int				iNumElements = 6;
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
+	}VTX_RECT_INSTANCE;
+
+	typedef struct ENGINE_DLL tagVertex_Model_Instance
+	{
+		static const unsigned int				iNumElements = 8;
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
+	}VTX_MODEL_INSTANCE;
+
+
 	typedef struct tagKeyFrame
 	{
 		float		fTime;

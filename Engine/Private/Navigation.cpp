@@ -31,6 +31,7 @@ HRESULT CNavigation::Initialize_ProtoType(const wstring& _strNaviMeshPath)
 	if (StrCmpW(_strNaviMeshPath.c_str(), TEXT("")))
 	{
 		_ulong		dwByte = 0;
+		_bool		bIsRead = false;
 		HANDLE		hFile = CreateFile(_strNaviMeshPath.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 		if (0 == hFile)
 			return E_FAIL;
@@ -39,12 +40,12 @@ HRESULT CNavigation::Initialize_ProtoType(const wstring& _strNaviMeshPath)
 		{
 			_float3		vPoints[CCell::POINT_END] = {};
 
-			ReadFile(hFile, vPoints, sizeof(_float3) * CCell::POINT_END, &dwByte, nullptr);
+			bIsRead = ReadFile(hFile, vPoints, sizeof(_float3) * CCell::POINT_END, &dwByte, nullptr);
 
 			if (0 == dwByte)
 				break;
 
-			CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, m_vecCell.size());
+			CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_uint)m_vecCell.size());
 			if (nullptr == pCell)
 				return E_FAIL;
 
@@ -127,7 +128,7 @@ HRESULT CNavigation::Add_Cell(_float3 _vMeshPos[3])
 	{
 		for (size_t j = 0; j < m_vecCell.size(); ++j)
 		{
-			for (size_t k = 0; k < CCell::POINT_END; ++k)
+			for (_uint k = 0; k < CCell::POINT_END; ++k)
 			{
 				_float fDx = fabsf(m_vecCell[j]->Get_LocalPoints(k)->x - _vMeshPos[i].x);
 				_float fDy = fabsf(m_vecCell[j]->Get_LocalPoints(k)->y - _vMeshPos[i].y);
@@ -157,7 +158,7 @@ HRESULT CNavigation::Add_Cell(_float3 _vMeshPos[3])
 	}
 
 	/* 셀에 추가. */
-	CCell* pCell = CCell::Create(m_pDevice, m_pContext, _vMeshPos, m_vecCell.size());
+	CCell* pCell = CCell::Create(m_pDevice, m_pContext, _vMeshPos, (_uint)m_vecCell.size());
 	if (nullptr == pCell)
 		return E_FAIL;
 
@@ -165,6 +166,8 @@ HRESULT CNavigation::Add_Cell(_float3 _vMeshPos[3])
 
 	if (FAILED(SetUp_Neighbors()))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CNavigation::Cell_PopBack()
@@ -291,11 +294,6 @@ HRESULT CNavigation::SetUp_Neighbors()
 
 _vector CNavigation::Set_OnCell(_fvector _vWorldPos)
 {
-	/* 
-	1. 월드 포스 받아온다.
-	2. m_vecCell[m_iCurIndex]의 위치의 셀 타기.
-	3. */
-
 	_float3 PosA = *m_vecCell[m_iCurIndex]->Get_LocalPoints(CCell::POINT_A);
 	_float3 PosB = *m_vecCell[m_iCurIndex]->Get_LocalPoints(CCell::POINT_B);
 	_float3 PosC = *m_vecCell[m_iCurIndex]->Get_LocalPoints(CCell::POINT_C);

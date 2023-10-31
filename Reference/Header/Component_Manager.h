@@ -2,14 +2,16 @@
 
 #include "Model.h"
 #include "Renderer.h"
-#include "VIBuffer_Rect.h"
-#include "VIBuffer_Terrain.h"
-#include "VIBuffer_Grid.h"
-#include "VIBuffer_Cube.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "Transform.h"
 #include "Navigation.h"
+
+#include "VIBuffer_Rect.h"
+#include "VIBuffer_Terrain.h"
+#include "VIBuffer_Grid.h"
+#include "VIBuffer_Cube.h"
+#include "VIBuffer_Rect_Instance.h"
 
 #include "Collider.h"
 #include "Bounding_AABB.h"

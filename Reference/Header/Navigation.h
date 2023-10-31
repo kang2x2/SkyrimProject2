@@ -39,8 +39,8 @@ public:
 
 private:
 	static _float4x4				m_matWorld;
-	_int					m_iCurIndex = -1;
-	vector<class CCell*>	m_vecCell;
+	_int							m_iCurIndex = -1;
+	vector<class CCell*>			m_vecCell;
 
 #ifdef _DEBUG
 private:

@@ -39,6 +39,8 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	m_bHasPart = true;
 	m_strName = TEXT("Player");
 	
+	m_pTransformCom->Set_Speed(5.f);
+
 	Play_Animation(true, "1hm_idle");
 
 	return S_OK;
@@ -121,25 +123,17 @@ const _vector CPlayer::Get_PlayerCamLook()
 
 HRESULT CPlayer::Ready_Component()
 {
-	CTransform::TRANSFORM_DESC		TransformDesc;
-	TransformDesc.fSpeedPerSec = 0.5f;
-	//TransformDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
-
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom), &TransformDesc))
 		return E_FAIL;
 
 	/* Com_Navigation */
-
-#ifdef _DEBUG
 	CNavigation::DESC_NAVIGATION		NavigationDesc;
 	NavigationDesc.iCurIndex = 0;
 	
 	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
 		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
 		return E_FAIL;
-
-#endif
 
 	return S_OK;
 }
