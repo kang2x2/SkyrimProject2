@@ -10,10 +10,10 @@ CVIBuffer_Rect_Instance::CVIBuffer_Rect_Instance(const CVIBuffer_Rect_Instance& 
 {
 }
 
-HRESULT CVIBuffer_Rect_Instance::Initialize_ProtoType(_uint iNumInstance)
+HRESULT CVIBuffer_Rect_Instance::Initialize_ProtoType(const INSTANCE_DESC& _InstanceDesc)
 {
 	/* 인스턴스용 데이터. 셋. */
-	m_iNumInstance = iNumInstance;
+	m_iNumInstance = _InstanceDesc.iNumInstance;
 	m_iNumIndicesPerInstance = 6;
 
 	/* 그리기용 정점을 생성하는 파트. */
@@ -102,7 +102,7 @@ HRESULT CVIBuffer_Rect_Instance::Initialize_ProtoType(_uint iNumInstance)
 
 #pragma region INSTANCE_BUFFER
 
-	if (FAILED(__super::Initialize_ProtoType()))
+	if (FAILED(__super::Initialize_ProtoType(_InstanceDesc)))
 		return E_FAIL;
 
 #pragma endregion
@@ -110,8 +110,15 @@ HRESULT CVIBuffer_Rect_Instance::Initialize_ProtoType(_uint iNumInstance)
 	return S_OK;
 }
 
-HRESULT CVIBuffer_Rect_Instance::Initialize_Clone(void* pArg)
+HRESULT CVIBuffer_Rect_Instance::Initialize_Clone(void* _pArg)
 {
+#pragma region INSTANCE_BUFFER
+
+	if (FAILED(__super::Initialize_Clone(_pArg)))
+		return E_FAIL;
+
+#pragma endregion
+
 	return S_OK;
 }
 
@@ -122,21 +129,29 @@ HRESULT CVIBuffer_Rect_Instance::Update(_float _fTimeDelta)
 	/* 파티클의 움직임을 부여한다. */
 	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
 
-	//for (size_t i = 0; i < m_iNumInstance; i++)
-	//{
-	//	((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y -= 1.f * _fTimeDelta;
-	//}
+	for (size_t i = 0; i < m_iNumInstance; ++i)
+	{
+		m_pTimeAccAry[i] += _fTimeDelta;
+
+		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += m_pSpeedAry[i] * _fTimeDelta;
+	
+		if (m_pTimeAccAry[i] >= m_pLifeTimeAry[i])
+		{
+			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y = m_pVertices[i].vTranslation.y;
+			m_pTimeAccAry[i] = 0.f;
+		}
+	}
 
 	m_pContext->Unmap(m_pVBInstance, 0);
 
 	return S_OK;
 }
 
-CVIBuffer_Rect_Instance* CVIBuffer_Rect_Instance::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, _uint iNumInstance)
+CVIBuffer_Rect_Instance* CVIBuffer_Rect_Instance::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const INSTANCE_DESC& _InstanceDesc)
 {
 	CVIBuffer_Rect_Instance* pInstance = new CVIBuffer_Rect_Instance(_pDevice, _pContext);
 
-	if (FAILED(pInstance->Initialize_ProtoType(iNumInstance)))
+	if (FAILED(pInstance->Initialize_ProtoType(_InstanceDesc)))
 	{
 		MSG_BOX("Fail Create : CVIBuffer_Rect_Instance");
 		Safe_Release(pInstance);

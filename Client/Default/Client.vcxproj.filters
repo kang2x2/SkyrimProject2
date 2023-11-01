@@ -205,6 +205,18 @@
     <Filter Include="02. GameObject\01. GamePlay\04. ParticleObject\00. Rect">
       <UniqueIdentifier>{48c8af1f-974b-48ff-9abe-6b1f41783822}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\05. Particle">
+      <UniqueIdentifier>{82361166-7c5c-4c0d-9fef-281fb24d2da7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Level\02. GamePlay\00. WhiteRun">
+      <UniqueIdentifier>{efa50097-be3c-40ad-9a3d-153eae3d6845}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Level\02. GamePlay\01. Castle">
+      <UniqueIdentifier>{52f39095-2e5f-482b-a278-9d9d76466b18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Level\02. GamePlay\02. Dungeon">
+      <UniqueIdentifier>{b1986333-db61-46b3-9dc4-1dd2e0c73333}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -236,9 +248,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\BackGround.h">
       <Filter>02. GameObject\00. Logo\99. BackGround</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Level_GamePlay.h">
-      <Filter>01. Level\02. GamePlay</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\IMGui_Manager.h">
       <Filter>96. IMGUI\Manager</Filter>
@@ -357,6 +366,12 @@
     <ClInclude Include="..\Public\ParticleRect.h">
       <Filter>02. GameObject\01. GamePlay\04. ParticleObject\00. Rect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Level_WhiteRun.h">
+      <Filter>01. Level\02. GamePlay\00. WhiteRun</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Dungeon.h">
+      <Filter>01. Level\02. GamePlay\02. Dungeon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -384,9 +399,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\BackGround.cpp">
       <Filter>02. GameObject\00. Logo\99. BackGround</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Level_GamePlay.cpp">
-      <Filter>01. Level\02. GamePlay</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\IMGui_Manager.cpp">
       <Filter>96. IMGUI\Manager</Filter>
@@ -501,6 +513,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\ParticleRect.cpp">
       <Filter>02. GameObject\01. GamePlay\04. ParticleObject\00. Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_WhiteRun.cpp">
+      <Filter>01. Level\02. GamePlay\00. WhiteRun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Dungeon.cpp">
+      <Filter>01. Level\02. GamePlay\02. Dungeon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

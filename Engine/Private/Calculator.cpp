@@ -73,10 +73,10 @@ _float3 CCalculator::Picking_Position(ID3D11Device* _pDevice, ID3D11DeviceContex
 			if (!obj->Get_IsHasMesh())
 				continue;
 			// Terrain, Building, StoneWork 레이어만 검사.
-			if (obj->Get_ObjFileDesc().m_strLayerTag != TEXT("Layer_Skyrim_WhiteRun_Building") &&
-				obj->Get_ObjFileDesc().m_strLayerTag != TEXT("Layer_Skyrim_WhiteRun_StoneWork")&&
-				obj->Get_ObjFileDesc().m_strLayerTag != TEXT("Layer_Skyrim_WhiteRun_Terrain"))
-				continue;
+			//if (obj->Get_ObjFileDesc().m_strLayerTag != TEXT("Layer_Skyrim_WhiteRun_Building") &&
+			//	obj->Get_ObjFileDesc().m_strLayerTag != TEXT("Layer_Skyrim_WhiteRun_StoneWork")&&
+			//	obj->Get_ObjFileDesc().m_strLayerTag != TEXT("Layer_Skyrim_WhiteRun_Terrain"))
+			//	continue;
 
 			// 해당 객체의 월드 행렬을 얻어오기 위함.
 			CTransform* pObjTransform = dynamic_cast<CTransform*>(obj->Get_Component(TEXT("Com_Transform")));

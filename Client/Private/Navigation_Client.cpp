@@ -64,7 +64,7 @@ HRESULT CNavigation_Client::Ready_Component()
 		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Navigation"),
 		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom)))
 			return E_FAIL;
 

@@ -48,6 +48,18 @@ void CParticleRect::Tick(_float _fTimeDelta)
 
 void CParticleRect::LateTick(_float _fTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CTransform* m_pTargetTransform = 
+		dynamic_cast<CTransform*>
+		(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"), TEXT("Player"))
+		->Get_Component(TEXT("Com_Transform")));
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pTargetTransform->Get_State(CTransform::STATE_POSITION));
+
+	Safe_Release(pGameInstance);
+
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 }
 
@@ -69,17 +81,17 @@ HRESULT CParticleRect::Ready_Component()
 		return E_FAIL;
 
 	/* Com_Shader */
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_Rect_Instance"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Shader_Rect_Instance"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	/* Com_VIBuffer */
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_VIBuffer_Rect_Instance"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_VIBuffer_Rect_Instance"),
 		TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
 	/* Com_Texture*/
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Snow"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("Prototype_Component_Texture_Snow"),
 		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 

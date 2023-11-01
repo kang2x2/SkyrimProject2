@@ -25,7 +25,7 @@ HRESULT CIMGui_Manager::Initialize(ID3D11Device* _pDevice, ID3D11DeviceContext* 
 	{
 		m_pCurImGui = CImGui_Tool::Create(_pDevice, _pContext);
 	}
-	else if (_eLevelID == LEVEL_GAMEPLAY)
+	else if (_eLevelID == LEVEL_WHITERUN)
 	{
 		m_pCurImGui = CImGui_GamePlay::Create(_pDevice, _pContext);
 	}

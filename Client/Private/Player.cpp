@@ -131,7 +131,7 @@ HRESULT CPlayer::Ready_Component()
 	CNavigation::DESC_NAVIGATION		NavigationDesc;
 	NavigationDesc.iCurIndex = 0;
 	
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Navigation"),
 		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
 		return E_FAIL;
 

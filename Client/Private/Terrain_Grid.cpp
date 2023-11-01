@@ -36,7 +36,7 @@ void CTerrain_Grid::Tick(_float fTimeDelta)
 
 void CTerrain_Grid::LateTick(_float fTimeDelta)
 {
-	// m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
+	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 }
 
 HRESULT CTerrain_Grid::Render()

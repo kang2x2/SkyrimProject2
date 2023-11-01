@@ -41,7 +41,8 @@ private:
 	HRESULT					Loading_For_Level_Zero();
 	HRESULT					Loading_For_Level_Tool();
 	HRESULT					Loading_For_Level_Logo();
-	HRESULT					Loading_For_Level_GamePlay();
+	HRESULT					Loading_For_Level_WhiteRun();
+	HRESULT					Loading_For_Level_Dungeon();
 
 	HRESULT					Set_ProtoType_Mesh(LEVELID _eLevel);
 	HRESULT					Set_ProtoType_Object();

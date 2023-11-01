@@ -5,11 +5,11 @@
 
 BEGIN(Client)
 
-class CLevel_GamePlay final : public CLevel
+class CLevel_Dungeon final : public CLevel
 {
 private:
-	CLevel_GamePlay(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
-	virtual ~CLevel_GamePlay() = default;
+	CLevel_Dungeon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	virtual ~CLevel_Dungeon() = default;
 
 public:
 	virtual HRESULT Initialize()override;
@@ -25,14 +25,14 @@ private:
 
 	HRESULT Ready_Layer_Player(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Camera(const wstring& _strLayerTag);
-	HRESULT Ready_Layer_Navigation_Cleint(const wstring& _strLayerTag);
+	HRESULT Ready_Layer_Navigation_Dungeon(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Sky(const wstring& _strLayerTag);
-	HRESULT Ready_Layer_Terrain(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Particle(const wstring& _strLayerTag);
 
 public:
-	static CLevel_GamePlay* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	static CLevel_Dungeon* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual void Free() override;
+
 };
 
 END

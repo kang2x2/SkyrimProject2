@@ -1,10 +1,9 @@
 #include "framework.h"
+#include "Level_Dungeon.h"
 
 #include <filesystem>
 #include <fstream>
 #include <commdlg.h>
-
-#include "Level_GamePlay.h"
 
 #include "IMGui_Manager.h"
 #include "GameInstance.h"
@@ -12,19 +11,15 @@
 #include "PlayerCamera_Free.h"
 #include "Player.h"
 
-
-CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CLevel_Dungeon::CLevel_Dungeon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CLevel(_pDevice, _pContext)
 {
 }
 
-HRESULT CLevel_GamePlay::Initialize()
+HRESULT CLevel_Dungeon::Initialize()
 {
-	// CIMGui_Manager 초기화
-	CIMGui_Manager::GetInstance()->Initialize(m_pDevice, m_pContext, LEVEL_GAMEPLAY);
-
-	//if (FAILED(Ready_Level()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Level()))
+		return E_FAIL;
 
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
@@ -38,7 +33,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_PlayerCamera"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Navigation_Cleint(TEXT("Layer_Navigation_Client"))))
+	if (FAILED(Ready_Layer_Navigation_Dungeon(TEXT("Layer_Navigation_Dungeon"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Particle(TEXT("Layer_Particle"))))
@@ -50,28 +45,26 @@ HRESULT CLevel_GamePlay::Initialize()
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Tick(_float _fTimeDelta)
+HRESULT CLevel_Dungeon::Tick(_float _fTimeDelta)
 {
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::LateTick(_float _fTimeDelta)
+HRESULT CLevel_Dungeon::LateTick(_float _fTimeDelta)
 {
-	SetWindowText(g_hWnd, TEXT("Current Level : GamePlay"));
+	SetWindowText(g_hWnd, TEXT("Current Level : Dungeon"));
 
 	return S_OK;
 }
 
-void CLevel_GamePlay::AfterRender()
+void CLevel_Dungeon::AfterRender()
 {
-	// ImGui 그리기
-	// CIMGui_Manager::GetInstance()->Frame();
 }
 
-HRESULT CLevel_GamePlay::Ready_Level()
+HRESULT CLevel_Dungeon::Ready_Level()
 {
 #pragma region Object
-	wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Skyrim2";
+	wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Dungeon1";
 
 	// 파일을 열기 모드로 열기.
 	ifstream fileStream(filePath, ios::binary);
@@ -81,7 +74,7 @@ HRESULT CLevel_GamePlay::Ready_Level()
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
-		pGameInstance->Object_FileLoad(fileStream, LEVEL_GAMEPLAY);
+		pGameInstance->Object_FileLoad(fileStream, LEVEL_DUNGEON);
 
 		Safe_Release(pGameInstance);
 
@@ -97,7 +90,7 @@ HRESULT CLevel_GamePlay::Ready_Level()
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Light()
+HRESULT CLevel_Dungeon::Ready_Light()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -108,11 +101,11 @@ HRESULT CLevel_GamePlay::Ready_Light()
 	ZeroMemory(&LightDesc, sizeof LightDesc);
 	LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
 	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
-	
+
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-	
+
 	if (FAILED(pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
 
@@ -134,20 +127,25 @@ HRESULT CLevel_GamePlay::Ready_Light()
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Player(const wstring& _strLayerTag)
+HRESULT CLevel_Dungeon::Ready_Layer_Player(const wstring& _strLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
 		return E_FAIL;
+
+	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"),
+		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
+		->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, 0.f, 3.f, 1.f));
 
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
+HRESULT CLevel_Dungeon::Ready_Layer_Camera(const wstring& _strLayerTag)
 {
 	/* 원형객체를 복제하여 사본객체를 생성하고 레이어에 추가한다. */
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -156,8 +154,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	// 구조체 생성
 	CPlayerCamera_Free::FREE_PLAYERCAMERA_DESC FreeCameraDesc;
 	ZeroMemory(&FreeCameraDesc, sizeof FreeCameraDesc);
-		
-	FreeCameraDesc.pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
+
+	FreeCameraDesc.pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"), TEXT("Player")));
 	FreeCameraDesc.fMouseSensitive = 0.2f;
 	FreeCameraDesc.vEye = _float4(0.f, 10.f, -8.f, 1.f);
 	FreeCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
@@ -169,7 +167,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	FreeCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
 	FreeCameraDesc.fZoomPerSec = 500.f;
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_FreePlayerCamera"), &FreeCameraDesc)))
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_FreePlayerCamera"), &FreeCameraDesc)))
 		return E_FAIL;
 
 	// 추후 카메라 추가.(전투, 1인칭)
@@ -177,42 +175,41 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring& _strLayerTag)
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Navigation_Cleint(const wstring& _strLayerTag)
+HRESULT CLevel_Dungeon::Ready_Layer_Navigation_Dungeon(const wstring& _strLayerTag)
 {
 	CGameInstance* pGameInstace = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstace);
 
-	if (FAILED(pGameInstace->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Navigation_Client"))))
+	if (FAILED(pGameInstace->Add_CloneObject(LEVEL_DUNGEON, _strLayerTag, TEXT("ProtoType_GameObject_Navigation_Dungeon"))))
 		return E_FAIL;
 
-	Safe_Release(pGameInstace);
-
-
-	return S_OK;
-}
-
-HRESULT CLevel_GamePlay::Ready_Layer_Sky(const wstring& _strLayerTag)
-{
-	CGameInstance* pGameInstace = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstace);
-	
-	if (FAILED(pGameInstace->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Sky"))))
-		return E_FAIL;
-	
 	Safe_Release(pGameInstace);
 
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Terrain(const wstring& _strLayerTag)
+HRESULT CLevel_Dungeon::Ready_Layer_Sky(const wstring& _strLayerTag)
 {
-	/* 원형객체를 복제하여 사본객체를 생성하고 레이어에 추가한다. */
+	CGameInstance* pGameInstace = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstace);
+
+	if (FAILED(pGameInstace->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Sky"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstace);
+
+	return S_OK;
+}
+
+HRESULT CLevel_Dungeon::Ready_Layer_Particle(const wstring& _strLayerTag)
+{
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Terrain"))))
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Particle_Rect"))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -220,33 +217,20 @@ HRESULT CLevel_GamePlay::Ready_Layer_Terrain(const wstring& _strLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Particle(const wstring& _strLayerTag)
+CLevel_Dungeon* CLevel_Dungeon::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Particle_Rect"))))
-		return E_FAIL;
-
-	Safe_Release(pGameInstance);
-}
-
-CLevel_GamePlay* CLevel_GamePlay::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-{
-	CLevel_GamePlay* pInstance = new CLevel_GamePlay(_pDevice, _pContext);
+	CLevel_Dungeon* pInstance = new CLevel_Dungeon(_pDevice, _pContext);
 
 	if (FAILED(pInstance->Initialize()))
 	{
-		MSG_BOX("Fail Create : CLevel_GamePlay");
+		MSG_BOX("Fail Create : CLevel_Dungeon");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CLevel_GamePlay::Free()
+void CLevel_Dungeon::Free()
 {
 	__super::Free();
-
-	CIMGui_Manager::GetInstance()->DestroyInstance();
 }

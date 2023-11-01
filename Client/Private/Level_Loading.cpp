@@ -7,7 +7,8 @@
 #include "Level_Zero.h"
 #include "CLevel_Tool.h"
 #include "Level_Logo.h"
-#include "Level_GamePlay.h"
+#include "Level_WhiteRun.h"
+#include "Level_Dungeon.h"
 
 CLevel_Loading::CLevel_Loading(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CLevel(_pDevice, _pContext)
@@ -58,8 +59,11 @@ HRESULT CLevel_Loading::LateTick(_float _fTimeDelta)
 			case LEVEL_LOGO:
 				pNewLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
 				break;
-			case LEVEL_GAMEPLAY:
-				pNewLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
+			case LEVEL_WHITERUN:
+				pNewLevel = CLevel_WhiteRun::Create(m_pDevice, m_pContext);
+				break;
+			case LEVEL_DUNGEON:
+				pNewLevel = CLevel_Dungeon::Create(m_pDevice, m_pContext);
 				break;
 			}
 
@@ -89,7 +93,7 @@ CLevel_Loading* CLevel_Loading::Create(ID3D11Device* _pDevice, ID3D11DeviceConte
 	}
 
 	return pInstance;
-}
+ }
 
 void CLevel_Loading::Free()
 {

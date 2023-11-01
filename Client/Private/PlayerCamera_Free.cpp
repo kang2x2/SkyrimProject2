@@ -35,7 +35,7 @@ HRESULT CPlayerCamera_Free::Initialize_Clone(void* pArg)
 	Safe_AddRef(pGameInstance);
 
 	m_pPlayerTransform = dynamic_cast<CTransform*>
-		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY,
+		(pGameInstance->Find_CloneObject(LEVEL_WHITERUN,
 			TEXT("Layer_Player"), TEXT("Player"))
 			->Get_Component(TEXT("Com_Transform")));
 

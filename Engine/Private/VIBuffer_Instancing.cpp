@@ -10,12 +10,14 @@ CVIBuffer_Instancing::CVIBuffer_Instancing(const CVIBuffer_Instancing& rhs)
 	, m_iStrideInstance(rhs.m_iStrideInstance)
 	, m_iNumInstance(rhs.m_iNumInstance)
 	, m_iNumIndicesPerInstance(rhs.m_iNumIndicesPerInstance)
-	, m_pVBInstance(rhs.m_pVBInstance)
+	, m_pVertices(rhs.m_pVertices)
+	, m_pSpeedAry(rhs.m_pSpeedAry)
+	, m_pLifeTimeAry(rhs.m_pLifeTimeAry)
+	, m_pTimeAccAry(rhs.m_pTimeAccAry)
 {
-	Safe_AddRef(m_pVBInstance);
 }
 
-HRESULT CVIBuffer_Instancing::Initialize_ProtoType()
+HRESULT CVIBuffer_Instancing::Initialize_ProtoType(const INSTANCE_DESC& _InstanceDesc)
 {
 	m_iStrideInstance = sizeof(VTXINSTANCE);
 
@@ -30,30 +32,70 @@ HRESULT CVIBuffer_Instancing::Initialize_ProtoType()
 	m_BufferDesc.MiscFlags = 0;
 	m_BufferDesc.StructureByteStride = m_iStrideInstance;
 
-	VTXINSTANCE* pVertices = new VTXINSTANCE[m_iNumInstance];
-	ZeroMemory(pVertices, sizeof(VTXINSTANCE) * m_iNumInstance);
+	m_pVertices = new VTXINSTANCE[m_iNumInstance];
+	ZeroMemory(m_pVertices, sizeof(VTXINSTANCE) * m_iNumInstance);
+
+#pragma region Random Initialize 
+	random_device RandomDevice;
+
+	mt19937_64								RandomNumber;
+	uniform_real_distribution<float>		RandomX;
+	uniform_real_distribution<float>		RandomY;
+	uniform_real_distribution<float>		RandomZ;
+
+	uniform_real_distribution<float>		ScaleRandom;
+	uniform_real_distribution<float>		SpeedRandom;
+	uniform_real_distribution<float>		LifeTimeRandom;
+
+	SpeedRandom = uniform_real_distribution<float>(_InstanceDesc.fSpeedMin, _InstanceDesc.fSpeedMax);
+	LifeTimeRandom = uniform_real_distribution<float>(_InstanceDesc.fLifeTimeMin, _InstanceDesc.fLifeTimeMax);
+	
+	m_pSpeedAry = new _float[_InstanceDesc.iNumInstance];
+	m_pLifeTimeAry = new _float[_InstanceDesc.iNumInstance];
+	m_pTimeAccAry = new _float[_InstanceDesc.iNumInstance];
+
+	for (size_t i = 0; i < _InstanceDesc.iNumInstance; ++i)
+	{
+		m_pSpeedAry[i] = SpeedRandom(RandomDevice);
+		m_pLifeTimeAry[i] = LifeTimeRandom(RandomDevice);
+		m_pTimeAccAry[i] = 0.f;
+	}
+
+	/* 난수 생성 초기화.  */
+	RandomNumber = mt19937_64(RandomDevice());
+	RandomX = uniform_real_distribution<float>(_InstanceDesc.vRange.x * -0.5f, _InstanceDesc.vRange.x * 0.5f);
+	RandomY = uniform_real_distribution<float>(_InstanceDesc.vRange.y * -0.5f, _InstanceDesc.vRange.y * 0.5f);
+	RandomZ = uniform_real_distribution<float>(_InstanceDesc.vRange.z * -0.5f, _InstanceDesc.vRange.z * 0.5f);
+
+	ScaleRandom = uniform_real_distribution<float>(_InstanceDesc.fScaleMin, _InstanceDesc.fScaleMax);
+#pragma endregion
 
 	for (size_t i = 0; i < m_iNumInstance; i++)
 	{
-		pVertices[i].vRight = _float4(1.f, 0.f, 0.f, 0.f);
-		pVertices[i].vUp = _float4(0.f, 1.f, 0.f, 0.f);
-		pVertices[i].vLook = _float4(0.f, 0.f, 1.f, 0.f);
-		pVertices[i].vTranslation = _float4(rand() % 5, rand() % 5, rand() % 5, 1.f);
+		_float		fScale = ScaleRandom(RandomNumber);
+
+		m_pVertices[i].vRight = _float4(fScale, 0.f, 0.f, 0.f);
+		m_pVertices[i].vUp = _float4(0.f, fScale, 0.f, 0.f);
+		m_pVertices[i].vLook = _float4(0.f, 0.f, fScale, 0.f);
+		m_pVertices[i].vTranslation = _float4(
+			  _InstanceDesc.vCenter.x + RandomX(RandomNumber)
+			, _InstanceDesc.vCenter.y + RandomY(RandomNumber)
+			, _InstanceDesc.vCenter.z + RandomZ(RandomNumber)
+			, 1.f);
 	}
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);
-	m_InitialData.pSysMem = pVertices;
-
-	if (FAILED(__super::Create_Buffer(&m_pVBInstance)))
-		return E_FAIL;
-
-	Safe_Delete_Array(pVertices);
+	m_InitialData.pSysMem = m_pVertices;
 
 	return S_OK;
 }
 
 HRESULT CVIBuffer_Instancing::Initialize_Clone(void* pArg)
 {
+	// 이렇게 하면 클론 할 때마다 각자 자기 정보를 들고 있을 수 있다.
+	if (FAILED(__super::Create_Buffer(&m_pVBInstance)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -100,6 +142,14 @@ HRESULT CVIBuffer_Instancing::Render()
 void CVIBuffer_Instancing::Free()
 {
 	__super::Free();
+
+	if (!m_isCloned)
+	{
+		Safe_Delete_Array(m_pVertices);
+		Safe_Delete_Array(m_pSpeedAry);
+		Safe_Delete_Array(m_pLifeTimeAry);
+		Safe_Delete_Array(m_pTimeAccAry);
+	}
 
 	Safe_Release(m_pVBInstance);
 }

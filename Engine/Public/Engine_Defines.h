@@ -34,6 +34,7 @@ using namespace DirectX;
 #include <map> /* 이진트리 */
 #include <unordered_map> /* 해시테이블 */
 #include <algorithm>
+#include <random>
 
 // imgui 문자열 관련
 #include <string>
