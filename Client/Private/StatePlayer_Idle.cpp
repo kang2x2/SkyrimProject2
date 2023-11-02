@@ -57,6 +57,7 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 		m_pPlayerTransform->SetLook(vPlayerLook);
 
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_L);
+		
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runforward");
 	}
 
@@ -73,6 +74,7 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 		m_pPlayerTransform->SetLook(vPlayerLook);
 
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_R);
+		
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runforward");
 	}
 

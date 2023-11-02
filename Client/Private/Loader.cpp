@@ -29,6 +29,9 @@
 #include "Building.h"
 #include "StoneWork.h"
 
+/* Monster */
+#include "Skeever.h"
+
 CLoader::CLoader(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: m_pDevice(_pDevice)
 	, m_pContext(_pContext)
@@ -130,13 +133,9 @@ HRESULT CLoader::Loading_For_Level_Tool()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNonAnimMesh.hlsl"), VTX_NONANIMMESH::Elements, VTX_NONANIMMESH::iNumElements))))
 		return E_FAIL;
 
-#pragma region Navigation
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Celltest")))))
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxAnimMesh.hlsl"), VTX_ANIMMESH::Elements, VTX_ANIMMESH::iNumElements))))
 		return E_FAIL;
-
-#pragma endregion
 
 	/* Mesh*/
 	m_strLoadingText = TEXT("Loading Mesh.");
@@ -144,21 +143,12 @@ HRESULT CLoader::Loading_For_Level_Tool()
 		CVIBuffer_Grid::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	Set_ProtoType_Mesh(LEVEL_TOOL);
+	Set_ProtoType_WhiteRunMesh(LEVEL_TOOL);
+
+	/* 일단 화이트런에 통합되어 있음.*/
+	// Set_ProtoType_DungeonMesh(LEVEL_TOOL);
 
 	_matrix matInitialize = XMMatrixIdentity();
-
-#pragma region Collider
-
-	m_strLoadingText = TEXT("Loading Collider.");
-
-	/* For.Prototype_Component_Collider_AABB */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
-		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
-		return E_FAIL;
-
-#pragma endregion
-
 
 #pragma region GameObject
 	// Camera
@@ -170,7 +160,9 @@ HRESULT CLoader::Loading_For_Level_Tool()
 		CTerrain_Grid::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	Set_ProtoType_Object();
+	Set_ProtoType_WhiteObject();
+	/* 일단 화이트런에 통합되어 있음.*/
+	// Set_ProtoType_DungeonObject();
 
 #pragma endregion
 
@@ -309,7 +301,16 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/IronSword/Iron_LongSword.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
-	Set_ProtoType_Mesh(LEVEL_WHITERUN);
+	/* Skeever */
+	//matInitialize = XMMatrixIdentity();
+	//matInitialize = XMMatrixScaling(0.0013f, 0.0013f, 0.0013f);
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Model_Skeever"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Skeever/Skeever.bin", matInitialize, CModel::TYPE_ANIM))))
+	//	return E_FAIL;
+
+	matInitialize = XMMatrixIdentity();
+
+	Set_ProtoType_WhiteRunMesh(LEVEL_WHITERUN);
 
 #pragma endregion
 
@@ -381,15 +382,21 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 		CWeapon_IronSword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	Set_ProtoType_Object();
+	Set_ProtoType_WhiteObject();
 
 #pragma endregion
 
 #pragma region Navigation
 	m_strLoadingText = TEXT("Loading ProtoType_Navigation.");
 
+	/* 화이트런 */
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Navigation"),
+	//	CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Celltest")))))
+	//	return E_FAIL;
+
+	/* 던전 임시 확인*/
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Celltest")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Dungeon_Cell")))))
 		return E_FAIL;
 
 	// Navigation Client
@@ -398,8 +405,6 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 		return E_FAIL;
 
 #pragma endregion
-
-
 
 	Safe_Release(pGameInstance);
 
@@ -417,21 +422,6 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 
 #pragma region Texture
 	m_strLoadingText = TEXT("Loading Texture.");
-
-	// Terrain 
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_DUNGEON, TEXT("ProtoType_Component_Texture_Terrain"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/Tile%d.dds"), 2))))
-		return E_FAIL;
-
-	/* Terrain_Mask */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_DUNGEON, TEXT("ProtoType_Component_Texture_Terrain_Mask"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Terrain/Mask.bmp"), 1))))
-		return E_FAIL;
-
-	/* Brush */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_DUNGEON, TEXT("ProtoType_Component_Texture_Terrain_Brush"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Terrain/Brush.png"), 1))))
-		return E_FAIL;
 
 	/* Sky */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_DUNGEON, TEXT("ProtoType_Component_Texture_Sky"),
@@ -461,11 +451,6 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 	/* Mesh */
 	m_strLoadingText = TEXT("Loading Mesh.");
 	_matrix matInitialize = XMMatrixIdentity();
-
-	/* Terrain */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_DUNGEON, TEXT("ProtoType_Component_VIBuffer_Terrain"),
-		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Terrain/Height.bmp")))))
-		return E_FAIL;
 
 	/* VIBuffer_Cube */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_DUNGEON, TEXT("ProtoType_Component_VIBuffer_Cube"),
@@ -503,7 +488,7 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/IronSword/Iron_LongSword.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
-	Set_ProtoType_Mesh(LEVEL_DUNGEON);
+	Set_ProtoType_DungeonMesh(LEVEL_DUNGEON);
 
 #pragma endregion
 
@@ -542,20 +527,21 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 	/* GameObject */
 	m_strLoadingText = TEXT("Loading ProtoType_GameObject.");
 
+#pragma region 나중에 지울 것들. 차피 WhiteRun에서 이미 생성했다.
 	// Camera
-	// if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FreePlayerCamera"),
-	// 	CPlayerCamera_Free::Create(m_pDevice, m_pContext))))
-	// 	return E_FAIL;
-	// 
-	// // Sky
-	// if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Sky"),
-	// 	CSky::Create(m_pDevice, m_pContext))))
-	// 	return E_FAIL;
-	// 
-	// // Particle
-	// if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Particle_Rect"),
-	// 	CParticleRect::Create(m_pDevice, m_pContext))))
-	// 	return E_FAIL;
+	 if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FreePlayerCamera"),
+	 	CPlayerCamera_Free::Create(m_pDevice, m_pContext))))
+	 	return E_FAIL;
+	 
+	// Sky
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Sky"),
+	//	CSky::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+
+	// Particle
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Particle_Rect"),
+	//	CParticleRect::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
 	// Terrain
 	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Terrain"),
@@ -571,11 +557,13 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 	// 	return E_FAIL;
 
 	// Weapon
-	// if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Weapon_IronSword"),
-	// 	CWeapon_IronSword::Create(m_pDevice, m_pContext))))
-	// 	return E_FAIL;
-	// 
-	// Set_ProtoType_Object();
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Weapon_IronSword"),
+	 	CWeapon_IronSword::Create(m_pDevice, m_pContext))))
+	 	return E_FAIL;
+
+#pragma endregion
+
+	Set_ProtoType_DungeonObject();
 
 #pragma endregion
 
@@ -602,12 +590,22 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 	return S_OK;
 }
 
-HRESULT CLoader::Set_ProtoType_Mesh(LEVELID _eLevel)
+HRESULT CLoader::Set_ProtoType_WhiteRunMesh(LEVELID _eLevel)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 	_matrix matInitialize = XMMatrixIdentity();
+	matInitialize = XMMatrixScaling(0.1f, 0.1f, 0.1f);
+
+	/* 임시 */
+	/* Skeever */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Skeever"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Skeever/Skeever.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+
+
+	matInitialize = XMMatrixIdentity();
 	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 
 #pragma region SkyrimTerrain
@@ -1122,6 +1120,225 @@ HRESULT CLoader::Set_ProtoType_Mesh(LEVELID _eLevel)
 
 #pragma endregion
 
+
+	/* 임시 */
+#pragma region Dungeon_SewerBarrel
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombCorner01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombCorner01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombCorner02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombCorner02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombCorner03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombCorner03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombCorner04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombCorner04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombCornerCap01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombCornerCap01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombCornerV01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombCornerV01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombDoorc01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombDoorc01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomBendCap01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoomBendCap01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombMid01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombMid01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombMid02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombMid02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombMid03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombMid03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombRoofL01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombRoofL01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombRoofL02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombRoofL02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombRoofL03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombRoofL03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombRoofR01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombRoofR01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombRoofR02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombRoofR02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombRoofR03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombRoofR03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombStairs01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombStairs01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombWall01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombWall01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombWall02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombWall02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombWall03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombWall03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombWall04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombWall04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomDropDown01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoomDropDown01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombDoor01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombDoor01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombRoofrDoorway"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerBarrel/RoombRoofrDoorway.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+#pragma endregion
+
+#pragma region Dungeon_SewerHall
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_DirtMound01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerHall/DirtMound01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_DirtMound02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerHall/DirtMound02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Hall1Way02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerHall/Hall1Way02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_HallArch01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerHall/HallArch01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_HallArch02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerHall/HallArch02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_HallDeadEnd01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerHall/HallDeadEnd01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_HallGutter01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerHall/HallGutter01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_HallGutter02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerHall/HallGutter02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_HallLadderDoor01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerHall/HallLadderDoor01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_HallSewerHole01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerHall/HallSewerHole01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_HallStairs01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerHall/HallStairs01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+#pragma endregion
+
+#pragma region Dungeon_SewerRoom
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomCore01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerRoom/RoomCore01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomCoreCap01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerRoom/RoomCoreCap01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomCoreWall01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerRoom/RoomCoreWall01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomCoreWall02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerRoom/RoomCoreWall02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomCoreWall03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerRoom/RoomCoreWall03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomDoor01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerRoom/RoomDoor01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomPillar02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerRoom/RoomPillar02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomPillar03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerRoom/RoomPillar03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomWall01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerRoom/RoomWall01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomWall02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerRoom/RoomWall02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomWall03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerRoom/RoomWall03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoomWall04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SewerRoom/RoomWall04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+#pragma endregion 
+
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+HRESULT CLoader::Set_ProtoType_DungeonMesh(LEVELID _eLevel)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_matrix matInitialize = XMMatrixIdentity();
+	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
 #pragma region Dungeon_SewerBarrel
 
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_RoombCorner01"),
@@ -1330,10 +1547,16 @@ HRESULT CLoader::Set_ProtoType_Mesh(LEVELID _eLevel)
 
 	return S_OK;
 }
-HRESULT CLoader::Set_ProtoType_Object()
+
+HRESULT CLoader::Set_ProtoType_WhiteObject()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+	/* 임시 */
+	/* Skeever */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Skeever"),
+		CSkeever::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma region SkyrimTerrain
 	/* Terrain */ 
@@ -1846,6 +2069,223 @@ HRESULT CLoader::Set_ProtoType_Object()
 		return E_FAIL;
 
 #pragma endregion
+
+	/* 임시 */
+
+#pragma region Dungeon_SewerBarrel
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombCorner01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombCorner02"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombCorner03"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombCorner04"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombCornerCap01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombCornerV01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombDoorc01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomBendCap01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombMid01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombMid02"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombMid03"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombRoofL01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombRoofL02"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombRoofL03"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombRoofR01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombRoofR02"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombRoofR03"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombStairs01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombWall01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombWall02"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombWall03"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombWall04"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomDropDown01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombDoor01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoombRoofrDoorway"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Dungeon_SewerHall
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_DirtMound01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_DirtMound02"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Hall1Way02"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HallArch01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HallArch02"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HallDeadEnd01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HallGutter01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HallGutter02"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HallLadderDoor01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HallSewerHole01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HallStairs01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+#pragma endregion 
+
+#pragma region Dungeon_SewerRoom
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomCore01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomCoreCap01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomCoreWall01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomCoreWall02"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomCoreWall03"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomDoor01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomPillar02"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomPillar03"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomWall01"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomWall02"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomWall03"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_RoomWall04"),
+		CStoneWork::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+#pragma endregion 
+
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLoader::Set_ProtoType_DungeonObject()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
 #pragma region Dungeon_SewerBarrel
 

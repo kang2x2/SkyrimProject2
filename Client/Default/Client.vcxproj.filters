@@ -217,6 +217,27 @@
     <Filter Include="01. Level\02. GamePlay\02. Dungeon">
       <UniqueIdentifier>{b1986333-db61-46b3-9dc4-1dd2e0c73333}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster">
+      <UniqueIdentifier>{0a6712d3-c403-4236-bad9-8cef4d2ae4a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\00. Skeever">
+      <UniqueIdentifier>{cedade6c-b557-4aed-abad-d5af8b27bfd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider">
+      <UniqueIdentifier>{46a230ec-b009-4c7d-865a-56a5f606157c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Skeever">
+      <UniqueIdentifier>{f2b5bf0e-8536-4169-b66d-5ca0b791672b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Skeever\00. Manager">
+      <UniqueIdentifier>{62873f54-c6d7-4627-ab35-fa68598a50af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Skeever\01. State">
+      <UniqueIdentifier>{3f26c167-6b8b-4420-8867-fa7e7e7d30d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Skeever\01. State\00. Idle">
+      <UniqueIdentifier>{b922933d-8aa5-4f9c-8096-3ba35ae737c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -372,6 +393,18 @@
     <ClInclude Include="..\Public\Level_Dungeon.h">
       <Filter>01. Level\02. GamePlay\02. Dungeon</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Monster.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Skeever.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\00. Skeever</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateManager_Skeever.h">
+      <Filter>03. State\01. Skeever\00. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSkeever_Idle.h">
+      <Filter>03. State\01. Skeever\01. State\00. Idle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -519,6 +552,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Level_Dungeon.cpp">
       <Filter>01. Level\02. GamePlay\02. Dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Skeever.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\00. Skeever</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateManager_Skeever.cpp">
+      <Filter>03. State\01. Skeever\00. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSkeever_Idle.cpp">
+      <Filter>03. State\01. Skeever\01. State\00. Idle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

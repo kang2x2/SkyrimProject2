@@ -28,8 +28,6 @@ public:
 	virtual HRESULT Render();
 
 protected:
-	// 보류, 나는 지금 충돌을 위한 버퍼를 만들어야 한다.
-	// 허나 내일 수업 때 충돌 나갈 수도 있으니 존버한다.
 	_vector SetUp_OnTerrain(_fvector _vWorldPos);
 
 private:

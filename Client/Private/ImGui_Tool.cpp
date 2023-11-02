@@ -352,7 +352,7 @@ void CImGui_Tool::LayOut_FBX_List()
 		if (m_bFindFolder)
 		{
 			// wstring 폴더 배열 비우기
-			m_vecBeforeFolderList.clear();
+			m_vecBeforeFileDesc.clear();
 
 			// Folder vector 모두 정리.(strdup를 사용하였기에 메모리 해제도 필수).
 			Empty_Content();
@@ -361,30 +361,30 @@ void CImGui_Tool::LayOut_FBX_List()
 			// 검색된 폴더 이름 const char*로 변환.
 			ChangeType_Folder();
 
-			selectedFolderName = m_vecAfterFolderList[0];
+			selectedFolderName = m_vecAfterFolderDesc[0].strFolderName;
 		}
 
 
 		// 폴더명 
 		if (ImGui::BeginCombo(" ", selectedFolderName))
 		{
-			for (size_t i = 0; i < m_vecAfterFolderList.size(); ++i)
+			for (size_t i = 0; i < m_vecAfterFolderDesc.size(); ++i)
 			{
-				_bool isSelected = m_vecAfterFolderList[i] == selectedFolderName;
-				if (ImGui::Selectable(m_vecAfterFolderList[i], isSelected))
+				_bool isSelected = m_vecAfterFolderDesc[i].strFolderName == selectedFolderName;
+				if (ImGui::Selectable(m_vecAfterFolderDesc[i].strFolderName, isSelected))
 				{
-					selectedFolderName = m_vecAfterFolderList[i]; 
+					selectedFolderName = m_vecAfterFolderDesc[i].strFolderName; 
 					// 클론 시 사용할 레이어 태그
-					m_strCurLayerTag = TEXT("Layer_") + m_vecBeforeFolderList[i];
+					m_strCurLayerTag = TEXT("Layer_") + m_vecBeforeFileDesc[i].strFolderName;
 
 					// File vector 모두 정리.(strdup를 사용하였기에 메모리 해제도 필수).
-					for (size_t i = 0; i < m_vecAfterFileList.size(); ++i)
+					for (size_t i = 0; i < m_vecAfterFileDesc.size(); ++i)
 					{
-						free((void*)m_vecAfterFileList[i].m_strFileName);
+						free((void*)m_vecAfterFileDesc[i].m_strFileName);
 					}
-					m_vecAfterFileList.clear();
+					m_vecAfterFileDesc.clear();
 					m_vecBeforeFileList.clear();
-					Ready_FindFBX(m_vecAfterFolderList[i]);
+					Ready_FindFBX(m_vecAfterFolderDesc[i]);
 					ChangeType_File();
 				}
 			}
@@ -394,26 +394,26 @@ void CImGui_Tool::LayOut_FBX_List()
 		// 파일 리스트
 		if (ImGui::BeginListBox("##listBox", ImVec2(215, 300)))
 		{
-			for (size_t i = 0; i < m_vecAfterFileList.size(); ++i)
+			for (size_t i = 0; i < m_vecAfterFileDesc.size(); ++i)
 			{
 				// 현재 항목이 선택되었는지 확인
-				bool isSelected = m_vecAfterFileList[i].m_bCheck;
+				bool isSelected = m_vecAfterFileDesc[i].m_bCheck;
 
-				if (ImGui::Selectable(m_vecAfterFileList[i].m_strFileName, isSelected))
+				if (ImGui::Selectable(m_vecAfterFileDesc[i].m_strFileName, isSelected))
 				{
 					// 항목을 클릭했을 때 다른 아이템들의 선택 상태를 false로 변경.
-					for (size_t i = 0; i < m_vecAfterFileList.size(); ++i)
+					for (size_t i = 0; i < m_vecAfterFileDesc.size(); ++i)
 					{
-						if (m_vecAfterFileList[i].m_bCheck)
+						if (m_vecAfterFileDesc[i].m_bCheck)
 						{
-							m_vecAfterFileList[i].m_bCheck = false;
+							m_vecAfterFileDesc[i].m_bCheck = false;
 						}
 					}
 
 					// 현재 선택한 항목만 true로 설정.
-					m_vecAfterFileList[i].m_bCheck = true;
+					m_vecAfterFileDesc[i].m_bCheck = true;
 					// 현재 선택된 파일 변수에 저장.
-					m_pCurFile = &m_vecAfterFileList[i];
+					m_pCurFile = &m_vecAfterFileDesc[i];
 				}
 			}
 			ImGui::EndListBox();
@@ -456,19 +456,46 @@ void CImGui_Tool::FindFolder()
 		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 			if (_tcscmp(findFileData.cFileName, _T(".")) != 0 && _tcscmp(findFileData.cFileName, _T("..")) != 0) {
 				// 찾은 폴더 이름 추가.
-				m_vecBeforeFolderList.push_back(findFileData.cFileName);
+				TOOL_BEFORE_FOLDERDESC tFileDesc;
+				tFileDesc.strFolderName = findFileData.cFileName;
+				tFileDesc.strType = TEXT("NonAnim");
+				m_vecBeforeFileDesc.push_back(tFileDesc);
+			}
+		}
+	} while (FindNextFile(hFind, &findFileData) != 0);
+
+	FindClose(hFind);
+
+	////////////////////////////////////
+
+	hFind = FindFirstFile(_T("../Bin/Resource/BinaryFBX/Anim/*"), &findFileData);
+
+	if (hFind == INVALID_HANDLE_VALUE) {
+		MSG_BOX("Fail Find : Skyrim Folder");
+		return;
+	}
+	do {
+		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+			if (_tcscmp(findFileData.cFileName, _T(".")) != 0 && _tcscmp(findFileData.cFileName, _T("..")) != 0) {
+				TOOL_BEFORE_FOLDERDESC tFileDesc;
+				tFileDesc.strFolderName = findFileData.cFileName;
+				tFileDesc.strType = TEXT("Anim");
+				m_vecBeforeFileDesc.push_back(tFileDesc);
 			}
 		}
 	} while (FindNextFile(hFind, &findFileData) != 0);
 
 	FindClose(hFind);
 }
-void CImGui_Tool::Ready_FindFBX(const char* _FolderName)
+void CImGui_Tool::Ready_FindFBX(TOOL_AFTER_FOLDERDESC _tFileDesc)
 {
 	wstring wStrFindPath;
-	CString FolderName = _FolderName;
+	CString FolderName = _tFileDesc.strFolderName;
 	
-	wStrFindPath = TEXT("../Bin/Resource/BinaryFBX/NonAnim/") + FolderName + TEXT("/");
+	if(_tFileDesc.strType == TEXT("NonAnim"))
+		wStrFindPath = TEXT("../Bin/Resource/BinaryFBX/NonAnim/") + FolderName + TEXT("/");
+	else if(_tFileDesc.strType == TEXT("Anim"))
+		wStrFindPath = TEXT("../Bin/Resource/BinaryFBX/Anim/") + FolderName + TEXT("/");
 
 	Find_FileFBX(wStrFindPath);
 
@@ -533,19 +560,19 @@ HRESULT CImGui_Tool::Find_FileFBX(const wstring& _wStrPath)
 void CImGui_Tool::Empty_Content()
 {
 	// Folder vector 모두 정리.(strdup를 사용하였기에 메모리 해제도 필수).
-	for (size_t i = 0; i < m_vecAfterFolderList.size(); ++i)
+	for (size_t i = 0; i < m_vecAfterFolderDesc.size(); ++i)
 	{
-		free((void*)m_vecAfterFolderList[i]);
+		free((void*)m_vecAfterFolderDesc[i].strFolderName);
 	}
-	m_vecAfterFolderList.clear();
-	m_vecBeforeFolderList.clear();
+	m_vecAfterFolderDesc.clear();
+	m_vecBeforeFileDesc.clear();
 
 	// File vector 모두 정리.(strdup를 사용하였기에 메모리 해제도 필수).
-	for (size_t i = 0; i < m_vecAfterFileList.size(); ++i)
+	for (size_t i = 0; i < m_vecAfterFileDesc.size(); ++i)
 	{
-		free((void*)m_vecAfterFileList[i].m_strFileName);
+		free((void*)m_vecAfterFileDesc[i].m_strFileName);
 	}
-	m_vecAfterFileList.clear();
+	m_vecAfterFileDesc.clear();
 	m_vecBeforeFileList.clear();
 
 	m_bFindFolder = false;
@@ -553,11 +580,16 @@ void CImGui_Tool::Empty_Content()
 
 void CImGui_Tool::ChangeType_Folder()
 {
-	for (size_t i = 0; i < m_vecBeforeFolderList.size(); ++i)
+	for (size_t i = 0; i < m_vecBeforeFileDesc.size(); ++i)
 	{
 		wstring_convert<codecvt_utf8<wchar_t>> converter;
-		string tempStr = converter.to_bytes(m_vecBeforeFolderList[i]);
-		m_vecAfterFolderList.push_back(strdup(tempStr.c_str())); // strdup을 사용하여 복사
+		string tempStr = converter.to_bytes(m_vecBeforeFileDesc[i].strFolderName);
+		
+		TOOL_AFTER_FOLDERDESC tFolderDesc;
+		tFolderDesc.strFolderName = strdup(tempStr.c_str());
+		tFolderDesc.strType = m_vecBeforeFileDesc[i].strType;
+
+		m_vecAfterFolderDesc.push_back(tFolderDesc); // strdup을 사용하여 복사
 		// strdup를 사용하여 복사하면 메모리도 같이 할당 됨. 나중에 꼭 해제해줘야 함.
 	}
 
@@ -593,7 +625,7 @@ void CImGui_Tool::ChangeType_File()
 
 		//
 		tempFile.m_strFileName = strdup(tempStr.c_str()); // strdup을 사용하여 복사
-		m_vecAfterFileList.push_back(tempFile); 
+		m_vecAfterFileDesc.push_back(tempFile); 
 		// strdup를 사용하여 복사하면 메모리도 같이 할당 됨. 나중에 꼭 해제해줘야 함.
 	}
 
@@ -1035,18 +1067,18 @@ void CImGui_Tool::Free()
 	__super::Free();
 
 	// 사용했던 vector 모두 정리.(strdup를 사용하였기에 메모리 해제도 필수).
-	for (size_t i = 0; i < m_vecAfterFolderList.size(); ++i)
+	for (size_t i = 0; i < m_vecAfterFolderDesc.size(); ++i)
 	{
-		free((void*)m_vecAfterFolderList[i]);
+		free((void*)m_vecAfterFolderDesc[i].strFolderName);
 	}
-	m_vecAfterFolderList.clear();
-	m_vecBeforeFolderList.clear();
+	m_vecAfterFolderDesc.clear();
+	m_vecBeforeFileDesc.clear();
 
-	for (size_t i = 0; i < m_vecAfterFileList.size(); ++i)
+	for (size_t i = 0; i < m_vecAfterFileDesc.size(); ++i)
 	{
-		free((void*)m_vecAfterFileList[i].m_strFileName);
+		free((void*)m_vecAfterFileDesc[i].m_strFileName);
 	}
-	m_vecAfterFileList.clear();
+	m_vecAfterFileDesc.clear();
 	m_vecBeforeFileList.clear();
 	// 
 

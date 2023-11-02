@@ -20,6 +20,18 @@ BEGIN(Client)
 class CImGui_Tool final : public CImGui_Base
 {
 public:
+	typedef struct tagBeforeFolderDesc
+	{
+		wstring strFolderName;
+		wstring strType;
+	}TOOL_BEFORE_FOLDERDESC;
+
+	typedef struct tagAfterFolderDesc
+	{
+		const char* strFolderName;
+		wstring strType;
+	}TOOL_AFTER_FOLDERDESC;
+
 	typedef struct tagAfterFileDesc
 	{
 		const char* m_strFileName;
@@ -67,7 +79,7 @@ private:
 
 	// FindFile
 	void	FindFolder();
-	void	Ready_FindFBX(const char* _FolderName);
+	void	Ready_FindFBX(TOOL_AFTER_FOLDERDESC _tFileDesc);
 	HRESULT Find_FileFBX(const wstring& _wStrPath);
 
 	// Empty Folder & File
@@ -118,11 +130,11 @@ private:
 	// 파일 배열
 	set<filesystem::path> visitedDirectories;
 
-	vector<wstring> m_vecBeforeFolderList; // 검색된 폴더 이름 저장.
-	vector<const char*> m_vecAfterFolderList; // 검색된 폴더 이름 const char* 형변환.
+	vector<TOOL_BEFORE_FOLDERDESC> m_vecBeforeFileDesc; // 검색된 폴더 이름 저장.
+	vector<TOOL_AFTER_FOLDERDESC> m_vecAfterFolderDesc; // 검색된 폴더 이름 const char* 형변환.
 
 	vector<wstring> m_vecBeforeFileList; // 변환 전 파일 이름 리스트
-	vector<TOOL_AFTER_FILEDESC> m_vecAfterFileList; // 변환 후 파일 정보 리스트
+	vector<TOOL_AFTER_FILEDESC> m_vecAfterFileDesc; // 변환 후 파일 정보 리스트
 
 	// 현재 list에서 선택된 파일 변수에 저장.
 	TOOL_AFTER_FILEDESC* m_pCurFile = nullptr;

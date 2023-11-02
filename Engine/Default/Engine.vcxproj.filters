@@ -181,6 +181,9 @@
     <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect">
       <UniqueIdentifier>{94c4df9a-6863-4d8c-bdee-c7a1bb307e23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07. State\01. Monster">
+      <UniqueIdentifier>{0c628418-2249-46fe-8c58-4ea7a6f95f60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -348,6 +351,9 @@
     <ClInclude Include="..\Public\VIBuffer_Rect_Instance.h">
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Monster.h">
+      <Filter>07. State\01. Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Graphic_Device.cpp">
@@ -499,6 +505,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Rect_Instance.cpp">
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Monster.cpp">
+      <Filter>07. State\01. Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

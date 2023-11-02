@@ -16,6 +16,12 @@ namespace Client
 		ONEHAND_END
 	};
 
+	enum SKEEVERSTATE
+	{
+		SKEEVER_IDLE, 
+		SKEEVER_END
+	};
+
 
 	const unsigned int		g_iWinSizeX = 1280;
 	const unsigned int		g_iWinSizeY = 720;

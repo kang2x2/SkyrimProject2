@@ -83,7 +83,11 @@ void CLevel_WhiteRun::AfterRender()
 HRESULT CLevel_WhiteRun::Ready_Level()
 {
 #pragma region Object
-	wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Skyrim2";
+	/* 화이트런 */
+	// wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Skyrim2";
+
+	/* 던전 임시 확인 */
+	wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Dungeon2";
 
 	// 파일을 열기 모드로 열기.
 	ifstream fileStream(filePath, ios::binary);
@@ -154,9 +158,24 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Player(const wstring& _strLayerTag)
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Skeever"), TEXT("ProtoType_GameObject_Skeever"))))
+		return E_FAIL;
+
+	/* 화이트런 */
+	//dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"),
+	//	TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
+	//	->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
+
+	/* 던전 임시 위치 */
 	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"),
 		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
-		->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
+		->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, 0.f, 3.f, 1.f));
+
+
+	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Skeever"),
+		TEXT("Skeever"))->Get_Component(TEXT("Com_Transform")))
+		->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, 0.f, 7.f, 1.f));
+
 
 	Safe_Release(pGameInstance);
 

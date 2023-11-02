@@ -44,8 +44,11 @@ private:
 	HRESULT					Loading_For_Level_WhiteRun();
 	HRESULT					Loading_For_Level_Dungeon();
 
-	HRESULT					Set_ProtoType_Mesh(LEVELID _eLevel);
-	HRESULT					Set_ProtoType_Object();
+	HRESULT					Set_ProtoType_WhiteRunMesh(LEVELID _eLevel);
+	HRESULT					Set_ProtoType_DungeonMesh(LEVELID _eLevel);
+	
+	HRESULT					Set_ProtoType_WhiteObject();
+	HRESULT					Set_ProtoType_DungeonObject();
 
 public:
 	static CLoader* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, LEVELID eNextLevel);

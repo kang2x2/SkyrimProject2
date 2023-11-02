@@ -189,9 +189,12 @@
     <ClInclude Include="..\Public\CLevel_Tool.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Level_Dungeon.h" />
+    <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Navigation_Client.h" />
     <ClInclude Include="..\Public\ParticleRect.h" />
+    <ClInclude Include="..\Public\Skeever.h" />
     <ClInclude Include="..\Public\Sky.h" />
+    <ClInclude Include="..\Public\StateManager_Skeever.h" />
     <ClInclude Include="..\Public\StatePlayerOH_LAttack.h" />
     <ClInclude Include="..\Public\PlayerCamera_Free.h" />
     <ClInclude Include="..\Public\ImGui_Base.h" />
@@ -218,6 +221,7 @@
     <ClInclude Include="..\Public\StatePlayer_RunFoward.h" />
     <ClInclude Include="..\Public\StatePlayer_RunLeft.h" />
     <ClInclude Include="..\Public\StatePlayer_RunRight.h" />
+    <ClInclude Include="..\Public\StateSkeever_Idle.h" />
     <ClInclude Include="..\Public\StoneWork.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Terrain_Grid.h" />
@@ -240,9 +244,12 @@
     <ClCompile Include="..\Private\Building.cpp" />
     <ClCompile Include="..\Private\CLevel_Tool.cpp" />
     <ClCompile Include="..\Private\Level_Dungeon.cpp" />
+    <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Navigation_Client.cpp" />
     <ClCompile Include="..\Private\ParticleRect.cpp" />
+    <ClCompile Include="..\Private\Skeever.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
+    <ClCompile Include="..\Private\StateManager_Skeever.cpp" />
     <ClCompile Include="..\Private\StatePlayerOH_LAttack.cpp" />
     <ClCompile Include="..\Private\PlayerCamera_Free.cpp" />
     <ClCompile Include="..\Private\ImGui_Base.cpp" />
@@ -269,6 +276,7 @@
     <ClCompile Include="..\Private\StatePlayer_RunFoward.cpp" />
     <ClCompile Include="..\Private\StatePlayer_RunLeft.cpp" />
     <ClCompile Include="..\Private\StatePlayer_RunRight.cpp" />
+    <ClCompile Include="..\Private\StateSkeever_Idle.cpp" />
     <ClCompile Include="..\Private\StoneWork.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Terrain_Grid.cpp" />
