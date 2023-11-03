@@ -18,14 +18,26 @@ HRESULT CStatePlayerOH_RAttack::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayerOH_RAttack::Update(_float _fTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurFrameIndex() >= 22 &&
+		!dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_attackleft") &&
+		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+	{
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_LATTACK);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_attackleft");
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 void CStatePlayerOH_RAttack::Late_Update()
 {
 	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin())
 	{
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
 	}
 }
 

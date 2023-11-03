@@ -25,6 +25,7 @@ private:
 
 public:
 	_bool Get_IsAnimationFin();
+	_bool Get_CurAnimationName(string _strAnimationName);
 
 public:
 	virtual HRESULT Initialize_ProtoType(); // ¿øº»
@@ -34,8 +35,8 @@ public:
 	virtual HRESULT Render();
 
 public:
-	void Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName);
-
+	void		Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName);
+	_uint		Get_CurFrameIndex();
 private:
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResource();

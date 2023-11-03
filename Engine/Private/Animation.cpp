@@ -69,11 +69,16 @@ void CAnimation::Update_TransformationMatrix(vector<class CBone*>& _vecBone, _fl
 			m_fTrackPosition = 0.f;
 		else
 			m_bIsFinish = true;
+
+		m_iCurFrameIndex = 0;
 	}
 
 	/* 경과 시간에 따른 뼈 업데이트(선형 보간 등등). */
 	for (size_t i = 0; i < m_vecChannel.size(); ++i)
+	{
 		m_vecChannel[i]->Update_TransformationMatrix(&m_vecCurKeyFrame[i], _vecBone, m_fTrackPosition);
+		m_iCurFrameIndex += 1;
+	}
 }
 
 _bool CAnimation::Change_TransformationMatrix(vector<class CBone*>& _vecBone, const vector<CChannel*>& _destVecChannel, _float _fTimeDelta)
@@ -81,13 +86,17 @@ _bool CAnimation::Change_TransformationMatrix(vector<class CBone*>& _vecBone, co
 	m_fCnageTrackPosition += 0.02f;
 
 	if (m_fCnageTrackPosition >= 0.2f)
+	{
+		m_iCurFrameIndex = 0;
 		return true;
+	}
 
 	for (size_t i = 0; i < m_vecChannel.size(); ++i)
 	{
 		if (m_vecChannel[i]->Get_BoneIndex() == _destVecChannel[i]->Get_BoneIndex())
 		{
 			m_vecChannel[i]->Change_TransformationMatrix(_vecBone, _destVecChannel[i]->Get_FisrtKeyFrame(), m_fCnageTrackPosition);
+			m_iCurFrameIndex += 1;
 		}
 	}
 
@@ -98,7 +107,7 @@ void CAnimation::ReSet()
 {
 	m_fTrackPosition = 0.f;
 	m_bIsFinish = false;
-	m_bIsLoop = false;
+	// m_bIsLoop = false;
 
 	for (auto& iter : m_vecCurKeyFrame)
 		iter = 0;

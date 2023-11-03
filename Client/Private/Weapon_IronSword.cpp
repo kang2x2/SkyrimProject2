@@ -5,12 +5,12 @@
 #include "Bone.h"
 
 CWeapon_IronSword::CWeapon_IronSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CPart_Base(_pDevice, _pContext)
+	: CSkyrimWeapon(_pDevice, _pContext)
 {
 }
 
 CWeapon_IronSword::CWeapon_IronSword(const CWeapon_IronSword& rhs)
-	: CPart_Base(rhs)
+	: CSkyrimWeapon(rhs)
 {
 }
 
@@ -21,19 +21,6 @@ HRESULT CWeapon_IronSword::Initialize_ProtoType()
 
 HRESULT CWeapon_IronSword::Initialize_Clone(void* _pArg)
 {
-	if (nullptr != _pArg)
-	{
-		WEAPON_DESC* pWeaponDesc = (WEAPON_DESC*)_pArg;
-
-		m_pSocketBone = pWeaponDesc->pSocketBone;
-		Safe_AddRef(m_pSocketBone);
-
-		m_matSocketPivot = pWeaponDesc->matSocketPivot;
-
-		if (FAILED(__super::Initialize_Clone(_pArg)))
-			return E_FAIL;
-	}
-
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
@@ -47,17 +34,7 @@ HRESULT CWeapon_IronSword::Initialize_Clone(void* _pArg)
 
 void CWeapon_IronSword::Tick(_float _fTimeDelta)
 {
-	/* 내 행렬 * (소캣 뼈의 컴바인드 행렬 * 소캣의 행렬 * 페어런트의 월드 행렬) */
-	_float4x4 matSocketCombined = m_pSocketBone->Get_CombinedTransformationMatrix();
 
-	_matrix		WorldMatrix = XMLoadFloat4x4(&matSocketCombined) *
-		XMLoadFloat4x4(&m_matSocketPivot);
-
-	WorldMatrix.r[0] = XMVector3Normalize(WorldMatrix.r[0]);
-	WorldMatrix.r[1] = XMVector3Normalize(WorldMatrix.r[1]);
-	WorldMatrix.r[2] = XMVector3Normalize(WorldMatrix.r[2]);
-
- 	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix() * WorldMatrix);
 }
 
 void CWeapon_IronSword::LateTick(_float _fTimeDelta)
@@ -111,7 +88,7 @@ HRESULT CWeapon_IronSword::Ready_Component()
 
 HRESULT CWeapon_IronSword::Bind_ShaderResources()
 {
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_matWorld)))
+	if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -190,8 +167,6 @@ void CWeapon_IronSword::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pSocketBone);
-	Safe_Release(m_pParentTransform);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pShaderCom);

@@ -133,8 +133,10 @@ HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName)
 
 	/* 예외 처리 */
 	/* 이미 진행 중인 애니메이션인지 */
-	if(!strcmp(m_vecAnimation[m_iCurAnimationIndex]->Get_AnimationName(), _strAnimationName.c_str()))
-		return S_OK;
+	// if (!strcmp(m_vecAnimation[m_iCurAnimationIndex]->Get_AnimationName(), _strAnimationName.c_str()))
+	// {
+	// 	return S_OK;
+	// }
 
 	/* 존재하는 애니메이션인지 */
 	for (_uint i = 0; i < m_iNumAnimation; ++i)
@@ -374,9 +376,19 @@ CBone* CModel::Get_BonePtr(const char* _strBoneName) const
 	return nullptr;
 }
 
+string CModel::Get_CurAnimationName()
+{
+	return m_vecAnimation[m_iCurAnimationIndex]->Get_AnimationName();
+}
+
 _bool CModel::Get_IsAnimationFin()
 {
 	return m_vecAnimation[m_iCurAnimationIndex]->Get_Finish();
+}
+
+_uint CModel::Get_CurFrameIndex()
+{
+	return m_vecAnimation[m_iCurAnimationIndex]->Get_CurFrameIndex();
 }
 
 void CModel::Update_VI(const _fmatrix& _matPivot)

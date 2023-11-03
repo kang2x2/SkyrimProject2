@@ -83,9 +83,22 @@ void CPlayer_Body::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName)
 	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName);
 }
 
+_uint CPlayer_Body::Get_CurFrameIndex()
+{
+	return m_pModelCom->Get_CurFrameIndex();
+}
+
 _bool CPlayer_Body::Get_IsAnimationFin()
 {
 	return m_pModelCom->Get_IsAnimationFin();
+}
+
+_bool CPlayer_Body::Get_CurAnimationName(string _strAnimationName)
+{
+	if (!strcmp(m_pModelCom->Get_CurAnimationName().c_str(), _strAnimationName.c_str()))
+		return true;
+
+	return false;
 }
 
 

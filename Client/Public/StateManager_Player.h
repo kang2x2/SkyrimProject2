@@ -14,11 +14,11 @@ private:
 	virtual ~CStateManager_Player() = default;
 
 public:
-	CState_Player* Get_State(PLAYERSTATE _eState);
+	CState_Player* Get_State(CPlayer::PLAYERSTATE _eState);
 
 public:
 	HRESULT Initialize(class CGameObject* _pPlayer, class CTransform* _pPlayerTransform, class CNavigation* _pPlayerNavigation);
-	HRESULT Set_State(PLAYERSTATE _eState);
+	HRESULT Set_State(CPlayer::PLAYERSTATE _eState);
 
 public:
 	void Update(_float _fTimeDelta);

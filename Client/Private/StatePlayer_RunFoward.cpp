@@ -42,7 +42,7 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 
 			m_pPlayerTransform->SetLook(vPlayerLook);
 
-			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_L);
+			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_RUN_L);
 		}
 
 		else if (pGameInstance->Get_DIKeyPress('D'))
@@ -52,13 +52,13 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 
 			m_pPlayerTransform->SetLook(vPlayerLook);
 
-			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_R);
+			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_RUN_R);
 		}
 
 		else
 		{
-			dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
-			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
+			dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
+			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_IDLE);
 		}
 	}
 
@@ -82,7 +82,7 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown('R'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUNPOWERATTACK);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUNPOWERATTACK);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_attackpowerforwardsprint");
 	}
 

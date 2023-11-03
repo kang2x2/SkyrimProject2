@@ -28,7 +28,9 @@ public:
 
 public:
 	vector<class CMesh*> Get_VecMesh() { return m_vecMesh; }
+	string				 Get_CurAnimationName();
 	_bool				 Get_IsAnimationFin();
+	_uint				 Get_CurFrameIndex();
 	void				 Update_VI(const _fmatrix& _matPivot);
 
 public:

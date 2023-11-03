@@ -30,6 +30,9 @@ HRESULT CLevel_WhiteRun::Initialize()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Equip(TEXT("Layer_Equip"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Sky(TEXT("Layer_Sky"))))
 		return E_FAIL;
 
@@ -87,7 +90,10 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 	// wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Skyrim2";
 
 	/* 던전 임시 확인 */
-	wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Dungeon2";
+	wstring filePath = TEXT("../Bin/SaveLoad/Dungeon2");
+
+	// wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Dungeon2";
+
 
 	// 파일을 열기 모드로 열기.
 	ifstream fileStream(filePath, ios::binary);
@@ -150,15 +156,37 @@ HRESULT CLevel_WhiteRun::Ready_Light()
 	return S_OK;
 }
 
+HRESULT CLevel_WhiteRun::Ready_Layer_Equip(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Weapon_IronSword"))))
+		return E_FAIL;
+
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Boots"))))
+	//	return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Curiass"))))
+		return E_FAIL;
+	
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Gauntlet"))))
+	//	return E_FAIL;
+	
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Helmet"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CLevel_WhiteRun::Ready_Layer_Player(const wstring& _strLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Skeever"), TEXT("ProtoType_GameObject_Skeever"))))
 		return E_FAIL;
 
 	/* 화이트런 */
@@ -170,12 +198,6 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Player(const wstring& _strLayerTag)
 	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"),
 		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
 		->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, 0.f, 3.f, 1.f));
-
-
-	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Skeever"),
-		TEXT("Skeever"))->Get_Component(TEXT("Com_Transform")))
-		->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, 0.f, 7.f, 1.f));
-
 
 	Safe_Release(pGameInstance);
 

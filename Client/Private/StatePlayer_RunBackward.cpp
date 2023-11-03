@@ -38,8 +38,8 @@ void CStatePlayer_RunBackward::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyUp('S'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_IDLE);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_IDLE);
 	}
 
 	if (pGameInstance->Get_DIKeyPress('A'))

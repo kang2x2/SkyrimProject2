@@ -121,6 +121,46 @@ _bool CNavigation::IsMove(_fvector _vPoint)
 		return true;
 }
 
+HRESULT CNavigation::Init_Cell(const wstring& _strNaviMeshPath)
+{
+	for (auto& pCell : m_vecCell)
+		Safe_Release(pCell);
+
+	m_vecCell.clear();
+
+	if (StrCmpW(_strNaviMeshPath.c_str(), TEXT("")))
+	{
+		_ulong		dwByte = 0;
+		_bool		bIsRead = false;
+		HANDLE		hFile = CreateFile(_strNaviMeshPath.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+		if (0 == hFile)
+			return E_FAIL;
+
+		while (true)
+		{
+			_float3		vPoints[CCell::POINT_END] = {};
+
+			bIsRead = ReadFile(hFile, vPoints, sizeof(_float3) * CCell::POINT_END, &dwByte, nullptr);
+
+			if (0 == dwByte)
+				break;
+
+			CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_uint)m_vecCell.size());
+			if (nullptr == pCell)
+				return E_FAIL;
+
+			m_vecCell.push_back(pCell);
+		}
+
+		CloseHandle(hFile);
+
+		if (FAILED(SetUp_Neighbors()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 HRESULT CNavigation::Add_Cell(_float3 _vMeshPos[3])
 {
 	/* 스냅 설정.(가까우면 붙이기) */

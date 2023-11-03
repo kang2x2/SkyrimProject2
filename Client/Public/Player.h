@@ -6,6 +6,7 @@
 
 BEGIN(Engine)
 
+class CRenderer;
 class CTransform;
 class CCamera;
 class CNavigation;
@@ -17,8 +18,20 @@ BEGIN(Client)
 class CPlayer final : public CGameObject
 {
 public:
-	enum PARTS { PART_BODY, PART_WEAPON, PART_HAIR, PART_END };
+	enum PARTS { PART_BODY, PART_WEAPON, PART_ARMOR, PART_HELMET, PART_HAIR, PART_END };
 	enum PLAYERCAMERA { CAM_FREE, CAM_BATTLE, CAM_1ST, CAM_END };
+	enum PLAYER_EQUIP { NONEQUIP, ONEHAND, BOW, MAGIC, EQUIP_END };
+
+	enum PLAYERSTATE {
+		ENEQUIP_IDLE,
+		ENEQUIP_RUN_F, ENEQUIP_RUN_B, ENEQUIP_RUN_L, ENEQUIP_RUN_R,
+
+		ONEHAND_IDLE, ONEHAND_EQUIP, ONEHAND_UNEQUIP,
+		ONEHAND_RUN_F, ONEHAND_RUN_B, ONEHAND_RUN_L, ONEHAND_RUN_R,
+		ONEHAND_LATTACK, ONEHAND_RATTACK, ONEHAND_PATTACK, ONEHAND_RUNPOWERATTACK,
+		ONEHAND_END
+	};
+
 private:
 	CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	CPlayer(const CPlayer& rhs);
@@ -34,13 +47,18 @@ public:
 public:
 	HRESULT Set_State(PLAYERSTATE _eState);
 	
-	_bool   Get_IsAnimationFin();
-	void	Play_Animation(_bool _bIsLoop, string _strAnimationName);
-	
+	_bool			Get_IsAnimationFin();
+	_bool			Get_CurAnimationName(string _strAnimationName);
+	_uint			Get_CurFrameIndex();
+	const char*		Get_CurSocketBonName();
+	void			Play_Animation(_bool _bIsLoop, string _strAnimationName);
+	void			Set_SoketBone(const char* _pBoneName);
+
 	void	Set_PlayerCam(CCamera* _pCam, PLAYERCAMERA _eCamType)
 	{ 
 		m_pPlayerCams[_eCamType] = _pCam;
 	}
+
 
 	const _vector Get_PlayerCamLook();
 	// void Set_CamLook(const _vector& _vPlayerLook);
@@ -48,6 +66,7 @@ public:
 private:
 	vector<class CGameObject*>		m_vecPlayerPart;
 
+	CRenderer*						m_pRendererCom = nullptr;
 	CTransform*						m_pTransformCom = nullptr;
 	CNavigation*					m_pNavigationCom = nullptr;
 	CCamera*						m_pPlayerCams[CAM_END];
@@ -55,7 +74,6 @@ private:
 
 	PLAYERCAMERA					m_eCurCamMode = CAM_FREE;
 	_uint							m_iAnimKeyIndex = 0;
-
 
 
 private:

@@ -112,12 +112,6 @@
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\02. Eye">
       <UniqueIdentifier>{28318074-4b97-447d-aa1f-c99cce758d4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\03. Tail">
-      <UniqueIdentifier>{06192a36-3e11-4805-8b60-80a89644807a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\04. Mouse">
-      <UniqueIdentifier>{c7f1792c-498c-48fd-9b6b-18551a96abc6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\00. Body">
       <UniqueIdentifier>{465bf45a-a35c-41d0-a2b9-15d9b2b435ea}</UniqueIdentifier>
     </Filter>
@@ -148,33 +142,6 @@
     <Filter Include="03. State\00. Player\01. State">
       <UniqueIdentifier>{1b95f1c1-3d67-4f8d-ac58-5a128ffb01d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. State\00. Player\01. State\00. Idle">
-      <UniqueIdentifier>{7c153b31-9691-4f19-bc4b-ed6ecfab1d49}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. Walk">
-      <UniqueIdentifier>{f7aabcfa-2072-44da-97e1-79d02974f60a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\02. Run">
-      <UniqueIdentifier>{22e52fff-61ab-42d6-a33b-40aec04e138d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\03. Attack">
-      <UniqueIdentifier>{518b22ee-4786-4ec1-a785-b5688630cea6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\02. Run\00. Foward">
-      <UniqueIdentifier>{6e441908-ced5-4de3-abbc-bd1f4c91afa7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\03. Attack\00. LeftAttack">
-      <UniqueIdentifier>{dc306d6d-bcc0-40ba-a335-8ad585204351}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\03. Attack\01. RightAttack">
-      <UniqueIdentifier>{d4ff8b7d-8855-409f-9f2d-d52e3157a02a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\03. Attack\02. PowerAttack">
-      <UniqueIdentifier>{ea14efa6-8b5a-4dbe-a066-75a761b1a7c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\03. Attack\03. RunPowerAttack">
-      <UniqueIdentifier>{616fe159-34d9-4a5d-8dde-b60a2ece5f3b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam">
       <UniqueIdentifier>{898e95c2-11b7-4a82-bcc6-0e23bdd10530}</UniqueIdentifier>
     </Filter>
@@ -183,15 +150,6 @@
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\99. Camera\02. 1stCam">
       <UniqueIdentifier>{a7bf27e7-1937-4711-bcc6-4168dd2e31d6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\02. Run\01. Left">
-      <UniqueIdentifier>{d2ea6df8-20b9-4284-a8e6-21cf072f63e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\02. Run\03. Back">
-      <UniqueIdentifier>{d505fd96-0ffe-4533-bef9-03a8bdefd4c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\02. Run\02. Right">
-      <UniqueIdentifier>{e60cc967-8479-4bfc-81c7-4e44f3be23d2}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\02. Sky">
       <UniqueIdentifier>{74d6e1ba-a77b-4e72-9fe7-bca7a2e01e79}</UniqueIdentifier>
@@ -204,9 +162,6 @@
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\04. ParticleObject\00. Rect">
       <UniqueIdentifier>{48c8af1f-974b-48ff-9abe-6b1f41783822}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\05. Particle">
-      <UniqueIdentifier>{82361166-7c5c-4c0d-9fef-281fb24d2da7}</UniqueIdentifier>
     </Filter>
     <Filter Include="01. Level\02. GamePlay\00. WhiteRun">
       <UniqueIdentifier>{efa50097-be3c-40ad-9a3d-153eae3d6845}</UniqueIdentifier>
@@ -238,6 +193,117 @@
     <Filter Include="03. State\01. Skeever\01. State\00. Idle">
       <UniqueIdentifier>{b922933d-8aa5-4f9c-8096-3ba35ae737c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. UI">
+      <UniqueIdentifier>{0f6f3551-972d-43f7-8d25-97c8dea42272}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\05. Inventory">
+      <UniqueIdentifier>{322efd3e-e6d7-461a-9406-30da6355e17a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand">
+      <UniqueIdentifier>{a1d546b0-338d-49e7-8ffb-bd27e4f963bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\00. UnEquip">
+      <UniqueIdentifier>{bd6ce564-6c4e-4e53-9bee-0fbb89a7711a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack">
+      <UniqueIdentifier>{518b22ee-4786-4ec1-a785-b5688630cea6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\00. LeftAttack">
+      <UniqueIdentifier>{dc306d6d-bcc0-40ba-a335-8ad585204351}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\01. RightAttack">
+      <UniqueIdentifier>{d4ff8b7d-8855-409f-9f2d-d52e3157a02a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\02. PowerAttack">
+      <UniqueIdentifier>{ea14efa6-8b5a-4dbe-a066-75a761b1a7c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\03. RunPowerAttack">
+      <UniqueIdentifier>{616fe159-34d9-4a5d-8dde-b60a2ece5f3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Equip">
+      <UniqueIdentifier>{5ea3e558-6ee1-4016-9cca-70ac51c95b26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\00. UnEquip\00. Idle">
+      <UniqueIdentifier>{7c153b31-9691-4f19-bc4b-ed6ecfab1d49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\00. UnEquip\01. Walk">
+      <UniqueIdentifier>{f7aabcfa-2072-44da-97e1-79d02974f60a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\00. UnEquip\02. Run">
+      <UniqueIdentifier>{22e52fff-61ab-42d6-a33b-40aec04e138d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\00. UnEquip\02. Run\02. Right">
+      <UniqueIdentifier>{e60cc967-8479-4bfc-81c7-4e44f3be23d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\00. UnEquip\02. Run\01. Left">
+      <UniqueIdentifier>{d2ea6df8-20b9-4284-a8e6-21cf072f63e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\00. UnEquip\02. Run\00. Foward">
+      <UniqueIdentifier>{6e441908-ced5-4de3-abbc-bd1f4c91afa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\00. UnEquip\02. Run\03. Back">
+      <UniqueIdentifier>{d505fd96-0ffe-4533-bef9-03a8bdefd4c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\00. Idle">
+      <UniqueIdentifier>{622a310a-2f64-429b-87f8-36ad48104385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\01. Walk">
+      <UniqueIdentifier>{a41af0f8-ecce-4dae-b3e9-d870f6e09d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\02. Run">
+      <UniqueIdentifier>{abc80f6c-a4a4-4ff5-af61-41aeba1fbcc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\02. Run\00. Foward">
+      <UniqueIdentifier>{be68e44b-2694-4604-9aaa-ebf60ce05b0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\02. Run\01. Left">
+      <UniqueIdentifier>{6f52095e-2efd-4b41-ae39-83c98cb73171}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\02. Run\02. Right">
+      <UniqueIdentifier>{5e34561f-0ba5-434a-8a5a-a5ff7a2467d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\02. Run\03. Back">
+      <UniqueIdentifier>{fe04e746-05f9-4eef-905e-050115e63901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\03. Mouse">
+      <UniqueIdentifier>{c7f1792c-498c-48fd-9b6b-18551a96abc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\04. Particle">
+      <UniqueIdentifier>{82361166-7c5c-4c0d-9fef-281fb24d2da7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\05. Weapon">
+      <UniqueIdentifier>{ec712831-c2d5-43dc-be2f-91e14fe760af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\07. Boots">
+      <UniqueIdentifier>{5800b655-e321-444f-93a9-c180831220bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\08. Helmet">
+      <UniqueIdentifier>{c9a5d62c-0e31-4270-a5d0-1b7a3118a8dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\09. Gloves">
+      <UniqueIdentifier>{0b12693f-a4ad-4aa0-a068-ca366dd8dac6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\06. Armor">
+      <UniqueIdentifier>{6909f3c6-75c0-4001-a947-960d1f45997b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor">
+      <UniqueIdentifier>{daa3cf22-d568-4858-8e2c-ec448c7f1614}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\01. Boots">
+      <UniqueIdentifier>{5c473ff2-6cc8-4944-9a7e-3e78c5a76207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet">
+      <UniqueIdentifier>{8dab02aa-99f6-47b1-af29-d04e8c0f58f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\03. Gloves">
+      <UniqueIdentifier>{22d48169-c373-4961-8c30-3e09a7e8ef47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\00. Glass">
+      <UniqueIdentifier>{fbcddc44-d96c-49aa-aa30-cbb59c0937d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet\00. Glass">
+      <UniqueIdentifier>{85104bb0-dbf3-43fe-ab72-ca1191abb5b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -251,9 +317,6 @@
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>98. Default</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Client_Defines.h">
-      <Filter>99. Define</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\MainApp.h">
       <Filter>00. MainApp</Filter>
@@ -345,35 +408,23 @@
     <ClInclude Include="..\Public\Part_Base.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\StatePlayer_Idle.h">
-      <Filter>03. State\00. Player\01. State\00. Idle</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\StateManager_Player.h">
       <Filter>03. State\00. Player\00. Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayer_RunBackward.h">
-      <Filter>03. State\00. Player\01. State\02. Run\03. Back</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\StatePlayer_RunFoward.h">
-      <Filter>03. State\00. Player\01. State\02. Run\00. Foward</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\StatePlayer_RunLeft.h">
-      <Filter>03. State\00. Player\01. State\02. Run\01. Left</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\StatePlayer_RunRight.h">
-      <Filter>03. State\00. Player\01. State\02. Run\02. Right</Filter>
+      <Filter>03. State\00. Player\01. State\00. UnEquip\02. Run\03. Back</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_LAttack.h">
-      <Filter>03. State\00. Player\01. State\03. Attack\00. LeftAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\00. LeftAttack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_PAttack.h">
-      <Filter>03. State\00. Player\01. State\03. Attack\02. PowerAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\02. PowerAttack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_RAttack.h">
-      <Filter>03. State\00. Player\01. State\03. Attack\01. RightAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. RightAttack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_RunPAttack.h">
-      <Filter>03. State\00. Player\01. State\03. Attack\03. RunPowerAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\03. RunPowerAttack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PlayerCamera_Free.h">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam</Filter>
@@ -404,6 +455,72 @@
     </ClInclude>
     <ClInclude Include="..\Public\StateSkeever_Idle.h">
       <Filter>03. State\01. Skeever\01. State\00. Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayer_Idle.h">
+      <Filter>03. State\00. Player\01. State\00. UnEquip\00. Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayer_RunFoward.h">
+      <Filter>03. State\00. Player\01. State\00. UnEquip\02. Run\00. Foward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayer_RunLeft.h">
+      <Filter>03. State\00. Player\01. State\00. UnEquip\02. Run\01. Left</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayer_RunRight.h">
+      <Filter>03. State\00. Player\01. State\00. UnEquip\02. Run\02. Right</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_Weapon.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\05. Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimWeapon.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Inventory.h">
+      <Filter>04. UI\05. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimUI.h">
+      <Filter>04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_UnEquip.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_Equip.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_Idle.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\00. Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_RunBackward.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\02. Run\03. Back</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_RunFoward.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\02. Run\00. Foward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_RunLeft.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\02. Run\01. Left</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_RunRight.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\02. Run\02. Right</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_Armor.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\06. Armor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Client_Defines.h">
+      <Filter>99. Define</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Armor_Glass.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\00. Glass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimArmor.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_Helmet.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\08. Helmet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimHelmet.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Helmet_Glass.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet\00. Glass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -505,35 +622,23 @@
     <ClCompile Include="..\Private\Part_Base.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\StatePlayer_Idle.cpp">
-      <Filter>03. State\00. Player\01. State\00. Idle</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\StateManager_Player.cpp">
       <Filter>03. State\00. Player\00. Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayer_RunBackward.cpp">
-      <Filter>03. State\00. Player\01. State\02. Run\03. Back</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\StatePlayer_RunFoward.cpp">
-      <Filter>03. State\00. Player\01. State\02. Run\00. Foward</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\StatePlayer_RunLeft.cpp">
-      <Filter>03. State\00. Player\01. State\02. Run\01. Left</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\StatePlayer_RunRight.cpp">
-      <Filter>03. State\00. Player\01. State\02. Run\02. Right</Filter>
+      <Filter>03. State\00. Player\01. State\00. UnEquip\02. Run\03. Back</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_LAttack.cpp">
-      <Filter>03. State\00. Player\01. State\03. Attack\00. LeftAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\00. LeftAttack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_PAttack.cpp">
-      <Filter>03. State\00. Player\01. State\03. Attack\02. PowerAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\02. PowerAttack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_RAttack.cpp">
-      <Filter>03. State\00. Player\01. State\03. Attack\01. RightAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. RightAttack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_RunPAttack.cpp">
-      <Filter>03. State\00. Player\01. State\03. Attack\03. RunPowerAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\03. RunPowerAttack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PlayerCamera_Free.cpp">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam</Filter>
@@ -564,6 +669,69 @@
     </ClCompile>
     <ClCompile Include="..\Private\StateSkeever_Idle.cpp">
       <Filter>03. State\01. Skeever\01. State\00. Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayer_Idle.cpp">
+      <Filter>03. State\00. Player\01. State\00. UnEquip\00. Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayer_RunFoward.cpp">
+      <Filter>03. State\00. Player\01. State\00. UnEquip\02. Run\00. Foward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayer_RunLeft.cpp">
+      <Filter>03. State\00. Player\01. State\00. UnEquip\02. Run\01. Left</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayer_RunRight.cpp">
+      <Filter>03. State\00. Player\01. State\00. UnEquip\02. Run\02. Right</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_Weapon.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\05. Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimWeapon.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Inventory.cpp">
+      <Filter>04. UI\05. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimUI.cpp">
+      <Filter>04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_UnEquip.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_Equip.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_Idle.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\00. Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_RunBackward.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\02. Run\03. Back</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_RunFoward.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\02. Run\00. Foward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_RunLeft.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\02. Run\01. Left</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_RunRight.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\02. Run\02. Right</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_Armor.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\06. Armor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Armor_Glass.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\00. Glass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimArmor.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_Helmet.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\08. Helmet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimHelmet.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Helmet_Glass.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet\00. Glass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -64,7 +64,7 @@ void CLevel_Dungeon::AfterRender()
 HRESULT CLevel_Dungeon::Ready_Level()
 {
 #pragma region Object
-	wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Dungeon1";
+	wstring filePath = TEXT("../Bin/SaveLoad/Dungeon2");
 
 	// 파일을 열기 모드로 열기.
 	ifstream fileStream(filePath, ios::binary);

@@ -37,14 +37,14 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	/* 이동 */
 	if (pGameInstance->Get_DIKeyDown('W'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_F);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runforward");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_RUN_F);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
 	}
 
 	if (pGameInstance->Get_DIKeyDown('S'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_B);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runbackward");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_RUN_B);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runbackward");
 	}
 
 	if (pGameInstance->Get_DIKeyDown('A'))
@@ -56,13 +56,12 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 
 		m_pPlayerTransform->SetLook(vPlayerLook);
 
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_L);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_RUN_L);
 		
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runforward");
+		// 분명히 필요하긴 할거야 이 함수가.
+		//if(dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_runforward"))
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
 	}
-
-	// 애니메이션 체인징 상태 끝났는지 확인하고 상태 전환하는 코드 추가.
-	// 왼, 오 회전상태에서 멈추면 완전히 멈췄다가 정면을 봐야 한다.
 
 	if (pGameInstance->Get_DIKeyDown('D'))
 	{
@@ -73,28 +72,15 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 
 		m_pPlayerTransform->SetLook(vPlayerLook);
 
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RUN_R);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_RUN_R);
 		
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runforward");
-	}
-
-	/* 공격 나중에 조건문 추가 */
-	if (pGameInstance->Get_DIKeyDown('Z'))
-	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_LATTACK);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_attackleft");
-	}
-
-	if (pGameInstance->Get_DIKeyDown('X'))
-	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_RATTACK);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_attackright");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
 	}
 
 	if (pGameInstance->Get_DIKeyDown('R'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(ONEHAND_PATTACK);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_attackpower");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_EQUIP);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_equip");
 	}
 
 	Safe_Release(pGameInstance);

@@ -25,6 +25,7 @@ public:
 	void  Update();
 	_bool IsMove(_fvector _vPoint);
 
+	HRESULT Init_Cell(const wstring& _strNaviMeshPath);
 	HRESULT Add_Cell(_float3 _vMeshPos[3]);
 	HRESULT Cell_PopBack();
 	HRESULT SetUp_Neighbors();

@@ -133,6 +133,9 @@ HRESULT CMyFile_Manager::Cell_FileLoad(ifstream& _inFile, class CNavigation* _pN
 
 HRESULT CMyFile_Manager::Binary_OutFile(ofstream& _outFile, const char* _strFilePath, CModel::MODEL_TYPE _eType)
 {
+	m_pAIScene = nullptr;
+	m_vecIndex.clear();
+
 	// 기본적인 플래그.
 	_uint iFlag = aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast;
 	// 매개로 들어온 타입이 NonAnim일 때 aiProcess_PreTransformVertices도 바인딩 해준다.

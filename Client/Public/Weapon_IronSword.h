@@ -1,29 +1,11 @@
 #pragma once
 
-#include "Client_Defines.h"
-#include "Part_Base.h"
-
-BEGIN(Engine)
-
-class CBone;
-class CModel;
-class CRenderer;
-class CShader;
-class CTransform;
-
-END
+#include "SkyrimWeapon.h"
 
 BEGIN(Client)
 
-class CWeapon_IronSword final : public CPart_Base
+class CWeapon_IronSword final : public CSkyrimWeapon
 {
-public:
-	typedef struct tagPartDesc : public CPart_Base::PART_DESC
-	{
-		CBone*		pSocketBone = nullptr;
-		_float4x4	matSocketPivot;
-	}WEAPON_DESC;
-
 private:
 	CWeapon_IronSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	CWeapon_IronSword(const CWeapon_IronSword& rhs);
@@ -41,11 +23,16 @@ public:
 	HRESULT Bind_ShaderResources();
 
 private:
+	CModel* m_pModelCom = nullptr;
+	CRenderer* m_pRendererCom = nullptr;
+	CShader* m_pShaderCom = nullptr;
+	CTransform* m_pTransformCom = nullptr;
+
 	CBone*		m_pSocketBone =  nullptr;
 	_float4x4	m_matSocketPivot;
 
 public:
-	static CWeapon_IronSword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	static  CWeapon_IronSword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;
 	virtual void Free() override;
 };

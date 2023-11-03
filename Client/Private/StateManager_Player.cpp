@@ -9,6 +9,13 @@
 #include "StatePlayer_RunLeft.h"
 #include "StatePlayer_RunRight.h"
 
+#include "StatePlayerOH_Idle.h"
+#include "StatePlayerOH_Equip.h"
+#include "StatePlayerOH_UnEquip.h"
+#include "StatePlayerOH_RunFoward.h"
+#include "StatePlayerOH_RunBackward.h"
+#include "StatePlayerOH_RunLeft.h"
+#include "StatePlayerOH_RunRight.h"
 #include "StatePlayerOH_LAttack.h"
 #include "StatePlayerOH_RAttack.h"
 #include "StatePlayerOH_PAttack.h"
@@ -23,6 +30,7 @@ HRESULT CStateManager_Player::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 	if (_pPlayer == nullptr)
 		return E_FAIL;
 
+#pragma region EnEquip
 	/* Idle */
 	CState_Player* pState = CStatePlayer_Idle::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
@@ -40,6 +48,33 @@ HRESULT CStateManager_Player::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 	pState = CStatePlayer_RunRight::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
+#pragma endregion
+
+#pragma region OneHand
+	/* Idle */
+	pState = CStatePlayerOH_Idle::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
+
+	/* equip */
+	pState = CStatePlayerOH_Equip::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
+
+	pState = CStatePlayerOH_UnEquip::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
+
+	/* Run */
+	pState = CStatePlayerOH_RunFoward::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
+
+	pState = CStatePlayerOH_RunBackward::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
+
+	pState = CStatePlayerOH_RunLeft::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
+
+	pState = CStatePlayerOH_RunRight::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
+
 	/* Attack */
 	pState = CStatePlayerOH_LAttack::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
@@ -52,18 +87,22 @@ HRESULT CStateManager_Player::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 
 	pState = CStatePlayerOH_RunPAttack::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
+
+
+#pragma endregion
+
 	
 	m_pCurState = m_vecPlayerState.front();
 
 	return S_OK;
 }
 
-CState_Player* CStateManager_Player::Get_State(PLAYERSTATE _eState)
+CState_Player* CStateManager_Player::Get_State(CPlayer::PLAYERSTATE _eState)
 {
 	return m_vecPlayerState[_eState];
 }
 
-HRESULT CStateManager_Player::Set_State(PLAYERSTATE _eState)
+HRESULT CStateManager_Player::Set_State(CPlayer::PLAYERSTATE _eState)
 {
 	m_pCurState = m_vecPlayerState[_eState];
 

@@ -17,8 +17,8 @@
 
 #include "Player.h"
 #include "Player_Body.h"
-
-#include "Weapon_IronSword.h"
+#include "Player_Weapon.h"
+#include "Player_Armor.h"
 
 // Tool Level
 #include "Tool_Camera.h"
@@ -31,6 +31,10 @@
 
 /* Monster */
 #include "Skeever.h"
+
+/* Equip */
+#include "Weapon_IronSword.h"
+#include "Armor_Glass.h"
 
 CLoader::CLoader(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: m_pDevice(_pDevice)
@@ -233,7 +237,7 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 
 	/* Sky */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Texture_Sky"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/SkyBox/Sky_%d.dds"), 4))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/SkyBox/Sky_%d.dds"), 4))))
 		return E_FAIL;
 
 	/* Snow */
@@ -295,10 +299,28 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Player/Player_1Hand_Stand.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
-	/* Weapon */
+	/* Item */
 	matInitialize = XMMatrixIdentity();
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Model_Weapon_IronSword"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/IronSword/Iron_LongSword.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Model_Glass_Boots"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Armor/Glass/Glass_Boots/Glass_Boots.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	// matInitialize = XMMatrixRotationX(XMConvertToRadians(-10.f));
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Model_Glass_Curiass"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Armor/Glass/Glass_Curiass/Glass_Curiass.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	matInitialize = XMMatrixIdentity();
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Model_Glass_Gauntlet"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Armor/Glass/Glass_Gauntlet/Glass_Gauntlet.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Model_Glass_Helmet"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Armor/Glass/Glass_Helmet/Glass_Helmet.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
 	/* Skeever */
@@ -369,16 +391,40 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 	//	CTerrain::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
 
-	// 
+	// Player
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_Body"),
 		CPlayer_Body::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
-	// Weapon
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_Weapon"),
+		CPlayer_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_Armor"),
+		CPlayer_Armor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_Helmet"),
+		CPlayer_Armor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	// Item
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Weapon_IronSword"),
+		CWeapon_IronSword::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Glass_Boots"),
+	//	CWeapon_IronSword::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Glass_Curiass"),
+		CArmor_Glass::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	//
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Glass_Gauntlet"),
+	//	CWeapon_IronSword::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+	//
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Glass_Helmet"),
 		CWeapon_IronSword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
@@ -600,10 +646,13 @@ HRESULT CLoader::Set_ProtoType_WhiteRunMesh(LEVELID _eLevel)
 
 	/* юс╫ц */
 	/* Skeever */
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Skeever"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Skeever/Skeever.bin", matInitialize, CModel::TYPE_ANIM))))
+	//	return E_FAIL;
+
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Skeever"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Skeever/Skeever.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
-
 
 	matInitialize = XMMatrixIdentity();
 	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);

@@ -25,6 +25,9 @@ public:
 	void  Set_Loop(_bool _bIsLoop) { m_bIsLoop = _bIsLoop; }
 	
 	_char* Get_AnimationName() { return m_szName; }
+	
+	_uint Get_CurFrameIndex() { return m_iCurFrameIndex; }
+
 	void  Reset_TrackPosition() { m_fTrackPosition = 0; }
 	_bool Get_Finish() { return m_bIsFinish; }
 	const vector<CChannel*>& Get_Channel() { return m_vecChannel; }
@@ -41,6 +44,7 @@ private:
 	_uint					m_iNumChannel = 0;
 	vector<CChannel*>		m_vecChannel;
 	vector<_uint>			m_vecCurKeyFrame; // 각 채널이 가지는 키프레임. 따로 보관한다.
+	_float					m_iCurFrameIndex = 0;
 
 
 public:
