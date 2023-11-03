@@ -85,7 +85,7 @@ void CLevel_WhiteRun::AfterRender()
 
 HRESULT CLevel_WhiteRun::Ready_Level()
 {
-#pragma region Object
+#pragma region Static
 	/* 화이트런 */
 	// wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Skyrim2";
 
@@ -114,6 +114,32 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 		MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
 		return E_FAIL;
 	}
+#pragma endregion
+
+#pragma region Dynamic
+
+	filePath = TEXT("../Bin/SaveLoad/Dungeon_Monster");
+
+	// 파일을 열기 모드로 열기.
+	ifstream fileStream2(filePath, ios::binary);
+	if (fileStream2.is_open()) {
+		// 파일 내용을 읽기.
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->Object_FileLoad(fileStream2, LEVEL_WHITERUN);
+
+		Safe_Release(pGameInstance);
+
+		fileStream2.close();
+		MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
+	}
+	else {
+		MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 	return S_OK;

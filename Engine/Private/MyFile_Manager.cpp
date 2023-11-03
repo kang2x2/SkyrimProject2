@@ -19,7 +19,7 @@ CMyFile_Manager::CMyFile_Manager()
 {
 }
 
-HRESULT CMyFile_Manager::Object_FileSave(ofstream& _outFile, _uint _iLevelIndex) 
+HRESULT CMyFile_Manager::StaticObject_FileSave(ofstream& _outFile, _uint _iLevelIndex) 
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -32,30 +32,81 @@ HRESULT CMyFile_Manager::Object_FileSave(ofstream& _outFile, _uint _iLevelIndex)
 		list<CGameObject*> objList = Layer->second->Get_ObjList();
 		for (auto obj : objList)
 		{
-			if (!obj->Get_IsHasMesh())
-				continue;
+			if (!obj->Get_IsCreature())
+			{
+				if (!obj->Get_IsHasMesh())
+					continue;
 
-			CTransform* pTransform = dynamic_cast<CTransform*>(obj->Get_Component(TEXT("Com_Transform")));
+				CTransform* pTransform = dynamic_cast<CTransform*>(obj->Get_Component(TEXT("Com_Transform")));
 
-			FILE_INOUTDESC tOutFileDesc;
-			tOutFileDesc.m_strLayerTag = obj->Get_ObjFileDesc().m_strLayerTag;
-			tOutFileDesc.m_strProtoObjTag = obj->Get_ObjFileDesc().m_strProtoObjTag;
-			tOutFileDesc.m_strProtoModelComTag = obj->Get_ObjFileDesc().m_strProtoModelComTag;
-			tOutFileDesc.m_matWorld = pTransform->Get_WorldMatrix();
+				FILE_INOUTDESC tOutFileDesc;
+				tOutFileDesc.m_strLayerTag = obj->Get_ObjFileDesc().m_strLayerTag;
+				tOutFileDesc.m_strProtoObjTag = obj->Get_ObjFileDesc().m_strProtoObjTag;
+				tOutFileDesc.m_strProtoModelComTag = obj->Get_ObjFileDesc().m_strProtoModelComTag;
+				tOutFileDesc.m_matWorld = pTransform->Get_WorldMatrix();
 
-			size_t iStrLength = tOutFileDesc.m_strLayerTag.length();
-			_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
-			_outFile.write(reinterpret_cast<const char*>(tOutFileDesc.m_strLayerTag.c_str()), iStrLength * sizeof(wchar_t));
+				size_t iStrLength = tOutFileDesc.m_strLayerTag.length();
+				_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
+				_outFile.write(reinterpret_cast<const char*>(tOutFileDesc.m_strLayerTag.c_str()), iStrLength * sizeof(wchar_t));
 
-			iStrLength = tOutFileDesc.m_strProtoObjTag.length();
-			_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
-			_outFile.write(reinterpret_cast<const char*>(tOutFileDesc.m_strProtoObjTag.c_str()), iStrLength * sizeof(wchar_t));
+				iStrLength = tOutFileDesc.m_strProtoObjTag.length();
+				_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
+				_outFile.write(reinterpret_cast<const char*>(tOutFileDesc.m_strProtoObjTag.c_str()), iStrLength * sizeof(wchar_t));
 
-			iStrLength = tOutFileDesc.m_strProtoModelComTag.length();
-			_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
-			_outFile.write(reinterpret_cast<const char*>(tOutFileDesc.m_strProtoModelComTag.c_str()), iStrLength * sizeof(wchar_t));
+				iStrLength = tOutFileDesc.m_strProtoModelComTag.length();
+				_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
+				_outFile.write(reinterpret_cast<const char*>(tOutFileDesc.m_strProtoModelComTag.c_str()), iStrLength * sizeof(wchar_t));
 
-			_outFile.write(reinterpret_cast<const char*>(&tOutFileDesc.m_matWorld), sizeof(_matrix));
+				_outFile.write(reinterpret_cast<const char*>(&tOutFileDesc.m_matWorld), sizeof(_matrix));
+			}
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CMyFile_Manager::DynamicObject_FileSave(ofstream& _outFile, _uint _iLevelIndex)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	map<const wstring, CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(_iLevelIndex);
+
+	for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
+	{
+		// Layer 내부의 ObjList를 가져옴.
+		list<CGameObject*> objList = Layer->second->Get_ObjList();
+		for (auto obj : objList)
+		{
+			if (obj->Get_IsCreature())
+			{
+				if (!obj->Get_IsHasMesh())
+					continue;
+
+				CTransform* pTransform = dynamic_cast<CTransform*>(obj->Get_Component(TEXT("Com_Transform")));
+
+				FILE_INOUTDESC tOutFileDesc;
+				tOutFileDesc.m_strLayerTag = obj->Get_ObjFileDesc().m_strLayerTag;
+				tOutFileDesc.m_strProtoObjTag = obj->Get_ObjFileDesc().m_strProtoObjTag;
+				tOutFileDesc.m_strProtoModelComTag = obj->Get_ObjFileDesc().m_strProtoModelComTag;
+				tOutFileDesc.m_matWorld = pTransform->Get_WorldMatrix();
+
+				size_t iStrLength = tOutFileDesc.m_strLayerTag.length();
+				_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
+				_outFile.write(reinterpret_cast<const char*>(tOutFileDesc.m_strLayerTag.c_str()), iStrLength * sizeof(wchar_t));
+
+				iStrLength = tOutFileDesc.m_strProtoObjTag.length();
+				_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
+				_outFile.write(reinterpret_cast<const char*>(tOutFileDesc.m_strProtoObjTag.c_str()), iStrLength * sizeof(wchar_t));
+
+				iStrLength = tOutFileDesc.m_strProtoModelComTag.length();
+				_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
+				_outFile.write(reinterpret_cast<const char*>(tOutFileDesc.m_strProtoModelComTag.c_str()), iStrLength * sizeof(wchar_t));
+
+				_outFile.write(reinterpret_cast<const char*>(&tOutFileDesc.m_matWorld), sizeof(_matrix));
+			}
 		}
 	}
 

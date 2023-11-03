@@ -2,7 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Part_Base.h"
-#include "SkyrimArmor.h"
+#include "SkyrimHelmet.h"
 
 BEGIN(Engine)
 

@@ -23,7 +23,6 @@ public:
 
 protected:
 	_matrix*		pMatPivot;
-	_float4x4		m_matWorld;
 
 public:
 	virtual CGameObject* Clone(void* _pArg) = 0;

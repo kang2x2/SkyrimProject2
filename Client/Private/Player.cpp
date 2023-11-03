@@ -197,25 +197,25 @@ HRESULT CPlayer::Ready_Part()
 	m_vecPlayerPart.push_back(pPart);
 
 	/* For. Armor */
-	//CPlayer_Armor::ARMOR_DESC ArmorPartDesc;
-	//ArmorPartDesc.pParentTransform = m_pTransformCom; //NPC Spine [Spn0]
-	//ArmorPartDesc.pSocketBone = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Spine [Spn0]");
-	//ArmorPartDesc.matSocketPivot = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
-	//
-	//pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Armor"), &WeaponPartDesc);
-	//if (pPart == nullptr)
-	//	return E_FAIL;
-	//m_vecPlayerPart.push_back(pPart);
-	//
-	//CPlayer_Helmet::HELMET_DESC HelmetPartDesc;
-	//HelmetPartDesc.pParentTransform = m_pTransformCom; //NPC Spine [Spn0]
-	//HelmetPartDesc.pSocketBone = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Head [Head]");
-	//HelmetPartDesc.matSocketPivot = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
-	//
-	//pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Helmet"), &WeaponPartDesc);
-	//if (pPart == nullptr)
-	//	return E_FAIL;
-	//m_vecPlayerPart.push_back(pPart);
+	CPlayer_Armor::ARMOR_DESC ArmorPartDesc;
+	ArmorPartDesc.pParentTransform = m_pTransformCom; //NPC Spine [Spn0]
+	ArmorPartDesc.pSocketBone = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Spine [Spn0]");
+	ArmorPartDesc.matSocketPivot = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
+	
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Armor"), &ArmorPartDesc);
+	if (pPart == nullptr)
+		return E_FAIL;
+	m_vecPlayerPart.push_back(pPart);
+	
+	CPlayer_Helmet::HELMET_DESC HelmetPartDesc;
+	HelmetPartDesc.pParentTransform = m_pTransformCom; //NPC Spine [Spn0]
+	HelmetPartDesc.pSocketBone = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Spine [Spn0]");
+	HelmetPartDesc.matSocketPivot = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
+	
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Helmet"), &HelmetPartDesc);
+	if (pPart == nullptr)
+		return E_FAIL;
+	m_vecPlayerPart.push_back(pPart);
 
 	Safe_Release(pGameInstance);
 

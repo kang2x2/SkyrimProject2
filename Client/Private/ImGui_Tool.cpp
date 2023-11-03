@@ -171,16 +171,23 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 }
 void CImGui_Tool::LayOut_ObjSaveLoad()
 {
-	const char* strLayOutName = "Obj Save/Load";
+	const char* strLayOutName = "StaticObj Save/Load";
 
 	ImGui::Begin(strLayOutName);
 
 	// 범위 밖에서만 수행하기 위한 레이아웃 범위 저장.
 	Add_LayOut_Array(strLayOutName, ImGui::GetWindowPos(), ImGui::GetWindowSize());
 
-	if (ImGui::Button("Save"))
+	if (ImGui::Button("Static Save"))
 	{
-		ObjFile_Save();
+		ObjFile_Save(SAVETYPE_STATIC);
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Dynamic Save"))
+	{
+		ObjFile_Save(SAVETYPE_DYNAMIC);
 	}
 
 	ImGui::SameLine();
@@ -192,6 +199,7 @@ void CImGui_Tool::LayOut_ObjSaveLoad()
 
 	ImGui::End();
 }
+
 void CImGui_Tool::LayOut_CellSaveLoad()
 {
 	const char* strLayOutName = "Cell Save/Load";
@@ -634,7 +642,7 @@ void CImGui_Tool::ChangeType_File()
 	m_bFindFBX = false;
 }
 
-void CImGui_Tool::ObjFile_Save()
+void CImGui_Tool::ObjFile_Save(SAVE_OBJTYPE _eType)
 {
 	// 작업을 하고 나면 작업한 경로가 최종 저장 되어 추후 작업 시 문제가 됨.
 	// 그러니 경로를 저장해놓고 모든 작업이 끝나면 경로를 지금 저장한 경로로 다시 초기화한다.
@@ -671,7 +679,10 @@ void CImGui_Tool::ObjFile_Save()
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
 			Safe_AddRef(pGameInstance);
 
-			pGameInstance->Object_FileSave(fileStream, LEVEL_TOOL);
+			if(_eType == SAVETYPE_STATIC)
+				pGameInstance->StaticObject_FileSave(fileStream, LEVEL_TOOL);
+			else if(_eType == SAVETYPE_DYNAMIC)
+				pGameInstance->DynamicObject_FileSave(fileStream, LEVEL_TOOL);
 
 			Safe_Release(pGameInstance);
 

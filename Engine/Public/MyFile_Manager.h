@@ -25,7 +25,8 @@ private:
 	virtual ~CMyFile_Manager() = default;
 
 public: /* 파일 저장과 로드를 담당하는 함수들 */
-	HRESULT Object_FileSave(ofstream& _outFile, _uint _iLevelIndex);
+	HRESULT StaticObject_FileSave(ofstream& _outFile, _uint _iLevelIndex);
+	HRESULT DynamicObject_FileSave(ofstream& _outFile, _uint _iLevelIndex);
 	HRESULT Object_FileLoad(ifstream& _inFile, _uint _iLevelIndex);
 
 	HRESULT Cell_FileSave(ofstream& _outFile, class CNavigation* _pNavigation);

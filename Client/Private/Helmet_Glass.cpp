@@ -27,7 +27,7 @@ HRESULT CHelmet_Glass::Initialize_Clone(void* _pArg)
 	m_pTransformCom->Set_Scaling(_float3(0.01f, 0.01f, 0.01f));
 	// m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
 	// matInitialize = XMMatrixRotationY(XMConvertToRadians(-90.f));
-	m_strName = TEXT("GlassArmor");
+	m_strName = TEXT("GlassHelmet");
 
 	return S_OK;
 }

@@ -19,6 +19,7 @@
 #include "Player_Body.h"
 #include "Player_Weapon.h"
 #include "Player_Armor.h"
+#include "Player_Helmet.h"
 
 // Tool Level
 #include "Tool_Camera.h"
@@ -31,10 +32,12 @@
 
 /* Monster */
 #include "Skeever.h"
+#include "Falmer_UnEquip.h"
 
 /* Equip */
 #include "Weapon_IronSword.h"
 #include "Armor_Glass.h"
+#include "Helmet_Glass.h"
 
 CLoader::CLoader(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: m_pDevice(_pDevice)
@@ -141,6 +144,11 @@ HRESULT CLoader::Loading_For_Level_Tool()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxAnimMesh.hlsl"), VTX_ANIMMESH::Elements, VTX_ANIMMESH::iNumElements))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Collider_AABB */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Collider_AABB"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
+		return E_FAIL;
+
 	/* Mesh*/
 	m_strLoadingText = TEXT("Loading Mesh.");
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_VIBuffer_Terrain_Grid"),
@@ -154,6 +162,12 @@ HRESULT CLoader::Loading_For_Level_Tool()
 
 	_matrix matInitialize = XMMatrixIdentity();
 
+	matInitialize = XMMatrixScaling(0.0013f, 0.0013f, 0.0013f);
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Model_Player_Body"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Player/Player_1Hand_Stand.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+
+
 #pragma region GameObject
 	// Camera
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_ToolCamera"),
@@ -163,6 +177,15 @@ HRESULT CLoader::Loading_For_Level_Tool()
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_GridTerrain"),
 		CTerrain_Grid::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	// Player
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player"),
+		CPlayer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_Body"),
+		CPlayer_Body::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 	Set_ProtoType_WhiteObject();
 	/* 일단 화이트런에 통합되어 있음.*/
@@ -425,7 +448,7 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 	//	return E_FAIL;
 	//
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Glass_Helmet"),
-		CWeapon_IronSword::Create(m_pDevice, m_pContext))))
+		CHelmet_Glass::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	Set_ProtoType_WhiteObject();
@@ -642,7 +665,7 @@ HRESULT CLoader::Set_ProtoType_WhiteRunMesh(LEVELID _eLevel)
 	Safe_AddRef(pGameInstance);
 
 	_matrix matInitialize = XMMatrixIdentity();
-	matInitialize = XMMatrixScaling(0.1f, 0.1f, 0.1f);
+	matInitialize = XMMatrixScaling(0.0013f, 0.0013f, 0.0013f);
 
 	/* 임시 */
 	/* Skeever */
@@ -652,6 +675,13 @@ HRESULT CLoader::Set_ProtoType_WhiteRunMesh(LEVELID _eLevel)
 
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Skeever"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Skeever/Skeever.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+
+	matInitialize = XMMatrixIdentity();
+	matInitialize = XMMatrixScaling(0.0010f, 0.0010f, 0.0010f);
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Falmer_Unequip"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Falmer_UnEquip/Falmer_Unequip.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
 	matInitialize = XMMatrixIdentity();
@@ -1605,6 +1635,10 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 	/* Skeever */
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Skeever"),
 		CSkeever::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* Falmer_UnEquip */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Falmer_Unequip"),
+		CFalmer_UnEquip::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma region SkyrimTerrain

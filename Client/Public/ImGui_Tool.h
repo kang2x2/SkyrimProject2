@@ -52,6 +52,9 @@ public:
 		_float3 fCellPos[3];
 	}TOOL_CELLDESC;
 
+public:
+	enum SAVE_OBJTYPE { SAVETYPE_STATIC, SAVETYPE_DYNAMIC, SAVETYPE_END };
+
 private:
 	CImGui_Tool();
 	virtual ~CImGui_Tool() = default;
@@ -97,7 +100,7 @@ private:
 	void	Key_Input(class CTransform* _pTransform);
 
 	// Save / Load
-	void    ObjFile_Save();
+	void    ObjFile_Save(SAVE_OBJTYPE _eType);
 	void    ObjFile_Load();
 	void	CellFile_Save();
 	void	CellFile_Load();

@@ -304,6 +304,18 @@
     <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet\00. Glass">
       <UniqueIdentifier>{85104bb0-dbf3-43fe-ab72-ca1191abb5b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip">
+      <UniqueIdentifier>{fabeb582-8e47-4b5c-876b-525c5c38864d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip">
+      <UniqueIdentifier>{c32af7a5-02cd-4bff-9da2-0c635b0b5171}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. Idle">
+      <UniqueIdentifier>{e9b45858-7fcb-44c5-8cc7-ee2fcf5922c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\00. Manager">
+      <UniqueIdentifier>{5295ec82-195c-4838-9549-4bdcbb288f3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -522,6 +534,15 @@
     <ClInclude Include="..\Public\Helmet_Glass.h">
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet\00. Glass</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Falmer_UnEquip.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_Idle.h">
+      <Filter>03. State\02. Falmer_UnEquip\01. Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateManager_FalmerUE.h">
+      <Filter>03. State\02. Falmer_UnEquip\00. Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -732,6 +753,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Helmet_Glass.cpp">
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet\00. Glass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Falmer_UnEquip.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_Idle.cpp">
+      <Filter>03. State\02. Falmer_UnEquip\01. Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateManager_FalmerUE.cpp">
+      <Filter>03. State\02. Falmer_UnEquip\00. Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

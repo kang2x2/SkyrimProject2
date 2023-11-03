@@ -4,7 +4,7 @@
 #include "GameInstance.h" 
 #include "Bone.h"
 
-#include "Armor_Glass.h"
+#include "Helmet_Glass.h"
 
 CPlayer_Helmet::CPlayer_Helmet(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CPart_Base(_pDevice, _pContext)

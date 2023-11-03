@@ -350,12 +350,20 @@ _vector CGameInstance::Get_CamPosition_Vector() const
 }
 
 /* File Manager */
-HRESULT CGameInstance::Object_FileSave(ofstream& _outFile, _uint _iLevelIndex) const
+HRESULT CGameInstance::StaticObject_FileSave(ofstream& _outFile, _uint _iLevelIndex) const
 {
 	if (m_pMyFile_Manager == nullptr)
 		return E_FAIL;
 
-	return m_pMyFile_Manager->Object_FileSave(_outFile, _iLevelIndex);
+	return m_pMyFile_Manager->StaticObject_FileSave(_outFile, _iLevelIndex);
+}
+
+HRESULT CGameInstance::DynamicObject_FileSave(ofstream& _outFile, _uint _iLevelIndex)
+{
+	if (m_pMyFile_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pMyFile_Manager->DynamicObject_FileSave(_outFile, _iLevelIndex);
 }
 
 HRESULT CGameInstance::Object_FileLoad(std::ifstream& _inFile, _uint _iLevelIndex)

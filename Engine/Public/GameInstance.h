@@ -72,7 +72,8 @@ public: /* For. PipeLine */
 	_vector Get_CamPosition_Vector()const;
 
 public: /* For. File Manager */
-	HRESULT Object_FileSave(ofstream & _outFile, _uint _iLevelIndex) const;
+	HRESULT StaticObject_FileSave(ofstream & _outFile, _uint _iLevelIndex) const;
+	HRESULT DynamicObject_FileSave(ofstream & _outFile, _uint _iLevelIndex);
 	HRESULT Object_FileLoad(std::ifstream & _inFile, _uint _iLevelIndex);
 	HRESULT Cell_FileSave(ofstream & _outFile, CNavigation * _pNavigation);
 	HRESULT Cell_FileLoad(ifstream & _inFile, class CNavigation* _pNavigation);

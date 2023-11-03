@@ -1,31 +1,32 @@
 #include "framework.h"
-#include "Skeever.h"
+#include "Falmer_UnEquip.h"
 
 #include "GameInstance.h"
 
-#include "StateManager_Skeever.h"
+#include "StateManager_FalmerUE.h"
 
-CSkeever::CSkeever(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CFalmer_UnEquip::CFalmer_UnEquip(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CMonster(_pDevice, _pContext)
 {
+	// state manager 만들자. 그리고 로더에 원본 추가하자.
 }
 
-CSkeever::CSkeever(const CSkeever& rhs)
+CFalmer_UnEquip::CFalmer_UnEquip(const CFalmer_UnEquip& rhs)
 	: CMonster(rhs)
 {
 }
 
-HRESULT CSkeever::Initialize_ProtoType()
+HRESULT CFalmer_UnEquip::Initialize_ProtoType()
 {
 	return S_OK;
 }
 
-HRESULT CSkeever::Initialize_Clone(void* pArg)
+HRESULT CFalmer_UnEquip::Initialize_Clone(void* pArg)
 {
 	return S_OK;
 }
 
-HRESULT CSkeever::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag, void* pArg)
+HRESULT CFalmer_UnEquip::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag, void* pArg)
 {
 	pMatPivot = (_matrix*)pArg;
 
@@ -39,21 +40,21 @@ HRESULT CSkeever::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag
 
 	m_bHasMesh = true;
 	m_bCreature = true;
-	m_strName = TEXT("Skeever");
+	m_strName = TEXT("Falmer_UnEquip");
 
-	// m_pTransformCom->Set_Speed(5.f);
+	m_pTransformCom->Set_Speed(5.f);
 
-	Play_Animation(true, "mtidle");
+	Play_Animation(true, "mt_idle");
 
 	return S_OK;
 
 }
 
-void CSkeever::PriorityTick(_float _fTimeDelta)
+void CFalmer_UnEquip::PriorityTick(_float _fTimeDelta)
 {
 }
 
-void CSkeever::Tick(_float _fTimeDelta)
+void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
@@ -72,14 +73,14 @@ void CSkeever::Tick(_float _fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CSkeever::LateTick(_float _fTimeDelta)
+void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 {
 	m_pStateManager->Late_Update();
 
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 }
 
-HRESULT CSkeever::Render()
+HRESULT CFalmer_UnEquip::Render()
 {
 	if (FAILED(Bind_ShaderResource()))
 		return E_FAIL;
@@ -104,7 +105,7 @@ HRESULT CSkeever::Render()
 
 #ifdef _DEBUG
 	/* 콜라이더를 그 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
-	if(m_pColliderCom != nullptr)
+	if (m_pColliderCom != nullptr)
 		m_pColliderCom->Render();
 #endif
 
@@ -112,24 +113,24 @@ HRESULT CSkeever::Render()
 
 }
 
-HRESULT CSkeever::Set_State(SKEEVERSTATE _eState)
+HRESULT CFalmer_UnEquip::Set_State(SKEEVERSTATE _eState)
 {
 	m_pStateManager->Set_State(_eState);
 
 	return S_OK;
 }
 
-void CSkeever::Play_Animation(_bool _bIsLoop, string _strAnimationName)
+void CFalmer_UnEquip::Play_Animation(_bool _bIsLoop, string _strAnimationName)
 {
 	Set_AnimationIndex(_bIsLoop, _strAnimationName);
 }
 
-void CSkeever::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName)
+void CFalmer_UnEquip::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName)
 {
 	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName);
 }
 
-HRESULT CSkeever::Ready_Component(_uint _iLevel)
+HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 {
 	if (FAILED(__super::Add_CloneComponent(_iLevel, m_strModelComTag,
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
@@ -173,22 +174,22 @@ HRESULT CSkeever::Ready_Component(_uint _iLevel)
 	return S_OK;
 }
 
-HRESULT CSkeever::Ready_State()
+HRESULT CFalmer_UnEquip::Ready_State()
 {
-	m_pStateManager = CStateManager_Skeever::Create(this, m_pTransformCom, m_pNavigationCom);
+	m_pStateManager = CStateManager_FalmerUE::Create(this, m_pTransformCom, m_pNavigationCom);
 
 	return S_OK;
 }
 
-HRESULT CSkeever::Ready_Cell()
+HRESULT CFalmer_UnEquip::Ready_Cell()
 {
 	return S_OK;
 }
 
-HRESULT CSkeever::Bind_ShaderResource()
+HRESULT CFalmer_UnEquip::Bind_ShaderResource()
 {
-	//if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
-	//	return E_FAIL;
+	// if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
+	// 	return E_FAIL;
 
 	_float4x4 matWorld = m_pTransformCom->Get_WorldMatrix_Float4x4();
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &matWorld)))
@@ -241,46 +242,46 @@ HRESULT CSkeever::Bind_ShaderResource()
 
 }
 
-CSkeever* CSkeever::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CFalmer_UnEquip* CFalmer_UnEquip::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 {
-	CSkeever* pInstance = new CSkeever(_pDevice, _pContext);
+	CFalmer_UnEquip* pInstance = new CFalmer_UnEquip(_pDevice, _pContext);
 
 	if (FAILED(pInstance->Initialize_ProtoType()))
 	{
-		MSG_BOX("Fail Create : CSkeever");
+		MSG_BOX("Fail Create : CFalmer_UnEquip");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CSkeever::Clone(void* _pArg)
+CGameObject* CFalmer_UnEquip::Clone(void* _pArg)
 {
-	CSkeever* pInstance = new CSkeever(*this);
+	CFalmer_UnEquip* pInstance = new CFalmer_UnEquip(*this);
 
 	if (FAILED(pInstance->Initialize_Clone(_pArg)))
 	{
-		MSG_BOX("Fail Clone : CSkeever");
+		MSG_BOX("Fail Clone : CFalmer_UnEquip");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CSkeever::Clone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg)
+CGameObject* CFalmer_UnEquip::Clone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg)
 {
-	CSkeever* pInstance = new CSkeever(*this);
+	CFalmer_UnEquip* pInstance = new CFalmer_UnEquip(*this);
 
 	if (FAILED(pInstance->Initialize_Clone(_iLevel, _strModelComTag, _pArg)))
 	{
-		MSG_BOX("Fail Clone : CSkeever");
+		MSG_BOX("Fail Clone : CFalmer_UnEquip");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CSkeever::Free()
+void CFalmer_UnEquip::Free()
 {
 	__super::Free();
 
