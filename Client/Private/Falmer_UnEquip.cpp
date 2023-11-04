@@ -78,12 +78,13 @@ void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 	m_pStateManager->Late_Update();
 
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
+
+	__super::LateTick(_fTimeDelta);
 }
 
 HRESULT CFalmer_UnEquip::Render()
 {
-	if (FAILED(Bind_ShaderResource()))
-		return E_FAIL;
+	__super::Bind_ShaderResource();
 
 	// 메시 몇개
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
@@ -136,29 +137,7 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
-		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
-		return E_FAIL;
-
-	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Renderer"),
-		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
-		return E_FAIL;
-
-	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
-		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
-		return E_FAIL;
-
-	m_pTransformCom->Set_WorldMatrix(*pMatPivot);
-
-	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
-
-	AABBDesc.vExtents = _float3(0.5f, 0.5f, 0.5f);
-	AABBDesc.vCenter = _float3(0.f, 0.f, 0.f);
-
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
-		TEXT("Com_Collider_AABB"), (CComponent**)&m_pColliderCom, &AABBDesc)))
-		return E_FAIL;
-
+	__super::Ready_Component();
 
 	if (_iLevel != LEVEL_TOOL)
 	{
@@ -184,62 +163,6 @@ HRESULT CFalmer_UnEquip::Ready_State()
 HRESULT CFalmer_UnEquip::Ready_Cell()
 {
 	return S_OK;
-}
-
-HRESULT CFalmer_UnEquip::Bind_ShaderResource()
-{
-	// if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
-	// 	return E_FAIL;
-
-	_float4x4 matWorld = m_pTransformCom->Get_WorldMatrix_Float4x4();
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &matWorld)))
-		return E_FAIL;
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	// 뷰, 투영 행렬과 카메라의 위치를 던져준다.
-	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ViewMatrix", CPipeLine::D3DTS_VIEW)))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ProjMatrix", CPipeLine::D3DTS_PROJ)))
-		return E_FAIL;
-
-	_float4 vCamPosition = pGameInstance->Get_CamPosition_Float4();
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
-		return E_FAIL;
-
-	const LIGHT_DESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	if (pLightDesc == nullptr)
-		return E_FAIL;
-
-	_uint		iPassIndex = 0;
-
-	if (pLightDesc->eLightType == LIGHT_DESC::LIGHT_DIRECTIONAL)
-	{
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &pLightDesc->vLightDir, sizeof(_float4))))
-			return E_FAIL;
-		iPassIndex = 0;
-	}
-	else if (pLightDesc->eLightType == LIGHT_DESC::LIGHT_POINT)
-	{
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightPos", &pLightDesc->vLightPos, sizeof(_float4))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_fLightRange", &pLightDesc->fLightRange, sizeof(_float))))
-			return E_FAIL;
-		iPassIndex = 1;
-	}
-
-	// 나머지 조명 연산에 필요한 데이터를 던져 줌
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
-		return E_FAIL;
-
-	Safe_Release(pGameInstance);
-
-	return S_OK;
-
 }
 
 CFalmer_UnEquip* CFalmer_UnEquip::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)

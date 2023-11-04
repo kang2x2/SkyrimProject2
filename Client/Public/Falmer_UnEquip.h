@@ -5,11 +5,7 @@
 BEGIN(Engine)
 
 class CModel;
-class CShader;
-class CRenderer;
-class CTransform;
 class CNavigation;
-class CCollider;
 
 END
 
@@ -42,15 +38,10 @@ public:
 	HRESULT Ready_State();
 
 	HRESULT Ready_Cell();
-	HRESULT Bind_ShaderResource();
 
 private:
 	CModel* m_pModelCom = nullptr;
-	CShader* m_pShaderCom = nullptr;
 	CNavigation* m_pNavigationCom = nullptr;
-	CCollider* m_pColliderCom = nullptr;
-	CRenderer* m_pRendererCom = nullptr;
-	CTransform* m_pTransformCom = nullptr;
 
 	class CStateManager_FalmerUE* m_pStateManager = nullptr;
 

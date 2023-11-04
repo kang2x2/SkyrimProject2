@@ -2,6 +2,7 @@
 #include "Player_Body.h"
 
 #include "GameInstance.h"
+#include "Layer.h"
 
 CPlayer_Body::CPlayer_Body(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CPart_Base(_pDevice, _pContext)
@@ -45,6 +46,27 @@ void CPlayer_Body::Tick(_float _fTimeDelta)
 void CPlayer_Body::LateTick(_float _fTimeDelta)
 {
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_WHITERUN);
+
+	for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
+	{
+		list<CGameObject*> ltbjList = Layer->second->Get_ObjList();
+
+		for (auto obj : ltbjList)
+		{
+			if (obj->Get_IsCreature())
+			{
+				pGameInstance->Collision_AABBTransition(m_pColliderCom,
+					dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB"))));
+			}
+		}
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CPlayer_Body::Render()

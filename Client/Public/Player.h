@@ -59,9 +59,10 @@ public:
 		m_pPlayerCams[_eCamType] = _pCam;
 	}
 
-
 	const _vector Get_PlayerCamLook();
 	// void Set_CamLook(const _vector& _vPlayerLook);
+
+	CGameObject* Get_Part(PARTS _ePart) { return m_vecPlayerPart[_ePart]; }
 
 private:
 	vector<class CGameObject*>		m_vecPlayerPart;

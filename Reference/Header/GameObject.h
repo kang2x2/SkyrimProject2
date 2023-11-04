@@ -44,8 +44,6 @@ public:
 	void			Set_ObjFileDesc(const wstring& _strLayerTag, const wstring& _strProtoObjTag, const wstring& _strProtoModelComTag);
 	FILE_OBJDESC    Get_ObjFileDesc() { return m_tObjFileDesc; }
 
-	// 레벨 설정
-
 protected:
 	wstring					m_strName = TEXT(""); // 고유한 이름을 가지고 있어야 탐색이 용이 할 것 같다.
 	wstring					m_strModelComTag = TEXT(""); // 자신이 가지고 있는 모델 컴포넌트의 원본 태그

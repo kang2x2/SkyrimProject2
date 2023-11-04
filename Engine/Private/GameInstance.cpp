@@ -6,6 +6,7 @@
 #include "Level_Manager.h"
 #include "Object_Manager.h"
 #include "Light_Manager.h"
+#include "Collision_Manager.h"
 #include "MyFile_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -19,9 +20,9 @@ CGameInstance::CGameInstance()
 	, m_pComponent_Manager(CComponent_Manager::GetInstance())
 	, m_pObject_Manager(CObject_Manager::GetInstance())
 	, m_pLight_Manager(CLight_Manager::GetInstance())
+	, m_pCollision_Manager(CCollision_Manager::GetInstance())
 	, m_pPipeLine(CPipeLine::GetInstance())
 	, m_pMyFile_Manager(CMyFile_Manager::GetInstance())
-	
 {
 	Safe_AddRef(m_pGraphic_Device);
 	Safe_AddRef(m_pTimer_Manager);
@@ -31,6 +32,7 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pComponent_Manager);
 	Safe_AddRef(m_pObject_Manager);
 	Safe_AddRef(m_pLight_Manager);
+	Safe_AddRef(m_pCollision_Manager);
 	Safe_AddRef(m_pPipeLine);
 	Safe_AddRef(m_pMyFile_Manager);
 }
@@ -349,6 +351,12 @@ _vector CGameInstance::Get_CamPosition_Vector() const
 	return m_pPipeLine->Get_CamPosition_Vector();
 }
 
+/* Collision Manager */
+void CGameInstance::Collision_AABBTransition(CCollider* _pCollider, CCollider* _pTargetCollider)
+{
+	m_pCollision_Manager->Collision_AABBTransition(_pCollider, _pTargetCollider);
+}
+
 /* File Manager */
 HRESULT CGameInstance::StaticObject_FileSave(ofstream& _outFile, _uint _iLevelIndex) const
 {
@@ -411,10 +419,11 @@ void CGameInstance::Release_Engine()
 	CGameInstance::GetInstance()->DestroyInstance();
 	CMyFile_Manager::GetInstance()->DestroyInstance();
 	CPipeLine::GetInstance()->DestroyInstance();
+	CCollision_Manager::GetInstance()->DestroyInstance();
+	CLight_Manager::GetInstance()->DestroyInstance();
 	CLevel_Manager::GetInstance()->DestroyInstance();
 	CObject_Manager::GetInstance()->DestroyInstance();
 	CComponent_Manager::GetInstance()->DestroyInstance();
-	CLight_Manager::GetInstance()->DestroyInstance();
 	CTimer_Manager::GetInstance()->DestroyInstance();
 	CInput_Device::GetInstance()->DestroyInstance();
 	CCalculator::GetInstance()->DestroyInstance();
@@ -423,7 +432,6 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {
-	Safe_Release(m_pLight_Manager);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pLevel_Manager);
@@ -432,5 +440,7 @@ void CGameInstance::Free()
 	Safe_Release(m_pInput_Device);
 	Safe_Release(m_pCalculator);
 	Safe_Release(m_pPipeLine);
+	Safe_Release(m_pLight_Manager);
+	Safe_Release(m_pCollision_Manager);
 	Safe_Release(m_pMyFile_Manager);
 }

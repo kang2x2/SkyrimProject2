@@ -15,6 +15,10 @@ private:
 	virtual ~CCollider() = default;
 
 public:
+	COLLIDER_TYPE		Get_ColliderType() { return m_eColliderType; }
+	class CBounding*	Get_Bounding() { return m_pBounding; }
+
+public:
 	virtual HRESULT Initialize_ProtoType(COLLIDER_TYPE _eType);
 	virtual HRESULT Initialize_Clone(void* pArg);
 

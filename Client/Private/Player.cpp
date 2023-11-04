@@ -109,27 +109,22 @@ _bool CPlayer::Get_IsAnimationFin()
 {
 	return dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_IsAnimationFin();
 }
-
 _bool CPlayer::Get_CurAnimationName(string _strAnimationName)
 {
 	return dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_CurAnimationName(_strAnimationName);
 }
-
 _uint CPlayer::Get_CurFrameIndex()
 {
 	return dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_CurFrameIndex();
 }
-
 const char* CPlayer::Get_CurSocketBonName()
 {
 	return dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])->Get_SoketBoneName();
 }
-
 void CPlayer::Play_Animation(_bool _bIsLoop, string _strAnimationName)
 {
 	dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName);
 }
-
 void CPlayer::Set_SoketBone(const char* _pBoneName)
 {
 	dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])

@@ -88,6 +88,7 @@ HRESULT CMyFile_Manager::DynamicObject_FileSave(ofstream& _outFile, _uint _iLeve
 				CTransform* pTransform = dynamic_cast<CTransform*>(obj->Get_Component(TEXT("Com_Transform")));
 
 				FILE_INOUTDESC tOutFileDesc;
+				// tOutFileDesc.m_strLayerTag = obj->Get_ObjFileDesc().m_strLayerTag;
 				tOutFileDesc.m_strLayerTag = obj->Get_ObjFileDesc().m_strLayerTag;
 				tOutFileDesc.m_strProtoObjTag = obj->Get_ObjFileDesc().m_strProtoObjTag;
 				tOutFileDesc.m_strProtoModelComTag = obj->Get_ObjFileDesc().m_strProtoModelComTag;

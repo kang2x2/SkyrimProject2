@@ -76,15 +76,6 @@
     <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\02. Grid">
       <UniqueIdentifier>{ab836f33-0f58-4e73-8a65-f9005208118d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06. Light">
-      <UniqueIdentifier>{72e63eae-e4d1-413f-bf0b-c9fb787b76be}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06. Light\Manager">
-      <UniqueIdentifier>{1927c0d0-b4b5-41df-88b0-0f4d07fa9729}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05. Calculator">
-      <UniqueIdentifier>{01f54085-1f9b-484c-8568-4379ecfbc979}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Utiltiy\03. Component\05. Model">
       <UniqueIdentifier>{c5777cf1-621b-4403-a398-202e0bd9b244}</UniqueIdentifier>
     </Filter>
@@ -112,29 +103,11 @@
     <Filter Include="01. Utiltiy\03. Component\06. Navigation\00. ShaderFile">
       <UniqueIdentifier>{17e196f6-fb9c-49d5-a8b6-0c383ede1bea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="08. File">
-      <UniqueIdentifier>{463121a0-9070-49cd-87ef-caafd4d94e7b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="08. File\00. Data">
-      <UniqueIdentifier>{c9970d17-a16c-44b0-85d2-321dc8354113}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="08. File\00. Data\00. BinFBX">
-      <UniqueIdentifier>{c86f7611-9e3d-424f-96e2-22128561d102}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="07. State">
-      <UniqueIdentifier>{225f7bd3-1e2e-457b-9a8b-e22cc8c4d4f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="07. State\00. Player">
-      <UniqueIdentifier>{5e2745c3-5863-4615-821e-9c776b95e487}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\04. Collision">
       <UniqueIdentifier>{e4447fe5-b972-4802-8c17-2205353b8f44}</UniqueIdentifier>
     </Filter>
     <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\05. Cube">
       <UniqueIdentifier>{8b246ecf-d872-4c64-92cc-d5c62d5de0ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="09. ShaderFile">
-      <UniqueIdentifier>{feba1161-47e4-4186-866c-1d45168dff53}</UniqueIdentifier>
     </Filter>
     <Filter Include="01. Utiltiy\02. Object\01. Camera">
       <UniqueIdentifier>{45b87d8a-3833-4e35-a6eb-fcbe17ba3163}</UniqueIdentifier>
@@ -181,8 +154,38 @@
     <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect">
       <UniqueIdentifier>{94c4df9a-6863-4d8c-bdee-c7a1bb307e23}</UniqueIdentifier>
     </Filter>
-    <Filter Include="07. State\01. Monster">
+    <Filter Include="98. ShaderFile">
+      <UniqueIdentifier>{feba1161-47e4-4186-866c-1d45168dff53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\06. Light">
+      <UniqueIdentifier>{72e63eae-e4d1-413f-bf0b-c9fb787b76be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\06. Light\Manager">
+      <UniqueIdentifier>{1927c0d0-b4b5-41df-88b0-0f4d07fa9729}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\05. Calculator">
+      <UniqueIdentifier>{01f54085-1f9b-484c-8568-4379ecfbc979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\08. File">
+      <UniqueIdentifier>{463121a0-9070-49cd-87ef-caafd4d94e7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\08. File\00. Data">
+      <UniqueIdentifier>{c9970d17-a16c-44b0-85d2-321dc8354113}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\08. File\00. Data\00. BinFBX">
+      <UniqueIdentifier>{c86f7611-9e3d-424f-96e2-22128561d102}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. State">
+      <UniqueIdentifier>{225f7bd3-1e2e-457b-9a8b-e22cc8c4d4f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. State\00. Player">
+      <UniqueIdentifier>{5e2745c3-5863-4615-821e-9c776b95e487}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. State\01. Monster">
       <UniqueIdentifier>{0c628418-2249-46fe-8c58-4ea7a6f95f60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\07 .Collison">
+      <UniqueIdentifier>{164008c9-aec4-42b8-be94-0ebdb3640ad3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -268,16 +271,16 @@
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\02. Grid</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Calculator.h">
-      <Filter>05. Calculator</Filter>
+      <Filter>01. Utiltiy\05. Calculator</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Light_Manager.h">
-      <Filter>06. Light\Manager</Filter>
+      <Filter>01. Utiltiy\06. Light\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Model.h">
       <Filter>01. Utiltiy\03. Component\05. Model</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Light.h">
-      <Filter>06. Light</Filter>
+      <Filter>01. Utiltiy\06. Light</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Mesh.h">
       <Filter>01. Utiltiy\03. Component\05. Model\00. Mesh</Filter>
@@ -292,10 +295,10 @@
       <Filter>01. Utiltiy\03. Component\05. Model\02. Animation\Channel</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\MyFile_Manager.h">
-      <Filter>08. File</Filter>
+      <Filter>01. Utiltiy\08. File</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bin_AIScene.h">
-      <Filter>08. File\00. Data\00. BinFBX</Filter>
+      <Filter>01. Utiltiy\08. File\00. Data\00. BinFBX</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Navigation.h">
       <Filter>01. Utiltiy\03. Component\06. Navigation</Filter>
@@ -304,7 +307,7 @@
       <Filter>01. Utiltiy\03. Component\06. Navigation\01. Cell</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player.h">
-      <Filter>07. State\00. Player</Filter>
+      <Filter>02. State\00. Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_Collision.h">
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\04. Collision</Filter>
@@ -313,7 +316,7 @@
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\05. Cube</Filter>
     </ClInclude>
     <ClInclude Include="..\Bin\ShaderFile\Engine_Shader_Defines.hpp">
-      <Filter>09. ShaderFile</Filter>
+      <Filter>98. ShaderFile</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\LandObject.h">
       <Filter>01. Utiltiy\02. Object\02. LandObject</Filter>
@@ -352,7 +355,10 @@
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Monster.h">
-      <Filter>07. State\01. Monster</Filter>
+      <Filter>02. State\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Collision_Manager.h">
+      <Filter>01. Utiltiy\07 .Collison</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -429,16 +435,16 @@
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\02. Grid</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Calculator.cpp">
-      <Filter>05. Calculator</Filter>
+      <Filter>01. Utiltiy\05. Calculator</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Light_Manager.cpp">
-      <Filter>06. Light\Manager</Filter>
+      <Filter>01. Utiltiy\06. Light\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Model.cpp">
       <Filter>01. Utiltiy\03. Component\05. Model</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Light.cpp">
-      <Filter>06. Light</Filter>
+      <Filter>01. Utiltiy\06. Light</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Mesh.cpp">
       <Filter>01. Utiltiy\03. Component\05. Model\00. Mesh</Filter>
@@ -453,10 +459,10 @@
       <Filter>01. Utiltiy\03. Component\05. Model\02. Animation\Channel</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\MyFile_Manager.cpp">
-      <Filter>08. File</Filter>
+      <Filter>01. Utiltiy\08. File</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bin_AIScene.cpp">
-      <Filter>08. File\00. Data\00. BinFBX</Filter>
+      <Filter>01. Utiltiy\08. File\00. Data\00. BinFBX</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Navigation.cpp">
       <Filter>01. Utiltiy\03. Component\06. Navigation</Filter>
@@ -465,7 +471,7 @@
       <Filter>01. Utiltiy\03. Component\06. Navigation\01. Cell</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player.cpp">
-      <Filter>07. State\00. Player</Filter>
+      <Filter>02. State\00. Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Collision.cpp">
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\04. Collision</Filter>
@@ -507,7 +513,10 @@
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Monster.cpp">
-      <Filter>07. State\01. Monster</Filter>
+      <Filter>02. State\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Collision_Manager.cpp">
+      <Filter>01. Utiltiy\07 .Collison</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

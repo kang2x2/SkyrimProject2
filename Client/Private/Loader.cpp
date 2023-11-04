@@ -678,7 +678,7 @@ HRESULT CLoader::Set_ProtoType_WhiteRunMesh(LEVELID _eLevel)
 		return E_FAIL;
 
 	matInitialize = XMMatrixIdentity();
-	matInitialize = XMMatrixScaling(0.0010f, 0.0010f, 0.0010f);
+	matInitialize = XMMatrixScaling(0.0013f, 0.0013f, 0.0013f);
 
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Falmer_Unequip"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Falmer_UnEquip/Falmer_Unequip.bin", matInitialize, CModel::TYPE_ANIM))))

@@ -71,6 +71,9 @@ public: /* For. PipeLine */
 	_float4 Get_CamPosition_Float4()const;
 	_vector Get_CamPosition_Vector()const;
 
+public: /* For. Collision Manager */
+	void Collision_AABBTransition(CCollider * _pCollider, CCollider * _pTargetCollider);
+
 public: /* For. File Manager */
 	HRESULT StaticObject_FileSave(ofstream & _outFile, _uint _iLevelIndex) const;
 	HRESULT DynamicObject_FileSave(ofstream & _outFile, _uint _iLevelIndex);
@@ -89,6 +92,7 @@ private:
 	class CObject_Manager*		m_pObject_Manager = nullptr;
 	class CComponent_Manager*	m_pComponent_Manager = nullptr;
 	class CLight_Manager*		m_pLight_Manager = nullptr;
+	class CCollision_Manager*	m_pCollision_Manager = nullptr;
 	class CPipeLine*		    m_pPipeLine = nullptr;
 	class CMyFile_Manager*		m_pMyFile_Manager = nullptr;
 

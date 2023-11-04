@@ -32,6 +32,7 @@ public:
 	CBone* Get_SocketBonePtr(const char* _pBoneName);
 	_float4x4 Get_SocketPivotMatrix();
 
+	CTransform* Get_ParentTransform() { return m_pParentTransform; }
 public:
 	virtual HRESULT Initialize_ProtoType(); // 원본
 	virtual HRESULT Initialize_Clone(void* _pArg); // 사본

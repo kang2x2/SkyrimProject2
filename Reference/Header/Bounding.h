@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Collider.h"
+#include "GameObject.h"
 
 /* AABB, OBB, SPHERE 부모가 되는 클래스다. */
 
@@ -24,9 +25,13 @@ public:
 
 public:
 	virtual _bool IsCollision(CCollider::COLLIDER_TYPE _eType, CBounding* _pBounding) = 0;
+	
+	virtual CGameObject* Get_OwnerObj() { return m_pOwnerObj; }
+	virtual void		 Set_OwnerObj(class CGameObject* _pObj);
 
 protected:
-	_bool		m_bIsColl = false;
+	_bool				m_bIsColl = false;
+	CGameObject*		m_pOwnerObj = nullptr;
 
 #ifdef _DEBUG
 public:

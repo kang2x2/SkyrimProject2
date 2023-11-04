@@ -3,6 +3,15 @@
 #include "Client_Defines.h"
 #include "GameObject.h"
 
+BEGIN(Engine)
+
+class CCollider;
+class CTransform;
+class CShader;
+class CRenderer;
+
+END
+
 BEGIN(Client)
 
 class CMonster abstract : public CGameObject
@@ -22,7 +31,16 @@ public:
 	virtual HRESULT Render();
 
 protected:
+	HRESULT Ready_Component();
+	HRESULT Bind_ShaderResource();
+
+protected:
 	_matrix*		pMatPivot;
+
+	CShader* m_pShaderCom = nullptr;
+	CCollider* m_pColliderCom = nullptr;
+	CRenderer* m_pRendererCom = nullptr;
+	CTransform* m_pTransformCom = nullptr;
 
 public:
 	virtual CGameObject* Clone(void* _pArg) = 0;
