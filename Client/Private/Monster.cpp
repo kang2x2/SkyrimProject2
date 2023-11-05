@@ -58,8 +58,8 @@ void CMonster::LateTick(_float _fTimeDelta)
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>
 		(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"), TEXT("Player")));
-	//
-	//pGameInstance->Collision_AABBTransition(m_pColliderCom, dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+	
+	pGameInstance->Collision_AABBTransition(m_pColliderCom, dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
 
 	if (g_curLevel == LEVEL_WHITERUN|| g_curLevel == LEVEL_DUNGEON)
 	{

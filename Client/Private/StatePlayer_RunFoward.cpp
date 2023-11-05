@@ -80,10 +80,9 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 		m_pPlayerTransform->Go_Right(_fTimeDelta, m_pPlayerNavigation);
 	}
 
+	/* 나중에 달리면서 무기 꺼내는걸로 변경. */
 	if (pGameInstance->Get_DIKeyDown('R'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUNPOWERATTACK);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_attackpowerforwardsprint");
 	}
 
 	Safe_Release(pGameInstance);

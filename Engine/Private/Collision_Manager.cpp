@@ -72,6 +72,20 @@ void CCollision_Manager::Collision_AABBTransition(CCollider* _pCollider, CCollid
 	}
 }
 
+void CCollision_Manager::Collision_DetectionPlayer(CCollider* _pCollider, CCollider* _pTargetCollider, _float _fTimeDelta)
+{
+	/* 내 바운딩과 상대 바운딩과의 출동 처리. */
+	_bool m_bIsColl = Is_Collsion(_pCollider, _pTargetCollider);
+
+	if (m_bIsColl)
+	{
+		CTransform* pTransform = dynamic_cast<CTransform*>(_pCollider->Get_OwnerObj()->Get_Component(TEXT("Com_Transform")));
+		CTransform* pTragetTransform = dynamic_cast<CTransform*>(_pTargetCollider->Get_OwnerObj()->Get_Component(TEXT("Com_Transform")));
+	
+		pTransform->Chase(pTragetTransform->Get_State(CTransform::STATE_POSITION), _fTimeDelta);
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////
 
 _bool CCollision_Manager::Is_Collsion(CCollider* _pCollider, CCollider* _pTargetCollider)
@@ -100,7 +114,7 @@ _bool CCollision_Manager::Is_Collsion(CCollider* _pCollider, CCollider* _pTarget
 		}
 	}
 
-	if (_pCollider->Get_ColliderType() == CCollider::TYPE_OBB)
+	else if (_pCollider->Get_ColliderType() == CCollider::TYPE_OBB)
 	{
 		CBounding_OBB* pOBB = dynamic_cast<CBounding_OBB*>(_pCollider->Get_Bounding());
 
@@ -122,7 +136,7 @@ _bool CCollision_Manager::Is_Collsion(CCollider* _pCollider, CCollider* _pTarget
 		}
 	}
 
-	if (_pCollider->Get_ColliderType() == CCollider::TYPE_SPHERE)
+	else if (_pCollider->Get_ColliderType() == CCollider::TYPE_SPHERE)
 	{
 		CBounding_Sphere* pSphere = dynamic_cast<CBounding_Sphere*>(_pCollider->Get_Bounding());
 

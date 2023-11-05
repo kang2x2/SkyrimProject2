@@ -18,10 +18,18 @@ HRESULT CStateFalmerUE_Idle::Initialize(CGameObject* _pMonster, CTransform* _pMo
 
 void CStateFalmerUE_Idle::Update(_float _fTimeDelta)
 {
+	/*  
+	1. 팔머 클래스에 bool 함수로 추적하는 함수 생성.(detection)
+	2. true면 달리기로 전환
+	3. false면 계속 회전.
+	아니면 그냥 state가 Collider을 들고 있게 해도 괜찮을 듯??? 
+	이게 낫겠다.
+	*/
 }
 
 void CStateFalmerUE_Idle::Late_Update()
 {
+
 }
 
 CStateFalmerUE_Idle* CStateFalmerUE_Idle::Create(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation)

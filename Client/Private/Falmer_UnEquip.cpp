@@ -44,7 +44,7 @@ HRESULT CFalmer_UnEquip::Initialize_Clone(_uint _iLevel, const wstring& _strMode
 	m_bCreature = true;
 	m_strName = TEXT("Falmer_UnEquip");
 
-	m_pTransformCom->Set_Speed(5.f);
+	m_pTransformCom->Set_Speed(1.5f);
 
 	Play_Animation(true, "mtidle");
 
@@ -85,6 +85,7 @@ void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 	if (g_curLevel == LEVEL_WHITERUN || g_curLevel == LEVEL_DUNGEON)
 	{
 		m_pDetectionColCom->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+		pGameInstance->Collision_DetectionPlayer(m_pDetectionColCom, dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))), _fTimeDelta);
 	}
 
 	Safe_Release(pGameInstance);
@@ -160,8 +161,6 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 		return E_FAIL;
 
 	m_pDetectionColCom->Set_OwnerObj(this);
-
-	
 
 	return S_OK;
 }

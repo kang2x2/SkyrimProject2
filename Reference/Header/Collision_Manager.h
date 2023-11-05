@@ -32,6 +32,7 @@ private:
 
 public:
 	void Collision_AABBTransition(class CCollider* _pCollider, class CCollider* _pTargetCollider);
+	void Collision_DetectionPlayer(class CCollider* _pCollider, class CCollider* _pTargetCollider, _float _fTimeDelta);
 
 private:
 	_bool Is_Collsion(class CCollider* _pCollider, class CCollider* _pTargetCollider);

@@ -271,7 +271,7 @@ void CPlayer::Free()
 	m_vecPlayerPart.clear();
 
 	Safe_Release(m_pNavigationCom);
-	// Safe_Release(m_pTransformCom);
+	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pStateManager);
 }
