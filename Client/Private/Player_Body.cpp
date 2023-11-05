@@ -66,6 +66,7 @@ void CPlayer_Body::LateTick(_float _fTimeDelta)
 		}
 	}
 
+
 	Safe_Release(pGameInstance);
 }
 
@@ -151,6 +152,7 @@ HRESULT CPlayer_Body::Ready_Component()
 		TEXT("Com_Collider_AABB"), (CComponent**)&m_pColliderCom, &AABBDesc)))
 		return E_FAIL;
 
+	m_pColliderCom->Set_OwnerObj(m_pParent);
 
 	return S_OK;
 }

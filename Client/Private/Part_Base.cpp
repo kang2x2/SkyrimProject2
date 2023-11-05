@@ -39,6 +39,7 @@ HRESULT CPart_Base::Initialize_Clone(void* _pArg)
 	if (_pArg != nullptr)
 	{
 		PART_DESC* pPartDesc = (PART_DESC*)_pArg;
+		m_pParent = pPartDesc->pParent;
 		m_pParentTransform = pPartDesc->pParentTransform;
 		Safe_AddRef(m_pParentTransform);
 	}

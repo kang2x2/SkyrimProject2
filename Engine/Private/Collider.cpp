@@ -115,6 +115,11 @@ HRESULT CCollider::Render()
 
 #endif
 
+void CCollider::Set_OwnerObj(CGameObject* _pObj)
+{
+	m_pOwnerObj = _pObj;
+}
+
 CCollider* CCollider::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, COLLIDER_TYPE _eType)
 {
 	CCollider* pInstance = new CCollider(_pDevice, _pContext);

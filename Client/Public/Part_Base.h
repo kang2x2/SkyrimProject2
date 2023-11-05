@@ -20,7 +20,8 @@ class CPart_Base abstract : public CGameObject
 public:
 	typedef struct tagPartDesc
 	{
-		CTransform* pParentTransform;
+		CGameObject* pParent;
+		CTransform*  pParentTransform;
 	}PART_DESC;
 
 protected:
@@ -49,7 +50,8 @@ protected:
 	CShader* m_pShaderCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
 
-	CTransform* m_pParentTransform = nullptr;
+	CGameObject*	m_pParent = nullptr;
+	CTransform*     m_pParentTransform = nullptr;
 	_float4x4		m_matWorld;
 
 public:

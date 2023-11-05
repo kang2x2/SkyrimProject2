@@ -173,6 +173,7 @@ HRESULT CPlayer::Ready_Part()
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
 	/* For. Player Body */
 	CPlayer_Body::PART_DESC BodyPartDesc;
+	BodyPartDesc.pParent = this;
 	BodyPartDesc.pParentTransform = m_pTransformCom;
 
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Body"), &BodyPartDesc);
@@ -193,6 +194,7 @@ HRESULT CPlayer::Ready_Part()
 
 	/* For. Armor */
 	CPlayer_Armor::ARMOR_DESC ArmorPartDesc;
+	ArmorPartDesc.pParent = this;
 	ArmorPartDesc.pParentTransform = m_pTransformCom; //NPC Spine [Spn0]
 	ArmorPartDesc.pSocketBone = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Spine [Spn0]");
 	ArmorPartDesc.matSocketPivot = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
@@ -203,6 +205,7 @@ HRESULT CPlayer::Ready_Part()
 	m_vecPlayerPart.push_back(pPart);
 	
 	CPlayer_Helmet::HELMET_DESC HelmetPartDesc;
+	HelmetPartDesc.pParent = this;
 	HelmetPartDesc.pParentTransform = m_pTransformCom; //NPC Spine [Spn0]
 	HelmetPartDesc.pSocketBone = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Spine [Spn0]");
 	HelmetPartDesc.matSocketPivot = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();

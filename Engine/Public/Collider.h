@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "GameObject.h"
 
 BEGIN(Engine)
 
@@ -33,7 +34,14 @@ public:
 	HRESULT Render();
 #endif
 
+public:
+	virtual CGameObject* Get_OwnerObj() { return m_pOwnerObj; }
+	virtual void		 Set_OwnerObj(class CGameObject* _pObj);
+
+
 private:
+	CGameObject* m_pOwnerObj = nullptr;
+
 	class CBounding*	m_pBounding = nullptr;
 	COLLIDER_TYPE		m_eColliderType = TYPE_END;
 

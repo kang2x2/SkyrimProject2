@@ -45,11 +45,12 @@ void CMonster::LateTick(_float _fTimeDelta)
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>
 		(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"), TEXT("Player")));
+	//
+	//pGameInstance->Collision_AABBTransition(m_pColliderCom, dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
 
 	m_pColliderCom->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
 
 	Safe_Release(pGameInstance);
-
 }
 
 HRESULT CMonster::Render()
@@ -136,6 +137,8 @@ HRESULT CMonster::Ready_Component()
 	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
 		TEXT("Com_Collider_AABB"), (CComponent**)&m_pColliderCom, &AABBDesc)))
 		return E_FAIL;
+
+	m_pColliderCom->Set_OwnerObj(this);
 
 	return S_OK;
 }
