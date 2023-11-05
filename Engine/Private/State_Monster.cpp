@@ -26,10 +26,6 @@ void CState_Monster::Late_Update()
 {
 }
 
-void CState_Monster::Key_Input(_float _fTimeDelta)
-{
-}
-
 void CState_Monster::Free()
 {
 	__super::Free();

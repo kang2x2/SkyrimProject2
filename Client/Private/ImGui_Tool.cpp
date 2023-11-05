@@ -660,7 +660,7 @@ void CImGui_Tool::ObjFile_Save(SAVE_OBJTYPE _eType)
 	OFN.lpstrFilter = filter;
 	OFN.lpstrFile = lpstrFile;
 	OFN.nMaxFile = MAX_PATH;
-	OFN.lpstrInitialDir = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\";
+	OFN.lpstrInitialDir = L"../Bin/SaveLoad/";;
 	OFN.Flags = OFN_OVERWRITEPROMPT; // 덮어쓰기 여부를 묻는 대화 상자를 표시
 
 	if (GetSaveFileName(&OFN) != 0) {
@@ -714,7 +714,7 @@ void CImGui_Tool::ObjFile_Load()
 	OFN.lpstrFilter = filter;
 	OFN.lpstrFile = lpstrFile;
 	OFN.nMaxFile = 100;
-	OFN.lpstrInitialDir = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\";
+	OFN.lpstrInitialDir = L"../Bin/SaveLoad/";
 
 	if (GetOpenFileName(&OFN) != 0) {
 		wsprintf(filePathName, L"%s 파일을 열겠습니까?", OFN.lpstrFile);
@@ -763,7 +763,7 @@ void CImGui_Tool::CellFile_Save()
 	OFN.lpstrFilter = filter;
 	OFN.lpstrFile = lpstrFile;
 	OFN.nMaxFile = MAX_PATH;
-	OFN.lpstrInitialDir = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\";
+	OFN.lpstrInitialDir = L"../Bin/SaveLoad/";;
 	OFN.Flags = OFN_OVERWRITEPROMPT; // 덮어쓰기 여부를 묻는 대화 상자를 표시
 
 	if (GetSaveFileName(&OFN) != 0) {
@@ -814,7 +814,8 @@ void CImGui_Tool::CellFile_Load()
 	OFN.lpstrFilter = filter;
 	OFN.lpstrFile = lpstrFile;
 	OFN.nMaxFile = 100;
-	OFN.lpstrInitialDir = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\";
+	OFN.lpstrInitialDir = L"../Bin/SaveLoad/";
+	// L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\"
 
 	if (GetOpenFileName(&OFN) != 0) {
 		wsprintf(filePathName, L"%s 파일을 열겠습니까?", OFN.lpstrFile);

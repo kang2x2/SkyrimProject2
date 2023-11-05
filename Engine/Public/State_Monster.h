@@ -17,8 +17,6 @@ public:
 	virtual void Update(_float _fTimeDelta);
 	virtual void Late_Update();
 
-	virtual void Key_Input(_float _fTimeDelta);
-
 protected:
 	class CGameObject* m_pMonster = nullptr;
 	class CTransform* m_pMonsterTransform = nullptr;

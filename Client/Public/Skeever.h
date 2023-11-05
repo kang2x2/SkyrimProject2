@@ -5,7 +5,6 @@
 BEGIN(Engine)
 
 class CModel;
-class CNavigation;
 
 END
 
@@ -13,6 +12,9 @@ BEGIN(Client)
 
 class CSkeever final : public CMonster
 {
+public:
+	enum SKEEVER_STATE { SKEEVER_IDLE, SKEEVER_END };
+
 private:
 	CSkeever(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	CSkeever(const CSkeever& rhs);
@@ -28,7 +30,7 @@ public:
 	virtual HRESULT Render();
 
 public:
-	HRESULT Set_State(SKEEVERSTATE _eState);
+	HRESULT Set_State(SKEEVER_STATE _eState);
 
 	void	Play_Animation(_bool _bIsLoop, string _strAnimationName);
 	void	Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName);
@@ -41,7 +43,6 @@ public:
 
 private:
 	CModel* m_pModelCom = nullptr;
-	CNavigation* m_pNavigationCom = nullptr;
 
 	class CStateManager_Skeever* m_pStateManager = nullptr;
 

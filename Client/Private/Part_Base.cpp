@@ -81,5 +81,5 @@ void CPart_Base::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pParentTransform);
+	// Safe_Release(m_pParentTransform);
 }

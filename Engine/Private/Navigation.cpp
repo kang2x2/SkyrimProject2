@@ -332,6 +332,48 @@ HRESULT CNavigation::SetUp_Neighbors()
 	return S_OK;
 }
 
+HRESULT CNavigation::Set_CurCell(_fvector vPos)
+{
+	// Flt_Max : 부동 소수점 형식에서 표현 가능한 가장 큰 양수.
+	_float fMinDistance = FLT_MAX;
+	_int   iSaveCellIndex = -1;
+
+	for(size_t i = 0; i < m_vecCell.size(); ++i)
+	{
+		_float3 PosA = *m_vecCell[i]->Get_LocalPoints(CCell::POINT_A);
+		_float3 PosB = *m_vecCell[i]->Get_LocalPoints(CCell::POINT_B);
+		_float3 PosC = *m_vecCell[i]->Get_LocalPoints(CCell::POINT_C);
+
+		_float3 vCellAvgPos = {};
+		_float3 vPlayerPos = {};
+
+		vCellAvgPos.x = (PosA.x + PosB.x + PosC.x) / 3.f;
+		vCellAvgPos.z = (PosA.z + PosB.z + PosC.z) / 3.f;
+
+		vPlayerPos.x = XMVectorGetX(vPos);
+		vPlayerPos.z = XMVectorGetZ(vPos);
+
+		_float fDistance = sqrt((vPlayerPos.x - vCellAvgPos.x) * (vPlayerPos.x - vCellAvgPos.x) +
+			(vPlayerPos.z - vCellAvgPos.z) * (vPlayerPos.z - vCellAvgPos.z));
+	
+		if (fDistance < fMinDistance)
+		{
+			fMinDistance = fDistance;
+			iSaveCellIndex = i;
+		}
+	}
+
+	if (iSaveCellIndex != -1)
+		m_iCurIndex = iSaveCellIndex;
+	else
+	{
+		MSG_BOX("Fail Find : Current OnCell Index");
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 _vector CNavigation::Set_OnCell(_fvector _vWorldPos)
 {
 	_float3 PosA = *m_vecCell[m_iCurIndex]->Get_LocalPoints(CCell::POINT_A);

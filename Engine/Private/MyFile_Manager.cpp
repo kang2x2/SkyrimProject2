@@ -632,7 +632,8 @@ HRESULT CMyFile_Manager::Read_FBXAnimation(ifstream& _inFile)
 		tempAnimationDesc.mName.Set(newData);
 
 		/* 애니메이션 이름 편집 */
-		if (string(tempAnimationDesc.mName.C_Str()).find("skeleton.nif|") == 0) {
+		if (string(tempAnimationDesc.mName.C_Str()).find("skeleton.nif|") == 0 ||
+			string(tempAnimationDesc.mName.C_Str()).find("Skeleton.nif|") == 0) {
 			tempAnimationDesc.mName = aiString(std::string(tempAnimationDesc.mName.C_Str()).substr(13).c_str());
 		}
 

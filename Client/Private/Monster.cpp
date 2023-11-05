@@ -36,6 +36,19 @@ void CMonster::PriorityTick(_float _fTimeDelta)
 
 void CMonster::Tick(_float _fTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_pNavigationCom != nullptr)
+	{
+		_vector	vPosition = m_pNavigationCom->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	}
+
+	_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
+	m_pColliderCom->Update(matWorld);
+
+	Safe_Release(pGameInstance);
 }
 
 void CMonster::LateTick(_float _fTimeDelta)
@@ -48,13 +61,25 @@ void CMonster::LateTick(_float _fTimeDelta)
 	//
 	//pGameInstance->Collision_AABBTransition(m_pColliderCom, dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
 
-	m_pColliderCom->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+	if (g_curLevel == LEVEL_WHITERUN|| g_curLevel == LEVEL_DUNGEON)
+	{
+		m_pColliderCom->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+	}
 
 	Safe_Release(pGameInstance);
 }
 
 HRESULT CMonster::Render()
 {
+#ifdef _DEBUG
+	/* 콜라이더를 그 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
+	if (m_pColliderCom != nullptr)
+		m_pColliderCom->Render();
+
+	if (m_pNavigationCom != nullptr)
+		m_pNavigationCom->Render();
+#endif
+
 	return S_OK;
 }
 
@@ -140,10 +165,30 @@ HRESULT CMonster::Ready_Component()
 
 	m_pColliderCom->Set_OwnerObj(this);
 
+	if (g_curLevel != LEVEL_TOOL)
+	{
+		/* Com_Navigation */
+		CNavigation::DESC_NAVIGATION		NavigationDesc;
+		NavigationDesc.iCurIndex = -1;
+
+		if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Navigation"),
+			TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
+			return E_FAIL;
+
+		m_pNavigationCom->Set_CurCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	}
+
+
 	return S_OK;
 }
 
 void CMonster::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pRendererCom);
+	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pNavigationCom);
 }

@@ -350,7 +350,7 @@ _int CModel::Get_BoneIndex(const char* _strBoneName) const
 	for (size_t iBoneIndex = 0; iBoneIndex < m_vecBone.size(); ++iBoneIndex)
 	{
 		if (false == strcmp(m_vecBone[iBoneIndex]->Get_BoneName(), _strBoneName))
-			return iBoneIndex;
+			return (_int)iBoneIndex;
 	}
 
 	return -1;

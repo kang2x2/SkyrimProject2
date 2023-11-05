@@ -8,7 +8,6 @@ class CCollision_Manager final : public CBase
 {
 	DECLARE_SINGLETON(CCollision_Manager)
 
-public:
 	typedef struct tagMinMaxFloat3Desc
 	{
 		_float3 vMinFloat3 = {};

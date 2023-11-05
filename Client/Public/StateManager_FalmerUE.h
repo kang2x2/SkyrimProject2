@@ -14,11 +14,11 @@ private:
 	virtual ~CStateManager_FalmerUE() = default;
 
 public:
-	CState_Monster* Get_State(SKEEVERSTATE _eState);
+	CState_Monster* Get_State(CFalmer_UnEquip::FALMERUE_STATE _eState);
 
 public:
 	HRESULT Initialize(class CGameObject* _pMonster, class CTransform* _pPlayerTransform, class CNavigation* _pPlayerNavigation);
-	HRESULT Set_State(SKEEVERSTATE _eState);
+	HRESULT Set_State(CFalmer_UnEquip::FALMERUE_STATE _eState);
 
 public:
 	void Update(_float _fTimeDelta);

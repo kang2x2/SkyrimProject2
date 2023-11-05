@@ -9,17 +9,12 @@ namespace Client
 		LEVEL_WHITERUN, LEVEL_DUNGEON,
 		LEVEL_LOADING, LEVEL_TOOL, LEVEL_END };
 
-	enum SKEEVERSTATE
-	{
-		SKEEVER_IDLE, 
-		SKEEVER_END
-	};
-
-
 	const unsigned int		g_iWinSizeX = 1280;
 	const unsigned int		g_iWinSizeY = 720;
 }
 
 extern HWND g_hWnd;
 extern HINSTANCE g_hInst;
+extern Client::LEVELID g_curLevel;
+
 using namespace Client;

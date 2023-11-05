@@ -5,7 +5,7 @@
 BEGIN(Engine)
 
 class CModel;
-class CNavigation;
+class CCollider;
 
 END
 
@@ -13,6 +13,9 @@ BEGIN(Client)
 
 class CFalmer_UnEquip final : public CMonster
 {
+public:
+	enum FALMERUE_STATE { FALMERUE_IDLE, FALMERUE_END };
+
 private:
 	CFalmer_UnEquip(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	CFalmer_UnEquip(const CFalmer_UnEquip& rhs);
@@ -28,7 +31,7 @@ public:
 	virtual HRESULT Render();
 
 public:
-	HRESULT Set_State(SKEEVERSTATE _eState);
+	HRESULT Set_State(CFalmer_UnEquip::FALMERUE_STATE _eState);
 
 	void	Play_Animation(_bool _bIsLoop, string _strAnimationName);
 	void	Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName);
@@ -41,7 +44,8 @@ public:
 
 private:
 	CModel* m_pModelCom = nullptr;
-	CNavigation* m_pNavigationCom = nullptr;
+
+	CCollider* m_pDetectionColCom = nullptr;
 
 	class CStateManager_FalmerUE* m_pStateManager = nullptr;
 

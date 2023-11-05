@@ -154,11 +154,14 @@ HRESULT CPlayer::Ready_Component()
 
 	/* Com_Navigation */
 	CNavigation::DESC_NAVIGATION		NavigationDesc;
-	NavigationDesc.iCurIndex = 0;
+	NavigationDesc.iCurIndex = -1;
 	
 	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Navigation"),
 		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
 		return E_FAIL;
+
+	m_pNavigationCom->Set_CurCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
 
 	return S_OK;
 }
@@ -267,10 +270,7 @@ void CPlayer::Free()
 
 	m_vecPlayerPart.clear();
 
-#ifdef _DEBUG
 	Safe_Release(m_pNavigationCom);
-#endif
-
 	// Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pStateManager);

@@ -90,7 +90,7 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 	// wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Skyrim2";
 
 	/* 던전 임시 확인 */
-	wstring filePath = TEXT("../Bin/SaveLoad/Dungeon2");
+	wstring filePath = TEXT("../Bin/SaveLoad/Dungeon1");
 
 	// wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Dungeon2";
 

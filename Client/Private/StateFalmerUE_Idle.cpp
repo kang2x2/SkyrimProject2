@@ -3,7 +3,7 @@
 
 #include "GameInstance.h"
 
-#include "Skeever.h"
+#include "Falmer_UnEquip.h"
 
 CStateFalmerUE_Idle::CStateFalmerUE_Idle()
 {
@@ -18,20 +18,23 @@ HRESULT CStateFalmerUE_Idle::Initialize(CGameObject* _pMonster, CTransform* _pMo
 
 void CStateFalmerUE_Idle::Update(_float _fTimeDelta)
 {
-	Key_Input(_fTimeDelta);
 }
 
 void CStateFalmerUE_Idle::Late_Update()
 {
 }
 
-void CStateFalmerUE_Idle::Key_Input(_float _fTimeDelta)
+CStateFalmerUE_Idle* CStateFalmerUE_Idle::Create(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation)
 {
-}
+	CStateFalmerUE_Idle* pInstance = new CStateFalmerUE_Idle();
 
-CStateFalmerUE_Idle* CStateFalmerUE_Idle::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
-{
-	return nullptr;
+	if (FAILED(pInstance->Initialize(_pMonster, _pMonsterTransform, _pMonsterNavigation)))
+	{
+		MSG_BOX("Fail Create : CStateFalmerUE_Idle");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 void CStateFalmerUE_Idle::Free()

@@ -18,18 +18,13 @@ HRESULT CStateSkeever_Idle::Initialize(CGameObject* _pMonster, CTransform* _pMon
 
 void CStateSkeever_Idle::Update(_float _fTimeDelta)
 {
-	Key_Input(_fTimeDelta);
 }
 
 void CStateSkeever_Idle::Late_Update()
 {
 }
 
-void CStateSkeever_Idle::Key_Input(_float _fTimeDelta)
-{
-}
-
-CStateSkeever_Idle* CStateSkeever_Idle::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
+CStateSkeever_Idle* CStateSkeever_Idle::Create(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation)
 {
 	return nullptr;
 }

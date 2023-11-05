@@ -9,6 +9,7 @@ class CCollider;
 class CTransform;
 class CShader;
 class CRenderer;
+class CNavigation;
 
 END
 
@@ -41,6 +42,7 @@ protected:
 	CCollider* m_pColliderCom = nullptr;
 	CRenderer* m_pRendererCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
+	CNavigation* m_pNavigationCom = nullptr;
 
 public:
 	virtual CGameObject* Clone(void* _pArg) = 0;

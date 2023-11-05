@@ -21,13 +21,12 @@ private:
 	virtual ~CStateFalmerUE_Idle() = default;
 
 public:
-	virtual		 HRESULT Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
+	virtual		 HRESULT Initialize(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation);
 	virtual void Update(_float _fTimeDelta);
 	virtual void Late_Update();
-	virtual void Key_Input(_float _fTimeDelta);
 
 public:
-	static CStateFalmerUE_Idle* Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
+	static CStateFalmerUE_Idle* Create(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation);
 	virtual void Free() override;
 };
 

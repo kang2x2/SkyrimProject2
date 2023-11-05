@@ -117,6 +117,8 @@ HRESULT CLoader::Loading_For_Level_Zero()
 
 	m_strLoadingText = TEXT("Loading Complete");
 	m_bIsFinish = true;
+	
+	g_curLevel = LEVEL_ZERO;
 
 	return S_OK;
 }
@@ -144,9 +146,13 @@ HRESULT CLoader::Loading_For_Level_Tool()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxAnimMesh.hlsl"), VTX_ANIMMESH::Elements, VTX_ANIMMESH::iNumElements))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Collider_AABB */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Collider_AABB"),
+	/* For.ProtoType_Component_Collider_AABB */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
+		return E_FAIL;
+	/* For.ProtoType_Component_Collider_Sphere */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_Sphere"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
 		return E_FAIL;
 
 	/* Mesh*/
@@ -199,6 +205,8 @@ HRESULT CLoader::Loading_For_Level_Tool()
 	m_strLoadingText = TEXT("Loading Complete");
 	m_bIsFinish = true;
 
+	g_curLevel = LEVEL_TOOL;
+
 	return S_OK;
 
 }
@@ -231,6 +239,8 @@ HRESULT CLoader::Loading_For_Level_Logo()
 	
 	m_strLoadingText = TEXT("Loading Complete");
 	m_bIsFinish = true;
+
+	g_curLevel = LEVEL_LOGO;
 
 	return S_OK;
 }
@@ -277,6 +287,10 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 	/* For.Prototype_Component_Collider_AABB */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
+		return E_FAIL;
+	/* For.ProtoType_Component_Collider_Sphere */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_Sphere"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
 		return E_FAIL;
 
 
@@ -481,6 +495,8 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 	m_strLoadingText = TEXT("Loading Complete");
 	m_bIsFinish = true;
 
+	g_curLevel = LEVEL_WHITERUN;
+
 	return S_OK;
 }
 
@@ -655,6 +671,8 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 	/* ·Îµù ³¡ */
 	m_strLoadingText = TEXT("Loading Complete");
 	m_bIsFinish = true;
+
+	g_curLevel = LEVEL_DUNGEON;
 
 	return S_OK;
 }

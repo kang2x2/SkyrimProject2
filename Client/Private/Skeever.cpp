@@ -58,19 +58,7 @@ void CSkeever::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	if (m_pNavigationCom != nullptr)
-	{
-		_vector	vPosition = m_pNavigationCom->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	}
-
-	_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
-	m_pColliderCom->Update(matWorld);
-
-	Safe_Release(pGameInstance);
+	__super::Tick(_fTimeDelta);
 }
 
 void CSkeever::LateTick(_float _fTimeDelta)
@@ -104,17 +92,13 @@ HRESULT CSkeever::Render()
 			return E_FAIL;
 	}
 
-#ifdef _DEBUG
-	/* 콜라이더를 그 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
-	if(m_pColliderCom != nullptr)
-		m_pColliderCom->Render();
-#endif
+	__super::Render();
 
 	return S_OK;
 
 }
 
-HRESULT CSkeever::Set_State(SKEEVERSTATE _eState)
+HRESULT CSkeever::Set_State(SKEEVER_STATE _eState)
 {
 	m_pStateManager->Set_State(_eState);
 
@@ -138,17 +122,6 @@ HRESULT CSkeever::Ready_Component(_uint _iLevel)
 		return E_FAIL;
 
 	__super::Ready_Component();
-
-	if (_iLevel != LEVEL_TOOL)
-	{
-		/* Com_Navigation */
-		CNavigation::DESC_NAVIGATION		NavigationDesc;
-		NavigationDesc.iCurIndex = 0;
-
-		if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Navigation"),
-			TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
-			return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -208,11 +181,5 @@ void CSkeever::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pRendererCom);
-	Safe_Release(m_pTransformCom);
-	Safe_Release(m_pNavigationCom);
-
 }

@@ -12,8 +12,8 @@ public:
 	// 노드
 	typedef struct tagNodeDesc
 	{
-		int							mParentIndex;
-		unsigned int				mNumChildren;
+		int							mParentIndex = 0;
+		unsigned int				mNumChildren = 0;
 		aiString					mName;
 		aiMatrix4x4					mTransformation;
 	}DESC_NODE;
@@ -25,7 +25,7 @@ public:
 	// 메시 본 웨이트
 	typedef struct tagMeshBoneWeightDesc
 	{
-		unsigned int mVertexId;
+		unsigned int mVertexId = 0;
 		_float		 mWeight;
 	}DESC_MESHBONEWEIGHT;
 
@@ -34,7 +34,7 @@ public:
 	{
 		aiMatrix4x4			 mOffsetMatrix;
 		aiString			 mName;
-		unsigned int		 mNumWeights;
+		unsigned int		 mNumWeights = 0;
 
 		vector<DESC_MESHBONEWEIGHT> mWeights;
 	}DESC_MESHBONE;
@@ -49,10 +49,10 @@ public:
 	typedef struct tagMeshDesc
 	{
 		aiString		mName;
-		unsigned int	mMaterialIndex;
-		unsigned int	mNumVertices;
-		unsigned int	mNumFaces;
-		unsigned int	mNumBones;
+		unsigned int	mMaterialIndex = 0;
+		unsigned int	mNumVertices = 0;
+		unsigned int	mNumFaces = 0;
+		unsigned int	mNumBones = 0;
 
 		vector<DESC_MESHFACE>   mFaces;
 		vector<aiVector3D>		mVertices;
@@ -76,19 +76,19 @@ public:
 	// 채널 키(time, value)
 	typedef struct tagChannelScaleKeyDesc
 	{
-		double		mTime;
+		double		mTime = 0.f;
 		aiVector3D  mValue;
 	}DESC_CHANNELSCALEKEY;
 
 	typedef struct tagChannelRotKeyDesc
 	{
-		double		 mTime;
+		double		 mTime = 0.f;
 		aiQuaternion mValue;
 	}DESC_CHANNELROTKEY;
 
 	typedef struct tagChannelPosKeyDesc
 	{
-		double		mTime;
+		double		mTime = 0.f;
 		aiVector3D  mValue;
 	}DESC_CHANNELPOSKEY;
 
@@ -96,9 +96,9 @@ public:
 	typedef struct tagAnimationChannelDesc
 	{
 		aiString		mNodeName;
-		unsigned int	mNumScalingKeys;
-		unsigned int	mNumRotationKeys;
-		unsigned int	mNumPositionKeys;
+		unsigned int	mNumScalingKeys = 0;
+		unsigned int	mNumRotationKeys = 0;
+		unsigned int	mNumPositionKeys = 0;
 
 		vector<DESC_CHANNELSCALEKEY>	mScalingKeys;
 		vector<DESC_CHANNELROTKEY>		mRotationKeys;
@@ -110,9 +110,9 @@ public:
 	typedef struct tagAnimationDesc
 	{
 		aiString				mName;
-		double					mDuration;
-		double					mTicksPerSecond;
-		unsigned int			mNumChannels;
+		double					mDuration = 0.f;
+		double					mTicksPerSecond = 0.f;
+		unsigned int			mNumChannels = 0;
 
 		vector<DESC_ANIMATIONCHANNEL>  mChannels;
 
@@ -127,13 +127,13 @@ private:
 public:
 	vector<DESC_NODE>		mVecNode;
 
-	unsigned int			mNumMeshes;
+	unsigned int			mNumMeshes = 0;
 	vector<DESC_MESH>		mMeshs;
 
-	unsigned int			mNumMaterials;
+	unsigned int			mNumMaterials = 0;
 	vector<DESC_MATERIAL>	mMaterials;
 
-	unsigned int			m_iNumAnimation;
+	unsigned int			m_iNumAnimation = 0;
 	vector<DESC_ANIMATION>	mAnimations;
 
 public:

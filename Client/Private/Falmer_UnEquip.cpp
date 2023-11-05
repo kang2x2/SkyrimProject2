@@ -5,6 +5,8 @@
 
 #include "StateManager_FalmerUE.h"
 
+#include "Player.h"
+
 CFalmer_UnEquip::CFalmer_UnEquip(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CMonster(_pDevice, _pContext)
 {
@@ -44,7 +46,7 @@ HRESULT CFalmer_UnEquip::Initialize_Clone(_uint _iLevel, const wstring& _strMode
 
 	m_pTransformCom->Set_Speed(5.f);
 
-	Play_Animation(true, "mt_idle");
+	Play_Animation(true, "mtidle");
 
 	return S_OK;
 
@@ -58,19 +60,12 @@ void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
+	m_pStateManager->Update(_fTimeDelta);
 
-	if (m_pNavigationCom != nullptr)
-	{
-		_vector	vPosition = m_pNavigationCom->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	}
+	__super::Tick(_fTimeDelta);
 
 	_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
-	m_pColliderCom->Update(matWorld);
-
-	Safe_Release(pGameInstance);
+	m_pDetectionColCom->Update(matWorld);
 }
 
 void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
@@ -80,6 +75,19 @@ void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 
 	__super::LateTick(_fTimeDelta);
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>
+		(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"), TEXT("Player")));
+
+	if (g_curLevel == LEVEL_WHITERUN || g_curLevel == LEVEL_DUNGEON)
+	{
+		m_pDetectionColCom->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CFalmer_UnEquip::Render()
@@ -104,17 +112,20 @@ HRESULT CFalmer_UnEquip::Render()
 			return E_FAIL;
 	}
 
+	__super::Render();
+
 #ifdef _DEBUG
-	/* 콜라이더를 그 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
-	if (m_pColliderCom != nullptr)
-		m_pColliderCom->Render();
-#endif
+
+	if (m_pDetectionColCom != nullptr)
+		m_pDetectionColCom->Render();
+
+#endif 
 
 	return S_OK;
 
 }
 
-HRESULT CFalmer_UnEquip::Set_State(SKEEVERSTATE _eState)
+HRESULT CFalmer_UnEquip::Set_State(CFalmer_UnEquip::FALMERUE_STATE _eState)
 {
 	m_pStateManager->Set_State(_eState);
 
@@ -139,16 +150,18 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 
 	__super::Ready_Component();
 
-	if (_iLevel != LEVEL_TOOL)
-	{
-		/* Com_Navigation */
-		CNavigation::DESC_NAVIGATION		NavigationDesc;
-		NavigationDesc.iCurIndex = 0;
+	CBounding_Sphere::BOUNDING_SPHERE_DESC SphereDesc = {};
 
-		if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Navigation"),
-			TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
-			return E_FAIL;
-	}
+	SphereDesc.fRadius = 12.f;
+	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_Sphere"),
+		TEXT("Com_Collider_Detection"), (CComponent**)&m_pDetectionColCom, &SphereDesc)))
+		return E_FAIL;
+
+	m_pDetectionColCom->Set_OwnerObj(this);
+
+	
 
 	return S_OK;
 }
@@ -208,11 +221,8 @@ void CFalmer_UnEquip::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pModelCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pRendererCom);
-	Safe_Release(m_pTransformCom);
-	Safe_Release(m_pNavigationCom);
+	Safe_Release(m_pDetectionColCom);
 
+	Safe_Release(m_pStateManager);
 }

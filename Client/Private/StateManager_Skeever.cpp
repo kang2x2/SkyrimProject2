@@ -9,11 +9,6 @@ CStateManager_Skeever::CStateManager_Skeever()
 {
 }
 
-CState_Monster* CStateManager_Skeever::Get_State(SKEEVERSTATE _eState)
-{
-	return nullptr;
-}
-
 HRESULT CStateManager_Skeever::Initialize(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation)
 {
 	if (_pMonster == nullptr)
@@ -29,9 +24,14 @@ HRESULT CStateManager_Skeever::Initialize(CGameObject* _pMonster, CTransform* _p
 
 }
 
-HRESULT CStateManager_Skeever::Set_State(SKEEVERSTATE _eState)
+CState_Monster* CStateManager_Skeever::Get_State(CSkeever::SKEEVER_STATE _eState)
 {
-	return E_NOTIMPL;
+	return nullptr;
+}
+
+HRESULT CStateManager_Skeever::Set_State(CSkeever::SKEEVER_STATE _eState)
+{
+	return S_OK;
 }
 
 void CStateManager_Skeever::Update(_float _fTimeDelta)
@@ -44,9 +44,23 @@ void CStateManager_Skeever::Late_Update()
 
 CStateManager_Skeever* CStateManager_Skeever::Create(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation)
 {
-	return nullptr;
+	CStateManager_Skeever* pInstance = new CStateManager_Skeever();
+
+	if (FAILED(pInstance->Initialize(_pMonster, _pMonsterTransform, _pMonsterNavigation)))
+	{
+		MSG_BOX("Fail Create : CStateManager_Skeever");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 void CStateManager_Skeever::Free()
 {
+	__super::Free();
+
+	for (auto& iter : m_vecMonsterState)
+	{
+		Safe_Release(iter);
+	}
 }
