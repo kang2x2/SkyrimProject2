@@ -35,14 +35,15 @@ HRESULT CSkeever::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag
 	if (FAILED(Ready_Component(_iLevel)))
 		return E_FAIL;
 
-	if (FAILED(Ready_State()))
-		return E_FAIL;
-
 	m_bHasMesh = true;
 	m_bCreature = true;
 	m_strName = TEXT("Skeever");
+	m_vOriginPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	// m_pTransformCom->Set_Speed(5.f);
+	m_pTransformCom->Set_Speed(2.f);
+
+	if (FAILED(Ready_State()))
+		return E_FAIL;
 
 	Play_Animation(true, "mtidle");
 

@@ -1,6 +1,2 @@
-몬스터들 블랜더에서 중점 확인해보자. 뭔가 이상하다.
-
-
-	아니면 그냥 state가 Collider을 들고 있게 해도 괜찮을 듯??? 
-	이게 낫겠다.
-	어차피 Collider은 Engine에 있잖아? 
+chase 상태와 runatk 상태 유심히 살펴보자.
+runatk에서 chase로 갈 때 문제가 있다.

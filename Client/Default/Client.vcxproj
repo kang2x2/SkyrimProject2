@@ -205,7 +205,14 @@
     <ClInclude Include="..\Public\SkyrimHelmet.h" />
     <ClInclude Include="..\Public\SkyrimUI.h" />
     <ClInclude Include="..\Public\SkyrimWeapon.h" />
-    <ClInclude Include="..\Public\StateFalmerUE_Idle.h" />
+    <ClInclude Include="..\Public\StateFalmerUE_Chase.h" />
+    <ClInclude Include="..\Public\StateFalmerUE_Detection.h" />
+    <ClInclude Include="..\Public\StateFalmerUE_Return.h" />
+    <ClInclude Include="..\Public\StateFalmerUE_RunAtk.h" />
+    <ClInclude Include="..\Public\StateFalmerUE_Squat.h" />
+    <ClInclude Include="..\Public\StateFalmerUE_SquatIntro.h" />
+    <ClInclude Include="..\Public\StateFalmerUE_SquatOutro.h" />
+    <ClInclude Include="..\Public\StateFalmerUE_Warning.h" />
     <ClInclude Include="..\Public\StateManager_FalmerUE.h" />
     <ClInclude Include="..\Public\StateManager_Skeever.h" />
     <ClInclude Include="..\Public\StatePlayerOH_UnEquip.h" />
@@ -242,6 +249,7 @@
     <ClInclude Include="..\Public\StatePlayer_RunLeft.h" />
     <ClInclude Include="..\Public\StatePlayer_RunRight.h" />
     <ClInclude Include="..\Public\StateSkeever_Idle.h" />
+    <ClInclude Include="..\Public\State_FalmerUE.h" />
     <ClInclude Include="..\Public\StoneWork.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Terrain_Grid.h" />
@@ -280,7 +288,14 @@
     <ClCompile Include="..\Private\SkyrimHelmet.cpp" />
     <ClCompile Include="..\Private\SkyrimUI.cpp" />
     <ClCompile Include="..\Private\SkyrimWeapon.cpp" />
-    <ClCompile Include="..\Private\StateFalmerUE_Idle.cpp" />
+    <ClCompile Include="..\Private\StateFalmerUE_Chase.cpp" />
+    <ClCompile Include="..\Private\StateFalmerUE_Detection.cpp" />
+    <ClCompile Include="..\Private\StateFalmerUE_Return.cpp" />
+    <ClCompile Include="..\Private\StateFalmerUE_RunAtk.cpp" />
+    <ClCompile Include="..\Private\StateFalmerUE_Squat.cpp" />
+    <ClCompile Include="..\Private\StateFalmerUE_SquatIntro.cpp" />
+    <ClCompile Include="..\Private\StateFalmerUE_SquatOutro.cpp" />
+    <ClCompile Include="..\Private\StateFalmerUE_Warning.cpp" />
     <ClCompile Include="..\Private\StateManager_FalmerUE.cpp" />
     <ClCompile Include="..\Private\StateManager_Skeever.cpp" />
     <ClCompile Include="..\Private\StatePlayerOH_UnEquip.cpp" />
@@ -317,6 +332,7 @@
     <ClCompile Include="..\Private\StatePlayer_RunLeft.cpp" />
     <ClCompile Include="..\Private\StatePlayer_RunRight.cpp" />
     <ClCompile Include="..\Private\StateSkeever_Idle.cpp" />
+    <ClCompile Include="..\Private\State_FalmerUE.cpp" />
     <ClCompile Include="..\Private\StoneWork.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Terrain_Grid.cpp" />

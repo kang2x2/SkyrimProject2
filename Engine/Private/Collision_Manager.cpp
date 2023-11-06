@@ -72,18 +72,12 @@ void CCollision_Manager::Collision_AABBTransition(CCollider* _pCollider, CCollid
 	}
 }
 
-void CCollision_Manager::Collision_DetectionPlayer(CCollider* _pCollider, CCollider* _pTargetCollider, _float _fTimeDelta)
+_bool CCollision_Manager::Collision_DetectionPlayer(CCollider* _pCollider, CCollider* _pTargetCollider, _float _fTimeDelta)
 {
 	/* 내 바운딩과 상대 바운딩과의 출동 처리. */
 	_bool m_bIsColl = Is_Collsion(_pCollider, _pTargetCollider);
 
-	if (m_bIsColl)
-	{
-		CTransform* pTransform = dynamic_cast<CTransform*>(_pCollider->Get_OwnerObj()->Get_Component(TEXT("Com_Transform")));
-		CTransform* pTragetTransform = dynamic_cast<CTransform*>(_pTargetCollider->Get_OwnerObj()->Get_Component(TEXT("Com_Transform")));
-	
-		pTransform->Chase(pTragetTransform->Get_State(CTransform::STATE_POSITION), _fTimeDelta);
-	}
+	return m_bIsColl;
 }
 
 ////////////////////////////////////////////////////////////////////////////

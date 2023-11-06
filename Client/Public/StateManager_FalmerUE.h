@@ -2,7 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Base.h"
-#include "State_Monster.h"
+#include "State_FalmerUE.h"
 #include "Falmer_UnEquip.h"
 
 BEGIN(Client)
@@ -17,7 +17,7 @@ public:
 	CState_Monster* Get_State(CFalmer_UnEquip::FALMERUE_STATE _eState);
 
 public:
-	HRESULT Initialize(class CGameObject* _pMonster, class CTransform* _pPlayerTransform, class CNavigation* _pPlayerNavigation);
+	HRESULT Initialize(class CGameObject* _pMonster, class CTransform* _pPlayerTransform, class CNavigation* _pPlayerNavigation, vector<CCollider*> _pVecColCom);
 	HRESULT Set_State(CFalmer_UnEquip::FALMERUE_STATE _eState);
 
 public:
@@ -25,12 +25,12 @@ public:
 	void Late_Update();
 
 private:
-	CState_Monster* m_pCurState = nullptr;
+	CState_FalmerUE* m_pCurState = nullptr;
 
-	vector<class CState_Monster*> m_vecMonsterState; /* 상태들 */
+	vector<class CState_FalmerUE*> m_vecMonsterState; /* 상태들 */
 
 public:
-	static CStateManager_FalmerUE* Create(class CGameObject* _pMonster, class CTransform* _pMonsterTransform, class CNavigation* _pMonsterNavigation);
+	static CStateManager_FalmerUE* Create(class CGameObject* _pMonster, class CTransform* _pMonsterTransform, class CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom);
 	virtual void Free() override;
 };
 

@@ -37,19 +37,19 @@ HRESULT CFalmer_UnEquip::Initialize_Clone(_uint _iLevel, const wstring& _strMode
 	if (FAILED(Ready_Component(_iLevel)))
 		return E_FAIL;
 
-	if (FAILED(Ready_State()))
-		return E_FAIL;
-
 	m_bHasMesh = true;
 	m_bCreature = true;
 	m_strName = TEXT("Falmer_UnEquip");
+	m_vOriginPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	m_pTransformCom->Set_Speed(1.5f);
+	m_pTransformCom->Set_Speed(3.f);
 
-	Play_Animation(true, "mtidle");
+	Play_Animation(true, "idlesquatloop");
+
+	if (FAILED(Ready_State()))
+		return E_FAIL;
 
 	return S_OK;
-
 }
 
 void CFalmer_UnEquip::PriorityTick(_float _fTimeDelta)
@@ -60,21 +60,26 @@ void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
-	m_pStateManager->Update(_fTimeDelta);
+	if (g_curLevel == LEVEL_WHITERUN || g_curLevel == LEVEL_DUNGEON)
+		m_pStateManager->Update(_fTimeDelta);
 
 	__super::Tick(_fTimeDelta);
 
 	_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
-	m_pDetectionColCom->Update(matWorld);
+
+	for (auto& collider : m_pVecCollider)
+	{
+		if(collider != nullptr)
+			collider->Update(matWorld);
+	}
 }
 
 void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 {
-	m_pStateManager->Late_Update();
+	if (g_curLevel == LEVEL_WHITERUN || g_curLevel == LEVEL_DUNGEON)
+		m_pStateManager->Late_Update();
 
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
-
-	__super::LateTick(_fTimeDelta);
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -84,8 +89,10 @@ void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 
 	if (g_curLevel == LEVEL_WHITERUN || g_curLevel == LEVEL_DUNGEON)
 	{
-		m_pDetectionColCom->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
-		pGameInstance->Collision_DetectionPlayer(m_pDetectionColCom, dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))), _fTimeDelta);
+		for (auto& collider : m_pVecCollider)
+			collider->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+		
+		pGameInstance->Collision_AABBTransition(m_pVecCollider[FALMERUE_COL_AABB], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
 	}
 
 	Safe_Release(pGameInstance);
@@ -117,8 +124,12 @@ HRESULT CFalmer_UnEquip::Render()
 
 #ifdef _DEBUG
 
-	if (m_pDetectionColCom != nullptr)
-		m_pDetectionColCom->Render();
+	for (auto& collider : m_pVecCollider)
+	{
+		/* 콜라이더를 그 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
+		if (collider != nullptr)
+			collider->Render();
+	}
 
 #endif 
 
@@ -133,16 +144,6 @@ HRESULT CFalmer_UnEquip::Set_State(CFalmer_UnEquip::FALMERUE_STATE _eState)
 	return S_OK;
 }
 
-void CFalmer_UnEquip::Play_Animation(_bool _bIsLoop, string _strAnimationName)
-{
-	Set_AnimationIndex(_bIsLoop, _strAnimationName);
-}
-
-void CFalmer_UnEquip::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName)
-{
-	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName);
-}
-
 HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 {
 	if (FAILED(__super::Add_CloneComponent(_iLevel, m_strModelComTag,
@@ -151,29 +152,62 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 
 	__super::Ready_Component();
 
-	CBounding_Sphere::BOUNDING_SPHERE_DESC SphereDesc = {};
+#pragma region Collider
 
-	SphereDesc.fRadius = 12.f;
+	m_pVecCollider.resize(FALMERUE_COL_END);
+
+	/* AABB */
+	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
+	AABBDesc.vExtents = _float3(0.5f, 0.5f, 0.5f);
+	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
+		TEXT("Com_Collider_AABB"), (CComponent**)&m_pVecCollider[FALMERUE_COL_AABB], &AABBDesc)))
+		return E_FAIL;
+
+	m_pVecCollider[FALMERUE_COL_AABB]->Set_OwnerObj(this);
+
+	/* DETECTION */
+	CBounding_Sphere::BOUNDING_SPHERE_DESC SphereDesc = {};
+	SphereDesc.fRadius = 6.f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_Sphere"),
-		TEXT("Com_Collider_Detection"), (CComponent**)&m_pDetectionColCom, &SphereDesc)))
+		TEXT("Com_Collider_Detection"), (CComponent**)&m_pVecCollider[FALMERUE_COL_DETECTION], &SphereDesc)))
 		return E_FAIL;
 
-	m_pDetectionColCom->Set_OwnerObj(this);
+	m_pVecCollider[FALMERUE_COL_DETECTION]->Set_OwnerObj(this);
+
+	/* MISS DETECTION */
+	SphereDesc.fRadius = 10.f;
+	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_Sphere"),
+		TEXT("Com_Collider_MissDetection"), (CComponent**)&m_pVecCollider[FALMERUE_COL_MISSDETECTION], &SphereDesc)))
+		return E_FAIL;
+
+	m_pVecCollider[FALMERUE_COL_MISSDETECTION]->Set_OwnerObj(this);
+
+	/* RUN ATTACK */
+	SphereDesc.fRadius = 2.5f;
+	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_Sphere"),
+		TEXT("Com_Collider_AtkRound"), (CComponent**)&m_pVecCollider[FALMERUE_COL_ATKROUND], &SphereDesc)))
+		return E_FAIL;
+
+	m_pVecCollider[FALMERUE_COL_ATKROUND]->Set_OwnerObj(this);
+
+
+#pragma endregion
 
 	return S_OK;
 }
 
 HRESULT CFalmer_UnEquip::Ready_State()
 {
-	m_pStateManager = CStateManager_FalmerUE::Create(this, m_pTransformCom, m_pNavigationCom);
+	m_pStateManager = CStateManager_FalmerUE::Create(this, m_pTransformCom, m_pNavigationCom, m_pVecCollider);
 
-	return S_OK;
-}
-
-HRESULT CFalmer_UnEquip::Ready_Cell()
-{
 	return S_OK;
 }
 
@@ -220,8 +254,8 @@ void CFalmer_UnEquip::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pModelCom);
-	Safe_Release(m_pDetectionColCom);
+	for (auto& iter : m_pVecCollider)
+		Safe_Release(iter);
 
 	Safe_Release(m_pStateManager);
 }

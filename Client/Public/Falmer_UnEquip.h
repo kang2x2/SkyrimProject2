@@ -4,7 +4,6 @@
 
 BEGIN(Engine)
 
-class CModel;
 class CCollider;
 
 END
@@ -14,7 +13,15 @@ BEGIN(Client)
 class CFalmer_UnEquip final : public CMonster
 {
 public:
-	enum FALMERUE_STATE { FALMERUE_IDLE, FALMERUE_END };
+	enum FALMERUE_COLTYPE	{ FALMERUE_COL_AABB, 
+		FALMERUE_COL_DETECTION, FALMERUE_COL_MISSDETECTION,
+		FALMERUE_COL_ATKROUND, FALMERUE_COL_END };
+	
+	enum FALMERUE_STATE { FALMERUE_SQUAT, FALMERUE_SQUAT_OUTRO, FALMERUE_SQUAT_INTRO,
+		FALMERUE_WARNING, FALMERUE_DETECTION, FALMERUE_RETURN,
+		FALMERUE_CHASE, 
+		FALMERUE_RUNATK,
+		FALMERUE_END };
 
 private:
 	CFalmer_UnEquip(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
@@ -33,20 +40,13 @@ public:
 public:
 	HRESULT Set_State(CFalmer_UnEquip::FALMERUE_STATE _eState);
 
-	void	Play_Animation(_bool _bIsLoop, string _strAnimationName);
-	void	Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName);
-
 public:
 	HRESULT Ready_Component(_uint _iLevel);
 	HRESULT Ready_State();
 
-	HRESULT Ready_Cell();
-
 private:
-	CModel* m_pModelCom = nullptr;
-
-	CCollider* m_pDetectionColCom = nullptr;
-
+	vector<CCollider*> m_pVecCollider;
+	
 	class CStateManager_FalmerUE* m_pStateManager = nullptr;
 
 public:

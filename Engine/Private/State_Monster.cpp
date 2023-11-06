@@ -7,7 +7,7 @@ CState_Monster::CState_Monster()
 
 HRESULT CState_Monster::Initialize(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation)
 {
-	if (m_pMonster == nullptr)
+	if (_pMonster == nullptr)
 		return E_FAIL;
 
 	m_pMonster = _pMonster;

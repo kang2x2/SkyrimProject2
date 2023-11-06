@@ -73,7 +73,7 @@ public: /* For. PipeLine */
 
 public: /* For. Collision Manager */
 	void Collision_AABBTransition(CCollider * _pCollider, CCollider * _pTargetCollider);
-	void Collision_DetectionPlayer(CCollider* _pCollider, CCollider* _pTargetCollider, _float _fTimeDelta);
+	_bool Collision_DetectionPlayer(CCollider* _pCollider, CCollider* _pTargetCollider, _float _fTimeDelta);
 
 public: /* For. File Manager */
 	HRESULT StaticObject_FileSave(ofstream & _outFile, _uint _iLevelIndex) const;

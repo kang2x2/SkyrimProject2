@@ -310,11 +310,38 @@
     <Filter Include="03. State\02. Falmer_UnEquip">
       <UniqueIdentifier>{c32af7a5-02cd-4bff-9da2-0c635b0b5171}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. State\02. Falmer_UnEquip\01. Idle">
-      <UniqueIdentifier>{e9b45858-7fcb-44c5-8cc7-ee2fcf5922c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. State\02. Falmer_UnEquip\00. Manager">
       <UniqueIdentifier>{5295ec82-195c-4838-9549-4bdcbb288f3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. State">
+      <UniqueIdentifier>{e9b45858-7fcb-44c5-8cc7-ee2fcf5922c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. State\00. Idle">
+      <UniqueIdentifier>{9adc651b-0246-459f-b169-80193e9144ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. State\00. Idle\00. Squat">
+      <UniqueIdentifier>{3638efa6-9120-40d2-9ff1-683d0e2667c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. State\00. Idle\01. Squat_Out">
+      <UniqueIdentifier>{71c11018-5e1f-4fc8-a8c9-38643b619101}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. State\01. Chase">
+      <UniqueIdentifier>{6de33547-b6c4-4fc5-ab4f-350ca9d0afd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. State\02. Detection">
+      <UniqueIdentifier>{899871be-fec2-4b91-add8-884b278092ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. State\03. Warning">
+      <UniqueIdentifier>{362c7dda-63ac-4b56-a1c3-cd18fe581428}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. State\04. Return">
+      <UniqueIdentifier>{ecac66c9-5133-4120-9c68-62027de8ec96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. State\00. Idle\02. Squat_Intro">
+      <UniqueIdentifier>{11f01c45-fb63-47bc-a740-d4dcb5edf9e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. State\05. Attack">
+      <UniqueIdentifier>{bc766074-1caf-4893-a65c-127ec0297db5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -537,11 +564,35 @@
     <ClInclude Include="..\Public\Falmer_UnEquip.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\StateFalmerUE_Idle.h">
-      <Filter>03. State\02. Falmer_UnEquip\01. Idle</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\StateManager_FalmerUE.h">
       <Filter>03. State\02. Falmer_UnEquip\00. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_FalmerUE.h">
+      <Filter>03. State\02. Falmer_UnEquip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_Chase.h">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\01. Chase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_Squat.h">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\00. Idle\00. Squat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_SquatOutro.h">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\00. Idle\01. Squat_Out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_Warning.h">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\03. Warning</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_SquatIntro.h">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\00. Idle\02. Squat_Intro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_Detection.h">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\02. Detection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_Return.h">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\04. Return</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_RunAtk.h">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\05. Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -757,11 +808,35 @@
     <ClCompile Include="..\Private\Falmer_UnEquip.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\StateFalmerUE_Idle.cpp">
-      <Filter>03. State\02. Falmer_UnEquip\01. Idle</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\StateManager_FalmerUE.cpp">
       <Filter>03. State\02. Falmer_UnEquip\00. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_FalmerUE.cpp">
+      <Filter>03. State\02. Falmer_UnEquip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_Chase.cpp">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\01. Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_Squat.cpp">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\00. Idle\00. Squat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_SquatOutro.cpp">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\00. Idle\01. Squat_Out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_Warning.cpp">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\03. Warning</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_SquatIntro.cpp">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\00. Idle\02. Squat_Intro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_Detection.cpp">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\02. Detection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_Return.cpp">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\04. Return</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_RunAtk.cpp">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\05. Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -46,36 +46,17 @@ void CMonster::Tick(_float _fTimeDelta)
 	}
 
 	_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
-	m_pColliderCom->Update(matWorld);
 
 	Safe_Release(pGameInstance);
 }
 
 void CMonster::LateTick(_float _fTimeDelta)
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	CPlayer* pPlayer = dynamic_cast<CPlayer*>
-		(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"), TEXT("Player")));
-	
-	pGameInstance->Collision_AABBTransition(m_pColliderCom, dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
-
-	if (g_curLevel == LEVEL_WHITERUN|| g_curLevel == LEVEL_DUNGEON)
-	{
-		m_pColliderCom->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
-	}
-
-	Safe_Release(pGameInstance);
 }
 
 HRESULT CMonster::Render()
 {
 #ifdef _DEBUG
-	/* 콜라이더를 그 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
-	if (m_pColliderCom != nullptr)
-		m_pColliderCom->Render();
-
 	if (m_pNavigationCom != nullptr)
 		m_pNavigationCom->Render();
 #endif
@@ -138,6 +119,34 @@ HRESULT CMonster::Bind_ShaderResource()
 	return S_OK;
 }
 
+void CMonster::Play_Animation(_bool _bIsLoop, string _strAnimationName)
+{
+	Set_AnimationIndex(_bIsLoop, _strAnimationName);
+}
+
+void CMonster::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName)
+{
+	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName);
+}
+
+_bool CMonster::Get_IsAnimationFin()
+{
+	return m_pModelCom->Get_IsAnimationFin();
+}
+
+_bool CMonster::Get_CurAnimationName(string _strAnimationName)
+{
+	if (!strcmp(m_pModelCom->Get_CurAnimationName().c_str(), _strAnimationName.c_str()))
+		return true;
+
+	return false;
+}
+
+_uint CMonster::Get_CurFrameIndex()
+{
+	return m_pModelCom->Get_CurFrameIndex();
+}
+
 HRESULT CMonster::Ready_Component()
 {
 	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
@@ -153,17 +162,6 @@ HRESULT CMonster::Ready_Component()
 		return E_FAIL;
 
 	m_pTransformCom->Set_WorldMatrix(*pMatPivot);
-
-	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
-
-	AABBDesc.vExtents = _float3(0.5f, 0.5f, 0.5f);
-	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
-
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
-		TEXT("Com_Collider_AABB"), (CComponent**)&m_pColliderCom, &AABBDesc)))
-		return E_FAIL;
-
-	m_pColliderCom->Set_OwnerObj(this);
 
 	if (g_curLevel != LEVEL_TOOL)
 	{
@@ -186,7 +184,7 @@ void CMonster::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTransformCom);

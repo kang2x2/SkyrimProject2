@@ -5,7 +5,7 @@
 
 BEGIN(Engine)
 
-class CCollider;
+class CModel;
 class CTransform;
 class CShader;
 class CRenderer;
@@ -35,14 +35,26 @@ protected:
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResource();
 
+public:
+	void			Play_Animation(_bool _bIsLoop, string _strAnimationName);
+	void			Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName);
+
+	_bool			Get_IsAnimationFin();
+	_bool			Get_CurAnimationName(string _strAnimationName);
+	_uint			Get_CurFrameIndex();
+
+	_vector			Get_OriginPos() { return m_vOriginPos; }
+
 protected:
 	_matrix*		pMatPivot;
 
+	CModel* m_pModelCom = nullptr;
 	CShader* m_pShaderCom = nullptr;
-	CCollider* m_pColliderCom = nullptr;
 	CRenderer* m_pRendererCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
 	CNavigation* m_pNavigationCom = nullptr;
+
+	_vector			m_vOriginPos = {};
 
 public:
 	virtual CGameObject* Clone(void* _pArg) = 0;
