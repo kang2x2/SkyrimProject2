@@ -73,6 +73,7 @@ public: /* For. PipeLine */
 
 public: /* For. Collision Manager */
 	void Collision_AABBTransition(CCollider * _pCollider, CCollider * _pTargetCollider);
+	void Collision_ColCheck(class CCollider* _pCollider, class CCollider* _pTargetCollider);
 	_bool Collision_DetectionPlayer(CCollider* _pCollider, CCollider* _pTargetCollider, _float _fTimeDelta);
 
 public: /* For. File Manager */

@@ -20,7 +20,7 @@ class CPlayer final : public CGameObject
 public:
 	enum PARTS { PART_BODY, PART_WEAPON, PART_ARMOR, PART_HELMET, PART_HAIR, PART_END };
 	enum PLAYERCAMERA { CAM_FREE, CAM_BATTLE, CAM_1ST, CAM_END };
-	enum PLAYER_EQUIP { NONEQUIP, ONEHAND, BOW, MAGIC, EQUIP_END };
+	enum PLAYER_EQUIPSTATE { EQUIP_NONEQUIP, EQUIP_ONEHAND, EQUIP_BOW, EQUIP_MAGIC, EQUIP_END };
 
 	enum PLAYERSTATE {
 		ENEQUIP_IDLE,
@@ -64,6 +64,9 @@ public:
 
 	CGameObject* Get_Part(PARTS _ePart) { return m_vecPlayerPart[_ePart]; }
 
+	PLAYER_EQUIPSTATE Get_PlayerEquipState() { return m_eEquipState; }
+	void			  Set_PlayerEquipState(PLAYER_EQUIPSTATE _eState) { m_eEquipState = _eState; }
+
 private:
 	vector<class CGameObject*>		m_vecPlayerPart;
 
@@ -76,6 +79,7 @@ private:
 	PLAYERCAMERA					m_eCurCamMode = CAM_FREE;
 	_uint							m_iAnimKeyIndex = 0;
 
+	PLAYER_EQUIPSTATE				m_eEquipState = EQUIP_END;
 
 private:
 	HRESULT Ready_Part();

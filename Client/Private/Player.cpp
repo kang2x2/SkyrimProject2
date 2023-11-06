@@ -40,7 +40,8 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	m_bHasMesh = true;
 	m_bHasPart = true;
 	m_strName = TEXT("Player");
-	
+	m_eEquipState = EQUIP_NONEQUIP;
+
 	m_pTransformCom->Set_Speed(5.f);
 
 	Play_Animation(true, "mt_idle");
@@ -186,6 +187,7 @@ HRESULT CPlayer::Ready_Part()
 
 	/* For. Weapon */
 	CPlayer_Weapon::WEAPON_DESC WeaponPartDesc;
+	WeaponPartDesc.pParent = this;
 	WeaponPartDesc.pParentTransform = m_pTransformCom;
 	WeaponPartDesc.pSocketBone = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("WeaponSword");
 	WeaponPartDesc.matSocketPivot = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();

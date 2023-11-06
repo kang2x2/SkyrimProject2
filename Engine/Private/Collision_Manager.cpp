@@ -21,6 +21,10 @@ CCollision_Manager::CCollision_Manager()
 
 void CCollision_Manager::Collision_AABBTransition(CCollider* _pCollider, CCollider* _pTargetCollider)
 {
+	if (_pCollider->Get_ColliderType() != CCollider::TYPE_AABB ||
+		_pTargetCollider->Get_ColliderType() != CCollider::TYPE_AABB)
+		return;
+
 	/* 내 바운딩과 상대 바운딩과의 출동 처리. */
 	_bool m_bIsColl = Is_Collsion(_pCollider, _pTargetCollider);
 
@@ -69,6 +73,16 @@ void CCollision_Manager::Collision_AABBTransition(CCollider* _pCollider, CCollid
 					Set_State(CTransform::STATE_POSITION, XMVectorSet(vPos.x, vPos.y, vPos.z + vOffset.z, 1.f));
 			}
 		}
+	}
+}
+
+void CCollision_Manager::Collision_ColCheck(CCollider* _pCollider, CCollider* _pTargetCollider)
+{
+	_bool m_bIsColl = Is_Collsion(_pCollider, _pTargetCollider);
+
+	if (m_bIsColl)
+	{
+
 	}
 }
 

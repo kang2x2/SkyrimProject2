@@ -6,6 +6,9 @@
 
 #include "Weapon_IronSword.h"
 
+#include "Layer.h"
+#include "Player.h"
+
 CPlayer_Weapon::CPlayer_Weapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CPart_Base(_pDevice, _pContext)
 {
@@ -41,7 +44,6 @@ HRESULT CPlayer_Weapon::Initialize_Clone(void* _pArg)
 
 	m_pTransformCom->Set_Scaling(_float3(0.01f, 0.01f, 0.01f));
 	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
-	// matInitialize = XMMatrixRotationY(XMConvertToRadians(-90.f));
 	m_strName = TEXT("PlayerWeapon");
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -68,17 +70,68 @@ void CPlayer_Weapon::Tick(_float _fTimeDelta)
 
 	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix() * WorldMatrix);
 	dynamic_cast<CTransform*>(m_pWeapon->Get_Component(TEXT("Com_Transform")))->Set_WorldMatrix(XMLoadFloat4x4(&m_matWorld));
+
+	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_NONEQUIP &&
+		dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_MAGIC)
+	{
+		m_pColliderCom->Update(XMLoadFloat4x4(&m_matWorld));
+	}
 }
 
 void CPlayer_Weapon::LateTick(_float _fTimeDelta)
 {
 	m_pWeapon->LateTick(_fTimeDelta);
+
+	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
+
+	_bool bIsCol = false;
+
+	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_NONEQUIP &&
+		dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_MAGIC)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_WHITERUN);
+
+		for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
+		{
+			list<CGameObject*> ltbjList = Layer->second->Get_ObjList();
+
+			for (auto obj : ltbjList)
+			{
+				if (obj->Get_IsCreature())
+				{
+					if (!bIsCol)
+					{
+						if (m_pColliderCom->IsCollision(dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB")))))
+						{
+							bIsCol = true;
+						}
+					}
+
+					pGameInstance->Collision_ColCheck(m_pColliderCom,
+						dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB"))));
+				}
+			}
+		}
+
+		Safe_Release(pGameInstance);
+	}
 }
 
 HRESULT CPlayer_Weapon::Render()
 {
 	if (m_pWeapon != nullptr)
 		m_pWeapon->Render();
+
+#ifdef _DEBUG
+	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_NONEQUIP &&
+		dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_MAGIC)
+	{
+		m_pColliderCom->Render();
+	}
+#endif
 
 	return S_OK;
 }
@@ -105,59 +158,19 @@ HRESULT CPlayer_Weapon::Ready_Component()
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
 		return E_FAIL;
 
-	return S_OK;
-}
-
-HRESULT CPlayer_Weapon::Bind_ShaderResources()
-{
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_matWorld)))
+	CBounding_OBB::BOUNDING_OBB_DESC OBBDesc = {};
+	
+	OBBDesc.vExtents = _float3(10.3f, 10.7f, 30.3f);
+	OBBDesc.vDegree = _float3(0.f, 0.f, 0.f);
+	OBBDesc.vCenter = _float3(0.f, 0.f, OBBDesc.vExtents.z);
+	
+	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_OBB"),
+		TEXT("Com_Collider_OBB"), (CComponent**)&m_pColliderCom, &OBBDesc)))
 		return E_FAIL;
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	// 뷰, 투영 행렬과 카메라의 위치를 던져준다.
-	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ViewMatrix", CPipeLine::D3DTS_VIEW)))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ProjMatrix", CPipeLine::D3DTS_PROJ)))
-		return E_FAIL;
-
-	_float4 vCamPosition = pGameInstance->Get_CamPosition_Float4();
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
-		return E_FAIL;
-
-	const LIGHT_DESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	if (pLightDesc == nullptr)
-		return E_FAIL;
-
-	_uint		iPassIndex = 0;
-
-	if (pLightDesc->eLightType == LIGHT_DESC::LIGHT_DIRECTIONAL)
-	{
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &pLightDesc->vLightDir, sizeof(_float4))))
-			return E_FAIL;
-		iPassIndex = 0;
-	}
-	else if (pLightDesc->eLightType == LIGHT_DESC::LIGHT_POINT)
-	{
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightPos", &pLightDesc->vLightPos, sizeof(_float4))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_fLightRange", &pLightDesc->fLightRange, sizeof(_float))))
-			return E_FAIL;
-		iPassIndex = 1;
-	}
-
-	// 나머지 조명 연산에 필요한 데이터를 던져 줌
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
-		return E_FAIL;
-
-	Safe_Release(pGameInstance);
+	
+	m_pColliderCom->Set_OwnerObj(m_pParent);
 
 	return S_OK;
-
 }
 
 CPlayer_Weapon* CPlayer_Weapon::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
@@ -190,6 +203,7 @@ void CPlayer_Weapon::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pSocketBone);
 	Safe_Release(m_pParentTransform);
 	Safe_Release(m_pRendererCom);

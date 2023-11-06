@@ -47,7 +47,7 @@ HRESULT CPlayer_Armor::Initialize_Clone(void* _pArg)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	m_pArmor = pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Equip"), TEXT("GlassArmor"));
+	// m_pArmor = pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Equip"), TEXT("GlassArmor"));
 
 	Safe_Release(pGameInstance);
 
@@ -67,12 +67,15 @@ void CPlayer_Armor::Tick(_float _fTimeDelta)
 	WorldMatrix.r[2] = XMVector3Normalize(WorldMatrix.r[2]);
 
 	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix() * WorldMatrix);
-	dynamic_cast<CTransform*>(m_pArmor->Get_Component(TEXT("Com_Transform")))->Set_WorldMatrix(XMLoadFloat4x4(&m_matWorld));
+	
+	if(m_pArmor != nullptr)
+		dynamic_cast<CTransform*>(m_pArmor->Get_Component(TEXT("Com_Transform")))->Set_WorldMatrix(XMLoadFloat4x4(&m_matWorld));
 }
 
 void CPlayer_Armor::LateTick(_float _fTimeDelta)
 {
-	m_pArmor->LateTick(_fTimeDelta);
+	if (m_pArmor != nullptr)
+		m_pArmor->LateTick(_fTimeDelta);
 }
 
 HRESULT CPlayer_Armor::Render()

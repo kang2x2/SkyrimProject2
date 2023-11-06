@@ -9,6 +9,7 @@ BEGIN(Engine)
 class CBone;
 class CRenderer;
 class CTransform;
+class CCollider;
 
 END
 
@@ -44,10 +45,13 @@ public:
 	HRESULT Bind_ShaderResources();
 
 private:
+	CCollider*		m_pColliderCom = nullptr;
+
 	CBone*			m_pSocketBone = nullptr;
 	_float4x4		m_matSocketPivot;
 
 	CGameObject*	m_pWeapon = nullptr;
+
 
 public:
 	static CPlayer_Weapon* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

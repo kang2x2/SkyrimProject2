@@ -158,7 +158,7 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 
 	/* AABB */
 	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
-	AABBDesc.vExtents = _float3(0.5f, 0.5f, 0.5f);
+	AABBDesc.vExtents = _float3(0.5f, 0.7f, 0.5f);
 	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),

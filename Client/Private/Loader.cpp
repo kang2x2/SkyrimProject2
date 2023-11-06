@@ -150,6 +150,10 @@ HRESULT CLoader::Loading_For_Level_Tool()
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
 		return E_FAIL;
+	/* For.ProtoType_Component_Collider_OBB */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_OBB"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB))))
+		return E_FAIL;
 	/* For.ProtoType_Component_Collider_Sphere */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_Sphere"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
@@ -287,6 +291,10 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 	/* For.Prototype_Component_Collider_AABB */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
+		return E_FAIL;
+	/* For.ProtoType_Component_Collider_OBB */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_OBB"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB))))
 		return E_FAIL;
 	/* For.ProtoType_Component_Collider_Sphere */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_Sphere"),

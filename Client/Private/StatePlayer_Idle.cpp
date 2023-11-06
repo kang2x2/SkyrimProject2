@@ -79,6 +79,7 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown('R'))
 	{
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_PlayerEquipState(CPlayer::EQUIP_ONEHAND);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_EQUIP);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_equip");
 	}
