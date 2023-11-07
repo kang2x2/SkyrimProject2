@@ -357,14 +357,9 @@ void CGameInstance::Collision_AABBTransition(CCollider* _pCollider, CCollider* _
 	m_pCollision_Manager->Collision_AABBTransition(_pCollider, _pTargetCollider);
 }
 
-void CGameInstance::Collision_ColCheck(CCollider* _pCollider, CCollider* _pTargetCollider)
+_bool CGameInstance::Collision_ColCheck(CCollider* _pCollider, CCollider* _pTargetCollider)
 {
-	m_pCollision_Manager->Collision_ColCheck(_pCollider, _pTargetCollider);
-}
-
-_bool CGameInstance::Collision_DetectionPlayer(CCollider* _pCollider, CCollider* _pTargetCollider, _float _fTimeDelta)
-{
-	return m_pCollision_Manager->Collision_DetectionPlayer(_pCollider, _pTargetCollider, _fTimeDelta);
+	return m_pCollision_Manager->Collision_ColCheck(_pCollider, _pTargetCollider);
 }
 
 /* File Manager */

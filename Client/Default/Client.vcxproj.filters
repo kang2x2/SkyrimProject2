@@ -208,18 +208,6 @@
     <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack">
       <UniqueIdentifier>{518b22ee-4786-4ec1-a785-b5688630cea6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\00. LeftAttack">
-      <UniqueIdentifier>{dc306d6d-bcc0-40ba-a335-8ad585204351}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\01. RightAttack">
-      <UniqueIdentifier>{d4ff8b7d-8855-409f-9f2d-d52e3157a02a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\02. PowerAttack">
-      <UniqueIdentifier>{ea14efa6-8b5a-4dbe-a066-75a761b1a7c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\03. RunPowerAttack">
-      <UniqueIdentifier>{616fe159-34d9-4a5d-8dde-b60a2ece5f3b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Equip">
       <UniqueIdentifier>{5ea3e558-6ee1-4016-9cca-70ac51c95b26}</UniqueIdentifier>
     </Filter>
@@ -343,6 +331,36 @@
     <Filter Include="03. State\02. Falmer_UnEquip\01. State\05. Attack">
       <UniqueIdentifier>{bc766074-1caf-4893-a65c-127ec0297db5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\00. Fix">
+      <UniqueIdentifier>{fcf53f55-1570-4889-80da-c236218a8fa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\03. Move_Foward">
+      <UniqueIdentifier>{900ffb4f-b479-41ae-b21c-218ec2e37bf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\04. Move_Back">
+      <UniqueIdentifier>{a055c7a3-2682-4cf1-908d-ee23437adb6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\05. PowerAttack">
+      <UniqueIdentifier>{ea14efa6-8b5a-4dbe-a066-75a761b1a7c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\06. RunPowerAttack">
+      <UniqueIdentifier>{616fe159-34d9-4a5d-8dde-b60a2ece5f3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\01. Move_Left">
+      <UniqueIdentifier>{56ddf63c-a0dc-4bbf-8f2c-f1a8ab938dc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\02. Move_Right">
+      <UniqueIdentifier>{4e0b42b8-1ea9-4f51-be76-239fa524ed72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block">
+      <UniqueIdentifier>{92cab5e9-b7a6-435d-97cb-ee99b72b254b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. State\05. Attack\00. Attack">
+      <UniqueIdentifier>{8c9c8eaf-2da6-4fe3-82d2-29908cc2bb58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. Falmer_UnEquip\01. State\05. Attack\01. Charge">
+      <UniqueIdentifier>{88ef3c0d-1d46-4336-810b-d6aa6c59b9a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -453,17 +471,11 @@
     <ClInclude Include="..\Public\StatePlayer_RunBackward.h">
       <Filter>03. State\00. Player\01. State\00. UnEquip\02. Run\03. Back</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\StatePlayerOH_LAttack.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\00. LeftAttack</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_PAttack.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\02. PowerAttack</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\StatePlayerOH_RAttack.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. RightAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\05. PowerAttack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_RunPAttack.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\03. RunPowerAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\06. RunPowerAttack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PlayerCamera_Free.h">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam</Filter>
@@ -591,8 +603,44 @@
     <ClInclude Include="..\Public\StateFalmerUE_Return.h">
       <Filter>03. State\02. Falmer_UnEquip\01. State\04. Return</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\StateFalmerUE_RunAtk.h">
-      <Filter>03. State\02. Falmer_UnEquip\01. State\05. Attack</Filter>
+    <ClInclude Include="..\Public\StatePlayerOH_LAttack.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\00. Fix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_LAttackR.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\02. Move_Right</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_RAttackR.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\02. Move_Right</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_LAttackF.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\03. Move_Foward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_RAttackF.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\03. Move_Foward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_LAttackB.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\04. Move_Back</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_RAttackB.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\04. Move_Back</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_RAttack.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\00. Fix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_LAttackL.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. Move_Left</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_RAttackL.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. Move_Left</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_Block.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_Charge.h">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\05. Attack\01. Charge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_Attack.h">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\05. Attack\00. Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -700,17 +748,11 @@
     <ClCompile Include="..\Private\StatePlayer_RunBackward.cpp">
       <Filter>03. State\00. Player\01. State\00. UnEquip\02. Run\03. Back</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\StatePlayerOH_LAttack.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\00. LeftAttack</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_PAttack.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\02. PowerAttack</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\StatePlayerOH_RAttack.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. RightAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\05. PowerAttack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_RunPAttack.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\03. RunPowerAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\06. RunPowerAttack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PlayerCamera_Free.cpp">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam</Filter>
@@ -835,8 +877,44 @@
     <ClCompile Include="..\Private\StateFalmerUE_Return.cpp">
       <Filter>03. State\02. Falmer_UnEquip\01. State\04. Return</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\StateFalmerUE_RunAtk.cpp">
-      <Filter>03. State\02. Falmer_UnEquip\01. State\05. Attack</Filter>
+    <ClCompile Include="..\Private\StatePlayerOH_LAttack.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\00. Fix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_LAttackR.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\02. Move_Right</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_RAttackR.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\02. Move_Right</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_LAttackF.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\03. Move_Foward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_RAttackF.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\03. Move_Foward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_LAttackB.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\04. Move_Back</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_RAttackB.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\04. Move_Back</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_RAttack.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\00. Fix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_LAttackL.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. Move_Left</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_RAttackL.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. Move_Left</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_Block.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_Charge.cpp">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\05. Attack\01. Charge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_Attack.cpp">
+      <Filter>03. State\02. Falmer_UnEquip\01. State\05. Attack\00. Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

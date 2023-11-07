@@ -28,10 +28,11 @@ void CStatePlayerOH_UnEquip::Update(_float _fTimeDelta)
 
 void CStatePlayerOH_UnEquip::Late_Update()
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin())
+	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin() &&
+		dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_unequip"))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_IDLE);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_IDLE);
 	}
 }
 

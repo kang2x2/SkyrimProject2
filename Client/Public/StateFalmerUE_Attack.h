@@ -14,11 +14,11 @@ END
 BEGIN(Client)
 
 class CStateManager_FalmerUE;
-class CStateFalmerUE_RunAtk final : public CState_FalmerUE
+class CStateFalmerUE_Attack final : public CState_FalmerUE
 {
 private:
-	CStateFalmerUE_RunAtk();
-	virtual ~CStateFalmerUE_RunAtk() = default;
+	CStateFalmerUE_Attack();
+	virtual ~CStateFalmerUE_Attack() = default;
 
 public:
 	virtual		 HRESULT Initialize(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom);
@@ -26,7 +26,7 @@ public:
 	virtual void Late_Update();
 
 public:
-	static CStateFalmerUE_RunAtk* Create(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom);
+	static CStateFalmerUE_Attack* Create(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom);
 	virtual void Free() override;
 };
 

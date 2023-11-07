@@ -18,9 +18,6 @@ HRESULT CStatePlayer_RunFoward::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayer_RunFoward::Update(_float _fTimeDelta)
 {
-	m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-	m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
-
 	Key_Input(_fTimeDelta);
 }
 
@@ -33,56 +30,61 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	
-	if (pGameInstance->Get_DIKeyUp('W'))
+	if (pGameInstance->Get_DIKeyPress('W'))
 	{
+		m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
+
 		if (pGameInstance->Get_DIKeyPress('A'))
 		{
+			m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+
 			_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-45.f));
 			_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
 
 			m_pPlayerTransform->SetLook(vPlayerLook);
 
-			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_RUN_L);
+			if (pGameInstance->Get_DIKeyUp('W'))
+			{
+				_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-45.f));
+				_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
+
+				m_pPlayerTransform->SetLook(vPlayerLook);
+
+				dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_L);
+			}
 		}
 
 		else if (pGameInstance->Get_DIKeyPress('D'))
 		{
+			m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+
 			_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(45.f));
 			_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
 
 			m_pPlayerTransform->SetLook(vPlayerLook);
 
-			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_RUN_R);
+			if (pGameInstance->Get_DIKeyUp('W'))
+			{
+				_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(45.f));
+				_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
+
+				m_pPlayerTransform->SetLook(vPlayerLook);
+
+				dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_R);
+			}
 		}
 
 		else
 		{
-			dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
-			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_IDLE);
+			m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 		}
+
 	}
 
-	if (pGameInstance->Get_DIKeyPress('A'))
+	if (pGameInstance->Get_DIKeyUp('W'))
 	{
-		_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-45.f));
-		_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-		
-		m_pPlayerTransform->SetLook(vPlayerLook);
-		m_pPlayerTransform->Go_Left(_fTimeDelta, m_pPlayerNavigation);
-	}
-
-	if (pGameInstance->Get_DIKeyPress('D'))
-	{
-		_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(45.f));
-		_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-
-		m_pPlayerTransform->SetLook(vPlayerLook);
-		m_pPlayerTransform->Go_Right(_fTimeDelta, m_pPlayerNavigation);
-	}
-
-	/* 나중에 달리면서 무기 꺼내는걸로 변경. */
-	if (pGameInstance->Get_DIKeyDown('R'))
-	{
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_IDLE);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
 	}
 
 	Safe_Release(pGameInstance);

@@ -6,12 +6,12 @@
 #include "Player.h"
 
 CMonster::CMonster(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CGameObject(_pDevice, _pContext)
+	: CCreatureObject(_pDevice, _pContext)
 {
 }
 
 CMonster::CMonster(const CMonster& rhs)
-	: CGameObject(rhs)
+	: CCreatureObject(rhs)
 {
 }
 

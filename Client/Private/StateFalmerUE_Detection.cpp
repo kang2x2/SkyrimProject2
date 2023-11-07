@@ -22,9 +22,11 @@ void CStateFalmerUE_Detection::Update(_float _fTimeDelta)
 
 void CStateFalmerUE_Detection::Late_Update()
 {
-	if (dynamic_cast<CMonster*>(m_pMonster)->Get_IsAnimationFin())
+	if (dynamic_cast<CMonster*>(m_pMonster)->Get_IsAnimationFin() &&
+		dynamic_cast<CMonster*>(m_pMonster)->Get_CurAnimationName("idledetection"))
 	{
-		m_pMonsterTransform->Set_Speed(1.5f);
+		m_pMonsterTransform->Set_Speed(dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->GetWalkSpeed());
+
 		dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->Set_State(CFalmer_UnEquip::FALMERUE_RETURN);
 		dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->Play_Animation(true, "mtwalkforward");
 	}

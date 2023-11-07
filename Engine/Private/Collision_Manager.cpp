@@ -76,17 +76,7 @@ void CCollision_Manager::Collision_AABBTransition(CCollider* _pCollider, CCollid
 	}
 }
 
-void CCollision_Manager::Collision_ColCheck(CCollider* _pCollider, CCollider* _pTargetCollider)
-{
-	_bool m_bIsColl = Is_Collsion(_pCollider, _pTargetCollider);
-
-	if (m_bIsColl)
-	{
-
-	}
-}
-
-_bool CCollision_Manager::Collision_DetectionPlayer(CCollider* _pCollider, CCollider* _pTargetCollider, _float _fTimeDelta)
+_bool CCollision_Manager::Collision_ColCheck(CCollider* _pCollider, CCollider* _pTargetCollider)
 {
 	/* 내 바운딩과 상대 바운딩과의 출동 처리. */
 	_bool m_bIsColl = Is_Collsion(_pCollider, _pTargetCollider);

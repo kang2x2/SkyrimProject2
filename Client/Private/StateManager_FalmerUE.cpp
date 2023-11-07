@@ -13,7 +13,8 @@
 
 #include "StateFalmerUE_Chase.h"
 
-#include "StateFalmerUE_RunAtk.h"
+#include "StateFalmerUE_Attack.h"
+#include "StateFalmerUE_Charge.h"
 
 CStateManager_FalmerUE::CStateManager_FalmerUE()
 {
@@ -49,7 +50,11 @@ HRESULT CStateManager_FalmerUE::Initialize(CGameObject* _pMonster, CTransform* _
 	m_vecMonsterState.push_back(pState);
 
 	/* Attack */
-	pState = CStateFalmerUE_RunAtk::Create(_pMonster, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	pState = CStateFalmerUE_Attack::Create(_pMonster, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+
+	/* Charge */
+	pState = CStateFalmerUE_Charge::Create(_pMonster, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
 
 	m_pCurState = m_vecMonsterState.front();

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "CreatureObject.h"
 
 
 BEGIN(Engine)
@@ -15,22 +15,39 @@ END
 
 BEGIN(Client)
 
-class CPlayer final : public CGameObject
+class CPlayer final : public CCreatureObject
 {
 public:
 	enum PARTS { PART_BODY, PART_WEAPON, PART_ARMOR, PART_HELMET, PART_HAIR, PART_END };
 	enum PLAYERCAMERA { CAM_FREE, CAM_BATTLE, CAM_1ST, CAM_END };
-	enum PLAYER_EQUIPSTATE { EQUIP_NONEQUIP, EQUIP_ONEHAND, EQUIP_BOW, EQUIP_MAGIC, EQUIP_END };
+	enum PLAYER_EQUIPSTATE { EQUIP_UNEQUIP, EQUIP_ONEHAND, EQUIP_BOW, EQUIP_MAGIC, EQUIP_END };
 
 	enum PLAYERSTATE {
-		ENEQUIP_IDLE,
-		ENEQUIP_RUN_F, ENEQUIP_RUN_B, ENEQUIP_RUN_L, ENEQUIP_RUN_R,
+		UNEQUIP_IDLE,
+		UNEQUIP_RUN_F, UNEQUIP_RUN_B, UNEQUIP_RUN_L, UNEQUIP_RUN_R,
 
 		ONEHAND_IDLE, ONEHAND_EQUIP, ONEHAND_UNEQUIP,
 		ONEHAND_RUN_F, ONEHAND_RUN_B, ONEHAND_RUN_L, ONEHAND_RUN_R,
-		ONEHAND_LATTACK, ONEHAND_RATTACK, ONEHAND_PATTACK, ONEHAND_RUNPOWERATTACK,
+
+		ONEHAND_LATTACK, ONEHAND_RATTACK, ONEHAND_PATTACK,
+
+		ONEHAND_LATTACKL, ONEHAND_RATTACKL,
+		ONEHAND_LATTACKR, ONEHAND_RATTACKR,
+		ONEHAND_LATTACKF, ONEHAND_RATTACKF,
+		ONEHAND_LATTACKB, ONEHAND_RATTACKB,
+		
+		ONEHAND_RUNPOWERATTACK,
+
+		ONEHAND_BLOCK,
+
 		ONEHAND_END
 	};
+
+public:
+	typedef struct PlayerSpeedDesc
+	{
+		_float fSprintSpeed = 4.5f;
+	}PLAYER_SPEEDDESC;
 
 private:
 	CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
@@ -67,6 +84,7 @@ public:
 	PLAYER_EQUIPSTATE Get_PlayerEquipState() { return m_eEquipState; }
 	void			  Set_PlayerEquipState(PLAYER_EQUIPSTATE _eState) { m_eEquipState = _eState; }
 
+	PLAYER_SPEEDDESC   Get_PlayerSpeedDesc() { return m_tSpeedDesc; }
 private:
 	vector<class CGameObject*>		m_vecPlayerPart;
 
@@ -80,7 +98,7 @@ private:
 	_uint							m_iAnimKeyIndex = 0;
 
 	PLAYER_EQUIPSTATE				m_eEquipState = EQUIP_END;
-
+	PLAYER_SPEEDDESC				m_tSpeedDesc;
 private:
 	HRESULT Ready_Part();
 	HRESULT Ready_Component();

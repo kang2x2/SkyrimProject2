@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "CreatureObject.h"
 
 BEGIN(Engine)
 
@@ -15,7 +15,7 @@ END
 
 BEGIN(Client)
 
-class CMonster abstract : public CGameObject
+class CMonster abstract : public CCreatureObject
 {
 protected:
 	CMonster(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
@@ -55,6 +55,8 @@ protected:
 	CNavigation* m_pNavigationCom = nullptr;
 
 	_vector			m_vOriginPos = {};
+
+
 
 public:
 	virtual CGameObject* Clone(void* _pArg) = 0;

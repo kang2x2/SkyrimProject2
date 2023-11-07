@@ -35,19 +35,19 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	/* 이동 */
-	if (pGameInstance->Get_DIKeyDown('W'))
+	if (pGameInstance->Get_DIKeyPress('W'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_RUN_F);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_F);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
 	}
 
-	if (pGameInstance->Get_DIKeyDown('S'))
+	if (pGameInstance->Get_DIKeyPress('S'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_RUN_B);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_B);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runbackward");
 	}
 
-	if (pGameInstance->Get_DIKeyDown('A'))
+	if (pGameInstance->Get_DIKeyPress('A'))
 	{
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
@@ -56,14 +56,14 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 
 		m_pPlayerTransform->SetLook(vPlayerLook);
 
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_RUN_L);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_L);
 		
 		// 분명히 필요하긴 할거야 이 함수가.
 		//if(dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_runforward"))
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
 	}
 
-	if (pGameInstance->Get_DIKeyDown('D'))
+	if (pGameInstance->Get_DIKeyPress('D'))
 	{
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
@@ -72,12 +72,19 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 
 		m_pPlayerTransform->SetLook(vPlayerLook);
 
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ENEQUIP_RUN_R);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_R);
 		
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
 	}
 
-	if (pGameInstance->Get_DIKeyDown('R'))
+	//if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+	//{
+	//	dynamic_cast<CPlayer*>(m_pPlayer)->Set_PlayerEquipState(CPlayer::EQUIP_ONEHAND);
+	//	dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_EQUIP);
+	//	dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_equip");
+	//}
+
+	if (pGameInstance->Get_DIKeyDown(VK_LBUTTON))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_PlayerEquipState(CPlayer::EQUIP_ONEHAND);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_EQUIP);

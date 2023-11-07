@@ -24,6 +24,7 @@ public:
 	virtual void Update(_float _fTimeDelta);
 	virtual void Late_Update();
 
+
 public:
 	static CStatePlayerOH_LAttack* Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
 	virtual void Free() override;

@@ -18,8 +18,6 @@ HRESULT CStatePlayerOH_RunRight::Initialize(CGameObject* _pPlayer, CTransform* _
 
 void CStatePlayerOH_RunRight::Update(_float _fTimeDelta)
 {
-	m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
-
 	Key_Input(_fTimeDelta);
 }
 
@@ -32,33 +30,36 @@ void CStatePlayerOH_RunRight::Key_Input(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyUp('D'))
+	if (pGameInstance->Get_DIKeyPress('D'))
 	{
+		m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
+
 		if (pGameInstance->Get_DIKeyPress('W'))
 		{
-			_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-45.f));
-			_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-
-			m_pPlayerTransform->SetLook(vPlayerLook);
-
 			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUN_F);
 		}
-		else
+
+		else if (pGameInstance->Get_DIKeyPress('S'))
 		{
-			// m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-			dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
-			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
+			dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runbackward");
+			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUN_B);
+		}
+
+		/* АјАн */
+		else if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+		{
+			m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+			m_pPlayerTransform->Set_Speed(dynamic_cast<CPlayer*>(m_pPlayer)->GetWalkSpeed());
+		
+			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_LATTACKR);
+			dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_walkrightattackleft");
 		}
 	}
 
-	else if (pGameInstance->Get_DIKeyDown('W'))
+	if (pGameInstance->Get_DIKeyUp('D'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUN_F);
-	}
-	else if (pGameInstance->Get_DIKeyDown('S'))
-	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUN_B);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runbackward");
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
 	}
 
 	Safe_Release(pGameInstance);

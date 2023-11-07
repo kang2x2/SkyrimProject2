@@ -26,11 +26,10 @@ public:
 	
 	_char* Get_AnimationName() { return m_szName; }
 	
-	_uint Get_CurFrameIndex() { return m_iCurFrameIndex; }
-
 	void  Reset_TrackPosition() { m_fTrackPosition = 0; }
 	_bool Get_Finish() { return m_bIsFinish; }
 	const vector<CChannel*>& Get_Channel() { return m_vecChannel; }
+	const vector<_uint>& Get_CurKeyFrame() { return m_vecCurKeyFrame; }
 private:
 	_float			m_fDuration = 0.f; // 총 길이라고 생각하자.
 	_float			m_fTickPerSecond = 0.f; // 재생 속도?
@@ -44,7 +43,6 @@ private:
 	_uint					m_iNumChannel = 0;
 	vector<CChannel*>		m_vecChannel;
 	vector<_uint>			m_vecCurKeyFrame; // 각 채널이 가지는 키프레임. 따로 보관한다.
-	_float					m_iCurFrameIndex = 0;
 
 
 public:

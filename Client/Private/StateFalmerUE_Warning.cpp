@@ -36,7 +36,7 @@ void CStateFalmerUE_Warning::Late_Update()
 	if (dynamic_cast<CMonster*>(m_pMonster)->Get_IsAnimationFin() &&
 		dynamic_cast<CMonster*>(m_pMonster)->Get_CurAnimationName("1hm_aggrowarning1"))
 	{
-		m_pMonsterTransform->Set_Speed(3.f);
+		m_pMonsterTransform->Set_Speed(dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->GetRunSpeed());
 
 		dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->Set_State(CFalmer_UnEquip::FALMERUE_CHASE);
 		dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->Play_Animation(true, "mtrunforward");

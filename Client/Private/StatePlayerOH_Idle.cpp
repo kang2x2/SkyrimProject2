@@ -35,19 +35,19 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	/* 이동 */
-	if (pGameInstance->Get_DIKeyDown('W'))
+	if (pGameInstance->Get_DIKeyPress('W'))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUN_F);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runforward");
 	}
 
-	if (pGameInstance->Get_DIKeyDown('S'))
+	else if (pGameInstance->Get_DIKeyPress('S'))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUN_B);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runbackward");
 	}
 
-	if (pGameInstance->Get_DIKeyDown('A'))
+	else if (pGameInstance->Get_DIKeyPress('A'))
 	{
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
@@ -57,14 +57,11 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 		m_pPlayerTransform->SetLook(vPlayerLook);
 
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUN_L);
-
+		
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runforward");
 	}
 
-	// 애니메이션 체인징 상태 끝났는지 확인하고 상태 전환하는 코드 추가.
-	// 왼, 오 회전상태에서 멈추면 완전히 멈췄다가 정면을 봐야 한다.
-
-	if (pGameInstance->Get_DIKeyDown('D'))
+	else if (pGameInstance->Get_DIKeyPress('D'))
 	{
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
@@ -78,24 +75,25 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_runforward");
 	}
 
-	if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+	else if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_LATTACK);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_attackleft");
 	}
 
-	if (pGameInstance->Get_DIKeyDown('R'))
+	else if (pGameInstance->Get_DIKeyDown('R'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_PlayerEquipState(CPlayer::EQUIP_NONEQUIP);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_PlayerEquipState(CPlayer::EQUIP_UNEQUIP);
 
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_UNEQUIP);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_unequip");
 	}
 
-	//dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_PATTACK);
-	//dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_equip");
-	
-	//1hm_attackpower
+	if (pGameInstance->Get_DIKeyPress(VK_RBUTTON))
+	{
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_BLOCK);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_blockidle");
+	}
 
 	Safe_Release(pGameInstance);
 

@@ -167,6 +167,17 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 
 	m_pVecCollider[FALMERUE_COL_AABB]->Set_OwnerObj(this);
 
+	// 이거 내일 진지하게 다시 생각해보자.
+	/* ATTACK AABB*/
+	AABBDesc.vExtents = _float3(0.f, 0.7f, 0.f);
+	AABBDesc.vCenter = _float3(AABBDesc.vExtents.x - 0.5f, AABBDesc.vExtents.y, 0.f);
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
+		TEXT("Com_Collider_AtkOBB"), (CComponent**)&m_pVecCollider[FALMERUE_COL_ATKAABB], &AABBDesc)))
+		return E_FAIL;
+
+	m_pVecCollider[FALMERUE_COL_ATKAABB]->Set_OwnerObj(this);
+
 	/* DETECTION */
 	CBounding_Sphere::BOUNDING_SPHERE_DESC SphereDesc = {};
 	SphereDesc.fRadius = 6.f;
@@ -179,7 +190,7 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 	m_pVecCollider[FALMERUE_COL_DETECTION]->Set_OwnerObj(this);
 
 	/* MISS DETECTION */
-	SphereDesc.fRadius = 10.f;
+	SphereDesc.fRadius = 9.f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_Sphere"),
@@ -206,6 +217,11 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 
 HRESULT CFalmer_UnEquip::Ready_State()
 {
+	m_fRunSpeed = 2.5f;
+	m_fWalkSpeed = 1.5f;
+	m_iHp = 100;
+	m_iAtk = 10;
+
 	m_pStateManager = CStateManager_FalmerUE::Create(this, m_pTransformCom, m_pNavigationCom, m_pVecCollider);
 
 	return S_OK;

@@ -24,6 +24,7 @@ public:
 	_bool   Get_DIKeyUp(_ubyte byKeyID);
 	_bool   Get_DIKeyPress(_ubyte byKeyID);
 	_byte	Get_DIKeyState(_ubyte byKeyID) { return m_byKeyState[byKeyID]; }
+	
 	_byte	Get_DIMouseState(MOUSEKEYSTATE eMouse) { return m_tMouseState.rgbButtons[eMouse]; }
 	_bool   Get_DIMouseDown(MOUSEKEYSTATE eMouse);
 	_long	Get_DIMouseMove(MOUSEMOVESTATE eMouseState)

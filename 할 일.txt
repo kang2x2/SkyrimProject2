@@ -1,2 +1,2 @@
-chase 상태와 runatk 상태 유심히 살펴보자.
-runatk에서 chase로 갈 때 문제가 있다.
+현재 FalmerUE 클래스에 만들어 둔 Atk용 AABB 수정해야 한다.
+심신 미약 상태로 대충 만들어서 엉망이다. 

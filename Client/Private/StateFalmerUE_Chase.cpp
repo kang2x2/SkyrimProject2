@@ -30,18 +30,18 @@ void CStateFalmerUE_Chase::Update(_float _fTimeDelta)
 	m_pMonsterTransform->LookAt(pTragetTransform->Get_State(CTransform::STATE_POSITION));
 
 	/* 추격 범위를 벗어났을 때 */
-	if (!pGameInstance->Collision_DetectionPlayer(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_MISSDETECTION], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))), _fTimeDelta))
+	if (!pGameInstance->Collision_ColCheck(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_MISSDETECTION], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 	{
 		dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->Set_State(CFalmer_UnEquip::FALMERUE_DETECTION);
 		dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->Play_Animation(false, "idledetection");
 	}
 
 	/* RunPowerAtk 범위에 들어왔을 때 */
-	if (pGameInstance->Collision_DetectionPlayer(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_ATKROUND], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))), _fTimeDelta))
+	if (pGameInstance->Collision_ColCheck(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_ATKROUND], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 	{
-		m_pMonsterTransform->Set_Speed(2.f);
+		m_pMonsterTransform->Set_Speed(dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->Get_FalmerUESpeedDesc().fChargeSpeed);
 
-		dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->Set_State(CFalmer_UnEquip::FALMERUE_RUNATK);
+		dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->Set_State(CFalmer_UnEquip::FALMERUE_CHARGE);
 		dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->Play_Animation(false, "1hm_forwardpowerattack1");
 	}
 

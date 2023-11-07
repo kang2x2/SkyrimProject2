@@ -14,14 +14,20 @@ class CFalmer_UnEquip final : public CMonster
 {
 public:
 	enum FALMERUE_COLTYPE	{ FALMERUE_COL_AABB, 
+		FALMERUE_COL_ATKAABB,
 		FALMERUE_COL_DETECTION, FALMERUE_COL_MISSDETECTION,
 		FALMERUE_COL_ATKROUND, FALMERUE_COL_END };
 	
 	enum FALMERUE_STATE { FALMERUE_SQUAT, FALMERUE_SQUAT_OUTRO, FALMERUE_SQUAT_INTRO,
 		FALMERUE_WARNING, FALMERUE_DETECTION, FALMERUE_RETURN,
 		FALMERUE_CHASE, 
-		FALMERUE_RUNATK,
+		FALMERUE_ATK, FALMERUE_CHARGE,
 		FALMERUE_END };
+
+	typedef struct FalmerUESpeedDesc
+	{
+		_float fChargeSpeed = 3.5f;
+	}FALMERUE_SPEEDDESC;
 
 private:
 	CFalmer_UnEquip(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
@@ -40,6 +46,8 @@ public:
 public:
 	HRESULT Set_State(CFalmer_UnEquip::FALMERUE_STATE _eState);
 
+	FALMERUE_SPEEDDESC   Get_FalmerUESpeedDesc() { return m_tSpeedDesc; }
+
 public:
 	HRESULT Ready_Component(_uint _iLevel);
 	HRESULT Ready_State();
@@ -48,6 +56,8 @@ private:
 	vector<CCollider*> m_pVecCollider;
 	
 	class CStateManager_FalmerUE* m_pStateManager = nullptr;
+
+	FALMERUE_SPEEDDESC				m_tSpeedDesc;
 
 public:
 	static  CFalmer_UnEquip* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

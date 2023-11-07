@@ -71,7 +71,7 @@ void CPlayer_Weapon::Tick(_float _fTimeDelta)
 	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix() * WorldMatrix);
 	dynamic_cast<CTransform*>(m_pWeapon->Get_Component(TEXT("Com_Transform")))->Set_WorldMatrix(XMLoadFloat4x4(&m_matWorld));
 
-	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_NONEQUIP &&
+	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_UNEQUIP &&
 		dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_MAGIC)
 	{
 		m_pColliderCom->Update(XMLoadFloat4x4(&m_matWorld));
@@ -86,7 +86,7 @@ void CPlayer_Weapon::LateTick(_float _fTimeDelta)
 
 	_bool bIsCol = false;
 
-	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_NONEQUIP &&
+	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_UNEQUIP &&
 		dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_MAGIC)
 	{
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -126,7 +126,7 @@ HRESULT CPlayer_Weapon::Render()
 		m_pWeapon->Render();
 
 #ifdef _DEBUG
-	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_NONEQUIP &&
+	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_UNEQUIP &&
 		dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_MAGIC)
 	{
 		m_pColliderCom->Render();

@@ -28,7 +28,8 @@ void CStatePlayerOH_Equip::Update(_float _fTimeDelta)
 
 void CStatePlayerOH_Equip::Late_Update()
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin())
+	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin() && 
+		dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_equip"))
 	{
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
 		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");

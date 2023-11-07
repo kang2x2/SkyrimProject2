@@ -388,7 +388,17 @@ _bool CModel::Get_IsAnimationFin()
 
 _uint CModel::Get_CurFrameIndex()
 {
-	return m_vecAnimation[m_iCurAnimationIndex]->Get_CurFrameIndex();
+	_uint iIdx = 0;
+
+	vector<_uint> vecCurKeyFrame = m_vecAnimation[m_iCurAnimationIndex]->Get_CurKeyFrame();
+
+	for (_uint i = 0; i < vecCurKeyFrame.size(); ++i)
+	{
+		if (iIdx < vecCurKeyFrame[i])
+			iIdx = vecCurKeyFrame[i];
+	}
+
+	return iIdx;
 }
 
 void CModel::Update_VI(const _fmatrix& _matPivot)

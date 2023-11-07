@@ -12,12 +12,12 @@
 #include "Player_Helmet.h"
 
 CPlayer::CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CGameObject(_pDevice, _pContext)
+	: CCreatureObject(_pDevice, _pContext)
 {
 }
 
 CPlayer::CPlayer(const CPlayer& rhs)
-	: CGameObject(rhs)
+	: CCreatureObject(rhs)
 {
 }
 
@@ -40,9 +40,9 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	m_bHasMesh = true;
 	m_bHasPart = true;
 	m_strName = TEXT("Player");
-	m_eEquipState = EQUIP_NONEQUIP;
+	m_eEquipState = EQUIP_UNEQUIP;
 
-	m_pTransformCom->Set_Speed(5.f);
+	m_pTransformCom->Set_Speed(m_fRunSpeed);
 
 	Play_Animation(true, "mt_idle");
 
@@ -227,6 +227,11 @@ HRESULT CPlayer::Ready_Part()
 
 HRESULT CPlayer::Ready_State()
 {
+	m_fRunSpeed = 3.5f;
+	m_fWalkSpeed = 1.5f;
+	m_iHp = 100;
+	m_iAtk = 25;
+
 	m_pStateManager = CStateManager_Player::Create(this, m_pTransformCom, m_pNavigationCom);
 
 	return S_OK;

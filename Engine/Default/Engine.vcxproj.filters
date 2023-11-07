@@ -118,9 +118,6 @@
     <Filter Include="01. Utiltiy\02. Object\00. Manager\Layer">
       <UniqueIdentifier>{21972f58-e11a-4bf9-b37c-810c07e55f82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Utiltiy\02. Object\02. LandObject">
-      <UniqueIdentifier>{588b0ad8-d999-434c-bd1b-4a9a4e6ad467}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Utiltiy\03. Component\07. Collider">
       <UniqueIdentifier>{ddc14793-64c7-4e7c-a7ad-8aac21037878}</UniqueIdentifier>
     </Filter>
@@ -186,6 +183,9 @@
     </Filter>
     <Filter Include="01. Utiltiy\07 .Collison">
       <UniqueIdentifier>{164008c9-aec4-42b8-be94-0ebdb3640ad3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\02. Object\02. CreatureObject">
+      <UniqueIdentifier>{588b0ad8-d999-434c-bd1b-4a9a4e6ad467}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -318,8 +318,8 @@
     <ClInclude Include="..\Bin\ShaderFile\Engine_Shader_Defines.hpp">
       <Filter>98. ShaderFile</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\LandObject.h">
-      <Filter>01. Utiltiy\02. Object\02. LandObject</Filter>
+    <ClInclude Include="..\Public\CreatureObject.h">
+      <Filter>01. Utiltiy\02. Object\02. CreatureObject</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\DebugDraw.h">
       <Filter>01. Utiltiy\03. Component\07. Collider\00. DebugDraw</Filter>
@@ -479,8 +479,8 @@
     <ClCompile Include="..\Private\VIBuffer_Cube.cpp">
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\05. Cube</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\LandObject.cpp">
-      <Filter>01. Utiltiy\02. Object\02. LandObject</Filter>
+    <ClCompile Include="..\Private\CreatureObject.cpp">
+      <Filter>01. Utiltiy\02. Object\02. CreatureObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\DebugDraw.cpp">
       <Filter>01. Utiltiy\03. Component\07. Collider\00. DebugDraw</Filter>

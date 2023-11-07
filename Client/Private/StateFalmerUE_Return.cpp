@@ -21,20 +21,17 @@ void CStateFalmerUE_Return::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	// z ∞Ì¡§.
-
-
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>
 		(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"), TEXT("Player")));
 
 	CTransform* pTragetTransform = dynamic_cast<CTransform*>(pPlayer->Get_Component(TEXT("Com_Transform")));
 
-	// m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
+	m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
 	
-	m_pMonsterTransform->Chase(dynamic_cast<CMonster*>(m_pMonster)->Get_OriginPos(), _fTimeDelta, 1.5f);
+	// m_pMonsterTransform->Chase(dynamic_cast<CMonster*>(m_pMonster)->Get_OriginPos(), _fTimeDelta, 1.5f);
 	m_pMonsterTransform->LookAt(dynamic_cast<CMonster*>(m_pMonster)->Get_OriginPos());
 
-	if (pGameInstance->Collision_DetectionPlayer(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_DETECTION], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))), _fTimeDelta))
+	if (pGameInstance->Collision_ColCheck(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_DETECTION], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 	{
 		dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->Set_State(CFalmer_UnEquip::FALMERUE_WARNING);
 		dynamic_cast<CFalmer_UnEquip*>(m_pMonster)->Play_Animation(false, "1hm_aggrowarning1");

@@ -209,7 +209,7 @@
     <ClInclude Include="..\Public\MyFile_Manager.h" />
     <ClInclude Include="..\Public\Navigation.h" />
     <ClInclude Include="..\Public\Object_Manager.h" />
-    <ClInclude Include="..\Public\LandObject.h" />
+    <ClInclude Include="..\Public\CreatureObject.h" />
     <ClInclude Include="..\Public\PipeLine.h" />
     <ClInclude Include="..\Public\Calculator.h" />
     <ClInclude Include="..\Public\Renderer.h" />
@@ -262,7 +262,7 @@
     <ClCompile Include="..\Private\MyFile_Manager.cpp" />
     <ClCompile Include="..\Private\Navigation.cpp" />
     <ClCompile Include="..\Private\Object_Manager.cpp" />
-    <ClCompile Include="..\Private\LandObject.cpp" />
+    <ClCompile Include="..\Private\CreatureObject.cpp" />
     <ClCompile Include="..\Private\PipeLine.cpp" />
     <ClCompile Include="..\Private\Calculator.cpp" />
     <ClCompile Include="..\Private\Renderer.cpp" />
