@@ -246,8 +246,8 @@ HRESULT CLoader::Loading_For_Level_Logo()
 
 HRESULT CLoader::Loading_For_Level_WhiteRun()
 {
-	if (!g_bIsWhiteRunInit)
-	{
+	//if (!g_bIsWhiteRunInit)
+	//{
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
@@ -279,8 +279,8 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 
 		Safe_Release(pGameInstance);
 
-		g_bIsWhiteRunInit = true;
-	}
+	//	g_bIsWhiteRunInit = true;
+	//}
 
 	/* 로딩 끝 */
 	m_strLoadingText = TEXT("Loading Complete");
@@ -294,10 +294,26 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 
 HRESULT CLoader::Loading_For_Level_Dungeon()
 {
-	if (!g_bIsDungeonInit)
-	{
+	//if (!g_bIsDungeonInit)
+	//{
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
+
+#pragma region 현재 화이트런 스카이박스, 파티클 같이 쓰고 있어서 어쩔 수 없이 추가.
+		/* GameObject */
+		m_strLoadingText = TEXT("Loading ProtoType_GameObject.");
+
+		// Sky
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Sky"),
+			CSky::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+
+		// Particle
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Particle_Rect"),
+			CParticleRect::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+
+#pragma endregion
 
 #pragma region Texture
 		m_strLoadingText = TEXT("Loading Texture.");
@@ -329,11 +345,13 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 
 		Set_ProtoType_DungeonObject();
 #pragma endregion
+		m_strLoadingText = TEXT("Loading Public Data.");
+		Loading_For_Level_Public();
 
 		Safe_Release(pGameInstance);
 
-		g_bIsDungeonInit = true;
-	}
+	//	g_bIsDungeonInit = true;
+	//}
 
 	/* 로딩 끝 */
 	m_strLoadingText = TEXT("Loading Complete");
@@ -350,111 +368,113 @@ HRESULT CLoader::Loading_For_Level_Public()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	if (!g_bIsPublicInit)
+	{
 #pragma region Texture
-	/* Sky */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Texture_Sky"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/SkyBox/Sky_%d.dds"), 4))))
-		return E_FAIL;
+		/* Sky */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Texture_Sky"),
+			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/SkyBox/Sky_%d.dds"), 4))))
+			return E_FAIL;
 
-	/* Snow */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Snow"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Snow/sun.dds"), 1))))
-		return E_FAIL;
+		/* Snow */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Snow"),
+			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Snow/sun.dds"), 1))))
+			return E_FAIL;
 
 #pragma endregion
 
 #pragma region Collider
-	/* For.Prototype_Component_Collider_AABB */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
-		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
-		return E_FAIL;
-	/* For.ProtoType_Component_Collider_OBB */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_OBB"),
-		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB))))
-		return E_FAIL;
-	/* For.ProtoType_Component_Collider_Sphere */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
-		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
-		return E_FAIL;
+		/* For.Prototype_Component_Collider_AABB */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
+			CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
+			return E_FAIL;
+		/* For.ProtoType_Component_Collider_OBB */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_OBB"),
+			CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB))))
+			return E_FAIL;
+		/* For.ProtoType_Component_Collider_Sphere */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
+			CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
+			return E_FAIL;
 
 #pragma endregion
 
 #pragma region Buffer
-	/* VIBuffer_Cube */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_VIBuffer_Cube"),
-		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+		/* VIBuffer_Cube */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_VIBuffer_Cube"),
+			CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
 
-	/* VIBuffer_Rect_Instance */
-	CVIBuffer_Rect_Instance::INSTANCE_DESC InstanceDesc = {};
+		/* VIBuffer_Rect_Instance */
+		CVIBuffer_Rect_Instance::INSTANCE_DESC InstanceDesc = {};
 
-	InstanceDesc.vCenter = _float3(0.f, 0.f, 0.f);
-	InstanceDesc.vRange = _float3(0.1f, 0.f, 0.1f);
-	InstanceDesc.fScaleMin = 0.01f;
-	InstanceDesc.fScaleMax = 0.04f;
-	InstanceDesc.iNumInstance = 20;
-	InstanceDesc.fLifeTimeMin = 0.5f;
-	InstanceDesc.fLifeTimeMax = 2.0f;
-	InstanceDesc.fSpeedMin = 0.1f;
-	InstanceDesc.fSpeedMax = 0.5f;
+		InstanceDesc.vCenter = _float3(0.f, 0.f, 0.f);
+		InstanceDesc.vRange = _float3(0.1f, 0.f, 0.1f);
+		InstanceDesc.fScaleMin = 0.01f;
+		InstanceDesc.fScaleMax = 0.04f;
+		InstanceDesc.iNumInstance = 20;
+		InstanceDesc.fLifeTimeMin = 0.5f;
+		InstanceDesc.fLifeTimeMax = 2.0f;
+		InstanceDesc.fSpeedMin = 0.1f;
+		InstanceDesc.fSpeedMax = 0.5f;
 
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_VIBuffer_Rect_Instance"),
-		CVIBuffer_Rect_Instance::Create(m_pDevice, m_pContext, InstanceDesc))))
-		return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_VIBuffer_Rect_Instance"),
+			CVIBuffer_Rect_Instance::Create(m_pDevice, m_pContext, InstanceDesc))))
+			return E_FAIL;
 
 #pragma endregion 
 
-#pragma region Mesh
-	Set_ProtoType_PublicMesh(LEVEL_GAMEPLAY);
+#pragma region Shader
+		/* Shader */
+		/* Shader_VtxNorTex */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxNorTex"),
+			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
+			return E_FAIL;
+
+		/* Shader_VtxAnimMesh */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
+			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxAnimMesh.hlsl"), VTX_ANIMMESH::Elements, VTX_ANIMMESH::iNumElements))))
+			return E_FAIL;
+
+		/* Shader_VtxNonAnimMesh */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
+			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNonAnimMesh.hlsl"), VTX_NONANIMMESH::Elements, VTX_NONANIMMESH::iNumElements))))
+			return E_FAIL;
+
+		/* Shader_VtxCube */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxCube"),
+			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxCube.hlsl"), VTXCUBE::Elements, VTXCUBE::iNumElements))))
+			return E_FAIL;
+
+		/* Shader_Rect_Instance */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_Rect_Instance"),
+			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Rect_Instance.hlsl"), VTX_RECT_INSTANCE::Elements, VTX_RECT_INSTANCE::iNumElements))))
+			return E_FAIL;
 #pragma endregion
 
-#pragma region Shader
-	/* Shader */
-	/* Shader_VtxNorTex */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxNorTex"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
-		return E_FAIL;
+#pragma region Navigation
+		/* 화이트런 */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_WhiteRun"),
+			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/WhiteRun_Cell")))))
+			return E_FAIL;
 
-	/* Shader_VtxAnimMesh */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxAnimMesh.hlsl"), VTX_ANIMMESH::Elements, VTX_ANIMMESH::iNumElements))))
-		return E_FAIL;
+		/* 던전 */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_Dungeon"),
+			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Dungeon_Cell")))))
+			return E_FAIL;
+#pragma endregion
 
-	/* Shader_VtxNonAnimMesh */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNonAnimMesh.hlsl"), VTX_NONANIMMESH::Elements, VTX_NONANIMMESH::iNumElements))))
-		return E_FAIL;
+		g_bIsPublicInit = true;
+	}
 
-	/* Shader_VtxCube */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxCube"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxCube.hlsl"), VTXCUBE::Elements, VTXCUBE::iNumElements))))
-		return E_FAIL;
-
-	/* Shader_Rect_Instance */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_Rect_Instance"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Rect_Instance.hlsl"), VTX_RECT_INSTANCE::Elements, VTX_RECT_INSTANCE::iNumElements))))
-		return E_FAIL;
-
+#pragma region Mesh
+	Set_ProtoType_PublicMesh(LEVEL_GAMEPLAY);
 #pragma endregion
 
 #pragma region GameObject
 	/* GameObject */
 
 	Set_ProtoType_PublicObject();
-
-#pragma endregion
-
-
-#pragma region Navigation
-	/* 화이트런 */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_WhiteRun"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/WhiteRun_Cell")))))
-		return E_FAIL;
-
-	/* 던전 */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_Dungeon"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Dungeon_Cell")))))
-		return E_FAIL;
 
 #pragma endregion
 

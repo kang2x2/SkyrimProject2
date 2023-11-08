@@ -23,5 +23,6 @@ extern Client::STAGEID g_curStage;
 
 extern bool g_bIsWhiteRunInit;
 extern bool g_bIsDungeonInit;
+extern bool g_bIsPublicInit;
 
 using namespace Client;

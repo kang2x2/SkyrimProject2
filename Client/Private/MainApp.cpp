@@ -14,6 +14,7 @@ HRESULT CMainApp::Initialize()
 {
 	g_bIsWhiteRunInit = false;
 	g_bIsDungeonInit = false;
+	g_bIsPublicInit = false;
 
 	/* 게임 초기화 */
 	// 1. 장치

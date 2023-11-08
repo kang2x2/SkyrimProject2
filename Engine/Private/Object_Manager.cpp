@@ -162,6 +162,13 @@ void CObject_Manager::Clear(_uint _iLevelIndex)
 		Safe_Release(iter.second);
 	}
 	m_mapLayer[_iLevelIndex].clear();
+
+	// 원본 객체 맵 비우기 (원본 정리)
+	for (auto& iter : m_mapProtoTypeObj)
+	{
+		Safe_Release(iter.second);
+	}
+	m_mapProtoTypeObj.clear();
 }
 
 CGameObject* CObject_Manager::Find_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName)
