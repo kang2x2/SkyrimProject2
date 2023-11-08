@@ -24,15 +24,45 @@ public:
 	HRESULT Add_RenderGroup(RENDERGROUP _eGroup, class CGameObject* _pCloneObject);
 	HRESULT Draw_RenderObjects();
 
+#ifdef _DEBUG
+public:
+	HRESULT Add_Debug(class CComponent* _pDebug)
+	{
+		m_ltRenderDebug.push_back(_pDebug);
+		Safe_AddRef(_pDebug);
+		return S_OK;
+	}
+#endif
+
 private:
 	list<class CGameObject*> m_ltRenderObj[RG_END];
+
+	class CTarget_Manager* m_pTarget_Manager	= nullptr;
+	class CLight_Manager* m_pLight_Manager		= nullptr;
+
+	class CVIBuffer_Rect* m_pVIBuffer = nullptr;
+	class CShader* m_pShader = nullptr;
+
+	_float4x4 m_matWorld, m_matView, m_matProj;
+
+#ifdef _DEBUG
+private:
+	list<class CComponent*>				m_ltRenderDebug;
+#endif
 
 private:
 	HRESULT Render_Priority();
 	HRESULT Render_NonLight();
 	HRESULT Render_NonBlend();
+	HRESULT Render_LightAcc();
+	HRESULT Render_Deferred();
 	HRESULT Render_Blend();
 	HRESULT Render_UI();
+
+#ifdef _DEBUG
+private:
+	HRESULT Render_Debug();
+#endif
 
 public:
 	static CRenderer* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

@@ -47,7 +47,7 @@ HRESULT CPlayer_Armor::Initialize_Clone(void* _pArg)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	// m_pArmor = pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Equip"), TEXT("GlassArmor"));
+	// m_pArmor = pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Equip"), TEXT("GlassArmor"));
 
 	Safe_Release(pGameInstance);
 

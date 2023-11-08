@@ -94,6 +94,7 @@ private:
 	class CComponent_Manager*	m_pComponent_Manager = nullptr;
 	class CLight_Manager*		m_pLight_Manager = nullptr;
 	class CCollision_Manager*	m_pCollision_Manager = nullptr;
+	class CTarget_Manager* m_pTarget_Manager = nullptr;
 	class CPipeLine*		    m_pPipeLine = nullptr;
 	class CMyFile_Manager*		m_pMyFile_Manager = nullptr;
 

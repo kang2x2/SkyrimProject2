@@ -1,6 +1,8 @@
 #include "framework.h"
 #include "Level_Dungeon.h"
 
+#include "Level_Loading.h"
+
 #include <filesystem>
 #include <fstream>
 #include <commdlg.h>
@@ -22,6 +24,9 @@ HRESULT CLevel_Dungeon::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Ready_Light()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Equip(TEXT("Layer_Equip"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Sky(TEXT("Layer_Sky"))))
@@ -54,6 +59,19 @@ HRESULT CLevel_Dungeon::LateTick(_float _fTimeDelta)
 {
 	SetWindowText(g_hWnd, TEXT("Current Level : Dungeon"));
 
+	if (GetKeyState(VK_F11) & 0x8000)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		g_curStage = STAGE_WHITERUN;
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
+			return E_FAIL;
+
+		Safe_Release(pGameInstance);
+	}
+
+
 	return S_OK;
 }
 
@@ -63,8 +81,8 @@ void CLevel_Dungeon::AfterRender()
 
 HRESULT CLevel_Dungeon::Ready_Level()
 {
-#pragma region Object
-	wstring filePath = TEXT("../Bin/SaveLoad/Dungeon2");
+#pragma region Static
+	wstring filePath = TEXT("../Bin/SaveLoad/Dungeon1");
 
 	// 파일을 열기 모드로 열기.
 	ifstream fileStream(filePath, ios::binary);
@@ -74,7 +92,7 @@ HRESULT CLevel_Dungeon::Ready_Level()
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
-		pGameInstance->Object_FileLoad(fileStream, LEVEL_DUNGEON);
+		pGameInstance->Object_FileLoad(fileStream, LEVEL_GAMEPLAY);
 
 		Safe_Release(pGameInstance);
 
@@ -85,6 +103,32 @@ HRESULT CLevel_Dungeon::Ready_Level()
 		MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
 		return E_FAIL;
 	}
+#pragma endregion
+
+#pragma region Dynamic
+
+	filePath = TEXT("../Bin/SaveLoad/Dungeon_Monster");
+
+	// 파일을 열기 모드로 열기.
+	ifstream fileStream2(filePath, ios::binary);
+	if (fileStream2.is_open()) {
+		// 파일 내용을 읽기.
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->Object_FileLoad(fileStream2, LEVEL_GAMEPLAY);
+
+		Safe_Release(pGameInstance);
+
+		fileStream2.close();
+		MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
+	}
+	else {
+		MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 	return S_OK;
@@ -127,15 +171,40 @@ HRESULT CLevel_Dungeon::Ready_Light()
 	return S_OK;
 }
 
+HRESULT CLevel_Dungeon::Ready_Layer_Equip(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Weapon_IronSword"))))
+		return E_FAIL;
+
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Boots"))))
+	//	return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Curiass"))))
+		return E_FAIL;
+
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Gauntlet"))))
+	//	return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Helmet"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CLevel_Dungeon::Ready_Layer_Player(const wstring& _strLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
 		return E_FAIL;
 
-	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"),
+	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
 		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
 		->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, 0.f, 3.f, 1.f));
 
@@ -155,7 +224,7 @@ HRESULT CLevel_Dungeon::Ready_Layer_Camera(const wstring& _strLayerTag)
 	CPlayerCamera_Free::FREE_PLAYERCAMERA_DESC FreeCameraDesc;
 	ZeroMemory(&FreeCameraDesc, sizeof FreeCameraDesc);
 
-	FreeCameraDesc.pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"), TEXT("Player")));
+	FreeCameraDesc.pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
 	FreeCameraDesc.fMouseSensitive = 0.2f;
 	FreeCameraDesc.vEye = _float4(0.f, 10.f, -8.f, 1.f);
 	FreeCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
@@ -167,7 +236,7 @@ HRESULT CLevel_Dungeon::Ready_Layer_Camera(const wstring& _strLayerTag)
 	FreeCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
 	FreeCameraDesc.fZoomPerSec = 500.f;
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_FreePlayerCamera"), &FreeCameraDesc)))
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_FreePlayerCamera"), &FreeCameraDesc)))
 		return E_FAIL;
 
 	// 추후 카메라 추가.(전투, 1인칭)
@@ -183,7 +252,7 @@ HRESULT CLevel_Dungeon::Ready_Layer_Navigation_Dungeon(const wstring& _strLayerT
 	CGameInstance* pGameInstace = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstace);
 
-	if (FAILED(pGameInstace->Add_CloneObject(LEVEL_DUNGEON, _strLayerTag, TEXT("ProtoType_GameObject_Navigation_Dungeon"))))
+	if (FAILED(pGameInstace->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Navigation"))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstace);
@@ -196,7 +265,7 @@ HRESULT CLevel_Dungeon::Ready_Layer_Sky(const wstring& _strLayerTag)
 	CGameInstance* pGameInstace = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstace);
 
-	if (FAILED(pGameInstace->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Sky"))))
+	if (FAILED(pGameInstace->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Sky"))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstace);
@@ -209,7 +278,7 @@ HRESULT CLevel_Dungeon::Ready_Layer_Particle(const wstring& _strLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_WHITERUN, _strLayerTag, TEXT("ProtoType_GameObject_Particle_Rect"))))
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Particle_Rect"))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

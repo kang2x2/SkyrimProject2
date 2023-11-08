@@ -28,7 +28,7 @@ public:
 
 private:
 	CRenderer*		 m_pRendererCom = nullptr;
-	CNavigation*	 m_pNavigationCom = nullptr;
+	CNavigation*	 m_pNavigationCom[STAGE_END];
 
 private:
 	HRESULT Ready_Component();

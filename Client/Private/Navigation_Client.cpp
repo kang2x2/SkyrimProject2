@@ -7,6 +7,10 @@
 CNavigation_Client::CNavigation_Client(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CGameObject(_pDevice, _pContext)
 {
+	for (_int i = 0; i < STAGE_END; ++i)
+	{
+		m_pNavigationCom[i] = nullptr;
+	}
 }
 
 CNavigation_Client::CNavigation_Client(const CNavigation_Client& rhs)
@@ -37,7 +41,7 @@ HRESULT CNavigation_Client::Initialize_Clone(_uint _iLevel, const wstring& _strM
 
 void CNavigation_Client::PriorityTick(_float _fTimeDelta)
 {
-	m_pNavigationCom->Update();
+	m_pNavigationCom[g_curStage]->Update();
 }
 
 void CNavigation_Client::Tick(_float _fTimeDelta)
@@ -46,15 +50,14 @@ void CNavigation_Client::Tick(_float _fTimeDelta)
 
 void CNavigation_Client::LateTick(_float _fTimeDelta)
 {
+#ifdef _DEBUG
+	m_pRendererCom->Add_Debug(m_pNavigationCom[g_curStage]);
+#endif
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_BLEND, this);
 }
 
 HRESULT CNavigation_Client::Render()
 {
-#ifdef _DEBUG
-	m_pNavigationCom->Render();
-#endif
-
 	return S_OK;
 }
 
@@ -64,9 +67,14 @@ HRESULT CNavigation_Client::Ready_Component()
 		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Navigation"),
-		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom)))
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_WhiteRun"),
+		TEXT("Com_Navigation_WhiteRun"), (CComponent**)&m_pNavigationCom[STAGE_WHITERUN])))
 			return E_FAIL;
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_Dungeon"),
+		TEXT("Com_Navigation_Dungeon"), (CComponent**)&m_pNavigationCom[STAGE_DUNGEON])))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -102,5 +110,9 @@ void CNavigation_Client::Free()
 	__super::Free();
 
 	Safe_Release(m_pRendererCom);
-	Safe_Release(m_pNavigationCom);
+
+	for (_int i = 0; i < STAGE_END; ++i)
+	{
+		Safe_Release(m_pNavigationCom[i]);
+	}
 }

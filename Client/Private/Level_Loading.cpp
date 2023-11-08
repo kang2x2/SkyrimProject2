@@ -59,11 +59,11 @@ HRESULT CLevel_Loading::LateTick(_float _fTimeDelta)
 			case LEVEL_LOGO:
 				pNewLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
 				break;
-			case LEVEL_WHITERUN:
-				pNewLevel = CLevel_WhiteRun::Create(m_pDevice, m_pContext);
-				break;
-			case LEVEL_DUNGEON:
-				pNewLevel = CLevel_Dungeon::Create(m_pDevice, m_pContext);
+			case LEVEL_GAMEPLAY:
+				if(g_curStage == STAGE_WHITERUN)
+					pNewLevel = CLevel_WhiteRun::Create(m_pDevice, m_pContext);
+				else if(g_curStage == STAGE_DUNGEON)
+					pNewLevel = CLevel_Dungeon::Create(m_pDevice, m_pContext);
 				break;
 			}
 

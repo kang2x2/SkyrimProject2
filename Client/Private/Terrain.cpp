@@ -51,25 +51,25 @@ HRESULT CTerrain::Render()
 HRESULT CTerrain::Ready_Components()
 {
 	// Shader
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Shader_VtxNorTex"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxNorTex"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	// VIBuffer
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_VIBuffer_Terrain"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_VIBuffer_Terrain"),
 		TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
 	// Texture
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Texture_Terrain"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Texture_Terrain"),
 		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom[TEX_DIFFUSE])))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Texture_Terrain_Mask"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Texture_Terrain_Mask"),
 		TEXT("Com_Texture_Mask"), (CComponent**)&m_pTextureCom[TEX_MASK])))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Texture_Terrain_Brush"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Texture_Terrain_Brush"),
 		TEXT("Com_Texture_Brush"), (CComponent**)&m_pTextureCom[TEX_BRUSH])))
 		return E_FAIL;
 

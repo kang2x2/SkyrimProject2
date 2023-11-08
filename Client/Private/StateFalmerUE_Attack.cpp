@@ -22,7 +22,7 @@ void CStateFalmerUE_Attack::Update(_float _fTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>
-		(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"), TEXT("Player")));
+		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
 	CTransform* pTragetTransform = dynamic_cast<CTransform*>(pPlayer->Get_Component(TEXT("Com_Transform")));
 
 	/* 공격 중 서로의 aabb 박스가 충돌하였으면. (피격) */

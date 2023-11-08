@@ -49,7 +49,7 @@ HRESULT CPlayer_Weapon::Initialize_Clone(void* _pArg)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	m_pWeapon = pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Equip"), TEXT("IronSword"));
+	m_pWeapon = pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Equip"), TEXT("IronSword"));
 
 	Safe_Release(pGameInstance);
 
@@ -82,6 +82,13 @@ void CPlayer_Weapon::LateTick(_float _fTimeDelta)
 {
 	m_pWeapon->LateTick(_fTimeDelta);
 
+#ifdef _DEBUG
+	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_UNEQUIP &&
+		dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_MAGIC)
+	{
+		m_pRendererCom->Add_Debug(m_pColliderCom);
+	}
+#endif
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 
 	_bool bIsCol = false;
@@ -92,7 +99,7 @@ void CPlayer_Weapon::LateTick(_float _fTimeDelta)
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
-		map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_WHITERUN);
+		map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_GAMEPLAY);
 
 		for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
 		{
@@ -122,16 +129,8 @@ void CPlayer_Weapon::LateTick(_float _fTimeDelta)
 
 HRESULT CPlayer_Weapon::Render()
 {
-	if (m_pWeapon != nullptr)
-		m_pWeapon->Render();
-
-#ifdef _DEBUG
-	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_UNEQUIP &&
-		dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_MAGIC)
-	{
-		m_pColliderCom->Render();
-	}
-#endif
+	//if (m_pWeapon != nullptr)
+	//	m_pWeapon->Render();
 
 	return S_OK;
 }
@@ -164,7 +163,7 @@ HRESULT CPlayer_Weapon::Ready_Component()
 	OBBDesc.vDegree = _float3(0.f, 0.f, 0.f);
 	OBBDesc.vCenter = _float3(0.f, 0.f, OBBDesc.vExtents.z);
 	
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_OBB"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_OBB"),
 		TEXT("Com_Collider_OBB"), (CComponent**)&m_pColliderCom, &OBBDesc)))
 		return E_FAIL;
 	

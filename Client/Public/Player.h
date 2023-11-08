@@ -85,12 +85,15 @@ public:
 	void			  Set_PlayerEquipState(PLAYER_EQUIPSTATE _eState) { m_eEquipState = _eState; }
 
 	PLAYER_SPEEDDESC   Get_PlayerSpeedDesc() { return m_tSpeedDesc; }
+
+	void			  Set_CurCell();
+
 private:
 	vector<class CGameObject*>		m_vecPlayerPart;
 
 	CRenderer*						m_pRendererCom = nullptr;
 	CTransform*						m_pTransformCom = nullptr;
-	CNavigation*					m_pNavigationCom = nullptr;
+	CNavigation*					m_pNavigationCom[STAGE_END];
 	CCamera*						m_pPlayerCams[CAM_END];
 	class CStateManager_Player*		m_pStateManager = nullptr;
 
@@ -99,6 +102,7 @@ private:
 
 	PLAYER_EQUIPSTATE				m_eEquipState = EQUIP_END;
 	PLAYER_SPEEDDESC				m_tSpeedDesc;
+
 private:
 	HRESULT Ready_Part();
 	HRESULT Ready_Component();

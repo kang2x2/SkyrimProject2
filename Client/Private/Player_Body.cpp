@@ -45,12 +45,15 @@ void CPlayer_Body::Tick(_float _fTimeDelta)
 
 void CPlayer_Body::LateTick(_float _fTimeDelta)
 {
+#ifdef _DEBUG
+	m_pRendererCom->Add_Debug(m_pColliderCom);
+#endif
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_WHITERUN);
+	map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_GAMEPLAY);
 
 	for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
 	{
@@ -93,11 +96,6 @@ HRESULT CPlayer_Body::Render()
 			return E_FAIL;
 	}
 
-#ifdef _DEBUG
-	/* 콜라이더를 그릴 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
-	m_pColliderCom->Render();
-#endif
-
 	return S_OK;
 }
 
@@ -127,11 +125,11 @@ _bool CPlayer_Body::Get_CurAnimationName(string _strAnimationName)
 
 HRESULT CPlayer_Body::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Model_Player_Body"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_Body"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
@@ -148,7 +146,7 @@ HRESULT CPlayer_Body::Ready_Component()
 	AABBDesc.vExtents = _float3(0.3f, 0.7f, 0.3f );
 	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
 		TEXT("Com_Collider_AABB"), (CComponent**)&m_pColliderCom, &AABBDesc)))
 		return E_FAIL;
 
@@ -167,43 +165,11 @@ HRESULT CPlayer_Body::Bind_ShaderResource()
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
 	// 뷰, 투영 행렬과 카메라의 위치를 던져준다.
 	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ViewMatrix", CPipeLine::D3DTS_VIEW)))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ProjMatrix", CPipeLine::D3DTS_PROJ)))
-		return E_FAIL;
-
-	_float4 vCamPosition = pGameInstance->Get_CamPosition_Float4();
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
-		return E_FAIL;
-
-	const LIGHT_DESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	if (pLightDesc == nullptr)
-		return E_FAIL;
-
-	_uint		iPassIndex = 0;
-
-	if (pLightDesc->eLightType == LIGHT_DESC::LIGHT_DIRECTIONAL)
-	{
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &pLightDesc->vLightDir, sizeof(_float4))))
-			return E_FAIL;
-		iPassIndex = 0;
-	}
-	else if (pLightDesc->eLightType == LIGHT_DESC::LIGHT_POINT)
-	{
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightPos", &pLightDesc->vLightPos, sizeof(_float4))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_fLightRange", &pLightDesc->fLightRange, sizeof(_float))))
-			return E_FAIL;
-		iPassIndex = 1;
-	}
-
-	// 나머지 조명 연산에 필요한 데이터를 던져 줌
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

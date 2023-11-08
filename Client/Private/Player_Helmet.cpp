@@ -47,7 +47,7 @@ HRESULT CPlayer_Helmet::Initialize_Clone(void* _pArg)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	m_pHelmet = pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Equip"), TEXT("GlassHelmet"));
+	m_pHelmet = pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Equip"), TEXT("GlassHelmet"));
 
 	Safe_Release(pGameInstance);
 

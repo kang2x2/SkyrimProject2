@@ -14,6 +14,10 @@
 CPlayer::CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CCreatureObject(_pDevice, _pContext)
 {
+	for (_int i = 0; i < STAGE_END; ++i)
+	{
+		m_pNavigationCom[i] = nullptr;
+	}
 }
 
 CPlayer::CPlayer(const CPlayer& rhs)
@@ -37,6 +41,7 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	if (FAILED(Ready_State()))
 		return E_FAIL;
 
+	m_bIsMaintain = true;
 	m_bHasMesh = true;
 	m_bHasPart = true;
 	m_strName = TEXT("Player");
@@ -62,7 +67,7 @@ void CPlayer::Tick(_float _fTimeDelta)
 			iter->Tick(_fTimeDelta);
 	}
 
-	_vector	vPosition = m_pNavigationCom->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	_vector	vPosition = m_pNavigationCom[g_curStage]->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
 	Safe_Release(pGameInstance);
@@ -93,7 +98,7 @@ HRESULT CPlayer::Render()
 	}
 
 #ifdef _DEBUG
-	m_pNavigationCom->Render();
+	m_pNavigationCom[g_curStage]->Render();
 #endif
 
 	return S_OK;
@@ -143,6 +148,11 @@ const _vector CPlayer::Get_PlayerCamLook()
 	return m_pPlayerCams[m_eCurCamMode]->Get_CamLook();
 }
 
+void CPlayer::Set_CurCell()
+{
+	m_pNavigationCom[g_curStage]->Set_CurCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+}
+
 HRESULT CPlayer::Ready_Component()
 {
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Renderer"),
@@ -155,14 +165,17 @@ HRESULT CPlayer::Ready_Component()
 
 	/* Com_Navigation */
 	CNavigation::DESC_NAVIGATION		NavigationDesc;
-	NavigationDesc.iCurIndex = -1;
+	NavigationDesc.iCurIndex = 0;
 	
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Navigation"),
-		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_WhiteRun"),
+		TEXT("Com_Navigation_WhiteRun"), (CComponent**)&m_pNavigationCom[STAGE_WHITERUN], &NavigationDesc)))
 		return E_FAIL;
 
-	m_pNavigationCom->Set_CurCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_Dungeon"),
+		TEXT("Com_Navigation_Dungeon"), (CComponent**)&m_pNavigationCom[STAGE_DUNGEON], &NavigationDesc)))
+		return E_FAIL;
 
+	Set_CurCell();
 
 	return S_OK;
 }
@@ -232,7 +245,7 @@ HRESULT CPlayer::Ready_State()
 	m_iHp = 100;
 	m_iAtk = 25;
 
-	m_pStateManager = CStateManager_Player::Create(this, m_pTransformCom, m_pNavigationCom);
+	m_pStateManager = CStateManager_Player::Create(this, m_pTransformCom, m_pNavigationCom[g_curStage]);
 
 	return S_OK;
 }
@@ -277,8 +290,12 @@ void CPlayer::Free()
 
 	m_vecPlayerPart.clear();
 
-	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pStateManager);
+
+	for (_int i = 0; i < STAGE_END; ++i)
+	{
+		Safe_Release(m_pNavigationCom[i]);
+	}
 }

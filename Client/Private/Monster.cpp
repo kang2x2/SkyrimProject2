@@ -75,43 +75,10 @@ HRESULT CMonster::Bind_ShaderResource()
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	// 뷰, 투영 행렬과 카메라의 위치를 던져준다.
+	// 뷰, 투영 행렬을 던져준다.
 	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ViewMatrix", CPipeLine::D3DTS_VIEW)))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ProjMatrix", CPipeLine::D3DTS_PROJ)))
-		return E_FAIL;
-
-	_float4 vCamPosition = pGameInstance->Get_CamPosition_Float4();
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
-		return E_FAIL;
-
-	const LIGHT_DESC* pLightDesc = pGameInstance->Get_LightDesc(0);
-	if (pLightDesc == nullptr)
-		return E_FAIL;
-
-	_uint		iPassIndex = 0;
-
-	if (pLightDesc->eLightType == LIGHT_DESC::LIGHT_DIRECTIONAL)
-	{
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &pLightDesc->vLightDir, sizeof(_float4))))
-			return E_FAIL;
-		iPassIndex = 0;
-	}
-	else if (pLightDesc->eLightType == LIGHT_DESC::LIGHT_POINT)
-	{
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightPos", &pLightDesc->vLightPos, sizeof(_float4))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_fLightRange", &pLightDesc->fLightRange, sizeof(_float))))
-			return E_FAIL;
-		iPassIndex = 1;
-	}
-
-	// 나머지 조명 연산에 필요한 데이터를 던져 줌
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -149,7 +116,7 @@ _uint CMonster::Get_CurFrameIndex()
 
 HRESULT CMonster::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
@@ -169,7 +136,7 @@ HRESULT CMonster::Ready_Component()
 		CNavigation::DESC_NAVIGATION		NavigationDesc;
 		NavigationDesc.iCurIndex = -1;
 
-		if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Navigation"),
+		if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation"),
 			TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
 			return E_FAIL;
 

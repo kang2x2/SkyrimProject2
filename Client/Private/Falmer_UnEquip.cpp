@@ -60,7 +60,7 @@ void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
-	if (g_curLevel == LEVEL_WHITERUN || g_curLevel == LEVEL_DUNGEON)
+	if (g_curLevel == LEVEL_GAMEPLAY || g_curLevel == LEVEL_GAMEPLAY)
 		m_pStateManager->Update(_fTimeDelta);
 
 	__super::Tick(_fTimeDelta);
@@ -76,18 +76,29 @@ void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 
 void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 {
-	if (g_curLevel == LEVEL_WHITERUN || g_curLevel == LEVEL_DUNGEON)
+	if (g_curLevel == LEVEL_GAMEPLAY || g_curLevel == LEVEL_GAMEPLAY)
 		m_pStateManager->Late_Update();
 
+#ifdef _DEBUG
+
+	for (auto& collider : m_pVecCollider)
+	{
+		/* 콜라이더를 그 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
+		if (collider != nullptr)
+			m_pRendererCom->Add_Debug(collider);
+	}
+
+#endif 
+	
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>
-		(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"), TEXT("Player")));
+		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
 
-	if (g_curLevel == LEVEL_WHITERUN || g_curLevel == LEVEL_DUNGEON)
+	if (g_curLevel == LEVEL_GAMEPLAY)
 	{
 		for (auto& collider : m_pVecCollider)
 			collider->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
@@ -122,17 +133,6 @@ HRESULT CFalmer_UnEquip::Render()
 
 	__super::Render();
 
-#ifdef _DEBUG
-
-	for (auto& collider : m_pVecCollider)
-	{
-		/* 콜라이더를 그 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
-		if (collider != nullptr)
-			collider->Render();
-	}
-
-#endif 
-
 	return S_OK;
 
 }
@@ -161,7 +161,7 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 	AABBDesc.vExtents = _float3(0.5f, 0.7f, 0.5f);
 	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
 		TEXT("Com_Collider_AABB"), (CComponent**)&m_pVecCollider[FALMERUE_COL_AABB], &AABBDesc)))
 		return E_FAIL;
 
@@ -172,7 +172,7 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 	AABBDesc.vExtents = _float3(0.f, 0.7f, 0.f);
 	AABBDesc.vCenter = _float3(AABBDesc.vExtents.x - 0.5f, AABBDesc.vExtents.y, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_AABB"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
 		TEXT("Com_Collider_AtkOBB"), (CComponent**)&m_pVecCollider[FALMERUE_COL_ATKAABB], &AABBDesc)))
 		return E_FAIL;
 
@@ -183,7 +183,7 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 	SphereDesc.fRadius = 6.f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_Sphere"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
 		TEXT("Com_Collider_Detection"), (CComponent**)&m_pVecCollider[FALMERUE_COL_DETECTION], &SphereDesc)))
 		return E_FAIL;
 
@@ -193,7 +193,7 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 	SphereDesc.fRadius = 9.f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_Sphere"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
 		TEXT("Com_Collider_MissDetection"), (CComponent**)&m_pVecCollider[FALMERUE_COL_MISSDETECTION], &SphereDesc)))
 		return E_FAIL;
 
@@ -203,7 +203,7 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 	SphereDesc.fRadius = 2.5f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_WHITERUN, TEXT("ProtoType_Component_Collider_Sphere"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
 		TEXT("Com_Collider_AtkRound"), (CComponent**)&m_pVecCollider[FALMERUE_COL_ATKROUND], &SphereDesc)))
 		return E_FAIL;
 

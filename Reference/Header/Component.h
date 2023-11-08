@@ -15,6 +15,11 @@ public:
 	virtual HRESULT Initialize_ProtoType();
 	virtual HRESULT Initialize_Clone(void* pArg);
 
+#ifdef _DEBUG
+public:
+	virtual HRESULT Render() { return S_OK; }
+#endif
+
 protected:
 	ID3D11Device*				 m_pDevice = nullptr;
 	ID3D11DeviceContext*		 m_pContext = nullptr;

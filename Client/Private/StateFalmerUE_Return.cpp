@@ -22,7 +22,7 @@ void CStateFalmerUE_Return::Update(_float _fTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>
-		(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"), TEXT("Player")));
+		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
 
 	CTransform* pTragetTransform = dynamic_cast<CTransform*>(pPlayer->Get_Component(TEXT("Com_Transform")));
 

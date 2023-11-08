@@ -213,9 +213,11 @@
     <ClInclude Include="..\Public\PipeLine.h" />
     <ClInclude Include="..\Public\Calculator.h" />
     <ClInclude Include="..\Public\Renderer.h" />
+    <ClInclude Include="..\Public\RenderTarget.h" />
     <ClInclude Include="..\Public\Shader.h" />
     <ClInclude Include="..\Public\State_Player.h" />
     <ClInclude Include="..\Public\State_Monster.h" />
+    <ClInclude Include="..\Public\Target_Manager.h" />
     <ClInclude Include="..\Public\Texture.h" />
     <ClInclude Include="..\Public\Timer.h" />
     <ClInclude Include="..\Public\Timer_Manager.h" />
@@ -266,9 +268,11 @@
     <ClCompile Include="..\Private\PipeLine.cpp" />
     <ClCompile Include="..\Private\Calculator.cpp" />
     <ClCompile Include="..\Private\Renderer.cpp" />
+    <ClCompile Include="..\Private\RenderTarget.cpp" />
     <ClCompile Include="..\Private\Shader.cpp" />
     <ClCompile Include="..\Private\State_Player.cpp" />
     <ClCompile Include="..\Private\State_Monster.cpp" />
+    <ClCompile Include="..\Private\Target_Manager.cpp" />
     <ClCompile Include="..\Private\Texture.cpp" />
     <ClCompile Include="..\Private\Timer.cpp" />
     <ClCompile Include="..\Private\Timer_Manager.cpp" />
@@ -287,6 +291,7 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFile\Shader_Cell.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFile\Shader_Deferred.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

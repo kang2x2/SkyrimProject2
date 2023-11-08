@@ -7,6 +7,7 @@
 #include "Object_Manager.h"
 #include "Light_Manager.h"
 #include "Collision_Manager.h"
+#include "Target_Manager.h"
 #include "MyFile_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -21,6 +22,7 @@ CGameInstance::CGameInstance()
 	, m_pObject_Manager(CObject_Manager::GetInstance())
 	, m_pLight_Manager(CLight_Manager::GetInstance())
 	, m_pCollision_Manager(CCollision_Manager::GetInstance())
+	, m_pTarget_Manager(CTarget_Manager::GetInstance())
 	, m_pPipeLine(CPipeLine::GetInstance())
 	, m_pMyFile_Manager(CMyFile_Manager::GetInstance())
 {
@@ -33,6 +35,7 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pObject_Manager);
 	Safe_AddRef(m_pLight_Manager);
 	Safe_AddRef(m_pCollision_Manager);
+	Safe_AddRef(m_pTarget_Manager);
 	Safe_AddRef(m_pPipeLine);
 	Safe_AddRef(m_pMyFile_Manager);
 }
@@ -424,6 +427,7 @@ void CGameInstance::Release_Engine()
 	CGameInstance::GetInstance()->DestroyInstance();
 	CMyFile_Manager::GetInstance()->DestroyInstance();
 	CPipeLine::GetInstance()->DestroyInstance();
+	CTarget_Manager::GetInstance()->DestroyInstance();
 	CCollision_Manager::GetInstance()->DestroyInstance();
 	CLight_Manager::GetInstance()->DestroyInstance();
 	CLevel_Manager::GetInstance()->DestroyInstance();
@@ -446,6 +450,7 @@ void CGameInstance::Free()
 	Safe_Release(m_pCalculator);
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pLight_Manager);
+	Safe_Release(m_pTarget_Manager);
 	Safe_Release(m_pCollision_Manager);
 	Safe_Release(m_pMyFile_Manager);
 }

@@ -22,7 +22,7 @@ void CStateFalmerUE_SquatIntro::Update(_float _fTimeDelta)
 	// Safe_AddRef(pGameInstance);
 	// 
 	// CPlayer* pPlayer = dynamic_cast<CPlayer*>
-	// 	(pGameInstance->Find_CloneObject(LEVEL_WHITERUN, TEXT("Layer_Player"), TEXT("Player")));
+	// 	(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
 	// 
 	// if (pGameInstance->Collision_ColCheck(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_DETECTION], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))), _fTimeDelta))
 	// {

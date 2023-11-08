@@ -44,6 +44,8 @@ public:
 	void			Set_ObjFileDesc(const wstring& _strLayerTag, const wstring& _strProtoObjTag, const wstring& _strProtoModelComTag);
 	FILE_OBJDESC    Get_ObjFileDesc() { return m_tObjFileDesc; }
 
+	_bool  Get_IsMaintain() { return m_bIsMaintain; }
+
 protected:
 	wstring					m_strName = TEXT(""); // 고유한 이름을 가지고 있어야 탐색이 용이 할 것 같다.
 	wstring					m_strModelComTag = TEXT(""); // 자신이 가지고 있는 모델 컴포넌트의 원본 태그
@@ -54,6 +56,8 @@ protected:
 	// 삭제를 위해 고유 인덱스를 주는 것 보단 bool 값으로 현재 선택된 상태를 전달하자.
 	// 같은 이름의 오브젝트가 많을 것이기에.
 	_bool					m_bDead = false;
+	_bool					m_bIsMaintain = false; // 씬 전환되도 지워지지 않을 것들.
+	
 
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pContext = nullptr;

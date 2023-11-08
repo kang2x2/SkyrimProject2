@@ -187,6 +187,12 @@
     <Filter Include="01. Utiltiy\02. Object\02. CreatureObject">
       <UniqueIdentifier>{588b0ad8-d999-434c-bd1b-4a9a4e6ad467}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utiltiy\09. RenderTarget">
+      <UniqueIdentifier>{9af99f61-f5f8-47d8-82b7-a2df231aabbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\09. RenderTarget\00. Manager">
+      <UniqueIdentifier>{765ecbe5-9fe4-4e3f-b2ce-0f8456e4b8d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -360,6 +366,12 @@
     <ClInclude Include="..\Public\Collision_Manager.h">
       <Filter>01. Utiltiy\07 .Collison</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\RenderTarget.h">
+      <Filter>01. Utiltiy\09. RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Target_Manager.h">
+      <Filter>01. Utiltiy\09. RenderTarget\00. Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Graphic_Device.cpp">
@@ -518,10 +530,19 @@
     <ClCompile Include="..\Private\Collision_Manager.cpp">
       <Filter>01. Utiltiy\07 .Collison</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\RenderTarget.cpp">
+      <Filter>01. Utiltiy\09. RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Target_Manager.cpp">
+      <Filter>01. Utiltiy\09. RenderTarget\00. Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFile\Shader_Cell.hlsl">
       <Filter>01. Utiltiy\03. Component\06. Navigation\00. ShaderFile</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFile\Shader_Deferred.hlsl">
+      <Filter>98. ShaderFile</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
