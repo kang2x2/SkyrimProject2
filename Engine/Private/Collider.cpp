@@ -17,12 +17,14 @@ CCollider::CCollider(const CCollider& rhs)
 	, m_pBatch(rhs.m_pBatch)
 	, m_pEffect(rhs.m_pEffect)
 	, m_pInputLayout(rhs.m_pInputLayout)
+	, m_pDSState(rhs.m_pDSState)
 #endif
 	, m_eColliderType(rhs.m_eColliderType)
 
 {
 #ifdef _DEBUG
 	Safe_AddRef(m_pInputLayout);
+	Safe_AddRef(m_pDSState);
 #endif
 }
 
@@ -43,6 +45,16 @@ HRESULT CCollider::Initialize_ProtoType(COLLIDER_TYPE _eType)
 	m_pEffect->GetVertexShaderBytecode(&pShaderByteCode, &iShaderByteCodeLength);
 
 	if (FAILED(m_pDevice->CreateInputLayout(VertexPositionColor::InputElements, VertexPositionColor::InputElementCount, pShaderByteCode, iShaderByteCodeLength, &m_pInputLayout)))
+		return E_FAIL;
+
+	D3D11_DEPTH_STENCIL_DESC	DSStateDesc = {};
+	DSStateDesc.DepthEnable = true;
+	DSStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	DSStateDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+
+	DSStateDesc.StencilEnable = false;
+
+	if (FAILED(m_pDevice->CreateDepthStencilState(&DSStateDesc, &m_pDSState)))
 		return E_FAIL;
 
 #endif
@@ -92,6 +104,8 @@ _bool CCollider::IsCollision(CCollider* _pTragetCollider)
 
 HRESULT CCollider::Render()
 {
+	m_pContext->OMSetDepthStencilState(m_pDSState, 0);
+
 	CPipeLine* pPipeLine = CPipeLine::GetInstance();
 	Safe_AddRef(pPipeLine);
 
@@ -153,7 +167,7 @@ void CCollider::Free()
 	Safe_Release(m_pBounding);
 
 #ifdef _DEBUG
-
+	Safe_Release(m_pDSState);
 	Safe_Release(m_pInputLayout);
 
 	if (!m_isCloned)

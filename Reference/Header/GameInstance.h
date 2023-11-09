@@ -81,6 +81,8 @@ public: /* For. File Manager */
 	HRESULT Object_FileLoad(std::ifstream & _inFile, _uint _iLevelIndex);
 	HRESULT Cell_FileSave(ofstream & _outFile, CNavigation * _pNavigation);
 	HRESULT Cell_FileLoad(ifstream & _inFile, class CNavigation* _pNavigation);
+	HRESULT Light_FileSave(ofstream & _outFile, _uint _iLevelIndex);
+	HRESULT Light_FileLoad(ifstream & _inFile, _uint _iLevelIndex);
 	HRESULT Binary_OutFile(ofstream & _outFile, const char* _strFilePath, CModel::MODEL_TYPE _eType);
 	CBin_AIScene* Binary_InFile(const char* _strFilePath, CModel::MODEL_TYPE _eType);
 

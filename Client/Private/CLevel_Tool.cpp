@@ -59,16 +59,16 @@ HRESULT CLevel_Tool::Ready_Light()
 	LIGHT_DESC LightDesc;
 
 	/* 방향성 광원을 추가. */
-	ZeroMemory(&LightDesc, sizeof LightDesc);
-	LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
-	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
-
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-
-	if (FAILED(pGameInstance->Add_Light(LightDesc)))
-		return E_FAIL;
+	//ZeroMemory(&LightDesc, sizeof LightDesc);
+	//LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
+	//LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
+	//
+	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	//
+	//if (FAILED(pGameInstance->Add_Light(LightDesc)))
+	//	return E_FAIL;
 
 	/* 점 광원 추가 */
 	//ZeroMemory(&LightDesc, sizeof(LightDesc));

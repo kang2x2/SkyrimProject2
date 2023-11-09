@@ -12,8 +12,8 @@
 #include "VIBuffer_Grid.h"
 #include "Terrain_Grid.h"
 
-// 마우스 좌표에서 메뉴바 y높이 제외하기 위함.
-// int iMenuBarHeight = GetSystemMetrics(SM_CYMENU);
+// 현재 선택된 Light Name 저장하기 위한 전역 변수
+string selectedLightName;
 
 CImGui_Tool::CImGui_Tool()
 {
@@ -35,6 +35,8 @@ HRESULT CImGui_Tool::Initialize(ID3D11Device* _pDevice, ID3D11DeviceContext* _pC
 
 	m_pNavigationCom = CNavigation::Create(m_pDevice, m_pContext);
 
+	selectedLightName = m_lightNameAry[TLIGHT_FIRE].c_str();
+
 	return S_OK;
 }
 
@@ -48,6 +50,7 @@ void CImGui_Tool::Frame()
 
 		LayOut_Mouse();
 		LayOut_Main();
+		LayOut_Light();
 		LayOut_ObjSaveLoad();
 		LayOut_CellSaveLoad();
 		LayOut_Navigation();
@@ -125,6 +128,14 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 		}
 #pragma endregion
 
+#pragma region Light
+
+		if (m_bLightCreateMode)
+			Create_Light();
+		if (m_bLightDeleteMode)
+			Delete_Light();
+
+#pragma endregion
 
 #pragma region Navigation
 
@@ -153,6 +164,10 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 			m_bObjCreateMode = false;
 			m_bObjDeleteMode = false;
 			m_bObjSelectMode = false;
+
+			m_bLightCreateMode = false;
+			m_bLightDeleteMode = false;
+
 			m_pSelectObject = nullptr;
 
 			m_bCellCreateMode = false;
@@ -239,6 +254,10 @@ void CImGui_Tool::LayOut_Object_PickMode()
 			m_bObjCreateMode = true;
 			m_bObjDeleteMode = false;
 			m_bObjSelectMode = false;
+
+			m_bLightCreateMode = false;
+			m_bLightDeleteMode = false;
+
 			m_pSelectObject = nullptr;
 
 			m_bCellCreateMode = false;
@@ -249,6 +268,10 @@ void CImGui_Tool::LayOut_Object_PickMode()
 		m_bObjCreateMode = false;
 		m_bObjDeleteMode = true;
 		m_bObjSelectMode = false;
+
+		m_bLightCreateMode = false;
+		m_bLightDeleteMode = false;
+
 		m_pSelectObject = nullptr;
 
 		m_bCellCreateMode = false;
@@ -258,6 +281,9 @@ void CImGui_Tool::LayOut_Object_PickMode()
 		m_bObjCreateMode = false;
 		m_bObjDeleteMode = false;
 		m_bObjSelectMode = true;
+
+		m_bLightCreateMode = false;
+		m_bLightDeleteMode = false;
 
 		m_bCellCreateMode = false;
 	}
@@ -291,6 +317,9 @@ void CImGui_Tool::LayOut_Navigation()
 		m_bObjCreateMode = false;
 		m_bObjDeleteMode = false;
 		m_bObjSelectMode = false;
+
+		m_bLightCreateMode = false;
+		m_bLightDeleteMode = false;
 
 		m_iCellClickIdx = 0;
 	}
@@ -444,6 +473,59 @@ void CImGui_Tool::LayOut_Object_Transform()
 	{
 		Select_Object();
 	}
+
+	ImGui::End();
+}
+
+void CImGui_Tool::LayOut_Light()
+{
+	const char* strLayOutName = "Light Object LayOut";
+
+	// 범위 밖에서만 수행하기 위한 레이아웃 범위 저장.
+	Add_LayOut_Array(strLayOutName, ImGui::GetWindowPos(), ImGui::GetWindowSize());
+
+
+	ImGui::Begin("Light Object LayOut");
+
+	if (ImGui::BeginCombo(" ", selectedLightName.c_str()))
+	{
+		for (size_t i = 0; i < TLIGHT_END; ++i)
+		{
+			_bool isSelected = m_lightNameAry[i] == selectedLightName;
+			if (ImGui::Selectable(m_lightNameAry[i].c_str(), isSelected))
+			{
+				selectedLightName = m_lightNameAry[i].c_str();
+				// 클론 시 사용할 레이어 태그
+				m_strCurLayerTag = TEXT("Layer_LightObject");
+			}
+		}
+
+		ImGui::EndCombo();
+	}
+
+	if (ImGui::Button("Create"))
+	{
+		m_bCellCreateMode = false;
+		m_pSelectObject = nullptr;
+
+		m_bObjCreateMode = false;
+		m_bObjDeleteMode = false;
+		m_bObjSelectMode = false;
+
+		m_bLightCreateMode = true;
+		m_bLightDeleteMode = false;
+
+		m_iCellClickIdx = 0;
+	}
+	if (ImGui::Button("Delete"))
+	{
+		/* 추후 라이트 가져오는 조건 만들어서 가장 나중 라이트 제거하자. */
+		//if (m_pNavigationCom->Get_VecCell().size() > 0)
+		//{
+		//	m_pNavigationCom->Cell_PopBack();
+		//}
+	}
+
 
 	ImGui::End();
 }
@@ -994,6 +1076,36 @@ HRESULT CImGui_Tool::Select_Object()
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+
+HRESULT CImGui_Tool::Create_Light()
+{
+	if (m_bLightCreateMode)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		// 행렬 세팅
+		_matrix matInitialize = XMMatrixIdentity();
+		matInitialize = XMMatrixTranslation(ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
+
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+		std::wstring changTypeName = converter.from_bytes(selectedLightName);
+
+		// clone light
+		if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, m_strCurLayerTag,
+			(TEXT("ProtoType_GameObject_Light_") + changTypeName), &matInitialize)))
+			return E_FAIL;
+
+		Safe_Release(pGameInstance);
+	}
+
+	return S_OK;
+}
+
+HRESULT CImGui_Tool::Delete_Light()
+{
+	return E_NOTIMPL;
 }
 
 void CImGui_Tool::Key_Input(class CTransform* _pTransform)

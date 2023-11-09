@@ -36,7 +36,7 @@ public:
 	{
 		const char* m_strFileName;
 		wstring m_strObjTag;
-		wstring m_strComTag;
+		wstring m_strComTag = TEXT("");
 		_bool	m_bCheck = false;
 	}TOOL_AFTER_FILEDESC;
 
@@ -54,7 +54,7 @@ public:
 
 public:
 	enum SAVE_OBJTYPE { SAVETYPE_STATIC, SAVETYPE_DYNAMIC, SAVETYPE_END };
-
+	enum TOOL_LIGHT_TYPE { TLIGHT_FIRE, TLIGHT_TOWN, TLIGHT_END };
 private:
 	CImGui_Tool();
 	virtual ~CImGui_Tool() = default;
@@ -80,6 +80,9 @@ private:
 	void    LayOut_FBX_List();
 	void    LayOut_Object_Transform();
 
+	// Light Content
+	void	LayOut_Light();
+
 	// FindFile
 	void	FindFolder();
 	void	Ready_FindFBX(TOOL_AFTER_FOLDERDESC _tFileDesc);
@@ -96,6 +99,10 @@ private:
 	HRESULT	Create_Object();
 	HRESULT	Delete_Object();
 	HRESULT	Select_Object();
+
+	// Custom Light
+	HRESULT Create_Light();
+	HRESULT Delete_Light();
 
 	void	Key_Input(class CTransform* _pTransform);
 
@@ -145,6 +152,10 @@ private:
 	// 선택된 오브젝트
 	class CGameObject*   m_pSelectObject = nullptr;
 
+	// Light 생성, 삭제 선택 모드
+	_bool				 m_bLightCreateMode = false;
+	_bool				 m_bLightDeleteMode = false;
+
 	// Object 생성, 삭제, 선택 모드
 	_bool				 m_bObjCreateMode = false;
 	_bool				 m_bObjDeleteMode = false;
@@ -160,6 +171,9 @@ private:
 	TOOL_CELLDESC			 m_CellPoint;
 	CNavigation*			 m_pNavigationCom = nullptr;
 
+
+	// Light
+	string m_lightNameAry[TLIGHT_END] = {"Fire", "Town"};
 
 	// 레이아웃 범위 밖에서만 클라이언트 작업을 수행하기 위함.
 	vector<TOOL_LAYOUTDESC> m_vecLayOut;

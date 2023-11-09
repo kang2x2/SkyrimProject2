@@ -49,6 +49,8 @@ HRESULT CPlayerCamera_Free::Initialize_Clone(void* pArg)
 
 void CPlayerCamera_Free::Tick(_float _fTimeDelta)
 {
+	Mouse_Fix();
+
 	Zoom(_fTimeDelta);
 
 	/* 실시간으로 Player 위치 받아온다. */
@@ -88,6 +90,14 @@ void CPlayerCamera_Free::Tick(_float _fTimeDelta)
 
 void CPlayerCamera_Free::LateTick(_float _fTimeDelta)
 {
+}
+
+void CPlayerCamera_Free::Mouse_Fix()
+{
+	POINT		pt{ g_iWinSizeX >> 1, g_iWinSizeY >> 1 };
+
+	ClientToScreen(g_hWnd, &pt);
+	SetCursorPos(pt.x, pt.y);
 }
 
 void CPlayerCamera_Free::Zoom(_float _fTimeDelta)

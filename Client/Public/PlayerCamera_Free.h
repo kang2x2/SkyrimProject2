@@ -33,6 +33,7 @@ public:
 	virtual void	LateTick(_float _fTimeDelta) override;
 
 public:
+	void Mouse_Fix();
 	void Zoom(_float _fTimeDelta);
 
 private:

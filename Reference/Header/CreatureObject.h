@@ -20,7 +20,6 @@ public:
 	virtual void	LateTick(_float _fTimeDelta);
 	virtual HRESULT Render();
 
-public:
 	_int	GetHp() { return m_iHp; }
 	void	SetHp(_int _iAmount) { m_iHp += _iAmount; }
 

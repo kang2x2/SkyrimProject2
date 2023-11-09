@@ -267,6 +267,7 @@
     <ClInclude Include="..\Public\Weapon_IronSword.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Light_Fire.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -359,6 +360,7 @@
     <ClCompile Include="..\Private\Tool_Camera.cpp" />
     <ClCompile Include="..\Private\Weapon_IronSword.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Light_Fire.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />

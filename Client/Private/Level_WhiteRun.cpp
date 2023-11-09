@@ -51,6 +51,8 @@ HRESULT CLevel_WhiteRun::Initialize()
 	//if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain"))))
 	//	return E_FAIL;
 
+	ShowCursor(false);
+
 	return S_OK;
 }
 
@@ -90,19 +92,10 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 {
 #pragma region Static
 	/* 화이트런 */
-	// wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Skyrim2";
-
-	/* 던전 임시 확인 */
 	wstring filePath = TEXT("../Bin/SaveLoad/Skyrim2");
 
-	// wstring filePath = L"D:\\SkyrimProject\\Client\\Bin\\SaveLoad\\Dungeon2";
-
-
-	// 파일을 열기 모드로 열기.
 	ifstream fileStream(filePath, ios::binary);
 	if (fileStream.is_open()) {
-		// 파일 내용을 읽기.
-
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
@@ -130,16 +123,16 @@ HRESULT CLevel_WhiteRun::Ready_Light()
 	LIGHT_DESC LightDesc;
 
 	/* 방향성 광원을 추가. */
-	ZeroMemory(&LightDesc, sizeof LightDesc);
-	LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
-	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
-	
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-	
-	if (FAILED(pGameInstance->Add_Light(LightDesc)))
-		return E_FAIL;
+	//ZeroMemory(&LightDesc, sizeof LightDesc);
+	//LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
+	//LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
+	//
+	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	//
+	//if (FAILED(pGameInstance->Add_Light(LightDesc)))
+	//	return E_FAIL;
 
 	/* 점 광원 추가 */
 	//ZeroMemory(&LightDesc, sizeof(LightDesc));
@@ -188,6 +181,9 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Player(const wstring& _strLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Light_Fire"))))
+		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
 		return E_FAIL;

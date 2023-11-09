@@ -406,6 +406,22 @@ HRESULT CGameInstance::Cell_FileLoad(ifstream& _inFile, class CNavigation* _pNav
 	return m_pMyFile_Manager->Cell_FileLoad(_inFile, _pNavigation);
 }
 
+HRESULT CGameInstance::Light_FileSave(ofstream& _outFile, _uint _iLevelIndex)
+{
+	if (m_pMyFile_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pMyFile_Manager->Light_FileSave(_outFile, _iLevelIndex);
+}
+
+HRESULT CGameInstance::Light_FileLoad(ifstream& _inFile, _uint _iLevelIndex)
+{
+	if (m_pMyFile_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pMyFile_Manager->Light_FileLoad(_inFile, _iLevelIndex);
+}
+
 HRESULT CGameInstance::Binary_OutFile(ofstream& _outFile, const char* _strFilePath, CModel::MODEL_TYPE _eType)
 {
 	if (m_pMyFile_Manager == nullptr)

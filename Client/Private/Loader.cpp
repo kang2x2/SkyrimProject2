@@ -23,9 +23,12 @@
 
 // Tool Level
 #include "Tool_Camera.h"
-
 #include "Terrain_Grid.h"
 
+/* Light */
+#include "Light_Fire.h"
+
+/* Building & Terrain*/
 #include "SkyrimTerrain.h"
 #include "Building.h"
 #include "StoneWork.h"
@@ -174,6 +177,11 @@ HRESULT CLoader::Loading_For_Level_Tool()
 
 
 #pragma region GameObject
+	// Light
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Light_Fire"),
+		CLight_Fire::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// Camera
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_ToolCamera"),
 		CTool_Camera::Create(m_pDevice, m_pContext))))
@@ -357,7 +365,7 @@ HRESULT CLoader::Loading_For_Level_Public()
 #pragma region Texture
 		/* Sky */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Texture_Sky"),
-			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/SkyBox/Sky_%d.dds"), 4))))
+			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/SkyBox/SkyCube.dds"), 1))))
 			return E_FAIL;
 
 		/* Snow */
@@ -1270,6 +1278,11 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+	// Light
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Light_Fire"),
+		CLight_Fire::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	// Navigation
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Navigation"),

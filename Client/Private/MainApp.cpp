@@ -35,7 +35,7 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 
 	// 레벨 생성
-	if (FAILED(Open_Level(LEVEL_LOGO)))
+	if (FAILED(Open_Level(LEVEL_TOOL)))
 		return E_FAIL;
 
 	return S_OK;
@@ -48,7 +48,7 @@ void CMainApp::Tick(_float _fTimeDelta)
 
 HRESULT CMainApp::Render()
 {
-	m_pGameInstance->Clear_BackBuffer_View(_float4(0.2f, 0.2f, 0.2f, 1.f));
+	m_pGameInstance->Clear_BackBuffer_View(_float4(0.1f, 0.1f, 0.1f, 1.f));
 	m_pGameInstance->Clear_DepthStencil_View();
 
 	// 그리기

@@ -102,7 +102,7 @@ HRESULT CSky::Bind_ShaderResource()
 
 	Safe_Release(pGameInstance);
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 3)))
+	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
 
 	m_pShaderCom->Begin(0);

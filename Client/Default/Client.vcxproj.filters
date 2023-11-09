@@ -364,6 +364,9 @@
     <Filter Include="01. Level\99. Loading\Station">
       <UniqueIdentifier>{230e7205-3ecb-4c02-9584-3a21780c66be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\05. LightObject">
+      <UniqueIdentifier>{1e737ea3-ccc8-414e-abaf-3d45aa75bfda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -645,6 +648,9 @@
     <ClInclude Include="..\Public\StateFalmerUE_Attack.h">
       <Filter>03. State\02. Falmer_UnEquip\01. State\05. Attack\00. Attack</Filter>
     </ClInclude>
+    <ClInclude Include="Light_Fire.h">
+      <Filter>02. GameObject\01. GamePlay\05. LightObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -918,6 +924,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\StateFalmerUE_Attack.cpp">
       <Filter>03. State\02. Falmer_UnEquip\01. State\05. Attack\00. Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Light_Fire.cpp">
+      <Filter>02. GameObject\01. GamePlay\05. LightObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
