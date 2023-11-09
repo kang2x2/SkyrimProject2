@@ -116,9 +116,9 @@ HRESULT CLevel_Dungeon::Ready_Level()
 
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
-
+		
 		pGameInstance->Object_FileLoad(fileStream2, LEVEL_GAMEPLAY);
-
+		
 		Safe_Release(pGameInstance);
 
 		fileStream2.close();

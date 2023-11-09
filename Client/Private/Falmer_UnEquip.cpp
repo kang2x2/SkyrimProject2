@@ -60,7 +60,7 @@ void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
-	if (g_curLevel == LEVEL_GAMEPLAY || g_curLevel == LEVEL_GAMEPLAY)
+	if (g_curLevel == LEVEL_GAMEPLAY)
 		m_pStateManager->Update(_fTimeDelta);
 
 	__super::Tick(_fTimeDelta);
@@ -76,7 +76,7 @@ void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 
 void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 {
-	if (g_curLevel == LEVEL_GAMEPLAY || g_curLevel == LEVEL_GAMEPLAY)
+	if (g_curLevel == LEVEL_GAMEPLAY)
 		m_pStateManager->Late_Update();
 
 #ifdef _DEBUG

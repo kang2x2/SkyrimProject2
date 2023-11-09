@@ -44,6 +44,8 @@ HRESULT CLevel_Manager::Open_Level(_uint _iLevelIndex, CLevel* _pLevel)
 		pGameInstance->Clear(m_iCurLevelIdx);
 
 		Safe_Release(pGameInstance);
+
+		int i = 0;
 	}
 
 	Safe_Release(m_pCurLevel);

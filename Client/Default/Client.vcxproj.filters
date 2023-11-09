@@ -361,6 +361,9 @@
     <Filter Include="03. State\02. Falmer_UnEquip\01. State\05. Attack\01. Charge">
       <UniqueIdentifier>{88ef3c0d-1d46-4336-810b-d6aa6c59b9a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Level\99. Loading\Station">
+      <UniqueIdentifier>{230e7205-3ecb-4c02-9584-3a21780c66be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

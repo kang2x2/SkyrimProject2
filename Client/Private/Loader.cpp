@@ -90,7 +90,7 @@ _int CLoader::Loading()
 		hr = Loading_For_Level_Tool();
 		break;
 	case LEVEL_LOGO:
-		hr = Loading_For_Level_Logo();
+ 		hr = Loading_For_Level_Logo();
 		break;
 	case LEVEL_GAMEPLAY:
 		if(g_curStage == STAGE_WHITERUN)
@@ -246,8 +246,8 @@ HRESULT CLoader::Loading_For_Level_Logo()
 
 HRESULT CLoader::Loading_For_Level_WhiteRun()
 {
-	//if (!g_bIsWhiteRunInit)
-	//{
+	if (!g_bIsWhiteRunInit)
+	{
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
@@ -279,8 +279,8 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 
 		Safe_Release(pGameInstance);
 
-	//	g_bIsWhiteRunInit = true;
-	//}
+		g_bIsWhiteRunInit = true;
+	}
 
 	/* 로딩 끝 */
 	m_strLoadingText = TEXT("Loading Complete");
@@ -294,26 +294,10 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 
 HRESULT CLoader::Loading_For_Level_Dungeon()
 {
-	//if (!g_bIsDungeonInit)
-	//{
+	if (!g_bIsDungeonInit)
+	{
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
-
-#pragma region 현재 화이트런 스카이박스, 파티클 같이 쓰고 있어서 어쩔 수 없이 추가.
-		/* GameObject */
-		m_strLoadingText = TEXT("Loading ProtoType_GameObject.");
-
-		// Sky
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Sky"),
-			CSky::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-
-		// Particle
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Particle_Rect"),
-			CParticleRect::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-
-#pragma endregion
 
 #pragma region Texture
 		m_strLoadingText = TEXT("Loading Texture.");
@@ -350,8 +334,8 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 
 		Safe_Release(pGameInstance);
 
-	//	g_bIsDungeonInit = true;
-	//}
+		g_bIsDungeonInit = true;
+	}
 
 	/* 로딩 끝 */
 	m_strLoadingText = TEXT("Loading Complete");
@@ -464,19 +448,16 @@ HRESULT CLoader::Loading_For_Level_Public()
 			return E_FAIL;
 #pragma endregion
 
-		g_bIsPublicInit = true;
-	}
-
 #pragma region Mesh
-	Set_ProtoType_PublicMesh(LEVEL_GAMEPLAY);
+		Set_ProtoType_PublicMesh(LEVEL_GAMEPLAY);
 #pragma endregion
 
 #pragma region GameObject
-	/* GameObject */
-
-	Set_ProtoType_PublicObject();
-
+		Set_ProtoType_PublicObject();
 #pragma endregion
+
+		g_bIsPublicInit = true;
+	}
 
 	Safe_Release(pGameInstance);
 
