@@ -6,6 +6,8 @@
 #include "PlayerCamera_Free.h"
 #include "StateManager_Player.h"
 
+#include "Player_Weapon.h"
+
 #include "Player_Body.h"
 #include "Player_Weapon.h"
 #include "Player_Armor.h"
@@ -153,6 +155,11 @@ void CPlayer::Set_CurCell()
 	m_pNavigationCom[g_curStage]->Set_CurCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 }
 
+void CPlayer::CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame)
+{
+	dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])->CheckHit_Onehand(_iSourFrame, _iDestFrame);
+}
+
 HRESULT CPlayer::Ready_Component()
 {
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Renderer"),
@@ -174,8 +181,6 @@ HRESULT CPlayer::Ready_Component()
 	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_Dungeon"),
 		TEXT("Com_Navigation_Dungeon"), (CComponent**)&m_pNavigationCom[STAGE_DUNGEON], &NavigationDesc)))
 		return E_FAIL;
-
-	Set_CurCell();
 
 	return S_OK;
 }

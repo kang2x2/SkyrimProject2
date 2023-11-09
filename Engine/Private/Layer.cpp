@@ -62,8 +62,25 @@ void CLayer::LateTick(_float _fTimeDelta)
 	for (auto& iter : m_ltCloneObj)
 	{
 		if (iter != nullptr)
+		{
 			iter->LateTick(_fTimeDelta);
+			if (iter->Get_IsDead())
+				Safe_Release(iter);
+		}
 	}
+
+	//for (auto iter = m_ltCloneObj.begin(); iter != m_ltCloneObj.end(); )
+	//{
+	//	if ((*iter)->Get_IsDead())
+	//	{
+	//		Safe_Release(*iter);
+	//		iter = m_ltCloneObj.erase(iter);
+	//	}
+	//	else
+	//	{
+	//		++iter;
+	//	}
+	//}
 }
 
 CGameObject* CLayer::Find_CloneObject(const wstring& _strName)

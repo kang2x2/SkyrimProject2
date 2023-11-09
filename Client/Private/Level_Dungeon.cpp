@@ -26,19 +26,19 @@ HRESULT CLevel_Dungeon::Initialize()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Navigation_Dungeon(TEXT("Layer_Navigation_Dungeon"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Equip(TEXT("Layer_Equip"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Sky(TEXT("Layer_Sky"))))
-		return E_FAIL;
+	//if (FAILED(Ready_Layer_Sky(TEXT("Layer_Sky"))))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_PlayerCamera"))))
-		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Navigation_Dungeon(TEXT("Layer_Navigation_Dungeon"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Particle(TEXT("Layer_Particle"))))
@@ -139,32 +139,46 @@ HRESULT CLevel_Dungeon::Ready_Light()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	pGameInstance->Light_Clear();
+
 	LIGHT_DESC LightDesc;
 
 	/* 방향성 광원을 추가. */
 	ZeroMemory(&LightDesc, sizeof LightDesc);
 	LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
 	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
-	
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
+	LightDesc.vDiffuse = _float4(0.05f, 0.05f, 0.05f, 1.f);
+	LightDesc.vAmbient = _float4(0.1f, 0.1f, 0.1f, 1.f);
+	LightDesc.vSpecular = _float4(0.2f, 0.2f, 0.2f, 1.f);
 	
 	if (FAILED(pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
 
-	/* 점 광원 추가 */
-	//ZeroMemory(&LightDesc, sizeof(LightDesc));
-	//LightDesc.eLightType = LIGHT_DESC::LIGHT_POINT;
-	//LightDesc.vLightPos = _float4(50.f, 1.f, 50.f, 1.f);
-	//LightDesc.fLightRange = 25.f;
-	//
-	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	//LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-	//
-	//if (FAILED(pGameInstance->Add_Light(LightDesc)))
-	//	return E_FAIL;
+#pragma region Light
+
+	wstring filePath = TEXT("../Bin/SaveLoad/Light_Dungeon");
+	// 파일을 열기 모드로 열기.
+	ifstream fileStream(filePath, ios::binary);
+	if (fileStream.is_open()) {
+		// 파일 내용을 읽기.
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->Light_FileLoad(fileStream, LEVEL_GAMEPLAY);
+
+		Safe_Release(pGameInstance);
+
+		fileStream.close();
+		MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
+	}
+	else {
+		MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
+		return E_FAIL;
+	}
+
+#pragma endregion
 
 	Safe_Release(pGameInstance);
 
@@ -208,6 +222,13 @@ HRESULT CLevel_Dungeon::Ready_Layer_Player(const wstring& _strLayerTag)
 		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
 		->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, 0.f, 3.f, 1.f));
 
+	//dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
+	//	TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
+	//	->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, -4.f, 42.f, 1.f));
+
+	dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
+		TEXT("Player")))->Set_CurCell();
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -249,13 +270,13 @@ HRESULT CLevel_Dungeon::Ready_Layer_Camera(const wstring& _strLayerTag)
 
 HRESULT CLevel_Dungeon::Ready_Layer_Navigation_Dungeon(const wstring& _strLayerTag)
 {
-	CGameInstance* pGameInstace = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstace);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstace->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Navigation"))))
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Navigation"))))
 		return E_FAIL;
 
-	Safe_Release(pGameInstace);
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }

@@ -26,6 +26,7 @@
 #include "Terrain_Grid.h"
 
 /* Light */
+#include "Light_Town.h"
 #include "Light_Fire.h"
 
 /* Building & Terrain*/
@@ -164,9 +165,7 @@ HRESULT CLoader::Loading_For_Level_Tool()
 		return E_FAIL;
 
 	Set_ProtoType_WhiteRunMesh(LEVEL_TOOL);
-
-	/* 일단 화이트런에 통합되어 있음.*/
-	// Set_ProtoType_DungeonMesh(LEVEL_TOOL);
+	Set_ProtoType_DungeonMesh(LEVEL_TOOL);
 
 	_matrix matInitialize = XMMatrixIdentity();
 
@@ -178,10 +177,12 @@ HRESULT CLoader::Loading_For_Level_Tool()
 
 #pragma region GameObject
 	// Light
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Light_Town"),
+		CLight_Town::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Light_Fire"),
 		CLight_Fire::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
 	// Camera
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_ToolCamera"),
 		CTool_Camera::Create(m_pDevice, m_pContext))))
@@ -201,8 +202,7 @@ HRESULT CLoader::Loading_For_Level_Tool()
 
 
 	Set_ProtoType_WhiteObject();
-	/* 일단 화이트런에 통합되어 있음.*/
-	// Set_ProtoType_DungeonObject();
+	Set_ProtoType_DungeonObject();
 
 #pragma endregion
 
@@ -1280,6 +1280,9 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 	Safe_AddRef(pGameInstance);
 
 	// Light
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Light_Town"),
+		CLight_Town::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Light_Fire"),
 		CLight_Fire::Create(m_pDevice, m_pContext))))
 		return E_FAIL;

@@ -8,6 +8,7 @@
 
 #include "Layer.h"
 #include "Player.h"
+#include "Monster.h"
 
 CPlayer_Weapon::CPlayer_Weapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CPart_Base(_pDevice, _pContext)
@@ -145,6 +146,42 @@ void CPlayer_Weapon::Set_SoketBone(CBone* _pBone)
 const char* CPlayer_Weapon::Get_SoketBoneName()
 {
 	return m_pSocketBone->Get_BoneName();
+}
+
+void CPlayer_Weapon::CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame)
+{
+	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//Safe_AddRef(pGameInstance);
+	//
+	//map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_GAMEPLAY);
+	//
+	//for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
+	//{
+	//	list<CGameObject*> ltbjList = Layer->second->Get_ObjList();
+	//
+	//	for (auto obj : ltbjList)
+	//	{
+	//		if (obj->Get_IsCreature())
+	//		{
+	//			/* 공격 중 서로의 aabb 박스가 충돌하였으면. (피격) */
+	//			if (pGameInstance->Collision_ColCheck(m_pColliderCom, dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB")))))
+	//			{
+	//				if (dynamic_cast<CMonster*>(obj)->Get_CurFrameIndex() >= _iSourFrame &&
+	//					dynamic_cast<CMonster*>(obj)->Get_CurFrameIndex() <= _iDestFrame)
+	//				{
+	//					// 데미지 처리.
+	//					dynamic_cast<CCreatureObject*>(obj)->SetHp(-dynamic_cast<CCreatureObject*>(m_pParent)->GetAtk());
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//
+	//
+	//
+	//
+	//
+	//Safe_Release(pGameInstance);
 }
 
 HRESULT CPlayer_Weapon::Ready_Component()

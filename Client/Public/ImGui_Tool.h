@@ -54,7 +54,7 @@ public:
 
 public:
 	enum SAVE_OBJTYPE { SAVETYPE_STATIC, SAVETYPE_DYNAMIC, SAVETYPE_END };
-	enum TOOL_LIGHT_TYPE { TLIGHT_FIRE, TLIGHT_TOWN, TLIGHT_END };
+	enum TOOL_LIGHT_TYPE { TLIGHT_TOWN, TLIGHT_FIRE, TLIGHT_END };
 private:
 	CImGui_Tool();
 	virtual ~CImGui_Tool() = default;
@@ -111,6 +111,8 @@ private:
 	void    ObjFile_Load();
 	void	CellFile_Save();
 	void	CellFile_Load();
+	void	LightFile_Save();
+	void	LightFile_Load();
 
 	// RangeCheck(레이아웃 범위 밖에서만 피킹 가능하도록)
 	void    Add_LayOut_Array(const char* _strName, ImVec2 _LayOutPos, ImVec2 _LayOutSize);
@@ -173,7 +175,7 @@ private:
 
 
 	// Light
-	string m_lightNameAry[TLIGHT_END] = {"Fire", "Town"};
+	string m_lightNameAry[TLIGHT_END] = { "Town", "Fire" };
 
 	// 레이아웃 범위 밖에서만 클라이언트 작업을 수행하기 위함.
 	vector<TOOL_LAYOUTDESC> m_vecLayOut;

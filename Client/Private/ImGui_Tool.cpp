@@ -517,6 +517,9 @@ void CImGui_Tool::LayOut_Light()
 
 		m_iCellClickIdx = 0;
 	}
+
+	ImGui::SameLine();
+
 	if (ImGui::Button("Delete"))
 	{
 		/* 추후 라이트 가져오는 조건 만들어서 가장 나중 라이트 제거하자. */
@@ -524,6 +527,16 @@ void CImGui_Tool::LayOut_Light()
 		//{
 		//	m_pNavigationCom->Cell_PopBack();
 		//}
+	}
+
+	if (ImGui::Button("Save"))
+	{
+		LightFile_Save();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Load"))
+	{
+		LightFile_Load();
 	}
 
 
@@ -928,6 +941,98 @@ void CImGui_Tool::CellFile_Load()
 	SetCurrentDirectory(originalPath);
 }
 
+void CImGui_Tool::LightFile_Save()
+{
+	TCHAR originalPath[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, originalPath);
+
+	OPENFILENAME OFN;
+	TCHAR filePathName[MAX_PATH] = L"";
+	TCHAR lpstrFile[MAX_PATH] = L"";
+	static TCHAR filter[] = L"텍스트 파일 (*.txt)\0*.txt\0모든 파일 (*.*)\0*.*\0";
+
+	memset(&OFN, 0, sizeof(OPENFILENAME));
+	OFN.lStructSize = sizeof(OPENFILENAME);
+	OFN.hwndOwner = g_hWnd;
+	OFN.lpstrFilter = filter;
+	OFN.lpstrFile = lpstrFile;
+	OFN.nMaxFile = MAX_PATH;
+	OFN.lpstrInitialDir = L"../Bin/SaveLoad/";;
+	OFN.Flags = OFN_OVERWRITEPROMPT; // 덮어쓰기 여부를 묻는 대화 상자를 표시
+
+	if (GetSaveFileName(&OFN) != 0) {
+		wsprintf(filePathName, L"%s 파일을 저장하겠습니까?", OFN.lpstrFile);
+		MessageBox(g_hWnd, filePathName, L"저장 선택", MB_OK);
+
+		wstring filePath = OFN.lpstrFile;
+
+		ofstream fileStream(filePath, ios::binary);
+		if (fileStream.is_open()) {
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			pGameInstance->Light_FileSave(fileStream, LEVEL_TOOL);
+
+			Safe_Release(pGameInstance);
+
+			fileStream.close();
+			MessageBox(g_hWnd, L"파일이 성공적으로 저장되었습니다.", L"저장 완료", MB_OK);
+		}
+		else {
+			MessageBox(g_hWnd, L"파일을 저장하는 중 오류가 발생했습니다.", L"저장 오류", MB_OK | MB_ICONERROR);
+		}
+	}
+
+	SetCurrentDirectory(originalPath);
+}
+void CImGui_Tool::LightFile_Load()
+{
+	TCHAR originalPath[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, originalPath);
+
+	OPENFILENAME OFN;
+	TCHAR filePathName[100] = L"";
+	TCHAR lpstrFile[100] = L"";
+	static TCHAR filter[] = L"모든 파일\0*.*\0텍스트 파일\0*.txt\0fbx 파일\0*.fbx";
+
+	memset(&OFN, 0, sizeof(OPENFILENAME));
+	OFN.lStructSize = sizeof(OPENFILENAME);
+	OFN.hwndOwner = g_hWnd;
+	OFN.lpstrFilter = filter;
+	OFN.lpstrFile = lpstrFile;
+	OFN.nMaxFile = 100;
+	OFN.lpstrInitialDir = L"../Bin/SaveLoad/";
+
+	if (GetOpenFileName(&OFN) != 0) {
+		wsprintf(filePathName, L"%s 파일을 열겠습니까?", OFN.lpstrFile);
+		MessageBox(g_hWnd, filePathName, L"열기 선택", MB_OK);
+
+		wstring filePath = OFN.lpstrFile;
+
+		// 파일을 열기 모드로 열기.
+		ifstream fileStream(filePath, ios::binary);
+		if (fileStream.is_open()) {
+			// 파일 내용을 읽기.
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			pGameInstance->Light_FileLoad(fileStream, LEVEL_TOOL);
+
+			Safe_Release(pGameInstance);
+
+			fileStream.close();
+			MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
+		}
+		else {
+			MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
+		}
+	}
+
+	SetCurrentDirectory(originalPath);
+
+}
+
 void CImGui_Tool::Add_LayOut_Array(const char* _strName, ImVec2 _LayOutPos, ImVec2 _LayOutSize)
 {
 	_bool m_bDupliName = false;
@@ -1089,8 +1194,8 @@ HRESULT CImGui_Tool::Create_Light()
 		_matrix matInitialize = XMMatrixIdentity();
 		matInitialize = XMMatrixTranslation(ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
 
-		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-		std::wstring changTypeName = converter.from_bytes(selectedLightName);
+		wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+		wstring changTypeName = converter.from_bytes(selectedLightName);
 
 		// clone light
 		if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, m_strCurLayerTag,
@@ -1102,10 +1207,9 @@ HRESULT CImGui_Tool::Create_Light()
 
 	return S_OK;
 }
-
 HRESULT CImGui_Tool::Delete_Light()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 void CImGui_Tool::Key_Input(class CTransform* _pTransform)

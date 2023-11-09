@@ -18,6 +18,8 @@ HRESULT CStatePlayerOH_LAttack::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayerOH_LAttack::Update(_float _fTimeDelta)
 {
+	dynamic_cast<CPlayer*>(m_pPlayer)->CheckHit_Onehand(13, 15);
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 

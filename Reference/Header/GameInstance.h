@@ -61,6 +61,7 @@ public: /* For.Component_Manager */
 public: /* For.Light_Manager */
 	const LIGHT_DESC* Get_LightDesc(_uint _iLightIndex);
 	HRESULT Add_Light(const LIGHT_DESC & _LightDesc);
+	void Light_Clear();
 
 public: /* For. PipeLine */
 	HRESULT Bind_TransformToShader(class CShader* _pShader, const char* _pConstantName, CPipeLine::TRANSFORMSTATE _eState);

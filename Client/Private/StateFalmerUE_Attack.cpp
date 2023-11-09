@@ -26,7 +26,7 @@ void CStateFalmerUE_Attack::Update(_float _fTimeDelta)
 	CTransform* pTragetTransform = dynamic_cast<CTransform*>(pPlayer->Get_Component(TEXT("Com_Transform")));
 
 	/* 공격 중 서로의 aabb 박스가 충돌하였으면. (피격) */
-	if (pGameInstance->Collision_ColCheck(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_ATKAABB], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+	if (pGameInstance->Collision_ColCheck(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_ATKOBB], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 	{
 		if (dynamic_cast<CMonster*>(m_pMonster)->Get_CurFrameIndex() >= 12 &&
 			dynamic_cast<CMonster*>(m_pMonster)->Get_CurFrameIndex() <= 20)

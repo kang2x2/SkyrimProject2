@@ -53,6 +53,7 @@ HRESULT CObject_Manager::Add_CloneObject(_uint _iLevelIndex, const wstring& _str
 		pLayer = CLayer::Create();
 
 		// 레이어에 오브젝트 추가
+		pCloneObject->Set_ObjFileDesc(_strLayerTag, _strProtoTypeTag);
 		pLayer->Add_CloneObject(pCloneObject);
 
 		// 레이어를 새로운 레이어로 해당 레벨의 map에 추가.
@@ -60,6 +61,7 @@ HRESULT CObject_Manager::Add_CloneObject(_uint _iLevelIndex, const wstring& _str
 	}
 	else
 	{
+		pCloneObject->Set_ObjFileDesc(_strLayerTag, _strProtoTypeTag);
 		pLayer->Add_CloneObject(pCloneObject);
 	}
 
@@ -151,7 +153,9 @@ void CObject_Manager::LateTick(_float _fTimeDelta)
 	for (size_t i = 0; i < m_iLevelNum; ++i)
 	{
 		for (auto& iter : m_mapLayer[i])
+		{
 			iter.second->LateTick(_fTimeDelta);
+		}
 	}
 }
 

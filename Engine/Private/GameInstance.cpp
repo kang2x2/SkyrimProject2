@@ -318,6 +318,11 @@ HRESULT CGameInstance::Add_Light(const LIGHT_DESC& _LightDesc)
 	return m_pLight_Manager->Add_Light(_LightDesc);
 }
 
+void CGameInstance::Light_Clear()
+{
+	m_pLight_Manager->Light_Clear();
+}
+
 /* PipeLine */
 HRESULT CGameInstance::Bind_TransformToShader(CShader* _pShader, const char* _pConstantName, CPipeLine::TRANSFORMSTATE _eState)
 {

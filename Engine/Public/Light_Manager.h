@@ -17,6 +17,8 @@ public:
 	HRESULT Add_Light(const LIGHT_DESC& _LightDesc);
 	HRESULT Render(class CShader* _pShader, class CVIBuffer_Rect* _pBuffer);
 
+	void Light_Clear();
+
 private:
 	list<class CLight*> m_ltLight;
 

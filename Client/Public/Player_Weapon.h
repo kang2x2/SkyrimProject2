@@ -41,6 +41,9 @@ public:
 	const char* Get_SoketBoneName();
 
 public:
+	void		CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);
+
+public:
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResources();
 

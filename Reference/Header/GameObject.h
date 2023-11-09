@@ -41,7 +41,7 @@ public:
 	void  Set_IsDead(_bool _bDead) { m_bDead = _bDead; } // 삭제 여부를 설정한다.
 
 	// 오브젝트 자신의 파일 관련 구조체 Get, Set
-	void			Set_ObjFileDesc(const wstring& _strLayerTag, const wstring& _strProtoObjTag, const wstring& _strProtoModelComTag);
+	void			Set_ObjFileDesc(const wstring& _strLayerTag, const wstring& _strProtoObjTag, const wstring& _strProtoModelComTag = TEXT(""));
 	FILE_OBJDESC    Get_ObjFileDesc() { return m_tObjFileDesc; }
 
 	_bool  Get_IsMaintain() { return m_bIsMaintain; }

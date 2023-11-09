@@ -42,6 +42,14 @@ HRESULT CLight_Manager::Render(CShader* _pShader, CVIBuffer_Rect* _pBuffer)
 	return S_OK;
 }
 
+void CLight_Manager::Light_Clear()
+{
+	for (auto& iter : m_ltLight)
+		Safe_Release(iter);
+
+	m_ltLight.clear();
+}
+
 void CLight_Manager::Free()
 {
 	__super::Free();

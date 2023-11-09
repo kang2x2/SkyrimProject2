@@ -45,13 +45,13 @@ void CMonster::Tick(_float _fTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 
-	_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
-
 	Safe_Release(pGameInstance);
 }
 
 void CMonster::LateTick(_float _fTimeDelta)
 {
+	if (m_iHp <= 0)
+		m_bDead = true;
 }
 
 HRESULT CMonster::Render()

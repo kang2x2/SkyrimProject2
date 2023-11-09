@@ -88,6 +88,9 @@ public:
 
 	void			  Set_CurCell();
 
+	void			  CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);
+
+
 private:
 	vector<class CGameObject*>		m_vecPlayerPart;
 

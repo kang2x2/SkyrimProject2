@@ -79,11 +79,11 @@ HRESULT CLight_Fire::Ready_Light()
 	ZeroMemory(&LightDesc, sizeof(LightDesc));
 	LightDesc.eLightType = LIGHT_DESC::LIGHT_POINT;
 	LightDesc.vLightPos = _float4(1.f, -1.3f, 12.f, 1.f);
-	LightDesc.fLightRange = 25.f;
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 0.7f, 1.f);
+	LightDesc.fLightRange = 50.f;
+	LightDesc.vDiffuse = _float4(1.f, 0.4f, 0.f, 1.f);
 	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-	
+
 	XMStoreFloat4(&LightDesc.vLightPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
 	if (FAILED(pGameInstance->Add_Light(LightDesc)))

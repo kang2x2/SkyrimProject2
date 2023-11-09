@@ -5,7 +5,9 @@
 
 #include "StateManager_FalmerUE.h"
 
+#include "Bone.h"
 #include "Player.h"
+
 
 CFalmer_UnEquip::CFalmer_UnEquip(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CMonster(_pDevice, _pContext)
@@ -49,6 +51,8 @@ HRESULT CFalmer_UnEquip::Initialize_Clone(_uint _iLevel, const wstring& _strMode
 	if (FAILED(Ready_State()))
 		return E_FAIL;
 
+	m_pAtkBone = m_pModelCom->Get_BonePtr("WEAPON");
+
 	return S_OK;
 }
 
@@ -67,10 +71,24 @@ void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 
 	_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
 
-	for (auto& collider : m_pVecCollider)
+	/* 내 행렬 * (소캣 뼈의 컴바인드 행렬 * 소캣의 행렬 * 페어런트의 월드 행렬) */
+	_float4x4 matSocketCombined = m_pAtkBone->Get_CombinedTransformationMatrix();
+	_matrix	matAtkBone = XMLoadFloat4x4(&matSocketCombined) * matWorld;
+
+	matAtkBone.r[0] = XMVector3Normalize(matAtkBone.r[0]);
+	matAtkBone.r[1] = XMVector3Normalize(matAtkBone.r[1]);
+	matAtkBone.r[2] = XMVector3Normalize(matAtkBone.r[2]);
+
+	for (size_t i = 0; i < FALMERUE_COL_END; ++i)
 	{
-		if(collider != nullptr)
-			collider->Update(matWorld);
+		if (m_pVecCollider[i] != nullptr)
+		{
+			if (i == FALMERUE_COL_ATKOBB)
+				m_pVecCollider[i]->Update(matAtkBone * matWorld);
+			else
+				m_pVecCollider[i]->Update(matWorld);
+		}
+
 	}
 }
 
@@ -168,15 +186,17 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 	m_pVecCollider[FALMERUE_COL_AABB]->Set_OwnerObj(this);
 
 	// 이거 내일 진지하게 다시 생각해보자.
-	/* ATTACK AABB*/
-	AABBDesc.vExtents = _float3(0.f, 0.7f, 0.f);
-	AABBDesc.vCenter = _float3(AABBDesc.vExtents.x - 0.5f, AABBDesc.vExtents.y, 0.f);
+	/* ATTACK OBB*/
+	CBounding_OBB::BOUNDING_OBB_DESC OBBDesc = {};
+
+	OBBDesc.vExtents = _float3(0.1f, 0.1f, 0.1f);
+	OBBDesc.vCenter = _float3(OBBDesc.vExtents.x, OBBDesc.vExtents.y, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
-		TEXT("Com_Collider_AtkOBB"), (CComponent**)&m_pVecCollider[FALMERUE_COL_ATKAABB], &AABBDesc)))
+		TEXT("Com_Collider_AtkOBB"), (CComponent**)&m_pVecCollider[FALMERUE_COL_ATKOBB], &OBBDesc)))
 		return E_FAIL;
 
-	m_pVecCollider[FALMERUE_COL_ATKAABB]->Set_OwnerObj(this);
+	m_pVecCollider[FALMERUE_COL_ATKOBB]->Set_OwnerObj(this);
 
 	/* DETECTION */
 	CBounding_Sphere::BOUNDING_SPHERE_DESC SphereDesc = {};

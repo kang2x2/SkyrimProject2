@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 
 #include "Player.h"
+#include "Player_Weapon.h"
 
 CStatePlayerOH_RAttack::CStatePlayerOH_RAttack()
 {
@@ -18,8 +19,18 @@ HRESULT CStatePlayerOH_RAttack::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayerOH_RAttack::Update(_float _fTimeDelta)
 {
+	dynamic_cast<CPlayer*>(m_pPlayer)->CheckHit_Onehand(14, 16);
+	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurFrameIndex() >= 22 &&
+		!dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_attackleft") &&
+		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+	{
+		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_LATTACK);
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_attackleft");
+	}
 
 	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurFrameIndex() >= 22 &&
 		!dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_attackleft") &&

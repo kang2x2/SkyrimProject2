@@ -14,7 +14,7 @@ class CFalmer_UnEquip final : public CMonster
 {
 public:
 	enum FALMERUE_COLTYPE	{ FALMERUE_COL_AABB, 
-		FALMERUE_COL_ATKAABB,
+		FALMERUE_COL_ATKOBB,
 		FALMERUE_COL_DETECTION, FALMERUE_COL_MISSDETECTION,
 		FALMERUE_COL_ATKROUND, FALMERUE_COL_END };
 	
@@ -58,6 +58,8 @@ private:
 	class CStateManager_FalmerUE* m_pStateManager = nullptr;
 
 	FALMERUE_SPEEDDESC				m_tSpeedDesc;
+
+	CBone* 					m_pAtkBone = nullptr;
 
 public:
 	static  CFalmer_UnEquip* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

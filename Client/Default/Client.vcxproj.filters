@@ -367,6 +367,12 @@
     <Filter Include="02. GameObject\01. GamePlay\05. LightObject">
       <UniqueIdentifier>{1e737ea3-ccc8-414e-abaf-3d45aa75bfda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\05. LightObject\00. Town">
+      <UniqueIdentifier>{6104ddaa-8373-4d48-ad46-dbe2e1812b6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\05. LightObject\01. Fire">
+      <UniqueIdentifier>{a4ce310a-ddde-4056-878d-4e4a53b3a5be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -648,8 +654,11 @@
     <ClInclude Include="..\Public\StateFalmerUE_Attack.h">
       <Filter>03. State\02. Falmer_UnEquip\01. State\05. Attack\00. Attack</Filter>
     </ClInclude>
-    <ClInclude Include="Light_Fire.h">
-      <Filter>02. GameObject\01. GamePlay\05. LightObject</Filter>
+    <ClInclude Include="..\Public\Light_Fire.h">
+      <Filter>02. GameObject\01. GamePlay\05. LightObject\01. Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Light_Town.h">
+      <Filter>02. GameObject\01. GamePlay\05. LightObject\00. Town</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -925,8 +934,11 @@
     <ClCompile Include="..\Private\StateFalmerUE_Attack.cpp">
       <Filter>03. State\02. Falmer_UnEquip\01. State\05. Attack\00. Attack</Filter>
     </ClCompile>
-    <ClCompile Include="Light_Fire.cpp">
-      <Filter>02. GameObject\01. GamePlay\05. LightObject</Filter>
+    <ClCompile Include="..\Private\Light_Fire.cpp">
+      <Filter>02. GameObject\01. GamePlay\05. LightObject\01. Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Light_Town.cpp">
+      <Filter>02. GameObject\01. GamePlay\05. LightObject\00. Town</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
