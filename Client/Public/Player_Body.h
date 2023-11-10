@@ -42,7 +42,9 @@ private:
 	HRESULT Bind_ShaderResource();
 
 private:
-	CCollider* m_pColliderCom = nullptr;
+	CCollider*  m_pColliderCom = nullptr;
+	CModel*		m_p3stModelCom = nullptr;
+	CModel*		m_p1stModelCom = nullptr;
 
 public:
 	static CPlayer_Body* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

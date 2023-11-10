@@ -126,8 +126,14 @@ _bool CPlayer_Body::Get_CurAnimationName(string _strAnimationName)
 HRESULT CPlayer_Body::Ready_Component()
 {
 	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_Body"),
-		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+		TEXT("Com_3stModel"), (CComponent**)&m_p3stModelCom)))
 		return E_FAIL;
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_1stBody"),
+		TEXT("Com_1stModel"), (CComponent**)&m_p1stModelCom)))
+		return E_FAIL;
+
+	m_pModelCom = m_p3stModelCom;
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
@@ -213,4 +219,11 @@ void CPlayer_Body::Free()
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTransformCom);
+
+	// 지울 때 누수나 에러 나는지 확인.
+	if(m_p1stModelCom != nullptr)
+		Safe_Release(m_p1stModelCom);
+	if (m_p3stModelCom != nullptr)
+		Safe_Release(m_p3stModelCom);
+
 }

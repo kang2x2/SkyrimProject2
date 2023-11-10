@@ -169,9 +169,15 @@ HRESULT CLoader::Loading_For_Level_Tool()
 
 	_matrix matInitialize = XMMatrixIdentity();
 
+	//3stPlayer
 	matInitialize = XMMatrixScaling(0.0013f, 0.0013f, 0.0013f);
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Model_Player_Body"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Player/Player_1Hand_Stand.bin", matInitialize, CModel::TYPE_ANIM))))
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Player/Player.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+
+	//1stPlayer
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Model_Player_Body"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_1stPlayer/1stPlayer.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
 
@@ -484,7 +490,11 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 	//  * XMMatrixTranslation(1.f, -1.3f, 12.f)
 	matInitialize = XMMatrixScaling(0.0013f, 0.0013f, 0.0013f);
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_Body"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Player/Player_1Hand_Stand.bin", matInitialize, CModel::TYPE_ANIM))))
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Player/Player.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_1stBody"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_1stPlayer/1stPlayer.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
 	/* Item */
