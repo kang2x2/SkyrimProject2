@@ -3,7 +3,7 @@
 
 #include "GameInstance.h"
 
-#include "PlayerCamera_Free.h"
+#include "PlayerCamera.h"
 #include "StateManager_Player.h"
 
 #include "Player_Weapon.h"
@@ -136,8 +136,22 @@ void CPlayer::Play_Animation(_bool _bIsLoop, string _strAnimationName)
 void CPlayer::Set_SoketBone(const char* _pBoneName)
 {
 	dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])
-		->Set_SoketBone(dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])
+		->Set_SoketBone(dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])
 			->Get_SocketBonePtr(_pBoneName));
+}
+
+void CPlayer::Set_PlayerCam(CCamera* _pCam, PLAYERCAMERA _eCamType)
+{
+	/* 카메라 변경 */
+	m_pPlayerCams[_eCamType] = _pCam;
+	m_eCurCamMode = _eCamType;
+	/* 바디 모델 변경 */
+	dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_BodyType(_eCamType);
+	
+	/* 피벗 재 설정. */
+	dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])->Set_PivotMatrix
+	(dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix());
+	
 }
 
 //void CPlayer::Set_CamLook(const _vector& _vPlayerLook)
@@ -207,8 +221,8 @@ HRESULT CPlayer::Ready_Part()
 	CPlayer_Weapon::WEAPON_DESC WeaponPartDesc;
 	WeaponPartDesc.pParent = this;
 	WeaponPartDesc.pParentTransform = m_pTransformCom;
-	WeaponPartDesc.pSocketBone = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("WeaponSword");
-	WeaponPartDesc.matSocketPivot = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
+	WeaponPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("WeaponSword");
+	WeaponPartDesc.matSocketPivot = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
 
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Weapon"), &WeaponPartDesc);
 	if (pPart == nullptr)
@@ -219,8 +233,8 @@ HRESULT CPlayer::Ready_Part()
 	CPlayer_Armor::ARMOR_DESC ArmorPartDesc;
 	ArmorPartDesc.pParent = this;
 	ArmorPartDesc.pParentTransform = m_pTransformCom; //NPC Spine [Spn0]
-	ArmorPartDesc.pSocketBone = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Spine [Spn0]");
-	ArmorPartDesc.matSocketPivot = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
+	ArmorPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Spine [Spn0]");
+	ArmorPartDesc.matSocketPivot = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
 	
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Armor"), &ArmorPartDesc);
 	if (pPart == nullptr)
@@ -230,8 +244,8 @@ HRESULT CPlayer::Ready_Part()
 	CPlayer_Helmet::HELMET_DESC HelmetPartDesc;
 	HelmetPartDesc.pParent = this;
 	HelmetPartDesc.pParentTransform = m_pTransformCom; //NPC Spine [Spn0]
-	HelmetPartDesc.pSocketBone = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Spine [Spn0]");
-	HelmetPartDesc.matSocketPivot = dynamic_cast<CPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
+	HelmetPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Spine [Spn0]");
+	HelmetPartDesc.matSocketPivot = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
 	
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Helmet"), &HelmetPartDesc);
 	if (pPart == nullptr)

@@ -10,7 +10,7 @@
 #include "IMGui_Manager.h"
 #include "GameInstance.h"
 
-#include "PlayerCamera_Free.h"
+#include "PlayerCamera.h"
 #include "Player.h"
 
 
@@ -50,8 +50,6 @@ HRESULT CLevel_WhiteRun::Initialize()
 
 	//if (FAILED(Ready_Layer_Terrain(TEXT("Layer_Terrain"))))
 	//	return E_FAIL;
-
-	ShowCursor(false);
 
 	return S_OK;
 }
@@ -219,22 +217,22 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Camera(const wstring& _strLayerTag)
 	Safe_AddRef(pGameInstance);
 
 	// 구조체 생성
-	CPlayerCamera_Free::FREE_PLAYERCAMERA_DESC FreeCameraDesc;
+	CPlayerCamera::FREE_PLAYERCAMERA_DESC FreeCameraDesc;
 	ZeroMemory(&FreeCameraDesc, sizeof FreeCameraDesc);
 		
 	FreeCameraDesc.pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
 	FreeCameraDesc.fMouseSensitive = 0.2f;
 	FreeCameraDesc.vEye = _float4(0.f, 10.f, -8.f, 1.f);
 	FreeCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
-	FreeCameraDesc.fFovY = XMConvertToRadians(60.f);
+	FreeCameraDesc.fFovY = XMConvertToRadians(45.f);
 	FreeCameraDesc.fAspect = g_iWinSizeX / (_float)g_iWinSizeY;
 	FreeCameraDesc.fNear = 0.2f;
-	FreeCameraDesc.fFar = 1100.f;
+	FreeCameraDesc.fFar = 500.f;
 	FreeCameraDesc.fSpeedPerSec = 100.f;
 	FreeCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
 	FreeCameraDesc.fZoomPerSec = 500.f;
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_FreePlayerCamera"), &FreeCameraDesc)))
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_PlayerCamera"), &FreeCameraDesc)))
 		return E_FAIL;
 
 	// 추후 카메라 추가.(전투, 1인칭)

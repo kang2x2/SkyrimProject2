@@ -9,7 +9,7 @@
 #include "BackGround.h"
 
 // GamePlay Level
-#include "PlayerCamera_Free.h"
+#include "PlayerCamera.h"
 #include "Navigation_Client.h"
 #include "Terrain.h"
 #include "Sky.h"
@@ -1303,8 +1303,8 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 		return E_FAIL;
 
 	// Camera
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FreePlayerCamera"),
-		CPlayerCamera_Free::Create(m_pDevice, m_pContext))))
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_PlayerCamera"),
+		CPlayerCamera::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Player

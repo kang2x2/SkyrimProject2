@@ -142,15 +142,6 @@
     <Filter Include="03. State\00. Player\01. State">
       <UniqueIdentifier>{1b95f1c1-3d67-4f8d-ac58-5a128ffb01d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam">
-      <UniqueIdentifier>{898e95c2-11b7-4a82-bcc6-0e23bdd10530}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\99. Camera\01. BattleCam">
-      <UniqueIdentifier>{109653fc-ab4f-4b9b-a29c-5c9b523a5a97}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\99. Camera\02. 1stCam">
-      <UniqueIdentifier>{a7bf27e7-1937-4711-bcc6-4168dd2e31d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\02. Sky">
       <UniqueIdentifier>{74d6e1ba-a77b-4e72-9fe7-bca7a2e01e79}</UniqueIdentifier>
     </Filter>
@@ -373,6 +364,9 @@
     <Filter Include="02. GameObject\01. GamePlay\05. LightObject\01. Fire">
       <UniqueIdentifier>{a4ce310a-ddde-4056-878d-4e4a53b3a5be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. PlayerCam">
+      <UniqueIdentifier>{898e95c2-11b7-4a82-bcc6-0e23bdd10530}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -474,7 +468,7 @@
     <ClInclude Include="..\Public\Weapon_IronSword.h">
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Part_Base.h">
+    <ClInclude Include="..\Public\PlayerPart_Base.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StateManager_Player.h">
@@ -489,8 +483,8 @@
     <ClInclude Include="..\Public\StatePlayerOH_RunPAttack.h">
       <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\06. RunPowerAttack</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\PlayerCamera_Free.h">
-      <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam</Filter>
+    <ClInclude Include="..\Public\PlayerCamera.h">
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. PlayerCam</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\02. Sky</Filter>
@@ -757,7 +751,7 @@
     <ClCompile Include="..\Private\Weapon_IronSword.cpp">
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Part_Base.cpp">
+    <ClCompile Include="..\Private\PlayerPart_Base.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StateManager_Player.cpp">
@@ -772,8 +766,8 @@
     <ClCompile Include="..\Private\StatePlayerOH_RunPAttack.cpp">
       <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\06. RunPowerAttack</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\PlayerCamera_Free.cpp">
-      <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. FreeCam</Filter>
+    <ClCompile Include="..\Private\PlayerCamera.cpp">
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. PlayerCam</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\02. Sky</Filter>

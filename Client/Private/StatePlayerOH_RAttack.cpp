@@ -19,6 +19,9 @@ HRESULT CStatePlayerOH_RAttack::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayerOH_RAttack::Update(_float _fTimeDelta)
 {
+	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
+		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+
 	dynamic_cast<CPlayer*>(m_pPlayer)->CheckHit_Onehand(14, 16);
 	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

@@ -10,7 +10,7 @@
 #include "IMGui_Manager.h"
 #include "GameInstance.h"
 
-#include "PlayerCamera_Free.h"
+#include "PlayerCamera.h"
 #include "Player.h"
 
 CLevel_Dungeon::CLevel_Dungeon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
@@ -242,7 +242,7 @@ HRESULT CLevel_Dungeon::Ready_Layer_Camera(const wstring& _strLayerTag)
 	Safe_AddRef(pGameInstance);
 
 	// 구조체 생성
-	CPlayerCamera_Free::FREE_PLAYERCAMERA_DESC FreeCameraDesc;
+	CPlayerCamera::FREE_PLAYERCAMERA_DESC FreeCameraDesc;
 	ZeroMemory(&FreeCameraDesc, sizeof FreeCameraDesc);
 
 	FreeCameraDesc.pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
@@ -257,7 +257,7 @@ HRESULT CLevel_Dungeon::Ready_Layer_Camera(const wstring& _strLayerTag)
 	FreeCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
 	FreeCameraDesc.fZoomPerSec = 500.f;
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_FreePlayerCamera"), &FreeCameraDesc)))
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_PlayerCamera"), &FreeCameraDesc)))
 		return E_FAIL;
 
 	// 추후 카메라 추가.(전투, 1인칭)

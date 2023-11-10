@@ -19,8 +19,9 @@ HRESULT CStatePlayer_Idle::Initialize(CGameObject* _pPlayer, CTransform* _pPlaye
 
 void CStatePlayer_Idle::Update(_float _fTimeDelta)
 {
-	// m_pPlayerTransform->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(0.f));
-
+	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
+		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+	
 	Key_Input(_fTimeDelta);
 }
 
@@ -51,10 +52,13 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	{
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
-		_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-90.f));
-		_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
+		if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
+		{
+			_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-90.f));
+			_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
 
-		m_pPlayerTransform->SetLook(vPlayerLook);
+			m_pPlayerTransform->SetLook(vPlayerLook);
+		}
 
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_L);
 		
@@ -66,15 +70,17 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIKeyPress('D'))
 	{
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+		if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
+		{
+			_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(90.f));
+			_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
 
-		_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(90.f));
-		_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
+			m_pPlayerTransform->SetLook(vPlayerLook);
 
-		m_pPlayerTransform->SetLook(vPlayerLook);
-
+		}
+		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
 		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_R);
 		
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
 	}
 
 	//if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))

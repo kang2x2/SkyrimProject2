@@ -11,12 +11,12 @@
 #include "Monster.h"
 
 CPlayer_Weapon::CPlayer_Weapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CPart_Base(_pDevice, _pContext)
+	: CPlayerPart_Base(_pDevice, _pContext)
 {
 }
 
 CPlayer_Weapon::CPlayer_Weapon(const CPlayer_Weapon& rhs)
-	: CPart_Base(rhs)
+	: CPlayerPart_Base(rhs)
 {
 }
 

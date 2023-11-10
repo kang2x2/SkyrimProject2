@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "Part_Base.h"
+#include "PlayerPart_Base.h"
 
 BEGIN(Engine)
 
@@ -16,7 +16,7 @@ END
 
 BEGIN(Client)
 
-class CPlayer_Body final : public CPart_Base
+class CPlayer_Body final : public CPlayerPart_Base
 {
 private:
 	CPlayer_Body(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
@@ -37,14 +37,17 @@ public:
 public:
 	void		Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName);
 	_uint		Get_CurFrameIndex();
+
+	void		Set_BodyType(CPlayer::PLAYERCAMERA _eCamType);
 private:
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResource();
 
 private:
 	CCollider*  m_pColliderCom = nullptr;
-	CModel*		m_p3stModelCom = nullptr;
-	CModel*		m_p1stModelCom = nullptr;
+	CModel*		m_pModelComAry[CPlayer::CAM_END];
+
+	CPlayer::PLAYERCAMERA m_ePlayerCamMode = CPlayer::CAM_END;
 
 public:
 	static CPlayer_Body* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

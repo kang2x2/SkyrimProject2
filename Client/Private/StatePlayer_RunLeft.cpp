@@ -18,6 +18,9 @@ HRESULT CStatePlayer_RunLeft::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 
 void CStatePlayer_RunLeft::Update(_float _fTimeDelta)
 {
+	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
+		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+
 	Key_Input(_fTimeDelta);
 }
 
@@ -32,8 +35,14 @@ void CStatePlayer_RunLeft::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyPress('A'))
 	{
-		m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
-	
+		if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
+		{
+			m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
+		}
+		else if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
+		{
+			m_pPlayerTransform->Go_Left(_fTimeDelta, m_pPlayerNavigation);
+		}
 		if (pGameInstance->Get_DIKeyPress('W'))
 		{
 			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_F);

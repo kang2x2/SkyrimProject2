@@ -231,7 +231,7 @@
     <ClInclude Include="..\Public\StatePlayerOH_Equip.h" />
     <ClInclude Include="..\Public\StatePlayerOH_Idle.h" />
     <ClInclude Include="..\Public\StatePlayerOH_LAttack.h" />
-    <ClInclude Include="..\Public\PlayerCamera_Free.h" />
+    <ClInclude Include="..\Public\PlayerCamera.h" />
     <ClInclude Include="..\Public\ImGui_Base.h" />
     <ClInclude Include="..\Public\ImGui_GamePlay.h" />
     <ClInclude Include="..\Public\IMGui_Manager.h" />
@@ -242,7 +242,7 @@
     <ClInclude Include="..\Public\Level_Zero.h" />
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
-    <ClInclude Include="..\Public\Part_Base.h" />
+    <ClInclude Include="..\Public\PlayerPart_Base.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\StateManager_Player.h" />
     <ClInclude Include="..\Public\Player_Body.h" />
@@ -326,7 +326,7 @@
     <ClCompile Include="..\Private\StatePlayerOH_Equip.cpp" />
     <ClCompile Include="..\Private\StatePlayerOH_Idle.cpp" />
     <ClCompile Include="..\Private\StatePlayerOH_LAttack.cpp" />
-    <ClCompile Include="..\Private\PlayerCamera_Free.cpp" />
+    <ClCompile Include="..\Private\PlayerCamera.cpp" />
     <ClCompile Include="..\Private\ImGui_Base.cpp" />
     <ClCompile Include="..\Private\ImGui_GamePlay.cpp" />
     <ClCompile Include="..\Private\IMGui_Manager.cpp" />
@@ -337,7 +337,7 @@
     <ClCompile Include="..\Private\Level_Zero.cpp" />
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
-    <ClCompile Include="..\Private\Part_Base.cpp" />
+    <ClCompile Include="..\Private\PlayerPart_Base.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\StateManager_Player.cpp" />
     <ClCompile Include="..\Private\Player_Body.cpp" />

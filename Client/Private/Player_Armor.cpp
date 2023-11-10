@@ -7,12 +7,12 @@
 #include "Armor_Glass.h"
 
 CPlayer_Armor::CPlayer_Armor(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CPart_Base(_pDevice, _pContext)
+	: CPlayerPart_Base(_pDevice, _pContext)
 {
 }
 
 CPlayer_Armor::CPlayer_Armor(const CPlayer_Armor& rhs)
-	: CPart_Base(rhs)
+	: CPlayerPart_Base(rhs)
 {
 }
 

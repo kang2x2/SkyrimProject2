@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "Part_Base.h"
+#include "PlayerPart_Base.h"
 #include "SkyrimWeapon.h"
 
 BEGIN(Engine)
@@ -15,10 +15,10 @@ END
 
 BEGIN(Client)
 
-class CPlayer_Weapon final : public CPart_Base
+class CPlayer_Weapon final : public CPlayerPart_Base
 {
 public:
-	typedef struct tagPartDesc : public CPart_Base::PART_DESC
+	typedef struct tagPartDesc : public CPlayerPart_Base::PART_DESC
 	{
 		CBone*		pSocketBone = nullptr;
 		_float4x4	matSocketPivot;
@@ -37,8 +37,10 @@ public:
 	virtual HRESULT Render();
 
 public:
+	void		Set_PivotMatrix(_float4x4 _matPivot) { m_matSocketPivot = _matPivot; }
 	void		Set_SoketBone(CBone* _pBone);
 	const char* Get_SoketBoneName();
+	
 
 public:
 	void		CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);

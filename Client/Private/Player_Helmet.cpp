@@ -7,12 +7,12 @@
 #include "Helmet_Glass.h"
 
 CPlayer_Helmet::CPlayer_Helmet(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CPart_Base(_pDevice, _pContext)
+	: CPlayerPart_Base(_pDevice, _pContext)
 {
 }
 
 CPlayer_Helmet::CPlayer_Helmet(const CPlayer_Helmet& rhs)
-	: CPart_Base(rhs)
+	: CPlayerPart_Base(rhs)
 {
 }
 

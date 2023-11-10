@@ -19,7 +19,7 @@ class CPlayer final : public CCreatureObject
 {
 public:
 	enum PARTS { PART_BODY, PART_WEAPON, PART_ARMOR, PART_HELMET, PART_HAIR, PART_END };
-	enum PLAYERCAMERA { CAM_FREE, CAM_BATTLE, CAM_1ST, CAM_END };
+	enum PLAYERCAMERA { CAM_3ST, CAM_1ST, CAM_END };
 	enum PLAYER_EQUIPSTATE { EQUIP_UNEQUIP, EQUIP_ONEHAND, EQUIP_BOW, EQUIP_MAGIC, EQUIP_END };
 
 	enum PLAYERSTATE {
@@ -71,13 +71,12 @@ public:
 	void			Play_Animation(_bool _bIsLoop, string _strAnimationName);
 	void			Set_SoketBone(const char* _pBoneName);
 
-	void	Set_PlayerCam(CCamera* _pCam, PLAYERCAMERA _eCamType)
-	{ 
-		m_pPlayerCams[_eCamType] = _pCam;
-	}
+	PLAYERCAMERA Get_CamMode() { return m_eCurCamMode; }
+	void	Set_PlayerCam(CCamera* _pCam, PLAYERCAMERA _eCamType);
 
 	const _vector Get_PlayerCamLook();
 	// void Set_CamLook(const _vector& _vPlayerLook);
+
 
 	CGameObject* Get_Part(PARTS _ePart) { return m_vecPlayerPart[_ePart]; }
 
@@ -100,7 +99,7 @@ private:
 	CCamera*						m_pPlayerCams[CAM_END];
 	class CStateManager_Player*		m_pStateManager = nullptr;
 
-	PLAYERCAMERA					m_eCurCamMode = CAM_FREE;
+	PLAYERCAMERA					m_eCurCamMode = CAM_3ST;
 	_uint							m_iAnimKeyIndex = 0;
 
 	PLAYER_EQUIPSTATE				m_eEquipState = EQUIP_END;

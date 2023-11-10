@@ -15,7 +15,7 @@ END
 
 BEGIN(Client)
 
-class CPart_Base abstract : public CGameObject
+class CPlayerPart_Base abstract : public CGameObject
 {
 public:
 	typedef struct tagPartDesc
@@ -25,9 +25,9 @@ public:
 	}PART_DESC;
 
 protected:
-	CPart_Base(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
-	CPart_Base(const CPart_Base& rhs);
-	virtual ~CPart_Base() = default;
+	CPlayerPart_Base(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	CPlayerPart_Base(const CPlayerPart_Base& rhs);
+	virtual ~CPlayerPart_Base() = default;
 
 public:
 	CBone* Get_SocketBonePtr(const char* _pBoneName);
@@ -55,7 +55,7 @@ protected:
 	_float4x4		m_matWorld;
 
 public:
-	static CPart_Base* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	static CPlayerPart_Base* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg)override;
 	virtual void Free()override;
 };

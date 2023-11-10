@@ -4,14 +4,20 @@
 #include "GameInstance.h"
 #include "Layer.h"
 
+#include "Player.h"
+
 CPlayer_Body::CPlayer_Body(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CPart_Base(_pDevice, _pContext)
+	: CPlayerPart_Base(_pDevice, _pContext)
 {
+	for (_int i = 0; i < CPlayer::CAM_END; ++i)
+		m_pModelComAry[i] = nullptr;
 }
 
 CPlayer_Body::CPlayer_Body(const CPlayer_Body& rhs)
-	: CPart_Base(rhs)
+	: CPlayerPart_Base(rhs)
 {
+	for (_int i = 0; i < CPlayer::CAM_END; ++i)
+		m_pModelComAry[i] = nullptr;
 }
 
 HRESULT CPlayer_Body::Initialize_ProtoType()
@@ -35,7 +41,7 @@ HRESULT CPlayer_Body::Initialize_Clone(void* _pArg)
 
 void CPlayer_Body::Tick(_float _fTimeDelta)
 {
-	m_pModelCom->Play_Animation(_fTimeDelta);
+	m_pModelComAry[m_ePlayerCamMode]->Play_Animation(_fTimeDelta);
 
 	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix());
 
@@ -79,20 +85,20 @@ HRESULT CPlayer_Body::Render()
 		return E_FAIL;
 
 	// 메시 몇개
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+	_uint		iNumMeshes = m_pModelComAry[m_ePlayerCamMode]->Get_NumMeshes();
 
 	for (_uint i = 0; i < iNumMeshes; ++i)
 	{
-		if (FAILED(m_pModelCom->Bind_BondMatrices(m_pShaderCom, i, "g_BoneMatrices")))
+		if (FAILED(m_pModelComAry[m_ePlayerCamMode]->Bind_BondMatrices(m_pShaderCom, i, "g_BoneMatrices")))
 			return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
+		if (FAILED(m_pModelComAry[m_ePlayerCamMode]->Bind_MaterialTexture(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
 			return E_FAIL;
 
 		if (FAILED(m_pShaderCom->Begin(0)))
 			return E_FAIL;
 
-		if (FAILED(m_pModelCom->Render(i)))
+		if (FAILED(m_pModelComAry[m_ePlayerCamMode]->Render(i)))
 			return E_FAIL;
 	}
 
@@ -101,22 +107,28 @@ HRESULT CPlayer_Body::Render()
 
 void CPlayer_Body::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName)
 {
-	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName);
+	m_pModelComAry[m_ePlayerCamMode]->SetUp_Animation(_bIsLoop, _strAnimationName);
 }
 
 _uint CPlayer_Body::Get_CurFrameIndex()
 {
-	return m_pModelCom->Get_CurFrameIndex();
+	return m_pModelComAry[m_ePlayerCamMode]->Get_CurFrameIndex();
+}
+
+void CPlayer_Body::Set_BodyType(CPlayer::PLAYERCAMERA _eCamType)
+{
+	m_ePlayerCamMode = _eCamType;
+	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
 }
 
 _bool CPlayer_Body::Get_IsAnimationFin()
 {
-	return m_pModelCom->Get_IsAnimationFin();
+	return m_pModelComAry[m_ePlayerCamMode]->Get_IsAnimationFin();
 }
 
 _bool CPlayer_Body::Get_CurAnimationName(string _strAnimationName)
 {
-	if (!strcmp(m_pModelCom->Get_CurAnimationName().c_str(), _strAnimationName.c_str()))
+	if (!strcmp(m_pModelComAry[m_ePlayerCamMode]->Get_CurAnimationName().c_str(), _strAnimationName.c_str()))
 		return true;
 
 	return false;
@@ -126,14 +138,15 @@ _bool CPlayer_Body::Get_CurAnimationName(string _strAnimationName)
 HRESULT CPlayer_Body::Ready_Component()
 {
 	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_Body"),
-		TEXT("Com_3stModel"), (CComponent**)&m_p3stModelCom)))
+		TEXT("Com_3stModel"), (CComponent**)&m_pModelComAry[CPlayer::CAM_3ST])))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Player_1stBody"),
-		TEXT("Com_1stModel"), (CComponent**)&m_p1stModelCom)))
+		TEXT("Com_1stModel"), (CComponent**)&m_pModelComAry[CPlayer::CAM_1ST])))
 		return E_FAIL;
 
-	m_pModelCom = m_p3stModelCom;
+	m_ePlayerCamMode = CPlayer::CAM_3ST;
+	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
@@ -221,9 +234,12 @@ void CPlayer_Body::Free()
 	Safe_Release(m_pTransformCom);
 
 	// 지울 때 누수나 에러 나는지 확인.
-	if(m_p1stModelCom != nullptr)
-		Safe_Release(m_p1stModelCom);
-	if (m_p3stModelCom != nullptr)
-		Safe_Release(m_p3stModelCom);
+	for (_int i = 0; i < CPlayer::CAM_END; ++i)
+	{
+		if (m_pModelComAry[i] != nullptr)
+			Safe_Release(m_pModelComAry[i]);
+
+	}
+
 
 }

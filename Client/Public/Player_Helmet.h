@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "Part_Base.h"
+#include "PlayerPart_Base.h"
 #include "SkyrimHelmet.h"
 
 BEGIN(Engine)
@@ -14,10 +14,10 @@ END
 
 BEGIN(Client)
 
-class CPlayer_Helmet final : public CPart_Base
+class CPlayer_Helmet final : public CPlayerPart_Base
 {
 public:
-	typedef struct tagPartDesc : public CPart_Base::PART_DESC
+	typedef struct tagPartDesc : public CPlayerPart_Base::PART_DESC
 	{
 		CBone* pSocketBone = nullptr;
 		_float4x4	matSocketPivot;
