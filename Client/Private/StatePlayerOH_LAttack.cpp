@@ -18,20 +18,19 @@ HRESULT CStatePlayerOH_LAttack::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayerOH_LAttack::Update(_float _fTimeDelta)
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
-		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 
-	dynamic_cast<CPlayer*>(m_pPlayer)->CheckHit_Onehand(13, 15);
+	m_pPlayer->CheckHit_Onehand(13, 15);
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurFrameIndex() >= 25 &&
-		!dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_attackright") &&
+	if (m_pPlayer->Get_CurFrameIndex() >= 25 &&
+		!m_pPlayer->Get_CurAnimationName("1hm_attackright") &&
 		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RATTACK);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_attackright");
+		m_pPlayer->Set_State(CPlayer::ONEHAND_RATTACK);
+		m_pPlayer->Play_Animation(false, "1hm_attackright");
 	}
 
 	Safe_Release(pGameInstance);
@@ -39,10 +38,12 @@ void CStatePlayerOH_LAttack::Update(_float _fTimeDelta)
 
 void CStatePlayerOH_LAttack::Late_Update()
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin())
+	__super::Key_Input();
+
+	if (m_pPlayer->Get_IsAnimationFin())
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
+		m_pPlayer->Play_Animation(true, "1hm_idle");
 	}
 }
 

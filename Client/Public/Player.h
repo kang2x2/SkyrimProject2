@@ -3,12 +3,10 @@
 #include "Client_Defines.h"
 #include "CreatureObject.h"
 
-
 BEGIN(Engine)
 
 class CRenderer;
 class CTransform;
-class CCamera;
 class CNavigation;
 
 END
@@ -18,7 +16,7 @@ BEGIN(Client)
 class CPlayer final : public CCreatureObject
 {
 public:
-	enum PARTS { PART_BODY, PART_WEAPON, PART_ARMOR, PART_HELMET, PART_HAIR, PART_END };
+	enum PARTS { PART_BODY, PART_CAMERA, PART_WEAPON, PART_ARMOR, PART_HELMET, PART_HAIR, PART_END };
 	enum PLAYERCAMERA { CAM_3ST, CAM_1ST, CAM_END };
 	enum PLAYER_EQUIPSTATE { EQUIP_UNEQUIP, EQUIP_ONEHAND, EQUIP_BOW, EQUIP_MAGIC, EQUIP_END };
 
@@ -57,6 +55,7 @@ private:
 public:
 	virtual HRESULT Initialize_ProtoType(); // 원본
 	virtual HRESULT Initialize_Clone(void* pArg); // 사본
+	virtual void    PriorityTick(_float _fTimeDelta);
 	virtual void	Tick(_float _fTimeDelta);
 	virtual void	LateTick(_float _fTimeDelta);
 	virtual HRESULT Render();
@@ -72,11 +71,8 @@ public:
 	void			Set_SoketBone(const char* _pBoneName);
 
 	PLAYERCAMERA Get_CamMode() { return m_eCurCamMode; }
-	void	Set_PlayerCam(CCamera* _pCam, PLAYERCAMERA _eCamType);
-
-	const _vector Get_PlayerCamLook();
-	// void Set_CamLook(const _vector& _vPlayerLook);
-
+	_vector		 Get_PlayerCamLook();
+	void		 Set_PlayerCam();
 
 	CGameObject* Get_Part(PARTS _ePart) { return m_vecPlayerPart[_ePart]; }
 
@@ -90,13 +86,13 @@ public:
 	void			  CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);
 
 
+
 private:
 	vector<class CGameObject*>		m_vecPlayerPart;
 
 	CRenderer*						m_pRendererCom = nullptr;
 	CTransform*						m_pTransformCom = nullptr;
 	CNavigation*					m_pNavigationCom[STAGE_END];
-	CCamera*						m_pPlayerCams[CAM_END];
 	class CStateManager_Player*		m_pStateManager = nullptr;
 
 	PLAYERCAMERA					m_eCurCamMode = CAM_3ST;

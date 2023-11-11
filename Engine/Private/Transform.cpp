@@ -163,26 +163,6 @@ void CTransform::Go_Down(_float _fTimeDelta)
 	Set_State(STATE_POSITION, vPosition);
 }
 
-void CTransform::Zoom_In(_float _fTimeDelta)
-{
-	_vector vLook = Get_State(STATE_LOOK);
-	_vector vPosition = Get_State(STATE_POSITION);
-
-	vPosition += XMVector3Normalize(vLook) * m_fZoomPerSec * _fTimeDelta;
-
-	Set_State(STATE_POSITION, vPosition);
-}
-
-void CTransform::Zoom_Out(_float _fTimeDelta)
-{
-	_vector vLook = Get_State(STATE_LOOK);
-	_vector vPosition = Get_State(STATE_POSITION);
-
-	vPosition -= XMVector3Normalize(vLook) * m_fZoomPerSec * _fTimeDelta;
-
-	Set_State(STATE_POSITION, vPosition);
-}
-
 void CTransform::Fix_Rotation(FXMVECTOR _vAxis, _float _fRadian)
 {
 	_float3 vScaled = Get_Scaled();

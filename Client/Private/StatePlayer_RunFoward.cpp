@@ -18,14 +18,12 @@ HRESULT CStatePlayer_RunFoward::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayer_RunFoward::Update(_float _fTimeDelta)
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
-		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-
 	Key_Input(_fTimeDelta);
 }
 
 void CStatePlayer_RunFoward::Late_Update()
 {
+	__super::Key_Input();
 }
 
 void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
@@ -35,80 +33,63 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 	
 	if (pGameInstance->Get_DIKeyPress('W'))
 	{
-		m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
+		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+			m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
 		if (pGameInstance->Get_DIKeyPress('A'))
 		{
-			if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
+			if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 			{
-				m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-
-				_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-45.f));
-				_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-
-				m_pPlayerTransform->SetLook(vPlayerLook);
+				Player_SetLook(-45.f);
+				m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 			}
-			else if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
+			else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 			{
 				m_pPlayerTransform->Go_Left(_fTimeDelta, m_pPlayerNavigation);
+				m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 			}
 
 			if (pGameInstance->Get_DIKeyUp('W'))
 			{
-				if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
-				{
-					_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-45.f));
-					_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
+				if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+					Player_SetLook(-45.f);
 
-					m_pPlayerTransform->SetLook(vPlayerLook);
-				}
-
-				dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_L);
+				m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_L);
 			}
+
 		}
 
 		else if (pGameInstance->Get_DIKeyPress('D'))
 		{
-			if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
+			if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 			{
-				m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-
-				_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(45.f));
-				_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-
-				m_pPlayerTransform->SetLook(vPlayerLook);
+				Player_SetLook(45.f);
+				m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 			}
-
-			else if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
+			else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 			{
 				m_pPlayerTransform->Go_Right(_fTimeDelta, m_pPlayerNavigation);
+				m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 			}
 
 			if (pGameInstance->Get_DIKeyUp('W'))
 			{
-				if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
-				{
-					_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(45.f));
-					_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
+				if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+					Player_SetLook(45.f);
 
-					m_pPlayerTransform->SetLook(vPlayerLook);
-				}
-
-				dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_R);
+				m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_R);
 			}
+
 		}
 
-		else
-		{
-			m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-		}
-
+		else 
+			m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 	}
 
 	if (pGameInstance->Get_DIKeyUp('W'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_IDLE);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_idle");
+		m_pPlayer->Set_State(CPlayer::UNEQUIP_IDLE);
+		m_pPlayer->Play_Animation(true, "mt_idle");
 	}
 
 	Safe_Release(pGameInstance);

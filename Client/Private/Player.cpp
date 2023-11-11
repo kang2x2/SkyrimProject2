@@ -3,11 +3,11 @@
 
 #include "GameInstance.h"
 
-#include "PlayerCamera.h"
 #include "StateManager_Player.h"
 
 #include "Player_Weapon.h"
 
+#include "Player_CameraPart.h"
 #include "Player_Body.h"
 #include "Player_Weapon.h"
 #include "Player_Armor.h"
@@ -53,7 +53,19 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 
 	Play_Animation(true, "mt_idle");
 
+	m_eCurCamMode = CAM_1ST;
+	//m_eCurCamMode = CAM_3ST;
+
 	return S_OK;
+}
+
+void CPlayer::PriorityTick(_float _fTimeDelta)
+{
+	for (auto& iter : m_vecPlayerPart)
+	{
+		if (iter != nullptr)
+			iter->PriorityTick(_fTimeDelta);
+	}
 }
 
 void CPlayer::Tick(_float _fTimeDelta)
@@ -133,35 +145,33 @@ void CPlayer::Play_Animation(_bool _bIsLoop, string _strAnimationName)
 {
 	dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName);
 }
+
 void CPlayer::Set_SoketBone(const char* _pBoneName)
 {
 	dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])
 		->Set_SoketBone(dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])
 			->Get_SocketBonePtr(_pBoneName));
 }
-
-void CPlayer::Set_PlayerCam(CCamera* _pCam, PLAYERCAMERA _eCamType)
+_vector CPlayer::Get_PlayerCamLook()
 {
-	/* 카메라 변경 */
-	m_pPlayerCams[_eCamType] = _pCam;
-	m_eCurCamMode = _eCamType;
-	/* 바디 모델 변경 */
-	dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_BodyType(_eCamType);
-	
-	/* 피벗 재 설정. */
-	dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])->Set_PivotMatrix
-	(dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix());
-	
+	return dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Get_PlayerCamLook();
 }
-
-//void CPlayer::Set_CamLook(const _vector& _vPlayerLook)
-//{
-//	m_pPlayerCams[m_eCurCamMode]->Set_CamLook(_vPlayerLook);
-//}
-
-const _vector CPlayer::Get_PlayerCamLook()
+void CPlayer::Set_PlayerCam()
 {
-	return m_pPlayerCams[m_eCurCamMode]->Get_CamLook();
+	if (m_eCurCamMode == CAM_1ST)
+		m_eCurCamMode = CAM_3ST;
+	else if (m_eCurCamMode == CAM_3ST)
+		m_eCurCamMode = CAM_1ST;
+
+	CPlayer_Body* pBody = dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY]);
+	pBody->Set_BodyType(m_eCurCamMode);
+
+	if(m_eCurCamMode == CAM_1ST)
+		dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_SoketBone(
+			pBody->Get_SocketBonePtr("Camera1st [Cam1]"));
+	else if(m_eCurCamMode == CAM_3ST)
+		dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_SoketBone(
+			pBody->Get_SocketBonePtr("Camera3rd [Cam3]"));
 }
 
 void CPlayer::Set_CurCell()
@@ -201,18 +211,33 @@ HRESULT CPlayer::Ready_Component()
 
 HRESULT CPlayer::Ready_Part()
 {	
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 	CGameObject* pPart = nullptr;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
 	/* For. Player Body */
 	CPlayer_Body::PART_DESC BodyPartDesc;
 	BodyPartDesc.pParent = this;
 	BodyPartDesc.pParentTransform = m_pTransformCom;
 
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Body"), &BodyPartDesc);
+	if (pPart == nullptr)
+		return E_FAIL;
+	m_vecPlayerPart.push_back(pPart);
+
+	/* For. Player Camera */
+	CPlayer_CameraPart::PLAYER_CAMERAPART_DESC CameraPartDesc;
+	CameraPartDesc.pParent = this;
+	CameraPartDesc.m_pParentBody = dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY]);
+	CameraPartDesc.pParentTransform = m_pTransformCom;
+	// CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera3rd [Cam3]");
+	CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera1st [Cam1]");
+	CameraPartDesc.matSocketPivot = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
+
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_CameraPart"), &CameraPartDesc);
 	if (pPart == nullptr)
 		return E_FAIL;
 	m_vecPlayerPart.push_back(pPart);

@@ -47,6 +47,10 @@ HRESULT CPlayerPart_Base::Initialize_Clone(void* _pArg)
 	return S_OK;
 }
 
+void CPlayerPart_Base::PriorityTick(_float _fTimeDelta)
+{
+}
+
 void CPlayerPart_Base::Tick(_float _fTimeDelta)
 {
 }

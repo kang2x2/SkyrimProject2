@@ -23,10 +23,12 @@ void CStatePlayerOH_RunPAttack::Update(_float _fTimeDelta)
 
 void CStatePlayerOH_RunPAttack::Late_Update()
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin())
+	__super::Key_Input();
+
+	if (m_pPlayer->Get_IsAnimationFin())
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
+		m_pPlayer->Play_Animation(true, "1hm_idle");
 	}
 }
 

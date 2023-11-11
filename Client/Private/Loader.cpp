@@ -9,13 +9,13 @@
 #include "BackGround.h"
 
 // GamePlay Level
-#include "PlayerCamera.h"
 #include "Navigation_Client.h"
 #include "Terrain.h"
 #include "Sky.h"
 #include "ParticleRect.h"
 
 #include "Player.h"
+#include "Player_CameraPart.h"
 #include "Player_Body.h"
 #include "Player_Weapon.h"
 #include "Player_Armor.h"
@@ -24,6 +24,9 @@
 // Tool Level
 #include "Tool_Camera.h"
 #include "Terrain_Grid.h"
+
+/* Camera */
+#include "Camera_Player.h"
 
 /* Light */
 #include "Light_Town.h"
@@ -176,7 +179,7 @@ HRESULT CLoader::Loading_For_Level_Tool()
 		return E_FAIL;
 
 	//1stPlayer
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Model_Player_Body"),
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Model_Player_1stBody"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_1stPlayer/1stPlayer.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
@@ -1289,6 +1292,11 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	// Camera 
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Camera_Player"),
+		CCamera_Player::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// Light
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Light_Town"),
 		CLight_Town::Create(m_pDevice, m_pContext))))
@@ -1302,14 +1310,12 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 		CNavigation_Client::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	// Camera
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_PlayerCamera"),
-		CPlayerCamera::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
 	// Player
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_CameraPart"),
+		CPlayer_CameraPart::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_Body"),
 		CPlayer_Body::Create(m_pDevice, m_pContext))))

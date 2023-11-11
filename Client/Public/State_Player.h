@@ -1,10 +1,18 @@
 #pragma once
 
+#include "Client_Defines.h"
 #include "Base.h"
 
 BEGIN(Engine)
 
-class ENGINE_DLL CState_Player abstract : public CBase
+class CTransform;
+class CNavigation;
+
+END
+
+BEGIN(Client)
+
+class CState_Player abstract : public CBase
 {
 protected:
 	CState_Player();
@@ -17,12 +25,15 @@ public:
 	virtual void Update(_float _fTimeDelta);
 	virtual void Late_Update();
 
-	virtual void Key_Input(_float _fTimeDelta);
+	virtual void Key_Input();
 
 protected:
-	class CGameObject* m_pPlayer = nullptr;
-	class CTransform*  m_pPlayerTransform = nullptr;
-	class CNavigation* m_pPlayerNavigation = nullptr;
+	virtual void Player_SetLook(_float _fDegree);
+
+protected:
+	class CPlayer* m_pPlayer = nullptr;
+	CTransform*  m_pPlayerTransform = nullptr;
+	CNavigation* m_pPlayerNavigation = nullptr;
 
 public:
 	virtual void Free() override;

@@ -18,17 +18,16 @@ HRESULT CStatePlayerOH_PAttack::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayerOH_PAttack::Update(_float _fTimeDelta)
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
-		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-
 }
 
 void CStatePlayerOH_PAttack::Late_Update()
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin())
+	__super::Key_Input();
+
+	if (m_pPlayer->Get_IsAnimationFin())
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
+		m_pPlayer->Play_Animation(true, "1hm_idle");
 	}
 }
 

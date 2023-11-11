@@ -63,7 +63,7 @@ void CCamera::Tick(_float _fTimeDelta)
 	/* 갱신된 정보를 파이프라인에 저장하자. */
 
 	/* 카메라 월드행렬의 역행렬 == 뷰스페이스 변환행렬. */
-	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
+	//m_pPipeLine->Set_Transform(CPipeLine::D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
 	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_VIEW, m_pTransformCom->Get_WorldMatrix_Inverse());
 	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_PROJ, XMMatrixPerspectiveFovLH(fFovY, fAspect, fNear, fFar));
 }
@@ -75,6 +75,26 @@ void CCamera::LateTick(_float _fTimeDelta)
 const _vector CCamera::Get_CamLook()
 {
 	return m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+}
+
+void CCamera::Zoom_In(_float _fZoomSpeed, _float _fTimeDelta)
+{
+	_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vLook) * _fZoomSpeed * _fTimeDelta;
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
+void CCamera::Zoom_Out(_float _fZoomSpeed, _float _fTimeDelta)
+{
+	_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vLook) * -_fZoomSpeed * _fTimeDelta;
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 }
 
 void CCamera::Free()

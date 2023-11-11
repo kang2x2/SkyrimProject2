@@ -37,6 +37,7 @@ public:
 public:
 	virtual HRESULT Initialize_ProtoType(); // 원본
 	virtual HRESULT Initialize_Clone(void* _pArg); // 사본
+	virtual void    PriorityTick(_float _fTimeDelta);
 	virtual void	Tick(_float _fTimeDelta);
 	virtual void	LateTick(_float _fTimeDelta);
 	virtual HRESULT Render();

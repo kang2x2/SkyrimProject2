@@ -23,11 +23,13 @@ void CStatePlayerOH_Block::Update(_float _fTimeDelta)
 
 void CStatePlayerOH_Block::Late_Update()
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin() &&
-		dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_equip"))
+	__super::Key_Input();
+
+	if (m_pPlayer->Get_IsAnimationFin() &&
+		m_pPlayer->Get_CurAnimationName("1hm_equip"))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
+		m_pPlayer->Play_Animation(true, "1hm_idle");
 	}
 }
 
@@ -38,8 +40,8 @@ void CStatePlayerOH_Block::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyUp(VK_RBUTTON))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
+		m_pPlayer->Play_Animation(true, "1hm_idle");
 	}
 
 

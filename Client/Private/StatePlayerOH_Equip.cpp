@@ -18,21 +18,23 @@ HRESULT CStatePlayerOH_Equip::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 
 void CStatePlayerOH_Equip::Update(_float _fTimeDelta)
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurFrameIndex() >= 10 &&
-		dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_equip") &&
-		strcmp(dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurSocketBonName(), "WEAPON"))
+	if (m_pPlayer->Get_CurFrameIndex() >= 10 &&
+		m_pPlayer->Get_CurAnimationName("1hm_equip") &&
+		strcmp(m_pPlayer->Get_CurSocketBonName(), "WEAPON"))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_SoketBone("WEAPON");
+		m_pPlayer->Set_SoketBone("WEAPON");
 	}
 }
 
 void CStatePlayerOH_Equip::Late_Update()
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin() && 
-		dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_equip"))
+	__super::Key_Input();
+
+	if (m_pPlayer->Get_IsAnimationFin() && 
+		m_pPlayer->Get_CurAnimationName("1hm_equip"))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
+		m_pPlayer->Play_Animation(true, "1hm_idle");
 	}
 }
 

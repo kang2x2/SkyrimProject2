@@ -33,7 +33,11 @@ public:
 	virtual void	Tick(_float _fTimeDelta) override;
 	virtual void	LateTick(_float _fTimeDelta) override;
 
+public:
 	const _vector Get_CamLook();
+	void	Zoom_In(_float _fZoomSpeed, _float _fTimeDelta);
+	void	Zoom_Out(_float _fZoomSpeed, _float _fTimeDelta);
+	
 	// void Set_CamLook(const _vector& _vPlayerLook) { m_pTransformCom->Set_State(CTransform::STATE_LOOK, _vPlayerLook); }
 protected:
 	class CTransform* m_pTransformCom = nullptr;

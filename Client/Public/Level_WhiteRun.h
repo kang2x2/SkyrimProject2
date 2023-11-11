@@ -25,7 +25,6 @@ private:
 
 	HRESULT Ready_Layer_Equip(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Player(const wstring& _strLayerTag);
-	HRESULT Ready_Layer_Camera(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Navigation_WhiteRun(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Sky(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Terrain(const wstring& _strLayerTag);

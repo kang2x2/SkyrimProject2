@@ -175,12 +175,6 @@
     <Filter Include="02. State">
       <UniqueIdentifier>{225f7bd3-1e2e-457b-9a8b-e22cc8c4d4f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. State\00. Player">
-      <UniqueIdentifier>{5e2745c3-5863-4615-821e-9c776b95e487}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. State\01. Monster">
-      <UniqueIdentifier>{0c628418-2249-46fe-8c58-4ea7a6f95f60}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Utiltiy\07 .Collison">
       <UniqueIdentifier>{164008c9-aec4-42b8-be94-0ebdb3640ad3}</UniqueIdentifier>
     </Filter>
@@ -192,6 +186,9 @@
     </Filter>
     <Filter Include="01. Utiltiy\09. RenderTarget\00. Manager">
       <UniqueIdentifier>{765ecbe5-9fe4-4e3f-b2ce-0f8456e4b8d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. State\00. Monster">
+      <UniqueIdentifier>{0c628418-2249-46fe-8c58-4ea7a6f95f60}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -312,9 +309,6 @@
     <ClInclude Include="..\Public\Cell.h">
       <Filter>01. Utiltiy\03. Component\06. Navigation\01. Cell</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_Player.h">
-      <Filter>02. State\00. Player</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_Collision.h">
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\04. Collision</Filter>
     </ClInclude>
@@ -361,7 +355,7 @@
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Monster.h">
-      <Filter>02. State\01. Monster</Filter>
+      <Filter>02. State\00. Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Collision_Manager.h">
       <Filter>01. Utiltiy\07 .Collison</Filter>
@@ -482,9 +476,6 @@
     <ClCompile Include="..\Private\Cell.cpp">
       <Filter>01. Utiltiy\03. Component\06. Navigation\01. Cell</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_Player.cpp">
-      <Filter>02. State\00. Player</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Collision.cpp">
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\04. Collision</Filter>
     </ClCompile>
@@ -525,7 +516,7 @@
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Monster.cpp">
-      <Filter>02. State\01. Monster</Filter>
+      <Filter>02. State\00. Monster</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Collision_Manager.cpp">
       <Filter>01. Utiltiy\07 .Collison</Filter>

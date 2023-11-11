@@ -18,14 +18,12 @@ HRESULT CStatePlayerOH_RunFoward::Initialize(CGameObject* _pPlayer, CTransform* 
 
 void CStatePlayerOH_RunFoward::Update(_float _fTimeDelta)
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
-		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-
 	Key_Input(_fTimeDelta);
 }
 
 void CStatePlayerOH_RunFoward::Late_Update()
 {
+	__super::Key_Input();
 }
 
 void CStatePlayerOH_RunFoward::Key_Input(_float _fTimeDelta)
@@ -35,67 +33,60 @@ void CStatePlayerOH_RunFoward::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyPress('W'))
 	{
-		m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
+		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
 		if (pGameInstance->Get_DIKeyPress('A'))
 		{
-			if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
+			if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 			{
-				m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-
-				_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-45.f));
-				_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-
-				m_pPlayerTransform->SetLook(vPlayerLook);
+				Player_SetLook(-45.f);
+				m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 			}
 
-			else if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
+			else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 			{
+				m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 				m_pPlayerTransform->Go_Left(_fTimeDelta, m_pPlayerNavigation);
 			}
 
 			if (pGameInstance->Get_DIKeyUp('W'))
 			{
-				if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
+				if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 				{
 					_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-45.f));
 					_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
 
 					m_pPlayerTransform->SetLook(vPlayerLook);
 				}
-				dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUN_L);
+				m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_L);
 			}
 
 			/* 공격 */
 			else if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 			{
-				m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-				m_pPlayerTransform->Set_Speed(dynamic_cast<CPlayer*>(m_pPlayer)->GetWalkSpeed());
+				m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
-				dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_LATTACKF);
-				dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_walkfwdattackleft");
+				m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACKF);
+				m_pPlayer->Play_Animation(false, "1hm_walkfwdattackleft");
 			}
 		}
 
 		else if (pGameInstance->Get_DIKeyPress('D'))
 		{
-			if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
+			if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 			{
-				m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-
-				_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(45.f));
-				_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-
-				m_pPlayerTransform->SetLook(vPlayerLook);
+				Player_SetLook(45.f);
+				m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 			}
-			else if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
+			else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 			{
+				m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 				m_pPlayerTransform->Go_Right(_fTimeDelta, m_pPlayerNavigation);
 			}
 
 			if (pGameInstance->Get_DIKeyUp('W'))
 			{
-				if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
+				if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 				{
 					_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(45.f));
 					_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
@@ -103,41 +94,36 @@ void CStatePlayerOH_RunFoward::Key_Input(_float _fTimeDelta)
 					m_pPlayerTransform->SetLook(vPlayerLook);
 				}
 
-				dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUN_R);
+				m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_R);
 			}
 
 			/* 공격 */
 			else if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 			{
-				m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-				m_pPlayerTransform->Set_Speed(dynamic_cast<CPlayer*>(m_pPlayer)->GetWalkSpeed());
+				m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
-				dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_LATTACKF);
-				dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_walkfwdattackleft");
+				m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACKF);
+				m_pPlayer->Play_Animation(false, "1hm_walkfwdattackleft");
 			}
 		}
 
 		/* 공격 */
 		else if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 		{
-			m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-			m_pPlayerTransform->Set_Speed(dynamic_cast<CPlayer*>(m_pPlayer)->GetWalkSpeed());
+			m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
-			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_LATTACKF);
-			dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_walkfwdattackleft");
+			m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACKF);
+			m_pPlayer->Play_Animation(false, "1hm_walkfwdattackleft");
 		}
 
 		else
-		{
-			m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-		}
-
+			m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 	}
 
 	if (pGameInstance->Get_DIKeyUp('W'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
+		m_pPlayer->Play_Animation(true, "1hm_idle");
 	}
 
 	Safe_Release(pGameInstance);

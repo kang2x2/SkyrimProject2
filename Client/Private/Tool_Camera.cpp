@@ -117,10 +117,17 @@ void CTool_Camera::Tick(_float _fTimeDelta)
 
 			if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_WHEEL))
 			{
+				_float4 vPos;
+				XMStoreFloat4(&vPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
 				if (mouseMove < 0 && pGameInstance->Get_DIKeyPress(VK_LCONTROL))
-					m_pTransformCom->Zoom_Out(_fTimeDelta);
+				{
+					Zoom_Out(60.f, _fTimeDelta);
+				}
 				else if (mouseMove > 0 && pGameInstance->Get_DIKeyPress(VK_LCONTROL))
-					m_pTransformCom->Zoom_In(_fTimeDelta);
+				{
+					Zoom_In(60.f, _fTimeDelta);
+				}
 			}
 
 		}

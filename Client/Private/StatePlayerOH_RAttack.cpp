@@ -19,28 +19,27 @@ HRESULT CStatePlayerOH_RAttack::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayerOH_RAttack::Update(_float _fTimeDelta)
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
-		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 
-	dynamic_cast<CPlayer*>(m_pPlayer)->CheckHit_Onehand(14, 16);
+	m_pPlayer->CheckHit_Onehand(14, 16);
 	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurFrameIndex() >= 22 &&
-		!dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_attackleft") &&
+	if (m_pPlayer->Get_CurFrameIndex() >= 22 &&
+		!m_pPlayer->Get_CurAnimationName("1hm_attackleft") &&
 		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_LATTACK);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_attackleft");
+		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACK);
+		m_pPlayer->Play_Animation(false, "1hm_attackleft");
 	}
 
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurFrameIndex() >= 22 &&
-		!dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_attackleft") &&
+	if (m_pPlayer->Get_CurFrameIndex() >= 22 &&
+		!m_pPlayer->Get_CurAnimationName("1hm_attackleft") &&
 		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_LATTACK);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_attackleft");
+		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACK);
+		m_pPlayer->Play_Animation(false, "1hm_attackleft");
 	}
 
 	Safe_Release(pGameInstance);
@@ -48,10 +47,12 @@ void CStatePlayerOH_RAttack::Update(_float _fTimeDelta)
 
 void CStatePlayerOH_RAttack::Late_Update()
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_IsAnimationFin())
+	__super::Key_Input();
+
+	if (m_pPlayer->Get_IsAnimationFin())
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
+		m_pPlayer->Play_Animation(true, "1hm_idle");
 	}
 }
 

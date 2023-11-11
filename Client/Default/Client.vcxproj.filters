@@ -100,9 +100,6 @@
     <Filter Include="02. GameObject\01. GamePlay\99. BasicObject">
       <UniqueIdentifier>{f32ab3bd-76b2-44b0-bb2d-c8a998fb5442}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\99. Camera">
-      <UniqueIdentifier>{b7ddeb8a-dbcb-455f-891b-01d267bf7602}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\01. Terrain">
       <UniqueIdentifier>{7bf92707-2698-41c0-9dc1-b6dcf5c16dc4}</UniqueIdentifier>
     </Filter>
@@ -352,9 +349,6 @@
     <Filter Include="03. State\02. Falmer_UnEquip\01. State\05. Attack\01. Charge">
       <UniqueIdentifier>{88ef3c0d-1d46-4336-810b-d6aa6c59b9a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Level\99. Loading\Station">
-      <UniqueIdentifier>{230e7205-3ecb-4c02-9584-3a21780c66be}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\05. LightObject">
       <UniqueIdentifier>{1e737ea3-ccc8-414e-abaf-3d45aa75bfda}</UniqueIdentifier>
     </Filter>
@@ -364,8 +358,14 @@
     <Filter Include="02. GameObject\01. GamePlay\05. LightObject\01. Fire">
       <UniqueIdentifier>{a4ce310a-ddde-4056-878d-4e4a53b3a5be}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. PlayerCam">
-      <UniqueIdentifier>{898e95c2-11b7-4a82-bcc6-0e23bdd10530}</UniqueIdentifier>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\99. Camera">
+      <UniqueIdentifier>{a694b268-eaae-4cf8-8772-38a2462cbc13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\04. Camara">
+      <UniqueIdentifier>{e85135be-17e4-4704-a7ee-0b81c3367723}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\04. Camara\00. PlayerCamera">
+      <UniqueIdentifier>{86e7d987-a176-4867-8192-ae619dcc8c16}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -482,9 +482,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_RunPAttack.h">
       <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\06. RunPowerAttack</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\PlayerCamera.h">
-      <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. PlayerCam</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\02. Sky</Filter>
@@ -654,6 +651,15 @@
     <ClInclude Include="..\Public\Light_Town.h">
       <Filter>02. GameObject\01. GamePlay\05. LightObject\00. Town</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Player_CameraPart.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\99. Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Player.h">
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\04. Camara\00. PlayerCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player.h">
+      <Filter>03. State\00. Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -765,9 +771,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_RunPAttack.cpp">
       <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\06. RunPowerAttack</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\PlayerCamera.cpp">
-      <Filter>02. GameObject\01. GamePlay\99. BasicObject\99. Camera\00. PlayerCam</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\02. Sky</Filter>
@@ -933,6 +936,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Light_Town.cpp">
       <Filter>02. GameObject\01. GamePlay\05. LightObject\00. Town</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_CameraPart.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\99. Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Player.cpp">
+      <Filter>02. GameObject\01. GamePlay\99. BasicObject\04. Camara\00. PlayerCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player.cpp">
+      <Filter>03. State\00. Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

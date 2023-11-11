@@ -187,6 +187,7 @@
     <ClInclude Include="..\Public\Armor_Glass.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Building.h" />
+    <ClInclude Include="..\Public\Camera_Player.h" />
     <ClInclude Include="..\Public\CLevel_Tool.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Falmer_UnEquip.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="..\Public\Navigation_Client.h" />
     <ClInclude Include="..\Public\ParticleRect.h" />
     <ClInclude Include="..\Public\Player_Armor.h" />
+    <ClInclude Include="..\Public\Player_CameraPart.h" />
     <ClInclude Include="..\Public\Player_Helmet.h" />
     <ClInclude Include="..\Public\Player_Weapon.h" />
     <ClInclude Include="..\Public\Skeever.h" />
@@ -231,7 +233,6 @@
     <ClInclude Include="..\Public\StatePlayerOH_Equip.h" />
     <ClInclude Include="..\Public\StatePlayerOH_Idle.h" />
     <ClInclude Include="..\Public\StatePlayerOH_LAttack.h" />
-    <ClInclude Include="..\Public\PlayerCamera.h" />
     <ClInclude Include="..\Public\ImGui_Base.h" />
     <ClInclude Include="..\Public\ImGui_GamePlay.h" />
     <ClInclude Include="..\Public\IMGui_Manager.h" />
@@ -262,6 +263,7 @@
     <ClInclude Include="..\Public\StatePlayer_RunRight.h" />
     <ClInclude Include="..\Public\StateSkeever_Idle.h" />
     <ClInclude Include="..\Public\State_FalmerUE.h" />
+    <ClInclude Include="..\Public\State_Player.h" />
     <ClInclude Include="..\Public\StoneWork.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Terrain_Grid.h" />
@@ -283,6 +285,7 @@
     <ClCompile Include="..\Private\Armor_Glass.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Building.cpp" />
+    <ClCompile Include="..\Private\Camera_Player.cpp" />
     <ClCompile Include="..\Private\CLevel_Tool.cpp" />
     <ClCompile Include="..\Private\Falmer_UnEquip.cpp" />
     <ClCompile Include="..\Private\Helmet_Glass.cpp" />
@@ -294,6 +297,7 @@
     <ClCompile Include="..\Private\Navigation_Client.cpp" />
     <ClCompile Include="..\Private\ParticleRect.cpp" />
     <ClCompile Include="..\Private\Player_Armor.cpp" />
+    <ClCompile Include="..\Private\Player_CameraPart.cpp" />
     <ClCompile Include="..\Private\Player_Helmet.cpp" />
     <ClCompile Include="..\Private\Player_Weapon.cpp" />
     <ClCompile Include="..\Private\Skeever.cpp" />
@@ -326,7 +330,6 @@
     <ClCompile Include="..\Private\StatePlayerOH_Equip.cpp" />
     <ClCompile Include="..\Private\StatePlayerOH_Idle.cpp" />
     <ClCompile Include="..\Private\StatePlayerOH_LAttack.cpp" />
-    <ClCompile Include="..\Private\PlayerCamera.cpp" />
     <ClCompile Include="..\Private\ImGui_Base.cpp" />
     <ClCompile Include="..\Private\ImGui_GamePlay.cpp" />
     <ClCompile Include="..\Private\IMGui_Manager.cpp" />
@@ -357,6 +360,7 @@
     <ClCompile Include="..\Private\StatePlayer_RunRight.cpp" />
     <ClCompile Include="..\Private\StateSkeever_Idle.cpp" />
     <ClCompile Include="..\Private\State_FalmerUE.cpp" />
+    <ClCompile Include="..\Private\State_Player.cpp" />
     <ClCompile Include="..\Private\StoneWork.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Terrain_Grid.cpp" />

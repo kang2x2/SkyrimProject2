@@ -119,6 +119,8 @@ void CPlayer_Body::Set_BodyType(CPlayer::PLAYERCAMERA _eCamType)
 {
 	m_ePlayerCamMode = _eCamType;
 	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
+
+
 }
 
 _bool CPlayer_Body::Get_IsAnimationFin()
@@ -145,7 +147,8 @@ HRESULT CPlayer_Body::Ready_Component()
 		TEXT("Com_1stModel"), (CComponent**)&m_pModelComAry[CPlayer::CAM_1ST])))
 		return E_FAIL;
 
-	m_ePlayerCamMode = CPlayer::CAM_3ST;
+	m_ePlayerCamMode = CPlayer::CAM_1ST;
+	// m_ePlayerCamMode = CPlayer::CAM_3ST;
 	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),

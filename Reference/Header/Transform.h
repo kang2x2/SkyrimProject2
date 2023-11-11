@@ -80,9 +80,6 @@ public:
 	void Go_Up(_float _fTimeDelta);
 	void Go_Down(_float _fTimeDelta);
 
-	void Zoom_In(_float _fTimeDelta);
-	void Zoom_Out(_float _fTimeDelta);
-
 	void Fix_Rotation(FXMVECTOR _vAxis, _float _fRadian);
 	void Turn(FXMVECTOR _vAxis, _float _fTimeDelta, _float _fRotationRadianPerSec = 0.f);
 	void LookAt(_fvector _vPoint);

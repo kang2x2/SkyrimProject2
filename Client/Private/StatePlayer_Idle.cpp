@@ -19,15 +19,12 @@ HRESULT CStatePlayer_Idle::Initialize(CGameObject* _pPlayer, CTransform* _pPlaye
 
 void CStatePlayer_Idle::Update(_float _fTimeDelta)
 {
-	if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_1ST)
-		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-	
 	Key_Input(_fTimeDelta);
 }
 
 void CStatePlayer_Idle::Late_Update()
 {
-
+	__super::Key_Input();
 }
 
 void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
@@ -38,63 +35,64 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	/* 이동 */
 	if (pGameInstance->Get_DIKeyPress('W'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_F);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
+		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
+			m_pPlayer->Play_Animation(true, "hm_1stp_run");
+
+		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+			m_pPlayer->Play_Animation(true, "mt_runforward");
+
+		m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_F);
 	}
 
 	if (pGameInstance->Get_DIKeyPress('S'))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_B);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runbackward");
+		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
+			m_pPlayer->Play_Animation(true, "hm_1stp_run");
+
+		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+			m_pPlayer->Play_Animation(true, "mt_runbackward");
+
+		m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_B);
 	}
 
 	if (pGameInstance->Get_DIKeyPress('A'))
 	{
-		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-
-		if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
+		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 		{
-			_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-90.f));
-			_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-
-			m_pPlayerTransform->SetLook(vPlayerLook);
+			m_pPlayer->Play_Animation(true, "1hm_1stp_turnleft");
+		}
+		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+		{
+			Player_SetLook(-90.f);
+			m_pPlayer->Play_Animation(true, "mt_runforward");
 		}
 
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_L);
+		m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_L);
 		
 		// 분명히 필요하긴 할거야 이 함수가.
 		//if(dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_runforward"))
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
 	}
 
 	if (pGameInstance->Get_DIKeyPress('D'))
 	{
-		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
-		if (dynamic_cast<CPlayer*>(m_pPlayer)->Get_CamMode() == CPlayer::CAM_3ST)
+		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 		{
-			_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(90.f));
-			_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-
-			m_pPlayerTransform->SetLook(vPlayerLook);
-
+			m_pPlayer->Play_Animation(true, "1hm_1stp_turnright");
 		}
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "mt_runforward");
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::UNEQUIP_RUN_R);
-		
-	}
+		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+		{
+			Player_SetLook(90.f);
+			m_pPlayer->Play_Animation(true, "mt_runforward");
+		}
 
-	//if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
-	//{
-	//	dynamic_cast<CPlayer*>(m_pPlayer)->Set_PlayerEquipState(CPlayer::EQUIP_ONEHAND);
-	//	dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_EQUIP);
-	//	dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_equip");
-	//}
+		m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_R);
+	}
 
 	if (pGameInstance->Get_DIKeyDown(VK_LBUTTON))
 	{
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_PlayerEquipState(CPlayer::EQUIP_ONEHAND);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_EQUIP);
-		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_equip");
+		m_pPlayer->Set_PlayerEquipState(CPlayer::EQUIP_ONEHAND);
+		m_pPlayer->Set_State(CPlayer::ONEHAND_EQUIP);
+		m_pPlayer->Play_Animation(false, "1hm_equip");
 	}
 
 	Safe_Release(pGameInstance);
