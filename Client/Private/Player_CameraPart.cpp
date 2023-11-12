@@ -32,7 +32,6 @@ HRESULT CPlayer_CameraPart::Initialize_Clone(void* _pArg)
 	{
 		PLAYER_CAMERAPART_DESC* pCameraPartDesc = (PLAYER_CAMERAPART_DESC*)_pArg;
 
-		m_pParentBody = pCameraPartDesc->m_pParentBody;
 		m_pSocketBone = pCameraPartDesc->pSocketBone;
 		Safe_AddRef(m_pSocketBone);
 
@@ -78,7 +77,9 @@ void CPlayer_CameraPart::Tick(_float _fTimeDelta)
 	}
 	else if (dynamic_cast<CPlayer*>(m_pParent)->Get_CamMode() == CPlayer::CAM_1ST)
 	{
-		m_pPlayerCamera->Tick_1st(m_matWorld, _fTimeDelta);
+		_vector vParentLook = m_pParentTransform->Get_State(CTransform::STATE_LOOK);
+		m_pPlayerCamera->Tick_1st(m_matWorld, vParentLook, _fTimeDelta);
+		m_pParentTransform->SetLook(dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerCamLook());
 	}
 }
 
@@ -122,14 +123,17 @@ HRESULT CPlayer_CameraPart::Ready_Camera(void* _pArg)
 	/* 카메라 세팅 */
 	CCamera_Player::FREE_PLAYERCAMERA_DESC PlayerCameraDesc;
 
-	PlayerCameraDesc.fMouseSensitive = 0.2f;
-	PlayerCameraDesc.vEye = _float4(0.f, 10.f, -8.f, 1.f);
+	PlayerCameraDesc.m_pPlayer = dynamic_cast<CPlayer*>(m_pParent);
+	PlayerCameraDesc.fMouseSensitive = 0.1f;
+	XMStoreFloat4(&PlayerCameraDesc.vEye, m_pParentTransform->Get_State(CTransform::STATE_POSITION));
 	PlayerCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
-	PlayerCameraDesc.fFovY = XMConvertToRadians(45.f);
+	PlayerCameraDesc.fFovY = XMConvertToRadians(60.f);
 	PlayerCameraDesc.fAspect = g_iWinSizeX / (_float)g_iWinSizeY;
 	PlayerCameraDesc.fNear = 0.2f;
 	PlayerCameraDesc.fFar = 500.f;
-	
+	PlayerCameraDesc.fSpeedPerSec = 50.f;
+	PlayerCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
+
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_PlayerCamera"), TEXT("ProtoType_GameObject_Camera_Player"), &PlayerCameraDesc)))
 		return E_FAIL;
 

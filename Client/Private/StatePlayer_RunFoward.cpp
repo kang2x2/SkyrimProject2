@@ -23,7 +23,6 @@ void CStatePlayer_RunFoward::Update(_float _fTimeDelta)
 
 void CStatePlayer_RunFoward::Late_Update()
 {
-	__super::Key_Input();
 }
 
 void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
@@ -52,7 +51,7 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 			if (pGameInstance->Get_DIKeyUp('W'))
 			{
 				if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
-					Player_SetLook(-45.f);
+					Player_SetLook(-90.f);
 
 				m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_L);
 			}
@@ -91,6 +90,8 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_IDLE);
 		m_pPlayer->Play_Animation(true, "mt_idle");
 	}
+
+	__super::Key_Input();
 
 	Safe_Release(pGameInstance);
 }

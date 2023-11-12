@@ -43,12 +43,12 @@ void CStatePlayerOH_RAttack::Update(_float _fTimeDelta)
 	}
 
 	Safe_Release(pGameInstance);
+
+	__super::Key_Input();
 }
 
 void CStatePlayerOH_RAttack::Late_Update()
 {
-	__super::Key_Input();
-
 	if (m_pPlayer->Get_IsAnimationFin())
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);

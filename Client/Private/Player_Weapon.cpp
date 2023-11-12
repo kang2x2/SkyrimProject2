@@ -43,8 +43,8 @@ HRESULT CPlayer_Weapon::Initialize_Clone(void* _pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Scaling(_float3(0.01f, 0.01f, 0.01f));
-	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
+	m_pTransformCom->Set_Scaling(_float3(0.013f, 0.013f, 0.013f));
+	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-120.0f));
 	m_strName = TEXT("PlayerWeapon");
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -70,6 +70,7 @@ void CPlayer_Weapon::Tick(_float _fTimeDelta)
 	WorldMatrix.r[2] = XMVector3Normalize(WorldMatrix.r[2]);
 
 	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix() * WorldMatrix);
+
 	dynamic_cast<CTransform*>(m_pWeapon->Get_Component(TEXT("Com_Transform")))->Set_WorldMatrix(XMLoadFloat4x4(&m_matWorld));
 
 	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_UNEQUIP &&

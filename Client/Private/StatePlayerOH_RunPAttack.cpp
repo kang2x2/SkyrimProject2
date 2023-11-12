@@ -19,12 +19,12 @@ HRESULT CStatePlayerOH_RunPAttack::Initialize(CGameObject* _pPlayer, CTransform*
 void CStatePlayerOH_RunPAttack::Update(_float _fTimeDelta)
 {
 	m_pPlayerTransform->Go_Foward(_fTimeDelta);
+
+	__super::Key_Input();
 }
 
 void CStatePlayerOH_RunPAttack::Late_Update()
 {
-	__super::Key_Input();
-
 	if (m_pPlayer->Get_IsAnimationFin())
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);

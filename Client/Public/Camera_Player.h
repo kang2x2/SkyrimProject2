@@ -14,6 +14,7 @@ class CCamera_Player final : public CCamera
 public:
 	typedef struct tagFREE_PLAYERCAMERA_DESC : public CCamera::CAMERA_DESC
 	{
+		class CPlayer*  m_pPlayer = nullptr;
 		_float			fMouseSensitive = 0.f;
 	}FREE_PLAYERCAMERA_DESC;
 
@@ -26,7 +27,7 @@ public:
 	virtual HRESULT Initialize_ProtoType() override; // 원본
 	virtual HRESULT Initialize_Clone(void* pArg) override; // 사본
 	void	Tick_3st(_float4x4 _matWorld, _float4 _vTargetPos, _float _fTimeDelta);
-	void	Tick_1st(_float4x4 _matWorld, _float _fTimeDelta);
+	void	Tick_1st(_float4x4 _matWorld, _vector& _vPlayerLook, _float _fTimeDelta);
 	virtual void	LateTick(_float _fTimeDelta) override;
 
 public:
@@ -34,6 +35,8 @@ public:
 	void Zoom(_float _fTimeDelta);
 
 private:
+	class CPlayer*  m_pPlayer = nullptr;
+
 	_matrix			m_matAccumulateRotX = XMMatrixIdentity();
 	_matrix			m_matAccumulateRotY = XMMatrixIdentity();
 	_matrix			matWorld = XMMatrixIdentity();

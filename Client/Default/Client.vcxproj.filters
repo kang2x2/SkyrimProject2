@@ -88,15 +88,6 @@
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts">
       <UniqueIdentifier>{dbeb029a-4cff-4d3b-9165-53f9fcb46b6f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\04. Building">
-      <UniqueIdentifier>{610b7e19-d7e7-4cb6-bbef-1f676ea6027f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. StoneWork">
-      <UniqueIdentifier>{a12bbec8-e07a-47e2-aee8-4f7e89f5a785}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\03. SkyrimTerrain">
-      <UniqueIdentifier>{cd088392-98f1-43ef-a656-c7d86e2f3e04}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\99. BasicObject">
       <UniqueIdentifier>{f32ab3bd-76b2-44b0-bb2d-c8a998fb5442}</UniqueIdentifier>
     </Filter>
@@ -367,6 +358,21 @@
     <Filter Include="02. GameObject\01. GamePlay\99. BasicObject\04. Camara\00. PlayerCamera">
       <UniqueIdentifier>{86e7d987-a176-4867-8192-ae619dcc8c16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\01. SkyrimTerrain">
+      <UniqueIdentifier>{cd088392-98f1-43ef-a656-c7d86e2f3e04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\02. Building">
+      <UniqueIdentifier>{610b7e19-d7e7-4cb6-bbef-1f676ea6027f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\03. StoneWork">
+      <UniqueIdentifier>{a12bbec8-e07a-47e2-aee8-4f7e89f5a785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\00. Rock">
+      <UniqueIdentifier>{b30aa7ea-84e0-44b8-8cbd-463978edd489}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\04. DGPlaceableObj">
+      <UniqueIdentifier>{319e262f-aab9-40d5-8469-bb9e006cb248}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -448,13 +454,13 @@
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SkyrimTerrain.h">
-      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\03. SkyrimTerrain</Filter>
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\01. SkyrimTerrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Building.h">
-      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\04. Building</Filter>
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\02. Building</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StoneWork.h">
-      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. StoneWork</Filter>
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\03. StoneWork</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Zero.h">
       <Filter>01. Level\00. Zero</Filter>
@@ -660,6 +666,12 @@
     <ClInclude Include="..\Public\State_Player.h">
       <Filter>03. State\00. Player</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SkyrimRock.h">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\00. Rock</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\DGPlaceableObj.h">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\04. DGPlaceableObj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -737,13 +749,13 @@
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SkyrimTerrain.cpp">
-      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\03. SkyrimTerrain</Filter>
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\01. SkyrimTerrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Building.cpp">
-      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\04. Building</Filter>
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\02. Building</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StoneWork.cpp">
-      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. StoneWork</Filter>
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\03. StoneWork</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Zero.cpp">
       <Filter>01. Level\00. Zero</Filter>
@@ -945,6 +957,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player.cpp">
       <Filter>03. State\00. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimRock.cpp">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\00. Rock</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DGPlaceableObj.cpp">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\04. DGPlaceableObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -9,31 +9,32 @@
 CPlayer_Body::CPlayer_Body(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CPlayerPart_Base(_pDevice, _pContext)
 {
-	for (_int i = 0; i < CPlayer::CAM_END; ++i)
-		m_pModelComAry[i] = nullptr;
 }
 
 CPlayer_Body::CPlayer_Body(const CPlayer_Body& rhs)
 	: CPlayerPart_Base(rhs)
 {
-	for (_int i = 0; i < CPlayer::CAM_END; ++i)
-		m_pModelComAry[i] = nullptr;
 }
 
 HRESULT CPlayer_Body::Initialize_ProtoType()
 {
+	for (_int i = 0; i < CPlayer::CAM_END; ++i)
+		m_pModelComAry[i] = nullptr;
+
 	return S_OK;
 }
 
 HRESULT CPlayer_Body::Initialize_Clone(void* _pArg)
 {
+	for (_int i = 0; i < CPlayer::CAM_END; ++i)
+		m_pModelComAry[i] = nullptr;
+
 	if (FAILED(__super::Initialize_Clone(_pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	// m_pTransformCom->Set_Scaling(_float3(0.0013f, 0.0013f, 0.0013f));
 	m_strName = TEXT("Player_Body");
 
 	return S_OK;
@@ -231,7 +232,7 @@ void CPlayer_Body::Free()
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pParentTransform);
-	Safe_Release(m_pModelCom);
+	// Safe_Release(m_pModelCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTransformCom);
@@ -241,8 +242,5 @@ void CPlayer_Body::Free()
 	{
 		if (m_pModelComAry[i] != nullptr)
 			Safe_Release(m_pModelComAry[i]);
-
 	}
-
-
 }

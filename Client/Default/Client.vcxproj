@@ -190,6 +190,7 @@
     <ClInclude Include="..\Public\Camera_Player.h" />
     <ClInclude Include="..\Public\CLevel_Tool.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\DGPlaceableObj.h" />
     <ClInclude Include="..\Public\Falmer_UnEquip.h" />
     <ClInclude Include="..\Public\Helmet_Glass.h" />
     <ClInclude Include="..\Public\Inventory.h" />
@@ -207,6 +208,7 @@
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\SkyrimArmor.h" />
     <ClInclude Include="..\Public\SkyrimHelmet.h" />
+    <ClInclude Include="..\Public\SkyrimRock.h" />
     <ClInclude Include="..\Public\SkyrimUI.h" />
     <ClInclude Include="..\Public\SkyrimWeapon.h" />
     <ClInclude Include="..\Public\StateFalmerUE_Attack.h" />
@@ -287,6 +289,7 @@
     <ClCompile Include="..\Private\Building.cpp" />
     <ClCompile Include="..\Private\Camera_Player.cpp" />
     <ClCompile Include="..\Private\CLevel_Tool.cpp" />
+    <ClCompile Include="..\Private\DGPlaceableObj.cpp" />
     <ClCompile Include="..\Private\Falmer_UnEquip.cpp" />
     <ClCompile Include="..\Private\Helmet_Glass.cpp" />
     <ClCompile Include="..\Private\Inventory.cpp" />
@@ -304,6 +307,7 @@
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SkyrimArmor.cpp" />
     <ClCompile Include="..\Private\SkyrimHelmet.cpp" />
+    <ClCompile Include="..\Private\SkyrimRock.cpp" />
     <ClCompile Include="..\Private\SkyrimUI.cpp" />
     <ClCompile Include="..\Private\SkyrimWeapon.cpp" />
     <ClCompile Include="..\Private\StateFalmerUE_Attack.cpp" />

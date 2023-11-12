@@ -37,16 +37,29 @@ void CState_Player::Key_Input()
 	Safe_AddRef(pGameInstance);
 
 	if (pGameInstance->Get_DIKeyDown('F'))
+	{
 		m_pPlayer->Set_PlayerCam();
+
+		/* ¹«±â */
+		if (m_pPlayer->Get_PlayerEquipState() == CPlayer::EQUIP_ONEHAND)
+			m_pPlayer->Set_SoketBone("WEAPON");
+		else if (m_pPlayer->Get_PlayerEquipState() == CPlayer::EQUIP_UNEQUIP)
+			m_pPlayer->Set_SoketBone("WeaponSword");
+	}
 
 	Safe_Release(pGameInstance);
 }
 
-void CState_Player::Player_SetLook(_float _fDegree)
+void CState_Player::Player_SetLook(_float _fXDegree, _float _fYDegree)
 {
-	_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(_fDegree));
-	_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
+	m_pPlayerTransform->Set_State(CTransform::STATE_LOOK, m_pPlayer->Get_PlayerCamLook());
 
+	_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(_fXDegree));
+	_matrix matRotX = XMMatrixRotationY(XMConvertToRadians(_fYDegree));
+
+	_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
+	vPlayerLook = XMVector4Normalize(XMVector4Transform(vPlayerLook, matRotX));
+	
 	m_pPlayerTransform->SetLook(vPlayerLook);
 }
 

@@ -23,7 +23,6 @@ void CStatePlayer_RunRight::Update(_float _fTimeDelta)
 
 void CStatePlayer_RunRight::Late_Update()
 {
-	__super::Key_Input();
 }
 
 void CStatePlayer_RunRight::Key_Input(_float _fTimeDelta)
@@ -34,18 +33,29 @@ void CStatePlayer_RunRight::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIKeyPress('D'))
 	{
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
-		{
 			m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
-		}
+		
 		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
-		{
 			m_pPlayerTransform->Go_Right(_fTimeDelta, m_pPlayerNavigation);
-		}
 
 		if (pGameInstance->Get_DIKeyPress('W'))
 		{
+			if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
+				m_pPlayer->Play_Animation(true, "hm_1stp_run");
+
 			m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_F);
 		}
+
+		if (pGameInstance->Get_DIKeyPress('S'))
+		{
+			if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
+				m_pPlayer->Play_Animation(true, "hm_1stp_run");
+			else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+				m_pPlayer->Play_Animation(true, "mt_runbackward");
+
+			m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_B);
+		}
+
 	}
 
 	if (pGameInstance->Get_DIKeyUp('D'))
@@ -53,6 +63,8 @@ void CStatePlayer_RunRight::Key_Input(_float _fTimeDelta)
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_IDLE);
 		m_pPlayer->Play_Animation(true, "mt_idle");
 	}
+
+	__super::Key_Input();
 
 	Safe_Release(pGameInstance);
 }

@@ -23,7 +23,6 @@ void CStatePlayer_RunBackward::Update(_float _fTimeDelta)
 
 void CStatePlayer_RunBackward::Late_Update()
 {
-	__super::Key_Input();
 }
 
 void CStatePlayer_RunBackward::Key_Input(_float _fTimeDelta)
@@ -74,7 +73,7 @@ void CStatePlayer_RunBackward::Key_Input(_float _fTimeDelta)
 
 			if (pGameInstance->Get_DIKeyUp('S'))
 			{
-				Player_SetLook(135.f);
+				Player_SetLook(-45.f);
 
 				m_pPlayer->Play_Animation(true, "mt_runforward");
 				m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_R);
@@ -90,6 +89,8 @@ void CStatePlayer_RunBackward::Key_Input(_float _fTimeDelta)
 		m_pPlayer->Play_Animation(true, "mt_idle");
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_IDLE);
 	}
+
+	__super::Key_Input();
 
 	Safe_Release(pGameInstance);
 }

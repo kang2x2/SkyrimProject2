@@ -24,12 +24,12 @@ void CStatePlayerOH_Equip::Update(_float _fTimeDelta)
 	{
 		m_pPlayer->Set_SoketBone("WEAPON");
 	}
+
+	__super::Key_Input();
 }
 
 void CStatePlayerOH_Equip::Late_Update()
 {
-	__super::Key_Input();
-
 	if (m_pPlayer->Get_IsAnimationFin() && 
 		m_pPlayer->Get_CurAnimationName("1hm_equip"))
 	{

@@ -50,19 +50,8 @@ HRESULT Engine::CInput_Device::Ready_Input_Device(HINSTANCE hInst, HWND hWnd)
 	return S_OK;
 }
 
-
 _bool CInput_Device::Get_DIKeyDown(_ubyte byKeyID)
 {
-	// 눌린 적 없고 지금 눌렀으면
-	//if (m_curKey != byKeyID && GetKeyState(byKeyID) & 0x80)
-	//{
-	//	m_curKey = byKeyID;
-	//	return true;
-	//}
-	//
-	//if (m_curKey == byKeyID && !(GetKeyState(byKeyID) & 0x80))
-	//	m_curKey = 0;
-
 	if (!m_byKeyState[byKeyID] && (GetAsyncKeyState(byKeyID) & 0x8000))
 	{
 		m_byKeyState[byKeyID] = !m_byKeyState[byKeyID];
@@ -76,7 +65,6 @@ _bool CInput_Device::Get_DIKeyDown(_ubyte byKeyID)
 	}
 
 	return false;
-
 }
 
 _bool CInput_Device::Get_DIKeyUp(_ubyte byKeyID)

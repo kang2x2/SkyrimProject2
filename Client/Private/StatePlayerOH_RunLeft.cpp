@@ -23,7 +23,6 @@ void CStatePlayerOH_RunLeft::Update(_float _fTimeDelta)
 
 void CStatePlayerOH_RunLeft::Late_Update()
 {
-	__super::Key_Input();
 }
 
 void CStatePlayerOH_RunLeft::Key_Input(_float _fTimeDelta)
@@ -42,14 +41,14 @@ void CStatePlayerOH_RunLeft::Key_Input(_float _fTimeDelta)
 		if (pGameInstance->Get_DIKeyPress('W'))
 			m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_F);
 
-		else if (pGameInstance->Get_DIKeyPress('S'))
+		if (pGameInstance->Get_DIKeyPress('S'))
 		{
 			m_pPlayer->Play_Animation(true, "1hm_runbackward");
 			m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_B);
 		}
 
 		/* АјАн */
-		else if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+		if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 		{
 			m_pPlayerTransform->SetLook(m_pPlayer->Get_PlayerCamLook());
 			m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
@@ -66,6 +65,9 @@ void CStatePlayerOH_RunLeft::Key_Input(_float _fTimeDelta)
 	}
 
 	Safe_Release(pGameInstance);
+
+	__super::Key_Input();
+
 }
 
 CStatePlayerOH_RunLeft* CStatePlayerOH_RunLeft::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)

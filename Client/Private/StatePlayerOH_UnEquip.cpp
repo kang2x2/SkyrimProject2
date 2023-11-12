@@ -24,12 +24,12 @@ void CStatePlayerOH_UnEquip::Update(_float _fTimeDelta)
 	{
 		m_pPlayer->Set_SoketBone("WeaponSword");
 	}
+
+	__super::Key_Input();
 }
 
 void CStatePlayerOH_UnEquip::Late_Update()
 {
-	__super::Key_Input();
-
 	if (m_pPlayer->Get_IsAnimationFin() &&
 		m_pPlayer->Get_CurAnimationName("1hm_unequip"))
 	{

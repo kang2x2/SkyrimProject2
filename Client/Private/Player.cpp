@@ -172,6 +172,10 @@ void CPlayer::Set_PlayerCam()
 	else if(m_eCurCamMode == CAM_3ST)
 		dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_SoketBone(
 			pBody->Get_SocketBonePtr("Camera3rd [Cam3]"));
+
+	dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_PivotMatrix(
+		pBody->Get_SocketPivotMatrix());
+
 }
 
 void CPlayer::Set_CurCell()
@@ -231,7 +235,6 @@ HRESULT CPlayer::Ready_Part()
 	/* For. Player Camera */
 	CPlayer_CameraPart::PLAYER_CAMERAPART_DESC CameraPartDesc;
 	CameraPartDesc.pParent = this;
-	CameraPartDesc.m_pParentBody = dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY]);
 	CameraPartDesc.pParentTransform = m_pTransformCom;
 	// CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera3rd [Cam3]");
 	CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera1st [Cam1]");

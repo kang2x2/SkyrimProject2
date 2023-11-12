@@ -23,7 +23,6 @@ void CStatePlayerOH_RunFoward::Update(_float _fTimeDelta)
 
 void CStatePlayerOH_RunFoward::Late_Update()
 {
-	__super::Key_Input();
 }
 
 void CStatePlayerOH_RunFoward::Key_Input(_float _fTimeDelta)
@@ -33,7 +32,8 @@ void CStatePlayerOH_RunFoward::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyPress('W'))
 	{
-		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+			m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
 		if (pGameInstance->Get_DIKeyPress('A'))
 		{
@@ -52,17 +52,13 @@ void CStatePlayerOH_RunFoward::Key_Input(_float _fTimeDelta)
 			if (pGameInstance->Get_DIKeyUp('W'))
 			{
 				if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
-				{
-					_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-45.f));
-					_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
+					Player_SetLook(-90.f);
 
-					m_pPlayerTransform->SetLook(vPlayerLook);
-				}
 				m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_L);
 			}
 
 			/* 공격 */
-			else if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+			if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 			{
 				m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
@@ -87,18 +83,13 @@ void CStatePlayerOH_RunFoward::Key_Input(_float _fTimeDelta)
 			if (pGameInstance->Get_DIKeyUp('W'))
 			{
 				if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
-				{
-					_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(45.f));
-					_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-
-					m_pPlayerTransform->SetLook(vPlayerLook);
-				}
+					Player_SetLook(45.f);
 
 				m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_R);
 			}
 
 			/* 공격 */
-			else if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+			if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 			{
 				m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
@@ -128,67 +119,7 @@ void CStatePlayerOH_RunFoward::Key_Input(_float _fTimeDelta)
 
 	Safe_Release(pGameInstance);
 
-
-
-	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	//Safe_AddRef(pGameInstance);
-	//
-	//if (pGameInstance->Get_DIKeyPress('W'))
-	//{
-	//	m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
-	//
-	//	if (pGameInstance->Get_DIKeyPress('A'))
-	//	{
-	//		_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-45.f));
-	//		_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-	//
-	//		m_pPlayerTransform->SetLook(vPlayerLook);
-	//		m_pPlayerTransform->Go_Left(_fTimeDelta, m_pPlayerNavigation);
-	//
-	//		if (pGameInstance->Get_DIKeyUp('W'))
-	//		{
-	//			_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-45.f));
-	//			_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-	//
-	//			m_pPlayerTransform->SetLook(vPlayerLook);
-	//
-	//			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUN_L);
-	//		}
-	//	}
-	//
-	//	else if (pGameInstance->Get_DIKeyPress('D'))
-	//	{
-	//		_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(45.f));
-	//		_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-	//
-	//		m_pPlayerTransform->SetLook(vPlayerLook);
-	//		m_pPlayerTransform->Go_Right(_fTimeDelta, m_pPlayerNavigation);
-	//
-	//		if (pGameInstance->Get_DIKeyUp('W'))
-	//		{
-	//			_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(45.f));
-	//			_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
-	//
-	//			m_pPlayerTransform->SetLook(vPlayerLook);
-	//
-	//			dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUN_R);
-	//		}
-	//	}
-	//
-	//	else if (pGameInstance->Get_DIKeyDown('R'))
-	//	{
-	//		dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_RUNPOWERATTACK);
-	//		dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(false, "1hm_attackpowerforwardsprint");
-	//	}
-	//}
-	//
-	//if (pGameInstance->Get_DIKeyUp('W'))
-	//{
-	//	dynamic_cast<CPlayer*>(m_pPlayer)->Set_State(CPlayer::ONEHAND_IDLE);
-	//	dynamic_cast<CPlayer*>(m_pPlayer)->Play_Animation(true, "1hm_idle");
-	//}
-	//
-	//Safe_Release(pGameInstance);
+	__super::Key_Input();
 }
 
 CStatePlayerOH_RunFoward* CStatePlayerOH_RunFoward::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)

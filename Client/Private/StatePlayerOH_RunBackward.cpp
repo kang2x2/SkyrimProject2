@@ -23,7 +23,6 @@ void CStatePlayerOH_RunBackward::Update(_float _fTimeDelta)
 
 void CStatePlayerOH_RunBackward::Late_Update()
 {
-	__super::Key_Input();
 }
 
 void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
@@ -58,7 +57,7 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 			}
 
 			/* 공격 */
-			else if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+			if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 			{
 				m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
@@ -90,7 +89,7 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 			}
 
 			/* 공격 */
-			else if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+			if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 			{
 				m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
@@ -119,6 +118,8 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 	}
 
 	Safe_Release(pGameInstance);
+
+	__super::Key_Input();
 }
 
 CStatePlayerOH_RunBackward* CStatePlayerOH_RunBackward::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)

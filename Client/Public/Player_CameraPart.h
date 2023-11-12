@@ -19,7 +19,6 @@ public:
 	typedef struct tagPartDesc : public CPlayerPart_Base::PART_DESC
 	{
 		CBone*					pSocketBone = nullptr;
-		class CPlayer_Body*		m_pParentBody = nullptr;
 		_float4x4				matSocketPivot;
 	}PLAYER_CAMERAPART_DESC;
 

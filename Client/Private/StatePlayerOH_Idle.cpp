@@ -24,7 +24,6 @@ void CStatePlayerOH_Idle::Update(_float _fTimeDelta)
 
 void CStatePlayerOH_Idle::Late_Update()
 {
-	__super::Key_Input();
 }
 
 void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
@@ -39,59 +38,39 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 		m_pPlayer->Play_Animation(true, "1hm_runforward");
 	}
 
-	else if (pGameInstance->Get_DIKeyPress('S'))
+	if (pGameInstance->Get_DIKeyPress('S'))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_B);
 		m_pPlayer->Play_Animation(true, "1hm_runbackward");
 	}
 
-	else if (pGameInstance->Get_DIKeyPress('A'))
+	if (pGameInstance->Get_DIKeyPress('A'))
 	{
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
-		{
-			_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(-90.f));
-			_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
+			Player_SetLook(-90.f);
 
-			m_pPlayerTransform->SetLook(vPlayerLook);
-
-			m_pPlayer->Play_Animation(true, "1hm_runforward");
-		}
-		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
-		{
-			m_pPlayer->Play_Animation(true, "1hm_1stp_turnleft");
-		}
-
+		m_pPlayer->Play_Animation(true, "1hm_runforward");
 		m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_L);
 		
 	}
 
-	else if (pGameInstance->Get_DIKeyPress('D'))
+	if (pGameInstance->Get_DIKeyPress('D'))
 	{
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
-		{
-			_matrix matRotY = XMMatrixRotationY(XMConvertToRadians(90.f));
-			_vector vPlayerLook = XMVector4Normalize(XMVector4Transform(m_pPlayerTransform->Get_State(CTransform::STATE_LOOK), matRotY));
+			Player_SetLook(90.f);
 
-			m_pPlayerTransform->SetLook(vPlayerLook);
-
-			m_pPlayer->Play_Animation(true, "1hm_runforward");
-		}
-		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
-		{
-			m_pPlayer->Play_Animation(true, "1hm_1stp_turnright");
-		}
-
+		m_pPlayer->Play_Animation(true, "1hm_runforward");
 		m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_R);
 
 	}
 
-	else if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+	if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACK);
 		m_pPlayer->Play_Animation(false, "1hm_attackleft");
 	}
 
-	else if (pGameInstance->Get_DIKeyDown('R'))
+	if (pGameInstance->Get_DIKeyDown('R'))
 	{
 		m_pPlayer->Set_PlayerEquipState(CPlayer::EQUIP_UNEQUIP);
 
@@ -105,8 +84,9 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 		m_pPlayer->Play_Animation(true, "1hm_blockidle");
 	}
 
-	Safe_Release(pGameInstance);
+	__super::Key_Input();
 
+	Safe_Release(pGameInstance);
 }
 
 CStatePlayerOH_Idle* CStatePlayerOH_Idle::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)

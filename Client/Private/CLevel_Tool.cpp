@@ -63,10 +63,14 @@ HRESULT CLevel_Tool::Ready_Light()
 	LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
 	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
 	
-	LightDesc.vDiffuse = _float4(0.5f, 0.5f, 0.5f, 1.f);
-	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
+	// LightDesc.vDiffuse = _float4(0.5f, 0.5f, 0.5f, 1.f);
+	// LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	// LightDesc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
 	
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
 	if (FAILED(pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
 

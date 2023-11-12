@@ -32,12 +32,12 @@ void CStatePlayerOH_RAttackF::Update(_float _fTimeDelta)
 	}
 
 	Safe_Release(pGameInstance);
+
+	__super::Key_Input();
 }
 
 void CStatePlayerOH_RAttackF::Late_Update()
 {
-	__super::Key_Input();
-
 	if (m_pPlayer->Get_IsAnimationFin())
 	{
 		m_pPlayerTransform->Set_Speed(m_pPlayer->GetRunSpeed());

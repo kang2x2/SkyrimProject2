@@ -28,7 +28,7 @@ public:
 	virtual void Key_Input();
 
 protected:
-	virtual void Player_SetLook(_float _fDegree);
+	virtual void Player_SetLook(_float _fXDegree, _float _fYDegree = 0.f);
 
 protected:
 	class CPlayer* m_pPlayer = nullptr;

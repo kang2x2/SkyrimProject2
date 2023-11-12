@@ -24,7 +24,6 @@ void CStatePlayer_Idle::Update(_float _fTimeDelta)
 
 void CStatePlayer_Idle::Late_Update()
 {
-	__super::Key_Input();
 }
 
 void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
@@ -36,7 +35,7 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIKeyPress('W'))
 	{
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
-			m_pPlayer->Play_Animation(true, "hm_1stp_run");
+			m_pPlayer->Play_Animation(true, "1hm_runforward");
 
 		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 			m_pPlayer->Play_Animation(true, "mt_runforward");
@@ -47,7 +46,7 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIKeyPress('S'))
 	{
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
-			m_pPlayer->Play_Animation(true, "hm_1stp_run");
+			m_pPlayer->Play_Animation(true, "1hm_runbackward");
 
 		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 			m_pPlayer->Play_Animation(true, "mt_runbackward");
@@ -59,7 +58,7 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	{
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 		{
-			m_pPlayer->Play_Animation(true, "1hm_1stp_turnleft");
+			m_pPlayer->Play_Animation(true, "1hm_runforward");
 		}
 		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 		{
@@ -77,7 +76,7 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	{
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 		{
-			m_pPlayer->Play_Animation(true, "1hm_1stp_turnright");
+			m_pPlayer->Play_Animation(true, "1hm_runforward");
 		}
 		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 		{
@@ -95,8 +94,9 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 		m_pPlayer->Play_Animation(false, "1hm_equip");
 	}
 
-	Safe_Release(pGameInstance);
+	__super::Key_Input();
 
+	Safe_Release(pGameInstance);
 }
 
 CStatePlayer_Idle* CStatePlayer_Idle::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)

@@ -22,9 +22,10 @@ HRESULT CCamera_Player::Initialize_ProtoType()
 
 HRESULT CCamera_Player::Initialize_Clone(void* pArg)
 {
-    FREE_PLAYERCAMERA_DESC* FreeCameraDesc = (FREE_PLAYERCAMERA_DESC*)pArg;
+    FREE_PLAYERCAMERA_DESC* PlayerCameraDesc = (FREE_PLAYERCAMERA_DESC*)pArg;
 
-    m_fMouseSensitive = FreeCameraDesc->fMouseSensitive;
+    m_pPlayer = PlayerCameraDesc->m_pPlayer;
+    m_fMouseSensitive = PlayerCameraDesc->fMouseSensitive;
 
     if (FAILED(__super::Initialize_Clone(pArg)))
         return E_FAIL;
@@ -38,6 +39,8 @@ HRESULT CCamera_Player::Initialize_Clone(void* pArg)
 
 void CCamera_Player::Tick_3st(_float4x4 _matWorld, _float4 _vTargetPos, _float _fTimeDelta)
 {
+    fNear = 0.2f;
+
     Mouse_Fix();
     Zoom(_fTimeDelta);
 
@@ -71,36 +74,41 @@ void CCamera_Player::Tick_3st(_float4x4 _matWorld, _float4 _vTargetPos, _float _
 
     m_pTransformCom->LookAt(XMLoadFloat4(&_vTargetPos));
 
-    if (pGameInstance->Get_DIKeyDown('F'))
-    {
-        m_bIsChangeCamMode = true;
-    }
-
     Safe_Release(pGameInstance);
 
     __super::Tick(_fTimeDelta);
 }
 
-void CCamera_Player::Tick_1st(_float4x4 _matWorld, _float _fTimeDelta)
+void CCamera_Player::Tick_1st(_float4x4 _matWorld, _vector& _vPlayerLook, _float _fTimeDelta)
 {
-    Mouse_Fix();
+    fNear = 0.005f;
 
-    m_pTransformCom->Set_WorldMatrix(XMLoadFloat4x4(&_matWorld));
+    Mouse_Fix();
 
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
     
-    _long mouseMove = 0l;
-    
-    if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_X))
-    {
-        m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), mouseMove * m_fMouseSensitive * _fTimeDelta);
-    }
-    
-    if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_Y))
-    {
-        m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), mouseMove * m_fMouseSensitive * _fTimeDelta);
-    }
+    /* 마우스 움직임 정도를 얻는다.*/
+    _long mouseMoveY = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_X);
+    _long mouseMoveX = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_Y);
+
+    _matrix matRot = XMMatrixRotationY(rotationSpeed * mouseMoveY * _fTimeDelta);
+    m_matAccumulateRotY = XMMatrixMultiply(m_matAccumulateRotY, matRot);
+    matRot = XMMatrixRotationX(rotationSpeed * mouseMoveX * _fTimeDelta);
+    m_matAccumulateRotX = XMMatrixMultiply(m_matAccumulateRotX, matRot);
+
+    _long	MouseMove = 0l;
+
+    if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_X))
+        m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), MouseMove * m_fMouseSensitive * _fTimeDelta);
+
+    if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_Y))
+        m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), MouseMove * m_fMouseSensitive * _fTimeDelta);
+
+    vEye = {_matWorld._41, _matWorld._42, _matWorld._43, 1.f};
+
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vEye)); // 위치
+
 
     Safe_Release(pGameInstance);
 
