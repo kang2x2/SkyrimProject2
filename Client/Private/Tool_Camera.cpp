@@ -122,11 +122,11 @@ void CTool_Camera::Tick(_float _fTimeDelta)
 
 				if (mouseMove < 0 && pGameInstance->Get_DIKeyPress(VK_LCONTROL))
 				{
-					Zoom_Out(60.f, _fTimeDelta);
+					Zoom_Out(300.f, _fTimeDelta);
 				}
 				else if (mouseMove > 0 && pGameInstance->Get_DIKeyPress(VK_LCONTROL))
 				{
-					Zoom_In(60.f, _fTimeDelta);
+					Zoom_In(300.f, _fTimeDelta);
 				}
 			}
 

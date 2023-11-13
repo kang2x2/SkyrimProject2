@@ -601,38 +601,6 @@ void CImGui_Tool::Ready_FindFBX(TOOL_AFTER_FOLDERDESC _tFileDesc)
 		wStrFindPath = TEXT("../Bin/Resource/BinaryFBX/Anim/") + FolderName + TEXT("/");
 
 	Find_FileFBX(wStrFindPath);
-
-	//HANDLE fileSearch;
-	//WIN32_FIND_DATA wfd;
-	//CString musiccount;
-	//CString findFileName;
-	//CString FolderName = _FolderName;
-
-	//musiccount.Format(_T("../Bin/Resource/BinaryFBX/NonAnim/") + FolderName + _T("/*"));
-
-	// FindFirstFile 함수를 통해 검색하려고 하는 파일이 없을 경우 
-	// 핸들 값은 INVALID_HANDLE_VALUE 값을 가짐
-	//fileSearch = FindFirstFile(musiccount, &wfd);
-
-	// 찾는 파일이 있다면, 
-	//if (fileSearch != INVALID_HANDLE_VALUE)
-	//{
-	//	do
-	//	{
-	//		if (!(wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-	//		{
-	//			findFileName.Format(_T("%s"), wfd.cFileName); // findFileName에 파일 이름 저장
-	//
-	//			LPCTSTR lpcStr = (LPCTSTR)findFileName;
-	//			wstring wstrName(lpcStr);
-	//
-	//			m_vecBeforeFileList.push_back(lpcStr);
-	//		}
-	//	} while (FindNextFile(fileSearch, &wfd));
-	//
-	//	// 파일 찾기 핸들 값 닫기	
-	//	FindClose(fileSearch);
-	//}
 }
 
 HRESULT CImGui_Tool::Find_FileFBX(const wstring& _wStrPath)
@@ -1271,6 +1239,12 @@ void CImGui_Tool::Key_Input(class CTransform* _pTransform)
 	{
 		m_fRotValue -= 11.25f;
 		_pTransform->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(m_fRotValue));
+	}
+
+	else if (pGameInstance->Get_DIKeyPress(VK_LCONTROL) && pGameInstance->Get_DIKeyDown('Q'))
+	{
+		m_fRotValue -= 90.f;
+		_pTransform->Fix_Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(m_fRotValue));
 	}
 
 
