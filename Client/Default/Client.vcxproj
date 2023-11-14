@@ -188,9 +188,13 @@
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Building.h" />
     <ClInclude Include="..\Public\Camera_Player.h" />
+    <ClInclude Include="..\Public\CavePillars.h" />
     <ClInclude Include="..\Public\CLevel_Tool.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\CaveRock.h" />
     <ClInclude Include="..\Public\DGPlaceableObj.h" />
+    <ClInclude Include="..\Public\FalmerFence.h" />
+    <ClInclude Include="..\Public\FalmerHouse.h" />
     <ClInclude Include="..\Public\Falmer_UnEquip.h" />
     <ClInclude Include="..\Public\Helmet_Glass.h" />
     <ClInclude Include="..\Public\Inventory.h" />
@@ -211,6 +215,7 @@
     <ClInclude Include="..\Public\SkyrimRock.h" />
     <ClInclude Include="..\Public\SkyrimUI.h" />
     <ClInclude Include="..\Public\SkyrimWeapon.h" />
+    <ClInclude Include="..\Public\SpiderEgg.h" />
     <ClInclude Include="..\Public\StateFalmerUE_Attack.h" />
     <ClInclude Include="..\Public\StateFalmerUE_Chase.h" />
     <ClInclude Include="..\Public\StateFalmerUE_Detection.h" />
@@ -288,8 +293,12 @@
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Building.cpp" />
     <ClCompile Include="..\Private\Camera_Player.cpp" />
+    <ClCompile Include="..\Private\CavePillars.cpp" />
     <ClCompile Include="..\Private\CLevel_Tool.cpp" />
+    <ClCompile Include="..\Private\CaveRock.cpp" />
     <ClCompile Include="..\Private\DGPlaceableObj.cpp" />
+    <ClCompile Include="..\Private\FalmerFence.cpp" />
+    <ClCompile Include="..\Private\FalmerHouse.cpp" />
     <ClCompile Include="..\Private\Falmer_UnEquip.cpp" />
     <ClCompile Include="..\Private\Helmet_Glass.cpp" />
     <ClCompile Include="..\Private\Inventory.cpp" />
@@ -310,6 +319,7 @@
     <ClCompile Include="..\Private\SkyrimRock.cpp" />
     <ClCompile Include="..\Private\SkyrimUI.cpp" />
     <ClCompile Include="..\Private\SkyrimWeapon.cpp" />
+    <ClCompile Include="..\Private\SpiderEgg.cpp" />
     <ClCompile Include="..\Private\StateFalmerUE_Attack.cpp" />
     <ClCompile Include="..\Private\StateFalmerUE_Chase.cpp" />
     <ClCompile Include="..\Private\StateFalmerUE_Detection.cpp" />

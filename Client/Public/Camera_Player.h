@@ -26,8 +26,8 @@ private:
 public:
 	virtual HRESULT Initialize_ProtoType() override; // 원본
 	virtual HRESULT Initialize_Clone(void* pArg) override; // 사본
-	void	Tick_3st(_float4x4 _matWorld, _float4 _vTargetPos, _float _fTimeDelta);
-	void	Tick_1st(_float4x4 _matWorld, _vector& _vPlayerLook, _float _fTimeDelta);
+	void	Tick_3st(_float4 _vTargetPos, _float _fTimeDelta);
+	void	Tick_1st(CTransform* _pParentTransform, _float4x4 _matSocket, _float _fTimeDelta);
 	virtual void	LateTick(_float _fTimeDelta) override;
 
 public:

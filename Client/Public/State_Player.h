@@ -25,7 +25,7 @@ public:
 	virtual void Update(_float _fTimeDelta);
 	virtual void Late_Update();
 
-	virtual void Key_Input();
+	virtual void Key_Input(_float _fTimeDelta);
 
 protected:
 	virtual void Player_SetLook(_float _fXDegree, _float _fYDegree = 0.f);

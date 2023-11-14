@@ -70,8 +70,8 @@ void CPlayer::PriorityTick(_float _fTimeDelta)
 
 void CPlayer::Tick(_float _fTimeDelta)
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
+
+
 
 	m_pStateManager->Update(_fTimeDelta);
 
@@ -83,8 +83,6 @@ void CPlayer::Tick(_float _fTimeDelta)
 
 	_vector	vPosition = m_pNavigationCom[g_curStage]->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-
-	Safe_Release(pGameInstance);
 }
 
 void CPlayer::LateTick(_float _fTimeDelta)
@@ -236,10 +234,11 @@ HRESULT CPlayer::Ready_Part()
 	CPlayer_CameraPart::PLAYER_CAMERAPART_DESC CameraPartDesc;
 	CameraPartDesc.pParent = this;
 	CameraPartDesc.pParentTransform = m_pTransformCom;
+	CameraPartDesc.pBodyTransform = dynamic_cast<CTransform*>(m_vecPlayerPart[PART_BODY]->Get_Component(TEXT("Com_Transform")));
 	// CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera3rd [Cam3]");
 	CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera1st [Cam1]");
 	CameraPartDesc.matSocketPivot = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
-
+	
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_CameraPart"), &CameraPartDesc);
 	if (pPart == nullptr)
 		return E_FAIL;
@@ -332,8 +331,12 @@ void CPlayer::Free()
 {
 	__super::Free();
 
+	// 이 새끼 주석 하냐 안하냐에 따라 릴리즈, 디버그에서 종료 시 에러남.
 	for (auto& iter : m_vecPlayerPart)
-		Safe_Release(iter);
+	{
+		if(iter != nullptr)
+			Safe_Release(iter);
+	}
 
 	m_vecPlayerPart.clear();
 

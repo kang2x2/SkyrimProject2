@@ -18,7 +18,7 @@ HRESULT CStatePlayerOH_PAttack::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayerOH_PAttack::Update(_float _fTimeDelta)
 {
-	__super::Key_Input();
+	__super::Key_Input(_fTimeDelta);
 }
 
 void CStatePlayerOH_PAttack::Late_Update()

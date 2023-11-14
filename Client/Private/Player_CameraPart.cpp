@@ -32,6 +32,7 @@ HRESULT CPlayer_CameraPart::Initialize_Clone(void* _pArg)
 	{
 		PLAYER_CAMERAPART_DESC* pCameraPartDesc = (PLAYER_CAMERAPART_DESC*)_pArg;
 
+		m_pBodyTransform = pCameraPartDesc->pBodyTransform;
 		m_pSocketBone = pCameraPartDesc->pSocketBone;
 		Safe_AddRef(m_pSocketBone);
 
@@ -50,6 +51,8 @@ HRESULT CPlayer_CameraPart::Initialize_Clone(void* _pArg)
 
 	m_strName = TEXT("PlayerCamera");
 
+	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
+
 	return S_OK;
 
 }
@@ -62,9 +65,9 @@ void CPlayer_CameraPart::Tick(_float _fTimeDelta)
 	_matrix		WorldMatrix = XMLoadFloat4x4(&matSocketCombined) *
 		XMLoadFloat4x4(&m_matSocketPivot);
 
-	WorldMatrix.r[0] = XMVector3Normalize(WorldMatrix.r[0]);
-	WorldMatrix.r[1] = XMVector3Normalize(WorldMatrix.r[1]);
-	WorldMatrix.r[2] = XMVector3Normalize(WorldMatrix.r[2]);
+	// WorldMatrix.r[0] = XMVector3Normalize(WorldMatrix.r[0]);
+	// WorldMatrix.r[1] = XMVector3Normalize(WorldMatrix.r[1]);
+	// WorldMatrix.r[2] = XMVector3Normalize(WorldMatrix.r[2]);
 
 	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix() * WorldMatrix);
 
@@ -73,14 +76,13 @@ void CPlayer_CameraPart::Tick(_float _fTimeDelta)
 
 	if (dynamic_cast<CPlayer*>(m_pParent)->Get_CamMode() == CPlayer::CAM_3ST)
 	{
-		m_pPlayerCamera->Tick_3st(m_matWorld, vTargetPos, _fTimeDelta);
+		m_pPlayerCamera->Tick_3st(vTargetPos, _fTimeDelta);
 	}
 	else if (dynamic_cast<CPlayer*>(m_pParent)->Get_CamMode() == CPlayer::CAM_1ST)
 	{
-		_vector vParentLook = m_pParentTransform->Get_State(CTransform::STATE_LOOK);
-		m_pPlayerCamera->Tick_1st(m_matWorld, vParentLook, _fTimeDelta);
-		m_pParentTransform->SetLook(dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerCamLook());
+		m_pPlayerCamera->Tick_1st(m_pParentTransform, m_matWorld, _fTimeDelta);
 	}
+
 }
 
 void CPlayer_CameraPart::LateTick(_float _fTimeDelta)
@@ -174,9 +176,6 @@ void CPlayer_CameraPart::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pSocketBone);
-	Safe_Release(m_pParentTransform);
-
 	Safe_Release(m_pPlayerCamera);
 }

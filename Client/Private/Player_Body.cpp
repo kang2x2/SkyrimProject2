@@ -231,12 +231,6 @@ void CPlayer_Body::Free()
 	__super::Free();
 
 	Safe_Release(m_pColliderCom);
-	Safe_Release(m_pParentTransform);
-	// Safe_Release(m_pModelCom);
-	Safe_Release(m_pRendererCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTransformCom);
-
 	// 지울 때 누수나 에러 나는지 확인.
 	for (_int i = 0; i < CPlayer::CAM_END; ++i)
 	{

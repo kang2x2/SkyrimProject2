@@ -31,7 +31,7 @@ void CState_Player::Late_Update()
 
 }
 
-void CState_Player::Key_Input()
+void CState_Player::Key_Input(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

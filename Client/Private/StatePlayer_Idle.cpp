@@ -94,7 +94,7 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 		m_pPlayer->Play_Animation(false, "1hm_equip");
 	}
 
-	__super::Key_Input();
+	__super::Key_Input(_fTimeDelta);
 
 	Safe_Release(pGameInstance);
 }

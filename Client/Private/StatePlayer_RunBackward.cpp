@@ -90,7 +90,7 @@ void CStatePlayer_RunBackward::Key_Input(_float _fTimeDelta)
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_IDLE);
 	}
 
-	__super::Key_Input();
+	__super::Key_Input(_fTimeDelta);
 
 	Safe_Release(pGameInstance);
 }

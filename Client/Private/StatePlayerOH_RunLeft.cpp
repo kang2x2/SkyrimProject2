@@ -66,7 +66,7 @@ void CStatePlayerOH_RunLeft::Key_Input(_float _fTimeDelta)
 
 	Safe_Release(pGameInstance);
 
-	__super::Key_Input();
+	__super::Key_Input(_fTimeDelta);
 
 }
 

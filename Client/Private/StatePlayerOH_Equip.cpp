@@ -25,7 +25,7 @@ void CStatePlayerOH_Equip::Update(_float _fTimeDelta)
 		m_pPlayer->Set_SoketBone("WEAPON");
 	}
 
-	__super::Key_Input();
+	__super::Key_Input(_fTimeDelta);
 }
 
 void CStatePlayerOH_Equip::Late_Update()

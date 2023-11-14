@@ -32,7 +32,8 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyPress('S'))
 	{
-		m_pPlayerTransform->SetLook(m_pPlayer->Get_PlayerCamLook());
+		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+			m_pPlayerTransform->SetLook(m_pPlayer->Get_PlayerCamLook());
 
 		if (pGameInstance->Get_DIKeyPress('A'))
 		{
@@ -119,7 +120,7 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 
 	Safe_Release(pGameInstance);
 
-	__super::Key_Input();
+	__super::Key_Input(_fTimeDelta);
 }
 
 CStatePlayerOH_RunBackward* CStatePlayerOH_RunBackward::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)

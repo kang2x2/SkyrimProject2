@@ -194,7 +194,4 @@ void CPlayer_Armor::Free()
 	__super::Free();
 
 	Safe_Release(m_pSocketBone);
-	Safe_Release(m_pParentTransform);
-	Safe_Release(m_pRendererCom);
-	Safe_Release(m_pTransformCom);
 }

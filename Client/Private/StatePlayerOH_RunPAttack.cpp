@@ -20,7 +20,7 @@ void CStatePlayerOH_RunPAttack::Update(_float _fTimeDelta)
 {
 	m_pPlayerTransform->Go_Foward(_fTimeDelta);
 
-	__super::Key_Input();
+	__super::Key_Input(_fTimeDelta);
 }
 
 void CStatePlayerOH_RunPAttack::Late_Update()

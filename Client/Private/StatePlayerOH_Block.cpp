@@ -44,7 +44,7 @@ void CStatePlayerOH_Block::Key_Input(_float _fTimeDelta)
 
 	Safe_Release(pGameInstance);
 
-	__super::Key_Input();
+	__super::Key_Input(_fTimeDelta);
 }
 
 CStatePlayerOH_Block* CStatePlayerOH_Block::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)

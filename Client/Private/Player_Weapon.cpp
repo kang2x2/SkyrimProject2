@@ -43,7 +43,7 @@ HRESULT CPlayer_Weapon::Initialize_Clone(void* _pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Scaling(_float3(0.013f, 0.013f, 0.013f));
+	m_pTransformCom->Set_Scaling(_float3(0.0128f, 0.0128f, 0.0128f));
 	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-120.0f));
 	m_strName = TEXT("PlayerWeapon");
 
@@ -242,7 +242,4 @@ void CPlayer_Weapon::Free()
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pSocketBone);
-	Safe_Release(m_pParentTransform);
-	Safe_Release(m_pRendererCom);
-	Safe_Release(m_pTransformCom);
 }

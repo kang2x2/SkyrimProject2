@@ -64,7 +64,7 @@ void CStatePlayer_RunRight::Key_Input(_float _fTimeDelta)
 		m_pPlayer->Play_Animation(true, "mt_idle");
 	}
 
-	__super::Key_Input();
+	__super::Key_Input(_fTimeDelta);
 
 	Safe_Release(pGameInstance);
 }

@@ -373,6 +373,24 @@
     <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\04. DGPlaceableObj">
       <UniqueIdentifier>{319e262f-aab9-40d5-8469-bb9e006cb248}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj">
+      <UniqueIdentifier>{339d7f2b-3fc1-47a9-8ce6-9b0ff35fa6e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\00. CaveRock">
+      <UniqueIdentifier>{0f49549a-c042-4f79-9a8d-5d2fe1173952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\01. SpiderEgg">
+      <UniqueIdentifier>{71404931-5f13-4141-9f75-3fa90bf41002}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\02. FalmerHouse">
+      <UniqueIdentifier>{590d8b11-9343-4888-9853-7529429c5244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\03. FalmerFence">
+      <UniqueIdentifier>{69f1c97b-c959-4533-b85f-93f66915eff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\04. CavePillars">
+      <UniqueIdentifier>{8fbc00e8-04de-4530-9bfd-c593ad51b7af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -672,6 +690,21 @@
     <ClInclude Include="..\Public\DGPlaceableObj.h">
       <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\04. DGPlaceableObj</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\CaveRock.h">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\00. CaveRock</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SpiderEgg.h">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\01. SpiderEgg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FalmerHouse.h">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\02. FalmerHouse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FalmerFence.h">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\03. FalmerFence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CavePillars.h">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\04. CavePillars</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -963,6 +996,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\DGPlaceableObj.cpp">
       <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\04. DGPlaceableObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CaveRock.cpp">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\00. CaveRock</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SpiderEgg.cpp">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\01. SpiderEgg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FalmerHouse.cpp">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\02. FalmerHouse</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FalmerFence.cpp">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\03. FalmerFence</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CavePillars.cpp">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\04. CavePillars</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

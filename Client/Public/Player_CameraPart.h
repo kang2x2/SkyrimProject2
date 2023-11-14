@@ -19,6 +19,7 @@ public:
 	typedef struct tagPartDesc : public CPlayerPart_Base::PART_DESC
 	{
 		CBone*					pSocketBone = nullptr;
+		CTransform*				pBodyTransform = nullptr;
 		_float4x4				matSocketPivot;
 	}PLAYER_CAMERAPART_DESC;
 
@@ -46,11 +47,17 @@ public:
 	HRESULT Ready_Camera(void* _pArg);
 
 private:
-	class CPlayer_Body*		m_pParentBody = nullptr;
 	CBone*					m_pSocketBone = nullptr;
 	_float4x4				m_matSocketPivot;
+	CTransform*				m_pBodyTransform = nullptr;
 
-	CCamera_Player*	 m_pPlayerCamera = nullptr;
+	CCamera_Player*			m_pPlayerCamera = nullptr;
+
+	_matrix			m_matAccumulateRotX = XMMatrixIdentity();
+	_matrix			m_matAccumulateRotY = XMMatrixIdentity();
+	_float			m_fMouseSensitive = 0.2f;
+	_float			rotationSpeed = 0.1f; // 회전 속도 (마우스 입력에 따라 조절 가능)
+
 
 public:
 	static  CPlayer_CameraPart* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

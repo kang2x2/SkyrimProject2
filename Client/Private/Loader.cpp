@@ -39,6 +39,13 @@
 #include "StoneWork.h"
 #include "DGPlaceableObj.h"
 
+/* Collisible Object*/
+#include "CaveRock.h"
+#include "SpiderEgg.h"
+#include "FalmerHouse.h"
+#include "FalmerFence.h"
+#include "CavePillars.h"
+
 /* Monster */
 #include "Skeever.h"
 #include "Falmer_UnEquip.h"
@@ -471,7 +478,7 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 
 	/* Player */
 	//  * XMMatrixTranslation(1.f, -1.3f, 12.f)
-	matInitialize = XMMatrixScaling(0.0013f, 0.0013f, 0.0013f);
+	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Player_Body"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Player/Player.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
@@ -2002,115 +2009,115 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 #pragma region Rock
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl01"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl02"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl03"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl04"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl05"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderm01"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderm02"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderm03"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderm04"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderpiles01"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderpiles02"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulders01"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulders02"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulders03"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl01"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl02"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl03"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl04"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl05"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockm01"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockm02"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockm03"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockm04"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockpiles01"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockpiles02"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrocks01"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrocks02"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrocks03"),
-		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		CCaveRock::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion
@@ -3070,75 +3077,75 @@ HRESULT CLoader::Set_ProtoType_DungeonObject()
 #pragma region Dungeon_CavePillars
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegepillar01"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegepillar02"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegepillar03"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegepillar04"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegepillar05"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegepillar06"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_caveglpillar01"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_caveglpillar02"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_caveglpillar03"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_caveglpillar04"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_caveglpillar05"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_caveglpillar06"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegpillar01"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegpillar02"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegpillar03"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegpillar04"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegpillar05"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegpillar06"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CCavePillars::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion
@@ -3261,26 +3268,31 @@ HRESULT CLoader::Set_ProtoType_DungeonObject()
 		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+#pragma endregion
+
+#pragma region SpiderEgg
+
 	/* °Å¹Ì¾Ë */
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_ruinsspidersac01"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CSpiderEgg::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_ruinsspidersac02"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CSpiderEgg::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_ruinsspidersac03"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CSpiderEgg::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_ruinsspidersac04"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CSpiderEgg::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_ruinsspidersac05"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CSpiderEgg::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
 
 #pragma endregion
 
@@ -3367,39 +3379,39 @@ HRESULT CLoader::Set_ProtoType_DungeonObject()
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_falmerbigfence01"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CFalmerFence::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_falmerbigfence02"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CFalmerFence::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_falmerbigfencegate01"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CFalmerFence::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_falmercontainer"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CFalmerHouse::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_falmercontainer02"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CFalmerHouse::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_falmerfence01"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CFalmerFence::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_falmerfence02"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CFalmerFence::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_falmerfence03"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CFalmerFence::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_largehut"),
-		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		CFalmerHouse::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_wallpod"),
