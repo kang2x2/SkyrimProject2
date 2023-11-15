@@ -126,7 +126,7 @@ HRESULT CModel::Bind_MaterialTexture(CShader* _pShader, const char* _pConstantNa
 	return m_vecMaterial[iMaterialIndex].pTextures[_eType]->Bind_ShaderResource(_pShader, _pConstantName, 0);
 }
 
-HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName)
+HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
 {
 	m_bIsFindAnimation = false;
 	_int iAnimationIndex = -1;
@@ -158,7 +158,8 @@ HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName)
 	//{
 		m_iNextAnimationIndex = iAnimationIndex;
 		m_vecAnimation[m_iNextAnimationIndex]->Set_Loop(_bIsLoop);
-		m_vecAnimation[m_iCurAnimationIndex]->Ready_ChangeAnimation();
+		m_iChangeIndex = _iChangeIndex;
+		m_vecAnimation[m_iCurAnimationIndex]->Ready_ChangeAnimation(m_iChangeIndex);
 		m_bIsChanging = true;
 	//}
 	//else
@@ -192,6 +193,7 @@ HRESULT CModel::Play_Animation(_float _fTimeDelta)
 			m_bIsChanging = false;
 			m_vecAnimation[m_iCurAnimationIndex]->ReSet();
 			m_iCurAnimationIndex = m_iNextAnimationIndex;
+			m_vecAnimation[m_iNextAnimationIndex]->Reset_TrackPosition(m_iChangeIndex);
 		}
 	}
 

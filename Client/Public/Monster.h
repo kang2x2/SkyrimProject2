@@ -36,8 +36,7 @@ protected:
 	HRESULT Bind_ShaderResource();
 
 public:
-	void			Play_Animation(_bool _bIsLoop, string _strAnimationName);
-	void			Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName);
+	void			Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
 
 	_bool			Get_IsAnimationFin();
 	_bool			Get_CurAnimationName(string _strAnimationName);

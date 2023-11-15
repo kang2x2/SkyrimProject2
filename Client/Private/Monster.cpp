@@ -86,15 +86,11 @@ HRESULT CMonster::Bind_ShaderResource()
 	return S_OK;
 }
 
-void CMonster::Play_Animation(_bool _bIsLoop, string _strAnimationName)
+void CMonster::Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
 {
-	Set_AnimationIndex(_bIsLoop, _strAnimationName);
+	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
 }
 
-void CMonster::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName)
-{
-	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName);
-}
 
 _bool CMonster::Get_IsAnimationFin()
 {

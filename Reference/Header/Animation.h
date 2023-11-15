@@ -19,18 +19,19 @@ public:
 	void Update_TransformationMatrix(vector<class CBone*>& _vecBone, _float _fTimeDelta);
 	_bool Change_TransformationMatrix(vector<class CBone*>& _vecBone, const vector<CChannel*>& _destVecChannel, _float _fTimeDelta);
 	void ReSet();
-	void Ready_ChangeAnimation();
+	void Ready_ChangeAnimation(_uint _iChangeIndex);
 
 public:
 	void  Set_Loop(_bool _bIsLoop) { m_bIsLoop = _bIsLoop; }
 	
 	_char* Get_AnimationName() { return m_szName; }
 	
-	void  Reset_TrackPosition() { m_fTrackPosition = 0; }
+	void  Reset_TrackPosition(_uint _iInitIndex) { m_fTrackPosition = _iInitIndex; }
 	_bool Get_Finish() { return m_bIsFinish; }
 	const vector<CChannel*>& Get_Channel() { return m_vecChannel; }
 	const vector<_uint>& Get_CurKeyFrame() { return m_vecCurKeyFrame; }
-private:
+
+ private:
 	_float			m_fDuration = 0.f; // 총 길이라고 생각하자.
 	_float			m_fTickPerSecond = 0.f; // 재생 속도?
 	_float			m_fTrackPosition = 0.f; // 애니메이션 현재 재생 위치.

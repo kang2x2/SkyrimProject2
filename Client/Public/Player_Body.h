@@ -35,7 +35,7 @@ public:
 	virtual HRESULT Render();
 
 public:
-	void		Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName);
+	void		Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex);
 	_uint		Get_CurFrameIndex();
 
 	void		Set_BodyType(CPlayer::PLAYERCAMERA _eCamType);

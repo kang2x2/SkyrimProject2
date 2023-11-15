@@ -14,8 +14,9 @@ class CCamera_Player final : public CCamera
 public:
 	typedef struct tagFREE_PLAYERCAMERA_DESC : public CCamera::CAMERA_DESC
 	{
-		class CPlayer*  m_pPlayer = nullptr;
-		_float			fMouseSensitive = 0.f;
+		class CPlayer*		pPlayer = nullptr;
+		class CTransform*   pPlayerTransform = nullptr;
+		_float				fMouseSensitive = 0.f;
 	}FREE_PLAYERCAMERA_DESC;
 
 private:
@@ -35,16 +36,19 @@ public:
 	void Zoom(_float _fTimeDelta);
 
 private:
-	class CPlayer*  m_pPlayer = nullptr;
+	class CPlayer*			m_pPlayer = nullptr;
+	class CTransform*		m_pPlayerTransform = nullptr;
 
 	_matrix			m_matAccumulateRotX = XMMatrixIdentity();
 	_matrix			m_matAccumulateRotY = XMMatrixIdentity();
+	_matrix			matTempRotX = XMMatrixIdentity();
 	_matrix			matWorld = XMMatrixIdentity();
 
-	_float3			m_vRelativeCamPos = {};
+	_float4			m_vCamPos = {};
 
 	_float			m_fMouseSensitive = 0.f;
-	_float			rotationSpeed = 0.1f; // 회전 속도 (마우스 입력에 따라 조절 가능)
+	_float			m_RotationSpeed = 0.1f; // 회전 속도 (마우스 입력에 따라 조절 가능)
+	_float			m_fMouseXAngle = 0.f; // 마우스 위 아래 회전 제한 두기 위한 변수.
 
 	_bool			m_bIsChangeCamMode = false;
 public:

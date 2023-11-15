@@ -32,9 +32,6 @@ public:
 public:
 	HRESULT Set_State(SKEEVER_STATE _eState);
 
-	void	Play_Animation(_bool _bIsLoop, string _strAnimationName);
-	void	Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName);
-
 public:
 	HRESULT Ready_Component(_uint _iLevel);
 	HRESULT Ready_State();

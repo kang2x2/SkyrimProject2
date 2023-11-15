@@ -34,7 +34,7 @@ public:
 	void				 Update_VI(const _fmatrix& _matPivot);
 
 public:
-	HRESULT SetUp_Animation(_bool _bIsLoop, string _strAnimationName);
+	HRESULT SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex);
 	HRESULT Bind_BondMatrices(class CShader* _pShader, _uint _iMeshIndex, const char* _strConstantName);
 	HRESULT Bind_MaterialTexture(class CShader* _pShader, const char* _pConstantName, _uint _iMeshIndex, aiTextureType _eType);
 	HRESULT Play_Animation(_float _fTimeDelta);
@@ -74,7 +74,9 @@ private:
 	_uint						m_iCurAnimationIndex = 0; /* 현재 선택된 애니메이션 인덱스. */
 	_uint						m_iNextAnimationIndex = 0; /* 변해야 할 애니메이션 인덱스. */
 	_uint						m_iNumAnimation = 0; /* 모델이 가지고 있는 애니메이션 수 */
+	_uint						m_iChangeIndex = 0; /* 바뀔 애니메이션의 시작 프레임 */
 	vector<class CAnimation*>	m_vecAnimation; /* 모델이 가지고 있는 애니메이션 배열 */
+
 
 public:
 	static CModel* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const char* _strModleFilePath, _fmatrix _matPivot, MODEL_TYPE _eType);

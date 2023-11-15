@@ -23,6 +23,9 @@ void CStatePlayerOH_PAttack::Update(_float _fTimeDelta)
 
 void CStatePlayerOH_PAttack::Late_Update()
 {
+	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+
 	if (m_pPlayer->Get_IsAnimationFin())
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);

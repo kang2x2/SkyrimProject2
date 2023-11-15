@@ -18,9 +18,11 @@ HRESULT CStatePlayerOH_LAttack::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayerOH_LAttack::Update(_float _fTimeDelta)
 {
-	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
+	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
-	m_pPlayer->CheckHit_Onehand(13, 15);
+	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
+		m_pPlayer->CheckHit_Onehand(13, 15);
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

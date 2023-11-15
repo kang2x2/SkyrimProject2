@@ -125,15 +125,17 @@ HRESULT CPlayer_CameraPart::Ready_Camera(void* _pArg)
 	/* 카메라 세팅 */
 	CCamera_Player::FREE_PLAYERCAMERA_DESC PlayerCameraDesc;
 
-	PlayerCameraDesc.m_pPlayer = dynamic_cast<CPlayer*>(m_pParent);
+	PlayerCameraDesc.pPlayer = dynamic_cast<CPlayer*>(m_pParent);
+	PlayerCameraDesc.pPlayerTransform = m_pTransformCom;
 	PlayerCameraDesc.fMouseSensitive = 0.1f;
-	XMStoreFloat4(&PlayerCameraDesc.vEye, m_pParentTransform->Get_State(CTransform::STATE_POSITION));
+	// XMStoreFloat4(&PlayerCameraDesc.vEye, m_pParentTransform->Get_State(CTransform::STATE_POSITION));
+	PlayerCameraDesc.vEye = _float4(0.f, 0.f, 0.f, 0.f);
 	PlayerCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	PlayerCameraDesc.fFovY = XMConvertToRadians(60.f);
 	PlayerCameraDesc.fAspect = g_iWinSizeX / (_float)g_iWinSizeY;
 	PlayerCameraDesc.fNear = 0.2f;
 	PlayerCameraDesc.fFar = 500.f;
-	PlayerCameraDesc.fSpeedPerSec = 50.f;
+	PlayerCameraDesc.fSpeedPerSec = 0.001f;
 	PlayerCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_PlayerCamera"), TEXT("ProtoType_GameObject_Camera_Player"), &PlayerCameraDesc)))

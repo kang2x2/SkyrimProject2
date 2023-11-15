@@ -19,6 +19,9 @@ HRESULT CStatePlayerOH_Idle::Initialize(CGameObject* _pPlayer, CTransform* _pPla
 
 void CStatePlayerOH_Idle::Update(_float _fTimeDelta)
 {
+	if(m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+
 	Key_Input(_fTimeDelta);
 }
 

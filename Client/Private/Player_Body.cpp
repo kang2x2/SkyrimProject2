@@ -106,9 +106,11 @@ HRESULT CPlayer_Body::Render()
 	return S_OK;
 }
 
-void CPlayer_Body::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName)
+void CPlayer_Body::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
 {
-	m_pModelComAry[m_ePlayerCamMode]->SetUp_Animation(_bIsLoop, _strAnimationName);
+	m_pModelComAry[m_ePlayerCamMode]->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
+
+	int i = 0;
 }
 
 _uint CPlayer_Body::Get_CurFrameIndex()
@@ -148,8 +150,8 @@ HRESULT CPlayer_Body::Ready_Component()
 		TEXT("Com_1stModel"), (CComponent**)&m_pModelComAry[CPlayer::CAM_1ST])))
 		return E_FAIL;
 
-	m_ePlayerCamMode = CPlayer::CAM_1ST;
-	// m_ePlayerCamMode = CPlayer::CAM_3ST;
+	// m_ePlayerCamMode = CPlayer::CAM_1ST;
+	m_ePlayerCamMode = CPlayer::CAM_3ST;
 	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),

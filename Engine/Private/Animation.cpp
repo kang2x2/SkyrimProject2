@@ -108,9 +108,9 @@ void CAnimation::ReSet()
 		iter = 0;
 }
 
-void CAnimation::Ready_ChangeAnimation()
+void CAnimation::Ready_ChangeAnimation(_uint _iChangeIndex)
 {
-	m_fCnageTrackPosition = 0.f;
+	m_fCnageTrackPosition = _iChangeIndex;
 }
 
 CAnimation* CAnimation::Create(const class CModel* _pModel, const CBin_AIScene::DESC_ANIMATION* _pAiAnimation)

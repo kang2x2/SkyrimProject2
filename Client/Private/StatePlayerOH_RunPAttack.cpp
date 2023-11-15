@@ -18,6 +18,9 @@ HRESULT CStatePlayerOH_RunPAttack::Initialize(CGameObject* _pPlayer, CTransform*
 
 void CStatePlayerOH_RunPAttack::Update(_float _fTimeDelta)
 {
+	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+
 	m_pPlayerTransform->Go_Foward(_fTimeDelta);
 
 	__super::Key_Input(_fTimeDelta);

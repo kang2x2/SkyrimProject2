@@ -45,6 +45,12 @@ void CState_Player::Key_Input(_float _fTimeDelta)
 			m_pPlayer->Set_SoketBone("WEAPON");
 		else if (m_pPlayer->Get_PlayerEquipState() == CPlayer::EQUIP_UNEQUIP)
 			m_pPlayer->Set_SoketBone("WeaponSword");
+
+		/* 일반 상태 달리기가 이름이 다름. */
+		if (m_pPlayer->Get_CurAnimationName("1hm_runforward"))
+			m_pPlayer->Play_Animation(true, "mt_runforward");
+		else if (m_pPlayer->Get_CurAnimationName("mt_runforward"))
+			m_pPlayer->Play_Animation(true, "1hm_runforward");
 	}
 
 	Safe_Release(pGameInstance);

@@ -18,6 +18,9 @@ HRESULT CStatePlayerOH_LAttackB::Initialize(CGameObject* _pPlayer, CTransform* _
 
 void CStatePlayerOH_LAttackB::Update(_float _fTimeDelta)
 {
+	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+
 	Key_Input(_fTimeDelta);
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -52,14 +55,26 @@ void CStatePlayerOH_LAttackB::Key_Input(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyPress('W'))
-	{
-		m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
-	}
-
-	else if (pGameInstance->Get_DIKeyPress('S'))
+	if (pGameInstance->Get_DIKeyPress('S'))
 	{
 		m_pPlayerTransform->Go_Backward(_fTimeDelta, m_pPlayerNavigation);
+	}
+	if (pGameInstance->Get_DIKeyPress('A'))
+	{
+		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACKL);
+		m_pPlayer->Play_Animation(false, "1hm_walkleftattackleft", m_pPlayer->Get_CurFrameIndex());
+
+	}
+	if (pGameInstance->Get_DIKeyPress('D'))
+	{
+		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACKR);
+		m_pPlayer->Play_Animation(false, "1hm_walkrightattackleft", m_pPlayer->Get_CurFrameIndex());
+
+	}
+	if (pGameInstance->Get_DIKeyPress('W'))
+	{
+		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACKF);
+		m_pPlayer->Play_Animation(false, "1hm_walkfwdattackleft", m_pPlayer->Get_CurFrameIndex());
 	}
 
 	Safe_Release(pGameInstance);

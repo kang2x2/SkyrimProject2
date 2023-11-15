@@ -37,6 +37,8 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
+	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.0f));
+
 	if (FAILED(Ready_Part()))
 		return E_FAIL;
 
@@ -53,8 +55,8 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 
 	Play_Animation(true, "mt_idle");
 
-	m_eCurCamMode = CAM_1ST;
-	//m_eCurCamMode = CAM_3ST;
+	//m_eCurCamMode = CAM_1ST;
+	m_eCurCamMode = CAM_3ST;
 
 	return S_OK;
 }
@@ -139,9 +141,9 @@ const char* CPlayer::Get_CurSocketBonName()
 {
 	return dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])->Get_SoketBoneName();
 }
-void CPlayer::Play_Animation(_bool _bIsLoop, string _strAnimationName)
+void CPlayer::Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
 {
-	dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName);
+	dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
 }
 
 void CPlayer::Set_SoketBone(const char* _pBoneName)
@@ -235,8 +237,8 @@ HRESULT CPlayer::Ready_Part()
 	CameraPartDesc.pParent = this;
 	CameraPartDesc.pParentTransform = m_pTransformCom;
 	CameraPartDesc.pBodyTransform = dynamic_cast<CTransform*>(m_vecPlayerPart[PART_BODY]->Get_Component(TEXT("Com_Transform")));
-	// CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera3rd [Cam3]");
-	CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera1st [Cam1]");
+	CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera3rd [Cam3]");
+	//CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera1st [Cam1]");
 	CameraPartDesc.matSocketPivot = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
 	
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_CameraPart"), &CameraPartDesc);

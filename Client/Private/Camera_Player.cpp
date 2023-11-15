@@ -24,7 +24,8 @@ HRESULT CCamera_Player::Initialize_Clone(void* pArg)
 {
     FREE_PLAYERCAMERA_DESC* PlayerCameraDesc = (FREE_PLAYERCAMERA_DESC*)pArg;
 
-    m_pPlayer = PlayerCameraDesc->m_pPlayer;
+    m_pPlayer = PlayerCameraDesc->pPlayer;
+    m_pPlayerTransform = PlayerCameraDesc->pPlayerTransform;
     m_fMouseSensitive = PlayerCameraDesc->fMouseSensitive;
 
     if (FAILED(__super::Initialize_Clone(pArg)))
@@ -32,15 +33,16 @@ HRESULT CCamera_Player::Initialize_Clone(void* pArg)
 
     m_strName = TEXT("GamePlay_PlayerCamera");
 
-    m_vRelativeCamPos = { 0.f, 4.f, -4.f };
+    XMStoreFloat4(&m_vCamPos, m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+
+    m_vCamPos.y += 3.f;
+    m_vCamPos.z -= 3.f;
 
     return S_OK;
 }
 
 void CCamera_Player::Tick_3st(_float4 _vTargetPos, _float _fTimeDelta)
 {
-    fNear = 0.2f;
-
     Mouse_Fix();
     Zoom(_fTimeDelta);
 
@@ -51,20 +53,28 @@ void CCamera_Player::Tick_3st(_float4 _vTargetPos, _float _fTimeDelta)
     _long mouseMoveY = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_X);
     _long mouseMoveX = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_Y);
 
+    /* 위 아래 회전 각도 제한 두기 */
+    _vector vPlayerUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
+    m_fMouseXAngle = XMVectorGetX(XMVector3AngleBetweenVectors(m_pTransformCom->Get_State(CTransform::STATE_LOOK), vPlayerUp));
+    m_fMouseXAngle = fabs(XMConvertToDegrees(m_fMouseXAngle));
+
+    cout << m_fMouseXAngle << endl;
+
     /* 회전 행렬 생성. */
-    _matrix matRot = XMMatrixRotationY(rotationSpeed * mouseMoveY * _fTimeDelta);
+    _matrix matRot = XMMatrixRotationY(m_RotationSpeed * mouseMoveY * _fTimeDelta);
     m_matAccumulateRotY = XMMatrixMultiply(m_matAccumulateRotY, matRot);
-    matRot = XMMatrixRotationX(rotationSpeed * mouseMoveX * _fTimeDelta);
+    matRot = XMMatrixRotationX(m_RotationSpeed * mouseMoveX * _fTimeDelta);
     m_matAccumulateRotX = XMMatrixMultiply(m_matAccumulateRotX, matRot);
 
     /* 위에서 계산한 회전 행렬들을 카메라의 world 행렬과 모두 연산한다.*/
-    /*  1. 카메라가 바라볼 중점에 대한 상대 위치 행렬을 설정.
+    /*  1. 카메라의 위치를 설정.
         2. 위에서 구한 마우스에 따른 회전 행렬들을 곱한다.(무조건 x축이 먼저)
-        3. 카메라의 위치 행렬을 설정하여 곱한다.
-        결론. 카메라의 위치 행렬에서 처음에 정한 상대 위치 만큼 떨어져서 공전이 가능. */
-    matWorld = XMMatrixTranslation(m_vRelativeCamPos.x, m_vRelativeCamPos.y, m_vRelativeCamPos.z);
+        3. 대상의 위치를 곱한다.
+        결론. 카메라의 위치 행렬에서 타겟의 떨어져서 공전이 가능. */
+    matWorld = XMMatrixTranslation(m_vCamPos.x, m_vCamPos.y, m_vCamPos.z);
     matWorld = XMMatrixMultiply(matWorld, m_matAccumulateRotX);
     matWorld = XMMatrixMultiply(matWorld, m_matAccumulateRotY);
+    matWorld *= XMMatrixRotationY(XMConvertToRadians(90.f));
     matWorld = XMMatrixMultiply(matWorld, XMMatrixTranslation(_vTargetPos.x, _vTargetPos.y, _vTargetPos.z));
 
     m_pTransformCom->Set_WorldMatrix(matWorld);
@@ -80,7 +90,6 @@ void CCamera_Player::Tick_3st(_float4 _vTargetPos, _float _fTimeDelta)
 
 void CCamera_Player::Tick_1st(CTransform* _pParentTransform, _float4x4 _matSocket, _float _fTimeDelta)
 {
-    fNear = 0.05f;
     Mouse_Fix();
 
     m_pTransformCom->Set_WorldMatrix(_pParentTransform->Get_WorldMatrix());
@@ -95,26 +104,18 @@ void CCamera_Player::Tick_1st(CTransform* _pParentTransform, _float4x4 _matSocke
     if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_Y))
         m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), MouseMove * m_fMouseSensitive * _fTimeDelta);
 
-    _vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
-    _vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
-    _vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+   //_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+   //_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
+   //_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+   //_pParentTransform->Set_State(CTransform::STATE_RIGHT, vRight);
+   //_pParentTransform->Set_State(CTransform::STATE_UP, vUp);
+   //_pParentTransform->Set_State(CTransform::STATE_LOOK, vLook);
 
-    _pParentTransform->Set_State(CTransform::STATE_RIGHT, vRight);
-    _pParentTransform->Set_State(CTransform::STATE_UP, vUp);
-    _pParentTransform->Set_State(CTransform::STATE_LOOK, vLook);
+    _pParentTransform->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix());
 
     Safe_Release(pGameInstance);
 
     m_pTransformCom->Set_WorldMatrix(XMLoadFloat4x4(&_matSocket));
-
-    //_matrix matRUL = XMLoadFloat4x4(&_matSocket);
-    //
-    //m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(_matSocket._41, _matSocket._42, _matSocket._43, 1.f));
-    //m_pTransformCom->Set_State(CTransform::STATE_RIGHT, (matRUL.r[0]));
-    //m_pTransformCom->Set_State(CTransform::STATE_UP, (matRUL.r[1]));
-    //m_pTransformCom->Set_State(CTransform::STATE_LOOK, (matRUL.r[2]));
-
-    // m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix());
 
     __super::Tick(_fTimeDelta);
 }
@@ -141,19 +142,15 @@ void CCamera_Player::Zoom(_float _fTimeDelta)
     _long mouseMove = 0l;
     if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_WHEEL))
     {
+        // in
         if (mouseMove > 0)
         {
-            if (m_vRelativeCamPos.y > 1.5f)
-                m_vRelativeCamPos.y -= 0.5f;
-            if (m_vRelativeCamPos.z > 1.5f)
-                m_vRelativeCamPos.z -= 0.5f;
+            m_pTransformCom->Go_Foward(_fTimeDelta);
         }
+        // out
         else if (mouseMove < 0)
         {
-            if (m_vRelativeCamPos.y < 4.f)
-                m_vRelativeCamPos.y += 0.5f;
-            if (m_vRelativeCamPos.z < 4.f)
-                m_vRelativeCamPos.z += 0.5f;
+            m_pTransformCom->Go_Backward(_fTimeDelta);
         }
     }
 

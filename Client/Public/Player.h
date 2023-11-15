@@ -67,7 +67,7 @@ public:
 	_bool			Get_CurAnimationName(string _strAnimationName);
 	_uint			Get_CurFrameIndex();
 	const char*		Get_CurSocketBonName();
-	void			Play_Animation(_bool _bIsLoop, string _strAnimationName);
+	void			Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
 	void			Set_SoketBone(const char* _pBoneName);
 
 	PLAYERCAMERA Get_CamMode() { return m_eCurCamMode; }

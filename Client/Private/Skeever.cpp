@@ -106,16 +106,6 @@ HRESULT CSkeever::Set_State(SKEEVER_STATE _eState)
 	return S_OK;
 }
 
-void CSkeever::Play_Animation(_bool _bIsLoop, string _strAnimationName)
-{
-	Set_AnimationIndex(_bIsLoop, _strAnimationName);
-}
-
-void CSkeever::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName)
-{
-	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName);
-}
-
 HRESULT CSkeever::Ready_Component(_uint _iLevel)
 {
 	if (FAILED(__super::Add_CloneComponent(_iLevel, m_strModelComTag,
