@@ -25,7 +25,7 @@ private:
 
 public:
 	_bool Get_IsAnimationFin();
-	_bool Get_CurAnimationName(string _strAnimationName);
+	string Get_CurAnimationName();
 
 public:
 	virtual HRESULT Initialize_ProtoType(); // ¿øº»
@@ -37,8 +37,9 @@ public:
 public:
 	void		Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex);
 	_uint		Get_CurFrameIndex();
+	_bool		Get_CurAnimationIsLoop();
 
-	void		Set_BodyType(CPlayer::PLAYERCAMERA _eCamType);
+	void		Set_BodyType(CPlayer::PLAYERCAMERA _eCamType, string _strAnimationName, _uint _iChangeIndex, _bool _bIsLoop);
 private:
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResource();

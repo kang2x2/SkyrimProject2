@@ -19,7 +19,7 @@ HRESULT CStatePlayerOH_Equip::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 void CStatePlayerOH_Equip::Update(_float _fTimeDelta)
 {
 	if (m_pPlayer->Get_CurFrameIndex() >= 10 &&
-		m_pPlayer->Get_CurAnimationName("1hm_equip") &&
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_equip") &&
 		strcmp(m_pPlayer->Get_CurSocketBonName(), "WEAPON"))
 	{
 		m_pPlayer->Set_SoketBone("WEAPON");
@@ -31,7 +31,7 @@ void CStatePlayerOH_Equip::Update(_float _fTimeDelta)
 void CStatePlayerOH_Equip::Late_Update()
 {
 	if (m_pPlayer->Get_IsAnimationFin() && 
-		m_pPlayer->Get_CurAnimationName("1hm_equip"))
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_equip"))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
 		m_pPlayer->Play_Animation(true, "1hm_idle");

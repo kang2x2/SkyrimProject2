@@ -388,6 +388,11 @@ _bool CModel::Get_IsAnimationFin()
 	return m_vecAnimation[m_iCurAnimationIndex]->Get_Finish();
 }
 
+_bool CModel::Get_CurAnimationIsLoop()
+{
+	return m_vecAnimation[m_iCurAnimationIndex]->Get_CurAnimationIsLoop();
+}
+
 _uint CModel::Get_CurFrameIndex()
 {
 	_uint iIdx = 0;

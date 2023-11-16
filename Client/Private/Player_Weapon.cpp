@@ -44,7 +44,13 @@ HRESULT CPlayer_Weapon::Initialize_Clone(void* _pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaling(_float3(0.0128f, 0.0128f, 0.0128f));
-	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-120.0f));
+	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-105.0f));
+	_float4 vInitPos;
+	XMStoreFloat4(&vInitPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	vInitPos.x -= 0.05f;
+	vInitPos.y -= 0.03f;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vInitPos));
+	
 	m_strName = TEXT("PlayerWeapon");
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

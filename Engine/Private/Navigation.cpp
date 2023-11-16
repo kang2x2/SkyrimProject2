@@ -394,7 +394,39 @@ _vector CNavigation::Set_OnCell(_fvector _vWorldPos)
 
 	_fvector vResultWorldPos = XMVectorSetY(_vWorldPos, fY);
 
+
 	return vResultWorldPos;
+}
+
+_bool CNavigation::isMove(_fvector vPoint)
+{
+	_int		iNeighborIndex = 0;
+
+	if (m_vecCell[m_iCurIndex]->IsOut(vPoint, XMLoadFloat4x4(&m_matWorld), &iNeighborIndex))
+	{
+		/* 나간 방향에 이웃셀이 있으면 움직여야해! */
+		if (-1 != iNeighborIndex)
+		{
+			while (true)
+			{
+				if (-1 == iNeighborIndex)
+					return false;
+
+				if (false == m_vecCell[iNeighborIndex]->IsOut(vPoint, XMLoadFloat4x4(&m_matWorld), &iNeighborIndex))
+				{
+					m_iCurIndex = iNeighborIndex;
+					break;
+				}
+			}
+			return true;
+		}
+		else
+			return false;
+
+	}
+	else
+		return true;
+
 }
 
 CNavigation* CNavigation::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const wstring& _strNaviMeshPath)

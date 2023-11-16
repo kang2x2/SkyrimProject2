@@ -13,11 +13,11 @@ END
 
 BEGIN(Client)
 
-class CStatePlayerOH_RAttackF final : public CState_Player
+class CStatePlayerOH_BwAttackL final : public CState_Player
 {
 private:
-	CStatePlayerOH_RAttackF();
-	virtual ~CStatePlayerOH_RAttackF() = default;
+	CStatePlayerOH_BwAttackL();
+	virtual ~CStatePlayerOH_BwAttackL() = default;
 
 public:
 	virtual		 HRESULT Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
@@ -27,7 +27,7 @@ public:
 	virtual void Key_Input(_float _fTimeDelta);
 
 public:
-	static CStatePlayerOH_RAttackF* Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
+	static CStatePlayerOH_BwAttackL* Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
 	virtual void Free() override;
 };
 

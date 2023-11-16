@@ -25,6 +25,7 @@ public:
 	void  Set_Loop(_bool _bIsLoop) { m_bIsLoop = _bIsLoop; }
 	
 	_char* Get_AnimationName() { return m_szName; }
+	_bool  Get_CurAnimationIsLoop() { return m_bIsLoop; }
 	
 	void  Reset_TrackPosition(_uint _iInitIndex) { m_fTrackPosition = _iInitIndex; }
 	_bool Get_Finish() { return m_bIsFinish; }

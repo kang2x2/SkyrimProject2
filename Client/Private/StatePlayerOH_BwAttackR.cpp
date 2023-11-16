@@ -1,46 +1,46 @@
 #include "framework.h"
-#include "StatePlayerOH_RAttackB.h"
+#include "StatePlayerOH_BwAttackR.h"
 
 #include "GameInstance.h"
 
 #include "Player.h"
 
-CStatePlayerOH_RAttackB::CStatePlayerOH_RAttackB()
+CStatePlayerOH_BwAttackR::CStatePlayerOH_BwAttackR()
 {
 }
 
-HRESULT CStatePlayerOH_RAttackB::Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
+HRESULT CStatePlayerOH_BwAttackR::Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
 {
 	__super::Initialize(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 
 	return S_OK;
 }
 
-void CStatePlayerOH_RAttackB::Update(_float _fTimeDelta)
+void CStatePlayerOH_BwAttackR::Update(_float _fTimeDelta)
 {
 	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
 	Key_Input(_fTimeDelta);
 
+	__super::Key_Input(_fTimeDelta);
+}
+
+void CStatePlayerOH_BwAttackR::Late_Update()
+{
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (m_pPlayer->Get_CurFrameIndex() >= 25 &&
-		m_pPlayer->Get_CurAnimationName("1hm_walkbwdattackright") &&
+	if (m_pPlayer->Get_CurFrameIndex() >= 20 &&
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_walkbwdattackright") &&
 		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 	{
-		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACKB);
+		m_pPlayer->Set_State(CPlayer::ONEHAND_BWATTACKL);
 		m_pPlayer->Play_Animation(false, "1hm_walkbwdattackleft");
 	}
 
 	Safe_Release(pGameInstance);
 
-	__super::Key_Input(_fTimeDelta);
-}
-
-void CStatePlayerOH_RAttackB::Late_Update()
-{
 	if (m_pPlayer->Get_IsAnimationFin())
 	{
 		m_pPlayerTransform->Set_Speed(m_pPlayer->GetRunSpeed());
@@ -50,7 +50,7 @@ void CStatePlayerOH_RAttackB::Late_Update()
 	}
 }
 
-void CStatePlayerOH_RAttackB::Key_Input(_float _fTimeDelta)
+void CStatePlayerOH_BwAttackR::Key_Input(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -60,19 +60,19 @@ void CStatePlayerOH_RAttackB::Key_Input(_float _fTimeDelta)
 		m_pPlayerTransform->Go_Backward(_fTimeDelta, m_pPlayerNavigation);
 	}
 
-	if (pGameInstance->Get_DIKeyPress('A'))
+	else if (pGameInstance->Get_DIKeyPress('A'))
 	{
-		m_pPlayer->Set_State(CPlayer::ONEHAND_RATTACKL);
+		m_pPlayer->Set_State(CPlayer::ONEHAND_LWATTACKR);
 		m_pPlayer->Play_Animation(false, "1hm_walkleftattackright", m_pPlayer->Get_CurFrameIndex());
 	}
-	if (pGameInstance->Get_DIKeyPress('D'))
+	else if (pGameInstance->Get_DIKeyPress('D'))
 	{
-		m_pPlayer->Set_State(CPlayer::ONEHAND_RATTACKR);
+		m_pPlayer->Set_State(CPlayer::ONEHAND_RWATTACKR);
 		m_pPlayer->Play_Animation(false, "1hm_walkrightattackright", m_pPlayer->Get_CurFrameIndex());
 	}
-	if (pGameInstance->Get_DIKeyPress('W'))
+	else if (pGameInstance->Get_DIKeyPress('W'))
 	{
-		m_pPlayer->Set_State(CPlayer::ONEHAND_RATTACKF);
+		m_pPlayer->Set_State(CPlayer::ONEHAND_FWATTACKR);
 		m_pPlayer->Play_Animation(false, "1hm_walkfwdattackright", m_pPlayer->Get_CurFrameIndex());
 	}
 
@@ -81,19 +81,19 @@ void CStatePlayerOH_RAttackB::Key_Input(_float _fTimeDelta)
 
 }
 
-CStatePlayerOH_RAttackB* CStatePlayerOH_RAttackB::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
+CStatePlayerOH_BwAttackR* CStatePlayerOH_BwAttackR::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)
 {
-	CStatePlayerOH_RAttackB* pInstance = new CStatePlayerOH_RAttackB();
+	CStatePlayerOH_BwAttackR* pInstance = new CStatePlayerOH_BwAttackR();
 
 	if (FAILED(pInstance->Initialize(_pPlayer, _pPlayerTransform, _pPlayerNavigation)))
 	{
-		MSG_BOX("Fail Create : CStatePlayerOH_RAttackB");
+		MSG_BOX("Fail Create : CStatePlayerOH_BwAttackR");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CStatePlayerOH_RAttackB::Free()
+void CStatePlayerOH_BwAttackR::Free()
 {
 }

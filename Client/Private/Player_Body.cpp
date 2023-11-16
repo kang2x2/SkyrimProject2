@@ -109,8 +109,6 @@ HRESULT CPlayer_Body::Render()
 void CPlayer_Body::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
 {
 	m_pModelComAry[m_ePlayerCamMode]->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
-
-	int i = 0;
 }
 
 _uint CPlayer_Body::Get_CurFrameIndex()
@@ -118,12 +116,16 @@ _uint CPlayer_Body::Get_CurFrameIndex()
 	return m_pModelComAry[m_ePlayerCamMode]->Get_CurFrameIndex();
 }
 
-void CPlayer_Body::Set_BodyType(CPlayer::PLAYERCAMERA _eCamType)
+_bool CPlayer_Body::Get_CurAnimationIsLoop()
+{
+	return m_pModelComAry[m_ePlayerCamMode]->Get_CurAnimationIsLoop();
+}
+
+void CPlayer_Body::Set_BodyType(CPlayer::PLAYERCAMERA _eCamType, string _strAnimationName, _uint _iChangeIndex, _bool _bIsLoop)
 {
 	m_ePlayerCamMode = _eCamType;
 	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
-
-
+	m_pModelComAry[m_ePlayerCamMode]->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
 }
 
 _bool CPlayer_Body::Get_IsAnimationFin()
@@ -131,12 +133,9 @@ _bool CPlayer_Body::Get_IsAnimationFin()
 	return m_pModelComAry[m_ePlayerCamMode]->Get_IsAnimationFin();
 }
 
-_bool CPlayer_Body::Get_CurAnimationName(string _strAnimationName)
+string CPlayer_Body::Get_CurAnimationName()
 {
-	if (!strcmp(m_pModelComAry[m_ePlayerCamMode]->Get_CurAnimationName().c_str(), _strAnimationName.c_str()))
-		return true;
-
-	return false;
+	return m_pModelComAry[m_ePlayerCamMode]->Get_CurAnimationName().c_str();
 }
 
 

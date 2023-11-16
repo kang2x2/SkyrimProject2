@@ -62,7 +62,7 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 			{
 				m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
-				m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACKB);
+				m_pPlayer->Set_State(CPlayer::ONEHAND_BWATTACKL);
 				m_pPlayer->Play_Animation(false, "1hm_walkbwdattackleft");
 			}
 		}
@@ -94,7 +94,7 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 			{
 				m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
-				m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACKB);
+				m_pPlayer->Set_State(CPlayer::ONEHAND_BWATTACKL);
 				m_pPlayer->Play_Animation(false, "1hm_walkbwdattackleft");
 			}
 		}
@@ -104,7 +104,7 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 		{
 			m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
-			m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACKB);
+			m_pPlayer->Set_State(CPlayer::ONEHAND_BWATTACKL);
 			m_pPlayer->Play_Animation(false, "1hm_walkbwdattackleft");
 		}
 

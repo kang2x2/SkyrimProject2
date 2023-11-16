@@ -67,9 +67,6 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 		}
 
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_L);
-		
-		// 분명히 필요하긴 할거야 이 함수가.
-		//if(dynamic_cast<CPlayer*>(m_pPlayer)->Get_CurAnimationName("1hm_runforward"))
 	}
 
 	if (pGameInstance->Get_DIKeyPress('D'))

@@ -26,12 +26,6 @@ void CStatePlayerOH_Block::Update(_float _fTimeDelta)
 
 void CStatePlayerOH_Block::Late_Update()
 {
-	if (m_pPlayer->Get_IsAnimationFin() &&
-		m_pPlayer->Get_CurAnimationName("1hm_equip"))
-	{
-		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
-		m_pPlayer->Play_Animation(true, "1hm_idle");
-	}
 }
 
 void CStatePlayerOH_Block::Key_Input(_float _fTimeDelta)
@@ -65,4 +59,5 @@ CStatePlayerOH_Block* CStatePlayerOH_Block::Create(CGameObject* _pPlayer, CTrans
 
 void CStatePlayerOH_Block::Free()
 {
+	__super::Free();
 }

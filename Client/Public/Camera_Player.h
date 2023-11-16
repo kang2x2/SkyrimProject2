@@ -5,6 +5,8 @@
 
 BEGIN(Engine)
 
+class CNavigation;
+
 END
 
 BEGIN(Client)
@@ -32,10 +34,15 @@ public:
 	virtual void	LateTick(_float _fTimeDelta) override;
 
 public:
+	HRESULT Ready_Component();
+
+public:
 	void Mouse_Fix();
 	void Zoom(_float _fTimeDelta);
 
 private:
+	CNavigation* m_pNavigationCom[STAGE_END];
+
 	class CPlayer*			m_pPlayer = nullptr;
 	class CTransform*		m_pPlayerTransform = nullptr;
 

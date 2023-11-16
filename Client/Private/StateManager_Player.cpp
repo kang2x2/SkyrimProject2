@@ -21,21 +21,25 @@
 #include "StatePlayerOH_RAttack.h"
 #include "StatePlayerOH_PAttack.h"
 
-#include "StatePlayerOH_LAttackL.h"
-#include "StatePlayerOH_RAttackL.h"
+#include "StatePlayerOH_LwAttackL.h"
+#include "StatePlayerOH_LwAttackR.h"
 
-#include "StatePlayerOH_LAttackR.h"
-#include "StatePlayerOH_RAttackR.h"
+#include "StatePlayerOH_RwAttackL.h"
+#include "StatePlayerOH_RwAttackR.h"
 
-#include "StatePlayerOH_LAttackF.h"
-#include "StatePlayerOH_RAttackF.h"
+#include "StatePlayerOH_FwAttackL.h"
+#include "StatePlayerOH_FwAttackR.h"
 
-#include "StatePlayerOH_LAttackB.h"
-#include "StatePlayerOH_RAttackB.h"
+#include "StatePlayerOH_BwAttackL.h"
+#include "StatePlayerOH_BwAttackR.h"
 
 #include "StatePlayerOH_RunPAttack.h"
 
 #include "StatePlayerOH_Block.h"
+#include "StatePlayerOH_LwBlock.h"
+#include "StatePlayerOH_RwBlock.h"
+#include "StatePlayerOH_FwBlock.h"
+#include "StatePlayerOH_BwBlock.h"
 
 CStateManager_Player::CStateManager_Player()
 {
@@ -103,27 +107,27 @@ HRESULT CStateManager_Player::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 
 	/* Move Attack */
 	// L
-	pState = CStatePlayerOH_LAttackL::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	pState = CStatePlayerOH_LwAttackL::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
-	pState = CStatePlayerOH_RAttackL::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	pState = CStatePlayerOH_LwAttackR::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
 	// R
-	pState = CStatePlayerOH_LAttackR::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	pState = CStatePlayerOH_RwAttackL::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
-	pState = CStatePlayerOH_RAttackR::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	pState = CStatePlayerOH_RwAttackR::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
 	// F
-	pState = CStatePlayerOH_LAttackF::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	pState = CStatePlayerOH_FwAttackL::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
-	pState = CStatePlayerOH_RAttackF::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	pState = CStatePlayerOH_FwAttackR::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
 	// B
-	pState = CStatePlayerOH_LAttackB::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	pState = CStatePlayerOH_BwAttackL::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
-	pState = CStatePlayerOH_RAttackB::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	pState = CStatePlayerOH_BwAttackR::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
 	// F P
@@ -133,6 +137,19 @@ HRESULT CStateManager_Player::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 	/* Block */
 	pState = CStatePlayerOH_Block::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
+
+	/* Move Block */
+	//pState = CStatePlayerOH_LwBlock::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	//m_vecPlayerState.push_back(pState);
+	//
+	//pState = CStatePlayerOH_RwBlock::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	//m_vecPlayerState.push_back(pState);
+	//
+	//pState = CStatePlayerOH_FwBlock::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	//m_vecPlayerState.push_back(pState);
+	//
+	//pState = CStatePlayerOH_BwBlock::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	//m_vecPlayerState.push_back(pState);
 
 #pragma endregion
 

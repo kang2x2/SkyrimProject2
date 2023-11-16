@@ -191,9 +191,12 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Player(const wstring& _strLayerTag)
 		return E_FAIL;
 
 	/* 화이트런 */
+	//dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
+	//	TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
+	//->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
 	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
 		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
-	->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
+	->Set_State(CTransform::STATE_POSITION, XMVectorSet(5.f, -1.3f, 12.f, 1.f));
 
 	dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
 		TEXT("Player")))->Set_CurCell();

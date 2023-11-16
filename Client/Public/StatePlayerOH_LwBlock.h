@@ -11,13 +11,11 @@ class CNavigation;
 
 END
 
-BEGIN(Client)
-
-class CStatePlayerOH_LAttackB final : public CState_Player
+class CStatePlayerOH_LwBlock final : public CState_Player
 {
 private:
-	CStatePlayerOH_LAttackB();
-	virtual ~CStatePlayerOH_LAttackB() = default;
+	CStatePlayerOH_LwBlock();
+	virtual ~CStatePlayerOH_LwBlock() = default;
 
 public:
 	virtual		 HRESULT Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
@@ -27,8 +25,7 @@ public:
 	virtual void Key_Input(_float _fTimeDelta);
 
 public:
-	static CStatePlayerOH_LAttackB* Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
+	static CStatePlayerOH_LwBlock* Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
 	virtual void Free() override;
 };
 
-END

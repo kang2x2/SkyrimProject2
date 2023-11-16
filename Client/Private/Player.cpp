@@ -120,6 +120,7 @@ HRESULT CPlayer::Render()
 
 HRESULT CPlayer::Set_State(PLAYERSTATE _eState)
 {
+	m_eCurState = _eState;
 	m_pStateManager->Set_State(_eState);
 
 	return S_OK;
@@ -129,9 +130,13 @@ _bool CPlayer::Get_IsAnimationFin()
 {
 	return dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_IsAnimationFin();
 }
-_bool CPlayer::Get_CurAnimationName(string _strAnimationName)
+_bool CPlayer::Get_CurAnimationIsLoop()
 {
-	return dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_CurAnimationName(_strAnimationName);
+	return dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_CurAnimationIsLoop();
+}
+string CPlayer::Get_CurAnimationName()
+{
+	return dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_CurAnimationName();
 }
 _uint CPlayer::Get_CurFrameIndex()
 {
@@ -156,7 +161,7 @@ _vector CPlayer::Get_PlayerCamLook()
 {
 	return dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Get_PlayerCamLook();
 }
-void CPlayer::Set_PlayerCam()
+void CPlayer::Set_PlayerCam(string _strAnimationName, _uint _iChangeIndex, _bool _bIsLoop)
 {
 	if (m_eCurCamMode == CAM_1ST)
 		m_eCurCamMode = CAM_3ST;
@@ -164,7 +169,7 @@ void CPlayer::Set_PlayerCam()
 		m_eCurCamMode = CAM_1ST;
 
 	CPlayer_Body* pBody = dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY]);
-	pBody->Set_BodyType(m_eCurCamMode);
+	pBody->Set_BodyType(m_eCurCamMode, _strAnimationName, _iChangeIndex, _bIsLoop);
 
 	if(m_eCurCamMode == CAM_1ST)
 		dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_SoketBone(
@@ -175,7 +180,6 @@ void CPlayer::Set_PlayerCam()
 
 	dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_PivotMatrix(
 		pBody->Get_SocketPivotMatrix());
-
 }
 
 void CPlayer::Set_CurCell()

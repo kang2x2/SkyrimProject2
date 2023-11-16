@@ -19,7 +19,7 @@ HRESULT CStatePlayerOH_UnEquip::Initialize(CGameObject* _pPlayer, CTransform* _p
 void CStatePlayerOH_UnEquip::Update(_float _fTimeDelta)
 {
 	if (m_pPlayer->Get_CurFrameIndex() >= 30 &&
-		m_pPlayer->Get_CurAnimationName("1hm_unequip") &&
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_unequip") &&
 		strcmp(m_pPlayer->Get_CurSocketBonName(), "WeaponSword"))
 	{
 		m_pPlayer->Set_SoketBone("WeaponSword");
@@ -31,7 +31,7 @@ void CStatePlayerOH_UnEquip::Update(_float _fTimeDelta)
 void CStatePlayerOH_UnEquip::Late_Update()
 {
 	if (m_pPlayer->Get_IsAnimationFin() &&
-		m_pPlayer->Get_CurAnimationName("1hm_unequip"))
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_unequip"))
 	{
 		m_pPlayer->Play_Animation(true, "mt_idle");
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_IDLE);

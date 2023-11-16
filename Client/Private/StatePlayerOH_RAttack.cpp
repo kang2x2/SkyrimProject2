@@ -25,26 +25,7 @@ void CStatePlayerOH_RAttack::Update(_float _fTimeDelta)
 	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 		m_pPlayer->CheckHit_Onehand(14, 16);
 	
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	if (m_pPlayer->Get_CurFrameIndex() >= 22 &&
-		!m_pPlayer->Get_CurAnimationName("1hm_attackleft") &&
-		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
-	{
-		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACK);
-		m_pPlayer->Play_Animation(false, "1hm_attackleft");
-	}
-
-	if (m_pPlayer->Get_CurFrameIndex() >= 22 &&
-		!m_pPlayer->Get_CurAnimationName("1hm_attackleft") &&
-		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
-	{
-		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACK);
-		m_pPlayer->Play_Animation(false, "1hm_attackleft");
-	}
-
-	Safe_Release(pGameInstance);
+	Key_Input(_fTimeDelta);
 
 	__super::Key_Input(_fTimeDelta);
 }
@@ -56,6 +37,53 @@ void CStatePlayerOH_RAttack::Late_Update()
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
 		m_pPlayer->Play_Animation(true, "1hm_idle");
 	}
+}
+
+void CStatePlayerOH_RAttack::Key_Input(_float _fTimeDelta)
+{
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_pPlayer->Get_CurFrameIndex() >= 22 &&
+		strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_attackleft") &&
+		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+	{
+		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACK);
+		m_pPlayer->Play_Animation(false, "1hm_attackleft");
+	}
+
+	else if (pGameInstance->Get_DIKeyPress('A'))
+	{
+		m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
+
+		m_pPlayer->Set_State(CPlayer::ONEHAND_LWATTACKR);
+		m_pPlayer->Play_Animation(false, "1hm_walkleftattackright", m_pPlayer->Get_CurFrameIndex());
+	}
+	else if (pGameInstance->Get_DIKeyPress('D'))
+	{
+		m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
+
+		m_pPlayer->Set_State(CPlayer::ONEHAND_RWATTACKR);
+		m_pPlayer->Play_Animation(false, "1hm_walkrightattackright", m_pPlayer->Get_CurFrameIndex());
+	}
+	else if (pGameInstance->Get_DIKeyPress('W'))
+	{
+		m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
+
+		m_pPlayer->Set_State(CPlayer::ONEHAND_FWATTACKR);
+		m_pPlayer->Play_Animation(false, "1hm_walkfwdattackright", m_pPlayer->Get_CurFrameIndex());
+	}
+	else if (pGameInstance->Get_DIKeyPress('S'))
+	{
+		m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
+
+		m_pPlayer->Set_State(CPlayer::ONEHAND_BWATTACKR);
+		m_pPlayer->Play_Animation(false, "1hm_walkbwdattackright", m_pPlayer->Get_CurFrameIndex());
+	}
+
+	Safe_Release(pGameInstance);
+
 }
 
 CStatePlayerOH_RAttack* CStatePlayerOH_RAttack::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)

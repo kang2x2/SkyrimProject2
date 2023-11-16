@@ -30,9 +30,11 @@ public:
 	HRESULT Cell_PopBack();
 	HRESULT SetUp_Neighbors();
 	HRESULT Set_CurCell(_fvector vPos);
+	_vector Set_OnCell(_fvector _vWorldPos);
+	_bool	isMove(_fvector vPoint);
+
 
 public:
-	_vector Set_OnCell(_fvector _vWorldPos);
 
 #ifdef _DEBUG
 public:

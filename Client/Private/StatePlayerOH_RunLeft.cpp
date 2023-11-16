@@ -53,7 +53,7 @@ void CStatePlayerOH_RunLeft::Key_Input(_float _fTimeDelta)
 			m_pPlayerTransform->SetLook(m_pPlayer->Get_PlayerCamLook());
 			m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
-			m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACKL);
+			m_pPlayer->Set_State(CPlayer::ONEHAND_LWATTACKL);
 			m_pPlayer->Play_Animation(false, "1hm_walkleftattackleft");
 		}
 	}

@@ -29,14 +29,18 @@ public:
 
 		ONEHAND_LATTACK, ONEHAND_RATTACK, ONEHAND_PATTACK,
 
-		ONEHAND_LATTACKL, ONEHAND_RATTACKL,
-		ONEHAND_LATTACKR, ONEHAND_RATTACKR,
-		ONEHAND_LATTACKF, ONEHAND_RATTACKF,
-		ONEHAND_LATTACKB, ONEHAND_RATTACKB,
+		ONEHAND_LWATTACKL, ONEHAND_LWATTACKR,
+		ONEHAND_RWATTACKL, ONEHAND_RWATTACKR,
+		ONEHAND_FWATTACKL, ONEHAND_FWATTACKR,
+		ONEHAND_BWATTACKL, ONEHAND_BWATTACKR,
 		
+		// fwattackr
+
 		ONEHAND_RUNPOWERATTACK,
 
-		ONEHAND_BLOCK,
+		ONEHAND_BLOCK, 
+		ONEHAND_LWBLOCK, ONEHAND_RWBLOCK, ONEHAND_FWBLOCK, ONEHAND_BWBLOCK,
+
 
 		ONEHAND_END
 	};
@@ -61,28 +65,37 @@ public:
 	virtual HRESULT Render();
 
 public:
+	/* 상태 관련 */
 	HRESULT Set_State(PLAYERSTATE _eState);
-	
-	_bool			Get_IsAnimationFin();
-	_bool			Get_CurAnimationName(string _strAnimationName);
-	_uint			Get_CurFrameIndex();
-	const char*		Get_CurSocketBonName();
-	void			Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
-	void			Set_SoketBone(const char* _pBoneName);
-
-	PLAYERCAMERA Get_CamMode() { return m_eCurCamMode; }
-	_vector		 Get_PlayerCamLook();
-	void		 Set_PlayerCam();
-
-	CGameObject* Get_Part(PARTS _ePart) { return m_vecPlayerPart[_ePart]; }
+	PLAYERSTATE	Get_CurState() { return m_eCurState; }
 
 	PLAYER_EQUIPSTATE Get_PlayerEquipState() { return m_eEquipState; }
 	void			  Set_PlayerEquipState(PLAYER_EQUIPSTATE _eState) { m_eEquipState = _eState; }
 
 	PLAYER_SPEEDDESC   Get_PlayerSpeedDesc() { return m_tSpeedDesc; }
 
+	/* 애니메이션 관련 */
+	_bool			Get_IsAnimationFin();
+	_bool			Get_CurAnimationIsLoop();
+	string			Get_CurAnimationName();
+	_uint			Get_CurFrameIndex();
+	const char*		Get_CurSocketBonName();
+	void			Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
+	void			Set_SoketBone(const char* _pBoneName);
+
+	/* 플레이어 카메라 관련*/
+	PLAYERCAMERA Get_CamMode() { return m_eCurCamMode; }
+	_vector		 Get_PlayerCamLook();
+	void		 Set_PlayerCam(string _strAnimationName, _uint _iChangeIndex = 0, _bool _bIsLoop = false);
+
+	/* 파츠 관련 */
+	CGameObject* Get_Part(PARTS _ePart) { return m_vecPlayerPart[_ePart]; }
+
+
+	/* 셀 관련 */
 	void			  Set_CurCell();
 
+	/* 충돌 관련*/
 	void			  CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);
 
 
@@ -100,6 +113,7 @@ private:
 
 	PLAYER_EQUIPSTATE				m_eEquipState = EQUIP_END;
 	PLAYER_SPEEDDESC				m_tSpeedDesc;
+	PLAYERSTATE						m_eCurState;
 
 private:
 	HRESULT Ready_Part();
