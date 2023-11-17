@@ -184,7 +184,7 @@ CGameObject* CObject_Manager::Find_CloneObject(_uint _iLevelIndex, const wstring
 		{
 			// 매개로 받은 레이어의 이름을 찾았다면
 			// 매개로 받은 오브젝트의 이름을 레이어의 Find_Object로 넘긴다.
-			return iter.second->Find_CloneObject(_strName);
+ 			return iter.second->Find_CloneObject(_strName);
 		}
 	}
 

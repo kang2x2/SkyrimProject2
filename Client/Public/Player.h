@@ -16,7 +16,7 @@ BEGIN(Client)
 class CPlayer final : public CCreatureObject
 {
 public:
-	enum PARTS { PART_BODY, PART_CAMERA, PART_WEAPON, PART_ARMOR, PART_HELMET, PART_HAIR, PART_END };
+	enum PLAYER_PARTS { PART_BODY, PART_CAMERA, PART_WEAPON, PART_ARMOR, PART_HELMET, PART_HAIR, PART_END };
 	enum PLAYERCAMERA { CAM_3ST, CAM_1ST, CAM_END };
 	enum PLAYER_EQUIPSTATE { EQUIP_UNEQUIP, EQUIP_ONEHAND, EQUIP_BOW, EQUIP_MAGIC, EQUIP_END };
 
@@ -38,9 +38,7 @@ public:
 
 		ONEHAND_RUNPOWERATTACK,
 
-		ONEHAND_BLOCK, 
-		ONEHAND_LWBLOCK, ONEHAND_RWBLOCK, ONEHAND_FWBLOCK, ONEHAND_BWBLOCK,
-
+		ONEHAND_BLOCK, ONEHAND_ANTICIPATE, ONEHAND_BLOCKHIT,
 
 		ONEHAND_END
 	};
@@ -86,10 +84,10 @@ public:
 	/* 플레이어 카메라 관련*/
 	PLAYERCAMERA Get_CamMode() { return m_eCurCamMode; }
 	_vector		 Get_PlayerCamLook();
-	void		 Set_PlayerCam(string _strAnimationName, _uint _iChangeIndex = 0, _bool _bIsLoop = false);
+	void		 Set_PlayerCam(string _strAnimationName, _vector _vPos, _uint _iChangeIndex = 0, _bool _bIsLoop = false);
 
 	/* 파츠 관련 */
-	CGameObject* Get_Part(PARTS _ePart) { return m_vecPlayerPart[_ePart]; }
+	CGameObject* Get_Part(PLAYER_PARTS _ePart) { return m_vecPlayerPart[_ePart]; }
 
 
 	/* 셀 관련 */

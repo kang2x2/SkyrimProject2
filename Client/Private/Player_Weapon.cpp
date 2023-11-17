@@ -143,11 +143,11 @@ HRESULT CPlayer_Weapon::Render()
 	return S_OK;
 }
 
-void CPlayer_Weapon::Set_SoketBone(CBone* _pBone)
+void CPlayer_Weapon::Set_SoketBone(CBone* _pSocketBone)
 {
 	Safe_Release(m_pSocketBone);
-	m_pSocketBone = _pBone;
-	Safe_AddRef(_pBone);
+	m_pSocketBone = _pSocketBone;
+	Safe_AddRef(_pSocketBone);
 }
 
 const char* CPlayer_Weapon::Get_SoketBoneName()

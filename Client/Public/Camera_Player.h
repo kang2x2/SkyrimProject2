@@ -34,6 +34,15 @@ public:
 	virtual void	LateTick(_float _fTimeDelta) override;
 
 public:
+	void	Set_PlayerCamLook(_vector _vLook) {
+		m_pTransformCom->Set_State(CTransform::STATE_LOOK, _vLook);
+	}
+	void	Set_PlayerCamPos(_vector _vPos)
+	{
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, _vPos);
+	}
+
+private:
 	HRESULT Ready_Component();
 
 public:
@@ -58,6 +67,10 @@ private:
 	_float			m_fMouseXAngle = 0.f; // 마우스 위 아래 회전 제한 두기 위한 변수.
 
 	_bool			m_bIsChangeCamMode = false;
+	_matrix			m_matSaveRotX = XMMatrixIdentity();
+	_float4			vDestCamPos = {};
+	_float4			vResultCamPos = {};
+	_vector			vFinalCamPos = {};
 public:
 	static CCamera_Player* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;

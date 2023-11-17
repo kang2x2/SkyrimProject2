@@ -36,10 +36,8 @@
 #include "StatePlayerOH_RunPAttack.h"
 
 #include "StatePlayerOH_Block.h"
-#include "StatePlayerOH_LwBlock.h"
-#include "StatePlayerOH_RwBlock.h"
-#include "StatePlayerOH_FwBlock.h"
-#include "StatePlayerOH_BwBlock.h"
+#include "StatePlayerOH_Anticipate.h"
+#include "StatePlayerOH_BlockHit.h"
 
 CStateManager_Player::CStateManager_Player()
 {
@@ -137,19 +135,10 @@ HRESULT CStateManager_Player::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 	/* Block */
 	pState = CStatePlayerOH_Block::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
-
-	/* Move Block */
-	//pState = CStatePlayerOH_LwBlock::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
-	//m_vecPlayerState.push_back(pState);
-	//
-	//pState = CStatePlayerOH_RwBlock::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
-	//m_vecPlayerState.push_back(pState);
-	//
-	//pState = CStatePlayerOH_FwBlock::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
-	//m_vecPlayerState.push_back(pState);
-	//
-	//pState = CStatePlayerOH_BwBlock::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
-	//m_vecPlayerState.push_back(pState);
+	pState = CStatePlayerOH_Anticipate::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
+	pState = CStatePlayerOH_BlockHit::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
 
 #pragma endregion
 

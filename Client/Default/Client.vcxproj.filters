@@ -340,18 +340,6 @@
     <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block\00. Fix">
       <UniqueIdentifier>{f0dc4d31-9403-4a14-b251-78e902700380}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block\01. Move_Left">
-      <UniqueIdentifier>{9a3d522f-ff7f-4b8c-91f6-42188a989383}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block\02. Move_Right">
-      <UniqueIdentifier>{9be62150-faca-4597-bb29-39ed5a499ac1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block\03. Move_Foward">
-      <UniqueIdentifier>{9d472241-5d1d-4d88-bd80-b31f0b24bc64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block\04. Move_Back">
-      <UniqueIdentifier>{08e0ce08-b8ac-4445-be6f-6d399453dab8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. State\01. Monster">
       <UniqueIdentifier>{af586fd7-0aed-49b7-80c4-724d4abaec72}</UniqueIdentifier>
     </Filter>
@@ -403,11 +391,143 @@
     <Filter Include="03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack">
       <UniqueIdentifier>{bc766074-1caf-4893-a65c-127ec0297db5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\00. Attack">
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip\00. Parts">
+      <UniqueIdentifier>{890972b4-48e6-4102-8375-e953d89ea832}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip\00. Parts\00. Weapon">
+      <UniqueIdentifier>{250f1e83-bd22-4725-9c5e-a426cbb11776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger">
+      <UniqueIdentifier>{5bd36484-c65f-4862-9313-23b03960bcc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\00. Skeever\00. Parts">
+      <UniqueIdentifier>{4ee85121-c230-4529-a01f-37dc75db79a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\00. Skeever\00. Parts\00.Weapon">
+      <UniqueIdentifier>{d22212b4-5f69-42b0-b0ce-25c846696b64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\00. Skeever\01. State\01. Chase">
+      <UniqueIdentifier>{125cc748-28cb-4a6e-a60c-4f1220760681}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\00. Skeever\01. State\02. Detection">
+      <UniqueIdentifier>{31d0355b-e6de-4014-b3a0-cd9fdf0c4bdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\00. Skeever\01. State\03. Warning">
+      <UniqueIdentifier>{d294e792-2f2a-45c9-9e99-48640cdce291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\00. Skeever\01. State\04. Return">
+      <UniqueIdentifier>{00fef913-37c4-48c1-b4ba-1ba195dfc0e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\00. Skeever\01. State\05. Attack">
+      <UniqueIdentifier>{4d72c625-4496-489f-a700-4ff4e16e8852}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\00. Skeever\01. State\05. Attack\00. Attack">
+      <UniqueIdentifier>{05ddd657-11bc-4aac-972c-ccd1e0c03b81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\00. Skeever\01. State\06. Stagger">
+      <UniqueIdentifier>{8d7a3d58-b1ca-4059-815a-f27e55c4f3d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\02. Charge">
+      <UniqueIdentifier>{88ef3c0d-1d46-4336-810b-d6aa6c59b9a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\00. Attack1">
       <UniqueIdentifier>{8c9c8eaf-2da6-4fe3-82d2-29908cc2bb58}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\01. Charge">
-      <UniqueIdentifier>{88ef3c0d-1d46-4336-810b-d6aa6c59b9a7}</UniqueIdentifier>
+    <Filter Include="03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\01. Attack2">
+      <UniqueIdentifier>{c3b4cb6b-c2de-4b35-b4e7-95a33336883b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger\02. Stagger_Heavy">
+      <UniqueIdentifier>{c0775960-ce03-424e-bc89-1ea56202e604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block\01. Anticipate">
+      <UniqueIdentifier>{c1113b03-c2d9-45b3-8d50-6f6ab582ce5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block\02. Hit">
+      <UniqueIdentifier>{64448eb4-902a-495c-8011-5ea01e6ea05e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\00. Skeever\01. State\05. Attack\01. Charge">
+      <UniqueIdentifier>{122c583a-2ed8-47a4-9e21-5b7fad715584}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand">
+      <UniqueIdentifier>{0c197c30-9b14-4cd6-a426-7e0f680622ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand\00. Parts">
+      <UniqueIdentifier>{e31abbfe-8cba-46cf-9ef0-2bd499931b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand\00. Parts\00. Weapon">
+      <UniqueIdentifier>{a6087fcc-cb6f-4bb0-90fe-1f90a6c6c179}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand\00. Parts\01. Shield">
+      <UniqueIdentifier>{f59176e2-b6f8-4235-be26-62ae4ae8c4eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\00. IronSword">
+      <UniqueIdentifier>{19aeb9f5-a844-40f5-ab88-475fd9e21e37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\01. FalmerAxe">
+      <UniqueIdentifier>{0b620d88-f9d4-4fb7-839a-6ae48a806059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand">
+      <UniqueIdentifier>{fbfef78e-15e7-46b3-9943-248355a8245f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\00. Manager">
+      <UniqueIdentifier>{f738bfb4-c08c-4d86-a5e8-63f26f30992d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State">
+      <UniqueIdentifier>{e16a03e0-d554-4598-bb66-3b0d5dc5ec62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\00. Idle">
+      <UniqueIdentifier>{b83444cd-de6f-4928-9635-b25f93d55061}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\01. Equip">
+      <UniqueIdentifier>{a313db9a-b4a9-463b-9252-9b0a555f59a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\02. Warning">
+      <UniqueIdentifier>{9ec0fd36-c6fa-4975-bc7f-3665883188bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\03. Chase">
+      <UniqueIdentifier>{162873d9-0761-43c7-a0e1-f78c9ee596a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\04. Detection">
+      <UniqueIdentifier>{ffa09932-8044-4cce-bd91-b2d14eb2dbd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\05. Return">
+      <UniqueIdentifier>{b109ff08-42dc-4a3f-b283-a0e32ecd8937}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack">
+      <UniqueIdentifier>{3728264c-d548-4355-9b13-267a8ef25f86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack\00. Attack1">
+      <UniqueIdentifier>{c94e65ac-fb69-4983-af97-39df42f60041}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack\01. Attack2">
+      <UniqueIdentifier>{4104d728-9874-497d-b388-bf0b85afed64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack\02. PowerAttack">
+      <UniqueIdentifier>{7d80d591-01e0-4312-a106-0a82404dc713}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack\03. Charge">
+      <UniqueIdentifier>{b1a490c8-af06-4170-bc06-f6d383216eaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger">
+      <UniqueIdentifier>{991f34e1-8354-4f03-ae02-83ed516846ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\00. Stagger_Light">
+      <UniqueIdentifier>{86706772-a1d0-4bcf-b8a7-01ef77765d10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger\00. Stagger_Light">
+      <UniqueIdentifier>{b28bb5c6-1037-4beb-bbc1-2311c38689b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger\01. Stagger_Light2">
+      <UniqueIdentifier>{a0b119c2-7ae5-451b-a8d9-ecd08c595618}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\01. Stagger_Light2">
+      <UniqueIdentifier>{5f56a582-001f-468f-ba80-1b97c87ee7dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\02. Stagger_Heavy">
+      <UniqueIdentifier>{23dd79ec-9fe6-433c-9a02-70d40e62379d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\03. Stagger_Heavy2">
+      <UniqueIdentifier>{7b69e7da-63df-4647-8f73-162be0ba8cd2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -422,9 +542,6 @@
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>98. Default</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\MainApp.h">
-      <Filter>00. MainApp</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Loader.h">
       <Filter>01. Level\99. Loading\Loader</Filter>
@@ -507,9 +624,6 @@
     <ClInclude Include="..\Public\Player_Body.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\00. Body</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Weapon_IronSword.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\PlayerPart_Base.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts</Filter>
     </ClInclude>
@@ -548,9 +662,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\StateManager_Skeever.h">
       <Filter>03. State\01. Monster\00. Skeever\00. Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\StateSkeever_Idle.h">
-      <Filter>03. State\01. Monster\00. Skeever\01. State\00. Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayer_Idle.h">
       <Filter>03. State\00. Player\01. State\00. UnEquip\00. Idle</Filter>
@@ -679,10 +790,10 @@
       <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. Move_Left</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StateFalmerUE_Charge.h">
-      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\01. Charge</Filter>
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\02. Charge</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StateFalmerUE_Attack.h">
-      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\00. Attack</Filter>
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\00. Attack1</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Light_Fire.h">
       <Filter>02. GameObject\01. GamePlay\05. LightObject\01. Fire</Filter>
@@ -723,17 +834,131 @@
     <ClInclude Include="..\Public\StatePlayerOH_Block.h">
       <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\00. Fix</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\StatePlayerOH_LwBlock.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\01. Move_Left</Filter>
+    <ClInclude Include="..\Public\State_Skeever.h">
+      <Filter>03. State\01. Monster\00. Skeever</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\StatePlayerOH_RwBlock.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\02. Move_Right</Filter>
+    <ClInclude Include="..\Public\FalmerUE_Weapon.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip\00. Parts\00. Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\StatePlayerOH_FwBlock.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\03. Move_Foward</Filter>
+    <ClInclude Include="..\Public\FalmerUEPart_Base.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip\00. Parts</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\StatePlayerOH_BwBlock.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\04. Move_Back</Filter>
+    <ClInclude Include="..\Public\StateFalmerUE_StaggerH.h">
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger\02. Stagger_Heavy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_StaggerL.h">
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger\00. Stagger_Light</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkeeverPart_Base.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\00. Skeever\00. Parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Skeever_Weapon.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\00. Skeever\00. Parts\00.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSkeever_Idle.h">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\00. Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSkeever_Chase.h">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\01. Chase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSkeever_Detection.h">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\02. Detection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSkeever_Warning.h">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\03. Warning</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSkeever_Return.h">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\04. Return</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSkeever_Attack.h">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\05. Attack\00. Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSkeever_Charge.h">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\05. Attack\01. Charge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSkeever_Stagger.h">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\06. Stagger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_Attack2.h">
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\01. Attack2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_StaggerL2.h">
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger\01. Stagger_Light2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_Anticipate.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\01. Anticipate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_BlockHit.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\02. Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MainApp.h">
+      <Filter>01. Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Falmer_OneHand.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FalmerOHPart_Base.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand\00. Parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FalmerOH_Weapon.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand\00. Parts\00. Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_IronSword.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\00. IronSword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_FalmerAxe.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\01. FalmerAxe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_FalmerOH.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateManager_FalmerOH.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\00. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_Idle.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\00. Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_Equip.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\01. Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_Warning.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\02. Warning</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_Chase.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\03. Chase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_Detection.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\04. Detection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_UnEquip.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\01. Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_Return.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\05. Return</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_Attack.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack\00. Attack1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_Attack2.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack\01. Attack2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_PAttack.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack\02. PowerAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_Charge.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack\03. Charge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_StaggerL.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\00. Stagger_Light</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_StaggerL2.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\01. Stagger_Light2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_StaggerH.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\02. Stagger_Heavy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_StaggerH2.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\03. Stagger_Heavy2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -829,9 +1054,6 @@
     <ClCompile Include="..\Private\Player_Body.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\00. Body</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Weapon_IronSword.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\PlayerPart_Base.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts</Filter>
     </ClCompile>
@@ -870,9 +1092,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\StateManager_Skeever.cpp">
       <Filter>03. State\01. Monster\00. Skeever\00. Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\StateSkeever_Idle.cpp">
-      <Filter>03. State\01. Monster\00. Skeever\01. State\00. Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayer_Idle.cpp">
       <Filter>03. State\00. Player\01. State\00. UnEquip\00. Idle</Filter>
@@ -998,10 +1217,10 @@
       <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. Move_Left</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StateFalmerUE_Charge.cpp">
-      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\01. Charge</Filter>
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\02. Charge</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StateFalmerUE_Attack.cpp">
-      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\00. Attack</Filter>
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\00. Attack1</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Light_Fire.cpp">
       <Filter>02. GameObject\01. GamePlay\05. LightObject\01. Fire</Filter>
@@ -1042,17 +1261,128 @@
     <ClCompile Include="..\Private\StatePlayerOH_Block.cpp">
       <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\00. Fix</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\StatePlayerOH_LwBlock.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\01. Move_Left</Filter>
+    <ClCompile Include="..\Private\State_Skeever.cpp">
+      <Filter>03. State\01. Monster\00. Skeever</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\StatePlayerOH_RwBlock.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\02. Move_Right</Filter>
+    <ClCompile Include="..\Private\FalmerUE_Weapon.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip\00. Parts\00. Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\StatePlayerOH_FwBlock.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\03. Move_Foward</Filter>
+    <ClCompile Include="..\Private\FalmerUEPart_Base.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip\00. Parts</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\StatePlayerOH_BwBlock.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\04. Move_Back</Filter>
+    <ClCompile Include="..\Private\StateFalmerUE_StaggerH.cpp">
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger\02. Stagger_Heavy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_StaggerL.cpp">
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger\00. Stagger_Light</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkeeverPart_Base.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\00. Skeever\00. Parts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Skeever_Weapon.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\00. Skeever\00. Parts\00.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSkeever_Idle.cpp">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\00. Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSkeever_Chase.cpp">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\01. Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSkeever_Detection.cpp">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\02. Detection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSkeever_Warning.cpp">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\03. Warning</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSkeever_Return.cpp">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\04. Return</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSkeever_Attack.cpp">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\05. Attack\00. Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSkeever_Charge.cpp">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\05. Attack\01. Charge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSkeever_Stagger.cpp">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\06. Stagger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_Attack2.cpp">
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\01. Attack2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_StaggerL2.cpp">
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger\01. Stagger_Light2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_Anticipate.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\01. Anticipate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_BlockHit.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\02. Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Falmer_OneHand.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FalmerOHPart_Base.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand\00. Parts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FalmerOH_Weapon.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand\00. Parts\00. Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_IronSword.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\00. IronSword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_FalmerAxe.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\01. FalmerAxe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_FalmerOH.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateManager_FalmerOH.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\00. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_Idle.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\00. Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_Equip.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\01. Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_Warning.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\02. Warning</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_Chase.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\03. Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_Detection.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\04. Detection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_UnEquip.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\01. Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_Return.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\05. Return</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_Attack.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack\00. Attack1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_Attack2.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack\01. Attack2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_PAttack.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack\02. PowerAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_Charge.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\06. Attack\03. Charge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_StaggerL.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\00. Stagger_Light</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_StaggerL2.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\01. Stagger_Light2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_StaggerH.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\02. Stagger_Heavy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_StaggerH2.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\03. Stagger_Heavy2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

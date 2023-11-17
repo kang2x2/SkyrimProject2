@@ -13,15 +13,17 @@ BEGIN(Client)
 class CFalmer_UnEquip final : public CMonster
 {
 public:
+	enum FALMERUE_PARTS { PART_WEAPON, PART_END };
+
 	enum FALMERUE_COLTYPE	{ FALMERUE_COL_AABB, 
-		FALMERUE_COL_ATKOBB,
 		FALMERUE_COL_DETECTION, FALMERUE_COL_MISSDETECTION,
 		FALMERUE_COL_ATKROUND, FALMERUE_COL_END };
 	
 	enum FALMERUE_STATE { FALMERUE_SQUAT, FALMERUE_SQUAT_OUTRO, FALMERUE_SQUAT_INTRO,
 		FALMERUE_WARNING, FALMERUE_DETECTION, FALMERUE_RETURN,
 		FALMERUE_CHASE, 
-		FALMERUE_ATK, FALMERUE_CHARGE,
+		FALMERUE_ATK, FALMERUE_ATK2, FALMERUE_CHARGE,
+		FALMERUE_STAGGERL, FALMERUE_STAGGERL2, FALMERUE_STAGGERH,
 		FALMERUE_END };
 
 	typedef struct FalmerUESpeedDesc
@@ -48,18 +50,23 @@ public:
 
 	FALMERUE_SPEEDDESC   Get_FalmerUESpeedDesc() { return m_tSpeedDesc; }
 
+	/* ÆÄÃ÷ °ü·Ã */
+	CGameObject* Get_Part(FALMERUE_PARTS _ePart) { return m_vecMonsterPart[_ePart]; }
+
+
 public:
+	HRESULT Ready_Part();
 	HRESULT Ready_Component(_uint _iLevel);
 	HRESULT Ready_State();
 
 private:
+	vector<class CGameObject*>		m_vecMonsterPart;
+
 	vector<CCollider*> m_pVecCollider;
 	
 	class CStateManager_FalmerUE* m_pStateManager = nullptr;
 
 	FALMERUE_SPEEDDESC				m_tSpeedDesc;
-
-	CBone* 					m_pAtkBone = nullptr;
 
 public:
 	static  CFalmer_UnEquip* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

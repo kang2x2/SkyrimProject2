@@ -5,6 +5,7 @@
 #include "GameInstance.h"
 
 #include "Tool_Camera.h"
+#include "Player.h"
 
 CLevel_Tool::CLevel_Tool(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CLevel(_pDevice, _pContext)

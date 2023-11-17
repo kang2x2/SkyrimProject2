@@ -21,12 +21,12 @@ private:
 	virtual ~CStateFalmerUE_Attack() = default;
 
 public:
-	virtual		 HRESULT Initialize(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom);
+	virtual		 HRESULT Initialize(CGameObject* _pMonster, CGameObject* _pPlayer, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom);
 	virtual void Update(_float _fTimeDelta);
 	virtual void Late_Update();
 
 public:
-	static CStateFalmerUE_Attack* Create(CGameObject* _pMonster, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom);
+	static CStateFalmerUE_Attack* Create(CGameObject* _pMonster, CGameObject* _pPlayer, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom);
 	virtual void Free() override;
 };
 

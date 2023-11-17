@@ -41,6 +41,8 @@ public:
 	const char* Get_SoketBoneName();
 
 	_vector		Get_PlayerCamLook() { return m_pPlayerCamera->Get_CamLook(); }
+	void		Set_PlayerCamLook(_vector _vLook);
+	void		Set_PlayerCamPos(_vector _vPos) { m_pPlayerCamera->Set_PlayerCamPos(_vPos); }
 
 public:
 	HRESULT Ready_Component();

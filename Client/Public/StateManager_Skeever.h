@@ -2,8 +2,16 @@
 
 #include "Client_Defines.h"
 #include "Base.h"
-#include "State_Monster.h"
 #include "Skeever.h"
+#include "State_Skeever.h"
+
+BEGIN(Engine)
+
+class CGameObject;
+class CTransform;
+class CNavigation;
+
+END
 
 BEGIN(Client)
 
@@ -14,10 +22,10 @@ private:
 	virtual ~CStateManager_Skeever() = default;
 
 public:
-	CState_Monster* Get_State(CSkeever::SKEEVER_STATE _eState);
+	CState_Skeever* Get_State(CSkeever::SKEEVER_STATE _eState);
 
 public:
-	HRESULT Initialize(class CGameObject* _pMonster, class CTransform* _pPlayerTransform, class CNavigation* _pPlayerNavigation);
+	HRESULT Initialize(CGameObject* _pMonster, CGameObject* _pPlayer, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom);
 	HRESULT Set_State(CSkeever::SKEEVER_STATE _eState);
 
 public:
@@ -25,12 +33,12 @@ public:
 	void Late_Update();
 
 private:
-	CState_Monster* m_pCurState = nullptr;
+	CState_Skeever* m_pCurState = nullptr;
 
-	vector<class CState_Monster*> m_vecMonsterState; /* 상태들 */
+	vector<class CState_Skeever*> m_vecMonsterState; /* 상태들 */
 
 public:
-	static CStateManager_Skeever* Create(class CGameObject* _pMonster, class CTransform* _pMonsterTransform, class CNavigation* _pMonsterNavigation);
+	static CStateManager_Skeever* Create(CGameObject* _pMonster, CGameObject* _pPlayer, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom);
 	virtual void Free() override;
 };
 

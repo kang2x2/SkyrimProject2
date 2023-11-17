@@ -106,6 +106,11 @@ const char* CPlayer_CameraPart::Get_SoketBoneName()
 	return m_pSocketBone->Get_BoneName();
 }
 
+void CPlayer_CameraPart::Set_PlayerCamLook(_vector _vLook)
+{
+	m_pPlayerCamera->Set_PlayerCamLook(_vLook);
+}
+
 HRESULT CPlayer_CameraPart::Ready_Component()
 {
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),

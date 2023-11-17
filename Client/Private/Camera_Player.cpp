@@ -17,6 +17,11 @@ CCamera_Player::CCamera_Player(ID3D11Device* _pDevice, ID3D11DeviceContext* _pCo
 CCamera_Player::CCamera_Player(const CCamera_Player& rhs)
     : CCamera(rhs)
 {
+    for (_int i = 0; i < STAGE_END; ++i)
+    {
+        m_pNavigationCom[i] = nullptr;
+    }
+
 }
 
 HRESULT CCamera_Player::Initialize_ProtoType()
@@ -65,23 +70,24 @@ void CCamera_Player::Tick_3st(_float4 _vTargetPos, _float _fTimeDelta)
     m_fMouseXAngle = XMVectorGetX(XMVector3AngleBetweenVectors(m_pTransformCom->Get_State(CTransform::STATE_LOOK), vPlayerUp));
     m_fMouseXAngle = fabs(XMConvertToDegrees(m_fMouseXAngle));
 
-    cout << m_fMouseXAngle << endl;
+    // cout << m_fMouseXAngle << endl;
 
     /* 회전 행렬 생성. */
     _matrix matRot = XMMatrixRotationY(m_RotationSpeed * mouseMoveY * _fTimeDelta);
     m_matAccumulateRotY = XMMatrixMultiply(m_matAccumulateRotY, matRot);
-    if (m_fMouseXAngle < 170.f)
+    if (m_fMouseXAngle > 170.f)
     {
+        m_matAccumulateRotX = m_matSaveRotX;
+    }
+    if (m_fMouseXAngle <= 170.f)
+    {
+        m_matSaveRotX = m_matAccumulateRotX;
         matRot = XMMatrixRotationX(m_RotationSpeed * mouseMoveX * _fTimeDelta);
         m_matAccumulateRotX = XMMatrixMultiply(m_matAccumulateRotX, matRot);
     }
-    else if(m_fMouseXAngle > 170.f)
-    {
-        matRot = XMMatrixRotationX(-(m_RotationSpeed * mouseMoveX * _fTimeDelta));
-        m_matAccumulateRotX = XMMatrixMultiply(m_matAccumulateRotX, matRot);
-    }
 
-        /* 위에서 계산한 회전 행렬들을 카메라의 world 행렬과 모두 연산한다.*/
+
+    /* 위에서 계산한 회전 행렬들을 카메라의 world 행렬과 모두 연산한다.*/
 /*  1. 카메라의 위치를 설정.
     2. 위에서 구한 마우스에 따른 회전 행렬들을 곱한다.(무조건 x축이 먼저)
     3. 대상의 위치를 곱한다.

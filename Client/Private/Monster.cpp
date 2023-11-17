@@ -97,12 +97,9 @@ _bool CMonster::Get_IsAnimationFin()
 	return m_pModelCom->Get_IsAnimationFin();
 }
 
-_bool CMonster::Get_CurAnimationName(string _strAnimationName)
+string CMonster::Get_CurAnimationName()
 {
-	if (!strcmp(m_pModelCom->Get_CurAnimationName().c_str(), _strAnimationName.c_str()))
-		return true;
-
-	return false;
+	return m_pModelCom->Get_CurAnimationName();
 }
 
 _uint CMonster::Get_CurFrameIndex()

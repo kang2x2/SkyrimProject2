@@ -172,9 +172,6 @@
     <Filter Include="01. Utiltiy\08. File\00. Data\00. BinFBX">
       <UniqueIdentifier>{c86f7611-9e3d-424f-96e2-22128561d102}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Utiltiy\07 .Collison">
-      <UniqueIdentifier>{164008c9-aec4-42b8-be94-0ebdb3640ad3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Utiltiy\02. Object\02. CreatureObject">
       <UniqueIdentifier>{588b0ad8-d999-434c-bd1b-4a9a4e6ad467}</UniqueIdentifier>
     </Filter>
@@ -183,6 +180,9 @@
     </Filter>
     <Filter Include="01. Utiltiy\09. RenderTarget\00. Manager">
       <UniqueIdentifier>{765ecbe5-9fe4-4e3f-b2ce-0f8456e4b8d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\07 Collison">
+      <UniqueIdentifier>{164008c9-aec4-42b8-be94-0ebdb3640ad3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -349,7 +349,7 @@
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Collision_Manager.h">
-      <Filter>01. Utiltiy\07 .Collison</Filter>
+      <Filter>01. Utiltiy\07 Collison</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\RenderTarget.h">
       <Filter>01. Utiltiy\09. RenderTarget</Filter>
@@ -507,7 +507,7 @@
       <Filter>01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\01. Rect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Collision_Manager.cpp">
-      <Filter>01. Utiltiy\07 .Collison</Filter>
+      <Filter>01. Utiltiy\07 Collison</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\RenderTarget.cpp">
       <Filter>01. Utiltiy\09. RenderTarget</Filter>

@@ -5,6 +5,10 @@
 
 #include "StateManager_Skeever.h"
 
+#include "Bone.h"
+#include "Player.h"
+
+#include "Skeever_Weapon.h"
 
 CSkeever::CSkeever(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CMonster(_pDevice, _pContext)
@@ -35,6 +39,9 @@ HRESULT CSkeever::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag
 	if (FAILED(Ready_Component(_iLevel)))
 		return E_FAIL;
 
+	if (FAILED(Ready_Part()))
+		return E_FAIL;
+
 	m_bHasMesh = true;
 	m_bCreature = true;
 	m_strName = TEXT("Skeever");
@@ -42,10 +49,10 @@ HRESULT CSkeever::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag
 
 	m_pTransformCom->Set_Speed(2.f);
 
+	Play_Animation(true, "combatidle");
+
 	if (FAILED(Ready_State()))
 		return E_FAIL;
-
-	Play_Animation(true, "mtidle");
 
 	return S_OK;
 
@@ -53,26 +60,90 @@ HRESULT CSkeever::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag
 
 void CSkeever::PriorityTick(_float _fTimeDelta)
 {
+	for (auto& iter : m_vecMonsterPart)
+	{
+		if (iter != nullptr)
+			iter->PriorityTick(_fTimeDelta);
+	}
 }
 
 void CSkeever::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
+	for (auto& iter : m_vecMonsterPart)
+	{
+		if (iter != nullptr)
+			iter->Tick(_fTimeDelta);
+	}
+
+	if (g_curLevel == LEVEL_GAMEPLAY)
+		m_pStateManager->Update(_fTimeDelta);
+
 	__super::Tick(_fTimeDelta);
+
+	_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
+
+	for (size_t i = 0; i < SKEEVER_COL_END; ++i)
+	{
+		if (m_pVecCollider[i] != nullptr)
+		{
+			m_pVecCollider[i]->Update(matWorld);
+		}
+
+	}
 }
 
 void CSkeever::LateTick(_float _fTimeDelta)
 {
-	m_pStateManager->Late_Update();
+	if (g_curLevel == LEVEL_GAMEPLAY)
+		m_pStateManager->Late_Update();
+
+	for (auto& iter : m_vecMonsterPart)
+	{
+		if (iter != nullptr)
+			iter->LateTick(_fTimeDelta);
+	}
+
+#ifdef _DEBUG
+
+	for (auto& collider : m_pVecCollider)
+	{
+		/* 콜라이더를 그 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
+		if (collider != nullptr)
+			m_pRendererCom->Add_Debug(collider);
+	}
+
+#endif 
 
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 
-	__super::LateTick(_fTimeDelta);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>
+		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
+
+	if (g_curLevel == LEVEL_GAMEPLAY)
+	{
+		for (auto& collider : m_pVecCollider)
+			collider->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+
+		pGameInstance->Collision_AABBTransition(m_pVecCollider[SKEEVER_COL_AABB], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+	}
+
+	Safe_Release(pGameInstance);
+
 }
 
 HRESULT CSkeever::Render()
 {
+	for (auto& iter : m_vecMonsterPart)
+	{
+		if (iter != nullptr)
+			iter->Render();
+	}
+
 	__super::Bind_ShaderResource();
 
 	// 메시 몇개
@@ -106,6 +177,31 @@ HRESULT CSkeever::Set_State(SKEEVER_STATE _eState)
 	return S_OK;
 }
 
+HRESULT CSkeever::Ready_Part()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject* pPart = nullptr;
+
+	/* For. FalmerUE_Weapon */
+	CSkeever_Weapon::WEAPON_DESC WeaponPartDesc;
+	WeaponPartDesc.pParent = this;
+	WeaponPartDesc.pParentTransform = m_pTransformCom;
+	WeaponPartDesc.pSocketBone = m_pModelCom->Get_BonePtr("UpperLipBack");
+	WeaponPartDesc.matSocketPivot = m_pModelCom->Get_PivotMatrix();
+
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Skeever_Weapon"), &WeaponPartDesc);
+	if (pPart == nullptr)
+		return E_FAIL;
+	m_vecMonsterPart.push_back(pPart);
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+
+}
+
 HRESULT CSkeever::Ready_Component(_uint _iLevel)
 {
 	if (FAILED(__super::Add_CloneComponent(_iLevel, m_strModelComTag,
@@ -114,18 +210,73 @@ HRESULT CSkeever::Ready_Component(_uint _iLevel)
 
 	__super::Ready_Component();
 
+#pragma region Collider
+
+	m_pVecCollider.resize(SKEEVER_COL_END);
+
+	/* AABB */
+	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
+	AABBDesc.vExtents = _float3(0.5f, 0.7f, 0.5f);
+	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
+		TEXT("Com_Collider_AABB"), (CComponent**)&m_pVecCollider[SKEEVER_COL_AABB], &AABBDesc)))
+		return E_FAIL;
+
+	m_pVecCollider[SKEEVER_COL_AABB]->Set_OwnerObj(this);
+
+	/* DETECTION */
+	CBounding_Sphere::BOUNDING_SPHERE_DESC SphereDesc = {};
+	SphereDesc.fRadius = 6.f;
+	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
+		TEXT("Com_Collider_Detection"), (CComponent**)&m_pVecCollider[SKEEVER_COL_DETECTION], &SphereDesc)))
+		return E_FAIL;
+
+	m_pVecCollider[SKEEVER_COL_DETECTION]->Set_OwnerObj(this);
+
+	/* MISS DETECTION */
+	SphereDesc.fRadius = 9.f;
+	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
+		TEXT("Com_Collider_MissDetection"), (CComponent**)&m_pVecCollider[SKEEVER_COL_MISSDETECTION], &SphereDesc)))
+		return E_FAIL;
+
+	m_pVecCollider[SKEEVER_COL_MISSDETECTION]->Set_OwnerObj(this);
+
+	/* RUN ATTACK */
+	SphereDesc.fRadius = 2.5f;
+	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
+		TEXT("Com_Collider_AtkRound"), (CComponent**)&m_pVecCollider[SKEEVER_COL_ATKROUND], &SphereDesc)))
+		return E_FAIL;
+
+	m_pVecCollider[SKEEVER_COL_ATKROUND]->Set_OwnerObj(this);
+
+#pragma endregion
+
 	return S_OK;
 }
 
 HRESULT CSkeever::Ready_State()
 {
-	m_pStateManager = CStateManager_Skeever::Create(this, m_pTransformCom, m_pNavigationCom);
+	m_fRunSpeed = 2.5f;
+	m_fWalkSpeed = 1.5f;
+	m_iHp = 50;
+	m_iAtk = 5;
 
-	return S_OK;
-}
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-HRESULT CSkeever::Ready_Cell()
-{
+	m_pStateManager = CStateManager_Skeever::Create(this,
+		pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")),
+		m_pTransformCom, m_pNavigationCom, m_pVecCollider);
+
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -172,5 +323,14 @@ void CSkeever::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pModelCom);
+	for (auto& iter : m_vecMonsterPart)
+	{
+		if (iter != nullptr)
+			Safe_Release(iter);
+	}
+
+	for (auto& iter : m_pVecCollider)
+		Safe_Release(iter);
+
+	Safe_Release(m_pStateManager);
 }

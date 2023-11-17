@@ -39,7 +39,7 @@ public:
 	void			Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
 
 	_bool			Get_IsAnimationFin();
-	_bool			Get_CurAnimationName(string _strAnimationName);
+	string			Get_CurAnimationName();
 	_uint			Get_CurFrameIndex();
 
 	_vector			Get_OriginPos() { return m_vOriginPos; }
@@ -54,8 +54,6 @@ protected:
 	CNavigation* m_pNavigationCom = nullptr;
 
 	_vector			m_vOriginPos = {};
-
-
 
 public:
 	virtual CGameObject* Clone(void* _pArg) = 0;

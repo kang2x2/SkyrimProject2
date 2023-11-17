@@ -38,7 +38,7 @@ public:
 
 public:
 	void		Set_PivotMatrix(_float4x4 _matPivot) { m_matSocketPivot = _matPivot; }
-	void		Set_SoketBone(CBone* _pBone);
+	void		Set_SoketBone(CBone* _pSocketBone);
 	const char* Get_SoketBoneName();
 	
 

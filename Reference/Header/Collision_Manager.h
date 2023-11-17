@@ -35,6 +35,8 @@ public:
 	
 	_bool Collision_ColCheck(class CCollider* _pCollider, class CCollider* _pTargetCollider);
 
+
+
 private:
 	_bool Is_Collsion(class CCollider* _pCollider, class CCollider* _pTargetCollider);
 	void MinMax_Calculator(class CCollider* _pCollider, class CCollider* _pTargetCollider, COL_MINMAX_FLOAT3& _pMinMaxFloat3Desc, COL_TARGET_MINMAX_FLOAT3& _pTargetMinMaxFloat3Desc);

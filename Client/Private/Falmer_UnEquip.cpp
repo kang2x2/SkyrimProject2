@@ -8,11 +8,11 @@
 #include "Bone.h"
 #include "Player.h"
 
+#include "FalmerUE_Weapon.h"
 
 CFalmer_UnEquip::CFalmer_UnEquip(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CMonster(_pDevice, _pContext)
 {
-	// state manager 만들자. 그리고 로더에 원본 추가하자.
 }
 
 CFalmer_UnEquip::CFalmer_UnEquip(const CFalmer_UnEquip& rhs)
@@ -39,6 +39,9 @@ HRESULT CFalmer_UnEquip::Initialize_Clone(_uint _iLevel, const wstring& _strMode
 	if (FAILED(Ready_Component(_iLevel)))
 		return E_FAIL;
 
+	if (FAILED(Ready_Part()))
+		return E_FAIL;
+
 	m_bHasMesh = true;
 	m_bCreature = true;
 	m_strName = TEXT("Falmer_UnEquip");
@@ -51,18 +54,29 @@ HRESULT CFalmer_UnEquip::Initialize_Clone(_uint _iLevel, const wstring& _strMode
 	if (FAILED(Ready_State()))
 		return E_FAIL;
 
-	m_pAtkBone = m_pModelCom->Get_BonePtr("WEAPON");
+	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-15.0f));
 
 	return S_OK;
 }
 
 void CFalmer_UnEquip::PriorityTick(_float _fTimeDelta)
 {
+	for (auto& iter : m_vecMonsterPart)
+	{
+		if (iter != nullptr)
+			iter->PriorityTick(_fTimeDelta);
+	}
 }
 
 void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
+
+	for (auto& iter : m_vecMonsterPart)
+	{
+		if (iter != nullptr)
+			iter->Tick(_fTimeDelta);
+	}
 
 	if (g_curLevel == LEVEL_GAMEPLAY)
 		m_pStateManager->Update(_fTimeDelta);
@@ -71,22 +85,11 @@ void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 
 	_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
 
-	/* 내 행렬 * (소캣 뼈의 컴바인드 행렬 * 소캣의 행렬 * 페어런트의 월드 행렬) */
-	_float4x4 matSocketCombined = m_pAtkBone->Get_CombinedTransformationMatrix();
-	_matrix	matAtkBone = XMLoadFloat4x4(&matSocketCombined) * matWorld;
-
-	matAtkBone.r[0] = XMVector3Normalize(matAtkBone.r[0]);
-	matAtkBone.r[1] = XMVector3Normalize(matAtkBone.r[1]);
-	matAtkBone.r[2] = XMVector3Normalize(matAtkBone.r[2]);
-
 	for (size_t i = 0; i < FALMERUE_COL_END; ++i)
 	{
 		if (m_pVecCollider[i] != nullptr)
 		{
-			if (i == FALMERUE_COL_ATKOBB)
-				m_pVecCollider[i]->Update(matAtkBone * matWorld);
-			else
-				m_pVecCollider[i]->Update(matWorld);
+			m_pVecCollider[i]->Update(matWorld);
 		}
 
 	}
@@ -96,6 +99,12 @@ void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 {
 	if (g_curLevel == LEVEL_GAMEPLAY)
 		m_pStateManager->Late_Update();
+
+	for (auto& iter : m_vecMonsterPart)
+	{
+		if (iter != nullptr)
+			iter->LateTick(_fTimeDelta);
+	}
 
 #ifdef _DEBUG
 
@@ -129,6 +138,12 @@ void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 
 HRESULT CFalmer_UnEquip::Render()
 {
+	for (auto& iter : m_vecMonsterPart)
+	{
+		if (iter != nullptr)
+			iter->Render();
+	}
+
 	__super::Bind_ShaderResource();
 
 	// 메시 몇개
@@ -162,6 +177,30 @@ HRESULT CFalmer_UnEquip::Set_State(CFalmer_UnEquip::FALMERUE_STATE _eState)
 	return S_OK;
 }
 
+HRESULT CFalmer_UnEquip::Ready_Part()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	
+	CGameObject* pPart = nullptr;
+	
+	/* For. FalmerUE_Weapon */
+	CFalmerUE_Weapon::WEAPON_DESC WeaponPartDesc;
+	WeaponPartDesc.pParent = this;
+	WeaponPartDesc.pParentTransform = m_pTransformCom;
+	WeaponPartDesc.pSocketBone = m_pModelCom->Get_BonePtr("WEAPON");
+	WeaponPartDesc.matSocketPivot = m_pModelCom->Get_PivotMatrix();
+	
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_FalmerUE_Weapon"), &WeaponPartDesc);
+	if (pPart == nullptr)
+		return E_FAIL;
+	m_vecMonsterPart.push_back(pPart);
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 {
 	if (FAILED(__super::Add_CloneComponent(_iLevel, m_strModelComTag,
@@ -184,19 +223,6 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 		return E_FAIL;
 
 	m_pVecCollider[FALMERUE_COL_AABB]->Set_OwnerObj(this);
-
-	// 이거 내일 진지하게 다시 생각해보자.
-	/* ATTACK OBB*/
-	CBounding_OBB::BOUNDING_OBB_DESC OBBDesc = {};
-
-	OBBDesc.vExtents = _float3(0.1f, 0.1f, 0.1f);
-	OBBDesc.vCenter = _float3(OBBDesc.vExtents.x, OBBDesc.vExtents.y, 0.f);
-
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
-		TEXT("Com_Collider_AtkOBB"), (CComponent**)&m_pVecCollider[FALMERUE_COL_ATKOBB], &OBBDesc)))
-		return E_FAIL;
-
-	m_pVecCollider[FALMERUE_COL_ATKOBB]->Set_OwnerObj(this);
 
 	/* DETECTION */
 	CBounding_Sphere::BOUNDING_SPHERE_DESC SphereDesc = {};
@@ -242,7 +268,14 @@ HRESULT CFalmer_UnEquip::Ready_State()
 	m_iHp = 100;
 	m_iAtk = 10;
 
-	m_pStateManager = CStateManager_FalmerUE::Create(this, m_pTransformCom, m_pNavigationCom, m_pVecCollider);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	m_pStateManager = CStateManager_FalmerUE::Create(this,
+		pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")),
+		m_pTransformCom, m_pNavigationCom, m_pVecCollider);
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -289,6 +322,12 @@ CGameObject* CFalmer_UnEquip::Clone(_uint _iLevel, const wstring& _strModelComTa
 void CFalmer_UnEquip::Free()
 {
 	__super::Free();
+
+	for (auto& iter : m_vecMonsterPart)
+	{
+		if (iter != nullptr)
+			Safe_Release(iter);
+	}
 
 	for (auto& iter : m_pVecCollider)
 		Safe_Release(iter);

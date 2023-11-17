@@ -14,12 +14,29 @@
 #include "Sky.h"
 #include "ParticleRect.h"
 
+/* Player */
 #include "Player.h"
 #include "Player_CameraPart.h"
 #include "Player_Body.h"
 #include "Player_Weapon.h"
 #include "Player_Armor.h"
 #include "Player_Helmet.h"
+
+#pragma region Monster 
+
+/* Skeever */
+#include "Skeever.h"
+#include "Skeever_Weapon.h"
+
+/* FalmerUE */
+#include "Falmer_UnEquip.h"
+#include "FalmerUE_Weapon.h"
+
+/* FalmerOH */
+#include "Falmer_OneHand.h"
+#include "FalmerOH_Weapon.h"
+
+#pragma endregion
 
 // Tool Level
 #include "Tool_Camera.h"
@@ -46,12 +63,9 @@
 #include "FalmerFence.h"
 #include "CavePillars.h"
 
-/* Monster */
-#include "Skeever.h"
-#include "Falmer_UnEquip.h"
-
 /* Equip */
 #include "Weapon_IronSword.h"
+#include "Weapon_FalmerAxe.h"
 #include "Armor_Glass.h"
 #include "Helmet_Glass.h"
 
@@ -247,7 +261,6 @@ HRESULT CLoader::Loading_For_Level_Logo()
 
 	return S_OK;
 }
-
 HRESULT CLoader::Loading_For_Level_WhiteRun()
 {
 	if (!g_bIsWhiteRunInit)
@@ -295,7 +308,6 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 
 	return S_OK;
 }
-
 HRESULT CLoader::Loading_For_Level_Dungeon()
 {
 	if (!g_bIsDungeonInit)
@@ -350,7 +362,6 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 
 	return S_OK;
 }
-
 HRESULT CLoader::Loading_For_Level_Public()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -489,20 +500,23 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 
 	/* Item */
 	matInitialize = XMMatrixIdentity();
+	/* Weapon */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Weapon_IronSword"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/IronSword/Iron_LongSword.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Weapon_FalmerAxe"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/FalmerAxe/FalmerAxe.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
 
+	/* Armor */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Boots"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Armor/Glass/Glass_Boots/Glass_Boots.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
-	// matInitialize = XMMatrixRotationX(XMConvertToRadians(-10.f));
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Curiass"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Armor/Glass/Glass_Curiass/Glass_Curiass.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
-	matInitialize = XMMatrixIdentity();
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Gauntlet"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Armor/Glass/Glass_Gauntlet/Glass_Gauntlet.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
@@ -636,7 +650,6 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 
 	return S_OK;
 }
-
 HRESULT CLoader::Set_ProtoType_WhiteRunMesh(LEVELID _eLevel)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -1179,6 +1192,11 @@ HRESULT CLoader::Set_ProtoType_DungeonMesh(LEVELID _eLevel)
 	/* Falmer_UnEquip */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Falmer_Unequip"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Falmer_UnEquip/Falmer_Unequip.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+
+	/* Falmer_OneHand */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Falmer_OneHand"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Falmer_OneHand/Falmer_OneHand.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
 #pragma endregion
@@ -1986,8 +2004,12 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 		CPlayer_Armor::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	// Item
+	/* Weapon */
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Weapon_IronSword"),
 		CWeapon_IronSword::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Weapon_FalmerAxe"),
+		CWeapon_FalmerAxe::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Glass_Boots"),
@@ -2126,7 +2148,6 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 
 	return S_OK;
 }
-
 HRESULT CLoader::Set_ProtoType_WhiteObject()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -2648,7 +2669,6 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 
 	return S_OK;
 }
-
 HRESULT CLoader::Set_ProtoType_DungeonObject()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -2659,10 +2679,26 @@ HRESULT CLoader::Set_ProtoType_DungeonObject()
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Skeever"),
 		CSkeever::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Skeever_Weapon"),
+		CSkeever_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	
 	/* Falmer_UnEquip */
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Falmer_Unequip"),
 		CFalmer_UnEquip::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FalmerUE_Weapon"),
+		CFalmerUE_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Falmer_OneHand*/
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Falmer_OneHand"),
+		CFalmer_OneHand::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FalmerOH_Weapon"),
+		CFalmerOH_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region Dungeon_SewerBarrel

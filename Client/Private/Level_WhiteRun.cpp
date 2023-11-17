@@ -25,20 +25,20 @@ HRESULT CLevel_WhiteRun::Initialize()
 
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
-	
+
+	if (FAILED(Ready_Layer_Equip(TEXT("Layer_Equip"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Level()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Navigation_WhiteRun(TEXT("Layer_Navigation_WhiteRun"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Equip(TEXT("Layer_Equip"))))
-		return E_FAIL;
-
 	if (FAILED(Ready_Layer_Sky(TEXT("Layer_Sky"))))
-		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Particle(TEXT("Layer_Particle"))))
