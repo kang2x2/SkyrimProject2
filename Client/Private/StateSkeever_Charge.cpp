@@ -30,7 +30,7 @@ void CStateSkeever_Charge::Update(_float _fTimeDelta)
 	/* 공격 중 서로의 aabb 박스가 충돌하였으면. (피격) */
 	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK)
 	{
-		if (m_isReadyAtk && pGameInstance->Collision_ColCheck(dynamic_cast<CCollider*>(m_pMonster->Get_Part(CSkeever::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))), dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
+		if (m_isReadyAtk && pGameInstance->Collision_Enter(dynamic_cast<CCollider*>(m_pMonster->Get_Part(CSkeever::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))), dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
 		{
 			m_pMonsterTransform->Set_Speed(m_pMonster->GetWalkSpeed());
 			m_isReadyAtk = false;
@@ -41,7 +41,7 @@ void CStateSkeever_Charge::Update(_float _fTimeDelta)
 			dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")))->Set_Speed(m_pPlayer->GetWalkSpeed());
 		}
 	}
-	if (m_isReadyAtk && pGameInstance->Collision_ColCheck(dynamic_cast<CCollider*>(m_pMonster->Get_Part(CSkeever::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))), dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+	if (m_isReadyAtk && pGameInstance->Collision_Enter(dynamic_cast<CCollider*>(m_pMonster->Get_Part(CSkeever::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))), dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 	{
 		//if (m_pMonster->Get_CurFrameIndex() >= 27 &&
 		//	m_pMonster->Get_CurFrameIndex() <= 30)
@@ -70,13 +70,13 @@ void CStateSkeever_Charge::Late_Update()
 	{
 		m_isReadyAtk = true;
 		/* 추격 범위를 벗어났을 때 */
-		if (!pGameInstance->Collision_ColCheck(m_pVecCollider[CSkeever::SKEEVER_COL_MISSDETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+		if (!pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_MISSDETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 		{
 			m_pMonster->Set_State(CSkeever::SKEEVER_DETECTION);
 			m_pMonster->Play_Animation(false, "idlecombat1");
 		}
 
-		else if (!pGameInstance->Collision_ColCheck(m_pVecCollider[CSkeever::SKEEVER_COL_ATKROUND], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+		else if (!pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_ATKROUND], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 		{
 			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
 

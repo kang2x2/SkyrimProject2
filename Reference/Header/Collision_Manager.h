@@ -33,9 +33,9 @@ private:
 public:
 	void Collision_AABBTransition(class CCollider* _pCollider, class CCollider* _pTargetCollider);
 	
-	_bool Collision_ColCheck(class CCollider* _pCollider, class CCollider* _pTargetCollider);
-
-
+	_bool Collision_Enter(class CCollider* _pCollider, class CCollider* _pTargetCollider);
+	_bool Collision_Stay(class CCollider* _pCollider, class CCollider* _pTargetCollider);
+	_bool Collision_Out(class CCollider* _pCollider, class CCollider* _pTargetCollider);
 
 private:
 	_bool Is_Collsion(class CCollider* _pCollider, class CCollider* _pTargetCollider);

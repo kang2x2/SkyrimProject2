@@ -28,29 +28,29 @@ void CBounding_Sphere::Update(_fmatrix _TransformMat)
 
 _bool CBounding_Sphere::IsCollision(CCollider::COLLIDER_TYPE _eType, CBounding* _pBounding)
 {
-	m_bIsColl = false;
+	m_bIsCol = false;
 
 	switch (_eType)
 	{
 	case CCollider::TYPE_AABB:
-		m_bIsColl = m_pSphere->Intersects(*((CBounding_AABB*)_pBounding)->Get_Bounding());
+		m_bIsCol = m_pSphere->Intersects(*((CBounding_AABB*)_pBounding)->Get_Bounding());
 		break;
 	case CCollider::TYPE_OBB:
-		m_bIsColl = m_pSphere->Intersects(*((CBounding_OBB*)_pBounding)->Get_Bounding());
+		m_bIsCol = m_pSphere->Intersects(*((CBounding_OBB*)_pBounding)->Get_Bounding());
 		break;
 	case CCollider::TYPE_SPHERE:
-		m_bIsColl = m_pSphere->Intersects(*((CBounding_Sphere*)_pBounding)->Get_Bounding());
+		m_bIsCol = m_pSphere->Intersects(*((CBounding_Sphere*)_pBounding)->Get_Bounding());
 		break;
 	}
 
-	return m_bIsColl;
+	return m_bIsCol;
 }
 
 #ifdef _DEBUG
 
 HRESULT CBounding_Sphere::Render(PrimitiveBatch<VertexPositionColor>* pBatch)
 {
-	_vector		vColor = m_bIsColl == true ? XMVectorSet(1.f, 0.f, 0.f, 1.f) : XMVectorSet(0.f, 1.f, 0.f, 1.f);
+	_vector		vColor = m_bIsCol == true ? XMVectorSet(1.f, 0.f, 0.f, 1.f) : XMVectorSet(0.f, 1.f, 0.f, 1.f);
 
 	DX::Draw(pBatch, *m_pSphere, vColor);
 

@@ -19,18 +19,17 @@ HRESULT CStateFalmerOH_Return::Initialize(CGameObject* _pMonster, CGameObject* _
 
 void CStateFalmerOH_Return::Update(_float _fTimeDelta)
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	CTransform* pTragetTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")));
-
 	m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
-
 	// m_pMonsterTransform->Chase(dynamic_cast<CMonster*>(m_pMonster)->Get_OriginPos(), _fTimeDelta, 1.5f);
 	m_pMonsterTransform->LookAt(m_pMonster->Get_OriginPos());
 
-	if (pGameInstance->Collision_ColCheck(m_pVecCollider[CFalmer_OneHand::FALMEROH_COL_DETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Collision_Enter(m_pVecCollider[CFalmer_OneHand::FALMEROH_COL_DETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 	{
+		m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+
 		m_pMonster->Set_State(CFalmer_OneHand::FALMEROH_EQUIP);
 		m_pMonster->Play_Animation(false, "1hmequip");
 	}

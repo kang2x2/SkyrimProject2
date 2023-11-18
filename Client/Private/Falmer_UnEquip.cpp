@@ -91,7 +91,6 @@ void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 		{
 			m_pVecCollider[i]->Update(matWorld);
 		}
-
 	}
 }
 
@@ -134,6 +133,15 @@ void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 	}
 
 	Safe_Release(pGameInstance);
+
+	for (size_t i = 0; i < FALMERUE_COL_END; ++i)
+	{
+		if (m_pVecCollider[i] != nullptr)
+		{
+			m_pVecCollider[i]->Late_Update();
+		}
+	}
+
 }
 
 HRESULT CFalmer_UnEquip::Render()

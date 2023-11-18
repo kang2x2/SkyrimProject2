@@ -6,6 +6,8 @@
 #include "Bounding_OBB.h"
 #include "Bounding_Sphere.h"
 
+_uint CCollider::m_iIDIndex = 0;
+
 CCollider::CCollider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CComponent(_pDevice, _pContext)
 {
@@ -87,17 +89,41 @@ HRESULT CCollider::Initialize_Clone(void* _pArg)
 	if (m_pBounding == nullptr)
 		return E_FAIL;
 
+	m_iColliderID = m_iIDIndex++;
+
 	return S_OK;
 }
 
 void CCollider::Update(_fmatrix _TransformMat)
 {
 	m_pBounding->Update(_TransformMat);
+
+	if (m_mapHadCol.size() > 0)
+	{
+		auto iter = m_mapHadCol.begin();
+	
+		while (iter != m_mapHadCol.end())
+		{
+			if (!IsCollision(iter->second))
+				iter = m_mapHadCol.erase(iter);
+			else
+				++iter;
+		}
+	}
 }
 
-_bool CCollider::IsCollision(CCollider* _pTragetCollider)
+void CCollider::Late_Update()
 {
-	return m_pBounding->IsCollision(_pTragetCollider->m_eColliderType, _pTragetCollider->m_pBounding);
+}
+
+_bool CCollider::IsCollision(CCollider* _pTargetCollider)
+{
+	if (m_pBounding->IsCollision(_pTargetCollider->m_eColliderType, _pTargetCollider->m_pBounding))
+	{
+		return true;
+	}
+
+	return false;
 }
 
 #ifdef _DEBUG
@@ -132,6 +158,11 @@ HRESULT CCollider::Render()
 void CCollider::Set_OwnerObj(CGameObject* _pObj)
 {
 	m_pOwnerObj = _pObj;
+}
+
+void CCollider::Set_bISCol(_bool _bIsCol)
+{
+	m_pBounding->Set_bISCol(_bIsCol);
 }
 
 CCollider* CCollider::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, COLLIDER_TYPE _eType)

@@ -26,13 +26,13 @@ void CCollision_Manager::Collision_AABBTransition(CCollider* _pCollider, CCollid
 		return;
 
 	/* 내 바운딩과 상대 바운딩과의 출동 처리. */
-	_bool m_bIsColl = Is_Collsion(_pCollider, _pTargetCollider);
+	_bool m_bIsCol = Is_Collsion(_pCollider, _pTargetCollider);
 
 	COL_MINMAX_FLOAT3 tMinMaxFloat3Desc;
 	COL_TARGET_MINMAX_FLOAT3 tTargetMinMaxFloat3Desc;
 	COL_OVERLAP_OFFSET tOverlapOffsetDesc;
 
-	if (m_bIsColl)
+	if (m_bIsCol)
 	{
 		MinMax_Calculator(_pCollider, _pTargetCollider, tMinMaxFloat3Desc, tTargetMinMaxFloat3Desc);
 		Overlap_Calculater(tOverlapOffsetDesc, tMinMaxFloat3Desc, tTargetMinMaxFloat3Desc);
@@ -76,19 +76,69 @@ void CCollision_Manager::Collision_AABBTransition(CCollider* _pCollider, CCollid
 	}
 }
 
-_bool CCollision_Manager::Collision_ColCheck(CCollider* _pCollider, CCollider* _pTargetCollider)
+_bool CCollision_Manager::Collision_Enter(CCollider* _pCollider, CCollider* _pTargetCollider)
 {
-	/* 내 바운딩과 상대 바운딩과의 출동 처리. */
-	_bool m_bIsColl = Is_Collsion(_pCollider, _pTargetCollider);
+	if (Is_Collsion(_pCollider, _pTargetCollider))
+	{
+		map<_uint, CCollider*>* mapHadCol = _pCollider->Get_MapHadCol();
+		
+		for (auto iter = mapHadCol->begin(); iter != mapHadCol->end(); ++iter)
+		{
+			if (iter->first == _pTargetCollider->Get_ColliderID())
+			{
+				return false;
+			}
+		}
 
-	return m_bIsColl;
+		_pCollider->Add_MapHadCol(_pTargetCollider->Get_ColliderID(), _pTargetCollider);
+		
+		return true;
+	}
+
+	return false;
+}
+_bool CCollision_Manager::Collision_Stay(CCollider* _pCollider, CCollider* _pTargetCollider)
+{
+	if (Is_Collsion(_pCollider, _pTargetCollider))
+	{
+		map<_uint, CCollider*>* mapHadCol = _pCollider->Get_MapHadCol();
+
+		for (auto iter = mapHadCol->begin(); iter != mapHadCol->end(); ++iter)
+		{
+			if (iter->first == _pTargetCollider->Get_ColliderID())
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+_bool CCollision_Manager::Collision_Out(CCollider* _pCollider, CCollider* _pTargetCollider)
+{
+	map<_uint, CCollider*>* mapHadCol = _pCollider->Get_MapHadCol();
+	_uint i = 0;
+
+	for (auto iter = mapHadCol->begin(); iter != mapHadCol->end(); ++iter)
+	{
+		if (iter->first == _pTargetCollider->Get_ColliderID())
+		{
+			if (!Is_Collsion(_pCollider, _pTargetCollider))
+			{
+				mapHadCol->erase(iter);
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
 _bool CCollision_Manager::Is_Collsion(CCollider* _pCollider, CCollider* _pTargetCollider)
 {
-	_bool m_bIsColl = false;
+	_bool m_bIsCol = false;
 
 	if (_pCollider->Get_ColliderType() == CCollider::TYPE_AABB)
 	{
@@ -101,13 +151,13 @@ _bool CCollision_Manager::Is_Collsion(CCollider* _pCollider, CCollider* _pTarget
 		switch (_pTargetCollider->Get_ColliderType())
 		{
 		case CCollider::TYPE_AABB:
-			m_bIsColl = pAABB->Get_Bounding()->Intersects(*pTargetAABB->Get_Bounding());
+			m_bIsCol = pAABB->Get_Bounding()->Intersects(*pTargetAABB->Get_Bounding());
 			break;
 		case CCollider::TYPE_OBB:
-			m_bIsColl = pAABB->Get_Bounding()->Intersects(*pTargetOBB->Get_Bounding());
+			m_bIsCol = pAABB->Get_Bounding()->Intersects(*pTargetOBB->Get_Bounding());
 			break;
 		case CCollider::TYPE_SPHERE:
-			m_bIsColl = pAABB->Get_Bounding()->Intersects(*pTargetSphere->Get_Bounding());
+			m_bIsCol = pAABB->Get_Bounding()->Intersects(*pTargetSphere->Get_Bounding());
 			break;
 		}
 	}
@@ -123,13 +173,13 @@ _bool CCollision_Manager::Is_Collsion(CCollider* _pCollider, CCollider* _pTarget
 		switch (_pTargetCollider->Get_ColliderType())
 		{
 		case CCollider::TYPE_AABB:
-			m_bIsColl = pOBB->Get_Bounding()->Intersects(*pTargetAABB->Get_Bounding());
+			m_bIsCol = pOBB->Get_Bounding()->Intersects(*pTargetAABB->Get_Bounding());
 			break;
 		case CCollider::TYPE_OBB:
-			m_bIsColl = pOBB->Get_Bounding()->Intersects(*pTargetOBB->Get_Bounding());
+			m_bIsCol = pOBB->Get_Bounding()->Intersects(*pTargetOBB->Get_Bounding());
 			break;
 		case CCollider::TYPE_SPHERE:
-			m_bIsColl = pOBB->Get_Bounding()->Intersects(*pTargetSphere->Get_Bounding());
+			m_bIsCol = pOBB->Get_Bounding()->Intersects(*pTargetSphere->Get_Bounding());
 			break;
 		}
 	}
@@ -145,19 +195,29 @@ _bool CCollision_Manager::Is_Collsion(CCollider* _pCollider, CCollider* _pTarget
 		switch (_pTargetCollider->Get_ColliderType())
 		{
 		case CCollider::TYPE_AABB:
-			m_bIsColl = pSphere->Get_Bounding()->Intersects(*pTargetAABB->Get_Bounding());
+			m_bIsCol = pSphere->Get_Bounding()->Intersects(*pTargetAABB->Get_Bounding());
 			break;
 		case CCollider::TYPE_OBB:
-			m_bIsColl = pSphere->Get_Bounding()->Intersects(*pTargetOBB->Get_Bounding());
+			m_bIsCol = pSphere->Get_Bounding()->Intersects(*pTargetOBB->Get_Bounding());
 			break;
 		case CCollider::TYPE_SPHERE:
-			m_bIsColl = pSphere->Get_Bounding()->Intersects(*pTargetSphere->Get_Bounding());
+			m_bIsCol = pSphere->Get_Bounding()->Intersects(*pTargetSphere->Get_Bounding());
 			break;
 		}
 	}
 
+	if (m_bIsCol)
+	{
+		_pCollider->Set_bISCol(true);
+		_pTargetCollider->Set_bISCol(true);
+	}
+	else if (!m_bIsCol)
+	{
+		_pCollider->Set_bISCol(false);
+		_pTargetCollider->Set_bISCol(false);
+	}
 
-	return m_bIsColl;
+	return m_bIsCol;
 }
 
 void CCollision_Manager::MinMax_Calculator(class CCollider* _pCollider, class CCollider* _pTargetCollider, COL_MINMAX_FLOAT3& _pMinMaxFloat3Desc, COL_TARGET_MINMAX_FLOAT3& _pTargetMinMaxFloat3Desc)

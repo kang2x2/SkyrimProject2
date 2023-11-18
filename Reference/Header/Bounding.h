@@ -25,8 +25,11 @@ public:
 public:
 	virtual _bool IsCollision(CCollider::COLLIDER_TYPE _eType, CBounding* _pBounding) = 0;
 	
+public:
+	virtual void Set_bISCol(_bool _bIsCol) { m_bIsCol = _bIsCol; }
+
 protected:
-	_bool				m_bIsColl = false;
+	_bool				m_bIsCol = false;
 
 #ifdef _DEBUG
 public:

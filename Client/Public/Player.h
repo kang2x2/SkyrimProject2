@@ -84,7 +84,7 @@ public:
 	/* 플레이어 카메라 관련*/
 	PLAYERCAMERA Get_CamMode() { return m_eCurCamMode; }
 	_vector		 Get_PlayerCamLook();
-	void		 Set_PlayerCam(string _strAnimationName, _vector _vPos, _uint _iChangeIndex = 0, _bool _bIsLoop = false);
+	void		 Set_PlayerCam(string _strAnimationName, _uint _iChangeIndex = 0, _bool _bIsLoop = false);
 
 	/* 파츠 관련 */
 	CGameObject* Get_Part(PLAYER_PARTS _ePart) { return m_vecPlayerPart[_ePart]; }

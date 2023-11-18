@@ -18,7 +18,11 @@ HRESULT CStatePlayerOH_BlockHit::Initialize(CGameObject* _pPlayer, CTransform* _
 
 void CStatePlayerOH_BlockHit::Update(_float _fTimeDelta)
 {
-	m_pPlayerTransform->Go_Backward(_fTimeDelta, m_pPlayerNavigation);
+	if (m_pPlayer->Get_CurFrameIndex() < 20)
+	{
+		m_pPlayerTransform->Go_Backward(_fTimeDelta, m_pPlayerNavigation);
+	}
+
 	Key_Input(_fTimeDelta);
 }
 

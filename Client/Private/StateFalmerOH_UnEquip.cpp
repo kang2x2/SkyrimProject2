@@ -28,7 +28,7 @@ void CStateFalmerOH_UnEquip::Update(_float _fTimeDelta)
 
 void CStateFalmerOH_UnEquip::Late_Update()
 {
-	if (dynamic_cast<CMonster*>(m_pMonster)->Get_IsAnimationFin())
+	if (m_pMonster->Get_IsAnimationFin())
 	{
 		m_pMonster->Set_State(CFalmer_OneHand::FALMEROH_RETURN);
 		m_pMonster->Play_Animation(true, "mtwalkforward");

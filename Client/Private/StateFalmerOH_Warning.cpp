@@ -19,14 +19,7 @@ HRESULT CStateFalmerOH_Warning::Initialize(CGameObject* _pMonster, CGameObject* 
 
 void CStateFalmerOH_Warning::Update(_float _fTimeDelta)
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	CTransform* pTragetTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")));
-
-	m_pMonsterTransform->LookAt(pTragetTransform->Get_State(CTransform::STATE_POSITION));
-
-	Safe_Release(pGameInstance);
+	m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
 }
 
 void CStateFalmerOH_Warning::Late_Update()

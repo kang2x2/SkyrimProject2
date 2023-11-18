@@ -960,6 +960,9 @@
     <ClInclude Include="..\Public\StateFalmerOH_StaggerH2.h">
       <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\03. Stagger_Heavy2</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Monster.h">
+      <Filter>03. State\01. Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1383,6 +1386,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\StateFalmerOH_StaggerH2.cpp">
       <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\03. Stagger_Heavy2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Monster.cpp">
+      <Filter>03. State\01. Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

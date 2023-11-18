@@ -29,7 +29,7 @@ void CStateSkeever_Return::Update(_float _fTimeDelta)
 	// m_pMonsterTransform->Chase(dynamic_cast<CMonster*>(m_pMonster)->Get_OriginPos(), _fTimeDelta, 1.5f);
 	m_pMonsterTransform->LookAt(m_pMonster->Get_OriginPos());
 
-	if (pGameInstance->Collision_ColCheck(m_pVecCollider[CSkeever::SKEEVER_COL_DETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+	if (pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_DETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 	{
 		m_pMonster->Set_State(CSkeever::SKEEVER_WARNING);
 		m_pMonster->Play_Animation(false, "aggrowarning1");

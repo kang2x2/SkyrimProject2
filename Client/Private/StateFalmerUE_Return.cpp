@@ -22,15 +22,15 @@ void CStateFalmerUE_Return::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	CTransform* pTragetTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")));
-
 	m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
 	
 	// m_pMonsterTransform->Chase(dynamic_cast<CMonster*>(m_pMonster)->Get_OriginPos(), _fTimeDelta, 1.5f);
 	m_pMonsterTransform->LookAt(m_pMonster->Get_OriginPos());
 
-	if (pGameInstance->Collision_ColCheck(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_DETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+	if (pGameInstance->Collision_Enter(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_DETECTION], m_pPlayerBodyCollider))
 	{
+		pGameInstance->Collision_Enter(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_MISSDETECTION], m_pPlayerBodyCollider);
+
 		m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_WARNING);
 		m_pMonster->Play_Animation(false, "1hm_aggrowarning1");
 	}

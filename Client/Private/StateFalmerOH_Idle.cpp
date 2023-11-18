@@ -22,8 +22,10 @@ void CStateFalmerOH_Idle::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Collision_ColCheck(m_pVecCollider[CFalmer_OneHand::FALMEROH_COL_DETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+	if (pGameInstance->Collision_Enter(m_pVecCollider[CFalmer_OneHand::FALMEROH_COL_DETECTION], m_pPlayerBodyCollider))
 	{
+		pGameInstance->Collision_Enter(m_pVecCollider[CFalmer_OneHand::FALMEROH_COL_MISSDETECTION], m_pPlayerBodyCollider);
+
 		m_pMonster->Play_Animation(false, "1hmequip");
 		m_pMonster->Set_State(CFalmer_OneHand::FALMEROH_EQUIP);
 	}

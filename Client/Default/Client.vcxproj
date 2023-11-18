@@ -307,6 +307,7 @@
     <ClInclude Include="..\Public\StateSkeever_Warning.h" />
     <ClInclude Include="..\Public\State_FalmerOH.h" />
     <ClInclude Include="..\Public\State_FalmerUE.h" />
+    <ClInclude Include="..\Public\State_Monster.h" />
     <ClInclude Include="..\Public\State_Player.h" />
     <ClInclude Include="..\Public\State_Skeever.h" />
     <ClInclude Include="..\Public\StoneWork.h" />
@@ -450,6 +451,7 @@
     <ClCompile Include="..\Private\StateSkeever_Warning.cpp" />
     <ClCompile Include="..\Private\State_FalmerOH.cpp" />
     <ClCompile Include="..\Private\State_FalmerUE.cpp" />
+    <ClCompile Include="..\Private\State_Monster.cpp" />
     <ClCompile Include="..\Private\State_Player.cpp" />
     <ClCompile Include="..\Private\State_Skeever.cpp" />
     <ClCompile Include="..\Private\StoneWork.cpp" />

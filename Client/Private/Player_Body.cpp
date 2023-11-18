@@ -78,6 +78,8 @@ void CPlayer_Body::LateTick(_float _fTimeDelta)
 
 
 	Safe_Release(pGameInstance);
+
+	m_pColliderCom->Late_Update();
 }
 
 HRESULT CPlayer_Body::Render()

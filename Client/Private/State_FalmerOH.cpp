@@ -3,7 +3,6 @@
 #include "GameInstance.h"
 
 #include "Falmer_OneHand.h"
-#include "Player.h"
 
 CState_FalmerOH::CState_FalmerOH()
 {
@@ -15,10 +14,10 @@ HRESULT CState_FalmerOH::Initialize(CGameObject* _pMonster, CGameObject* _pPlaye
 		return E_FAIL;
 
 	m_pMonster = dynamic_cast<CFalmer_OneHand*>(_pMonster);
-	m_pPlayer = dynamic_cast<CPlayer*>(_pPlayer);
-	m_pMonsterTransform = _pMonsterTransform;
-	m_pMonsterNavigation = _pMonsterNavigation;
-	m_pVecCollider = _pVecColCom;
+	m_pWeaponCollider = dynamic_cast<CCollider*>(m_pMonster->Get_Part(CFalmer_OneHand::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")));
+
+	if (FAILED(__super::Initialize(_pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom)))
+		return E_FAIL;
 
 	return S_OK;
 }

@@ -133,6 +133,14 @@ void CFalmer_OneHand::LateTick(_float _fTimeDelta)
 	}
 
 	Safe_Release(pGameInstance);
+
+	for (size_t i = 0; i < FALMEROH_COL_END; ++i)
+	{
+		if (m_pVecCollider[i] != nullptr)
+		{
+			m_pVecCollider[i]->Late_Update();
+		}
+	}
 }
 
 HRESULT CFalmer_OneHand::Render()

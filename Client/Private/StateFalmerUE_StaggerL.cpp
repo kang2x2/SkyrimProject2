@@ -30,21 +30,19 @@ void CStateFalmerUE_StaggerL::Late_Update()
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "1hmrecoil1"))
 	{
-		m_isReadyAtk = true;
-
-		if (!pGameInstance->Collision_ColCheck(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_ATKROUND], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
-		{
-			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
-
-			m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_CHASE);
-			m_pMonster->Play_Animation(true, "mtrunforward");
-		}
-		else
+		if (pGameInstance->Collision_Stay(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_ATKROUND], m_pPlayerBodyCollider))
 		{
 			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
 
 			m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_ATK2);
 			m_pMonster->Play_Animation(false, "1hm_attack3");
+		}
+		else
+		{
+			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+
+			m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_CHASE);
+			m_pMonster->Play_Animation(true, "mtrunforward");
 		}
 	}
 

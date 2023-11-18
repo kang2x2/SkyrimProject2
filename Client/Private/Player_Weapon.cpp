@@ -125,7 +125,7 @@ void CPlayer_Weapon::LateTick(_float _fTimeDelta)
 						}
 					}
 
-					pGameInstance->Collision_ColCheck(m_pColliderCom,
+					pGameInstance->Collision_Enter(m_pColliderCom,
 						dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB"))));
 				}
 			}
@@ -133,6 +133,8 @@ void CPlayer_Weapon::LateTick(_float _fTimeDelta)
 
 		Safe_Release(pGameInstance);
 	}
+
+	m_pColliderCom->Late_Update();
 }
 
 HRESULT CPlayer_Weapon::Render()
@@ -171,7 +173,7 @@ void CPlayer_Weapon::CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame)
 	//		if (obj->Get_IsCreature())
 	//		{
 	//			/* 공격 중 서로의 aabb 박스가 충돌하였으면. (피격) */
-	//			if (pGameInstance->Collision_ColCheck(m_pColliderCom, dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB")))))
+	//			if (pGameInstance->Collision_Enter(m_pColliderCom, dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB")))))
 	//			{
 	//				if (dynamic_cast<CMonster*>(obj)->Get_CurFrameIndex() >= _iSourFrame &&
 	//					dynamic_cast<CMonster*>(obj)->Get_CurFrameIndex() <= _iDestFrame)

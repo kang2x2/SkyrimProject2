@@ -83,17 +83,6 @@ void CFalmerOH_Weapon::LateTick(_float _fTimeDelta)
 	m_pRendererCom->Add_Debug(m_pColliderCom);
 #endif
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
-
-	Safe_Release(pGameInstance);
-
-	if (g_curLevel != LEVEL_TOOL)
-		m_pColliderCom->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
-
 }
 
 HRESULT CFalmerOH_Weapon::Render()

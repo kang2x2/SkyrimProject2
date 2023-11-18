@@ -38,13 +38,8 @@ void CState_Player::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown('F'))
 	{
-		_float4 vCamInitPos;
-		XMStoreFloat4(&vCamInitPos, m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
-		vCamInitPos.y += 3.f;
-		vCamInitPos.z -= 3.f;
+		m_pPlayer->Set_PlayerCam(m_pPlayer->Get_CurAnimationName().c_str(), m_pPlayer->Get_CurFrameIndex(), m_pPlayer->Get_CurAnimationIsLoop());
 
-		m_pPlayer->Set_PlayerCam(m_pPlayer->Get_CurAnimationName().c_str(), XMLoadFloat4(&vCamInitPos), m_pPlayer->Get_CurAnimationIsLoop());
-		
 		/* ¹«±â */
 		if (m_pPlayer->Get_PlayerEquipState() == CPlayer::EQUIP_ONEHAND)
 			m_pPlayer->Set_SoketBone("WEAPON");
@@ -62,9 +57,6 @@ void CState_Player::Key_Input(_float _fTimeDelta)
 		{
 			m_pPlayer->Play_Animation(true, "mt_runforward", m_pPlayer->Get_CurFrameIndex());
 		}
-
-		
-
 	}
 
 	Safe_Release(pGameInstance);

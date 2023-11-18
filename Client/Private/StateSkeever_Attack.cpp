@@ -27,7 +27,7 @@ void CStateSkeever_Attack::Update(_float _fTimeDelta)
 	/* 공격 중 서로의 콜라이더가 충돌하였으면. (피격) */
 	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK)
 	{
-		if (m_isReadyAtk && pGameInstance->Collision_ColCheck(dynamic_cast<CCollider*>(m_pMonster->Get_Part(CSkeever::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))), dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
+		if (m_isReadyAtk && pGameInstance->Collision_Enter(dynamic_cast<CCollider*>(m_pMonster->Get_Part(CSkeever::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))), dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
 		{
 			m_isReadyAtk = false;
 			m_pMonster->Play_Animation(false, "recoil");
@@ -38,7 +38,7 @@ void CStateSkeever_Attack::Update(_float _fTimeDelta)
 	}
 
 
-	if (m_isReadyAtk && pGameInstance->Collision_ColCheck(dynamic_cast<CCollider*>(m_pMonster->Get_Part(CSkeever::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))), dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+	if (m_isReadyAtk && pGameInstance->Collision_Enter(dynamic_cast<CCollider*>(m_pMonster->Get_Part(CSkeever::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))), dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 	{
 		//if (m_pMonster->Get_CurFrameIndex() >= 12 &&
 		//	m_pMonster->Get_CurFrameIndex() <= 20)
@@ -53,7 +53,7 @@ void CStateSkeever_Attack::Update(_float _fTimeDelta)
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "attack2"))
 	{
 		m_isReadyAtk = true;
-		if (!pGameInstance->Collision_ColCheck(m_pVecCollider[CSkeever::SKEEVER_COL_ATKROUND], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+		if (!pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_ATKROUND], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 		{
 			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
 

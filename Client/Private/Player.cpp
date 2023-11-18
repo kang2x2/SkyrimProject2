@@ -158,7 +158,7 @@ _vector CPlayer::Get_PlayerCamLook()
 {
 	return dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Get_PlayerCamLook();
 }
-void CPlayer::Set_PlayerCam(string _strAnimationName, _vector _vPos, _uint _iChangeIndex, _bool _bIsLoop)
+void CPlayer::Set_PlayerCam(string _strAnimationName, _uint _iChangeIndex, _bool _bIsLoop)
 {
 	if (m_eCurCamMode == CAM_1ST)
 		m_eCurCamMode = CAM_3ST;
@@ -175,8 +175,7 @@ void CPlayer::Set_PlayerCam(string _strAnimationName, _vector _vPos, _uint _iCha
 	{
 		dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_SoketBone(
 			pBody->Get_SocketBonePtr("Camera3rd [Cam3]"));
-		/* 위치 설정 (항상 플레이어의 뒤로)*/
-		dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_PlayerCamPos(_vPos);
+		m_pTransformCom->SetLook(dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Get_PlayerCamLook());
 	}
 
 	dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_PivotMatrix(

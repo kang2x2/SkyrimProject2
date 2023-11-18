@@ -47,11 +47,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     // TODO: 여기에 코드를 입력합니다.
     CMainApp* pMainApp = nullptr;
 
-    //#ifdef UNICODE
-    //#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
-    //#else
-    //#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-    //#endif
+    #ifdef UNICODE
+    #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+    #else
+    #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+    #endif
     
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);

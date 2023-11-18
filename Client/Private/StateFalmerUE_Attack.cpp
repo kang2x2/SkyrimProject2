@@ -27,24 +27,24 @@ void CStateFalmerUE_Attack::Update(_float _fTimeDelta)
 	/* 공격 중 서로의 콜라이더가 충돌하였으면. (피격) */
 	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK)
 	{
-		if (m_isReadyAtk && pGameInstance->Collision_ColCheck(dynamic_cast<CCollider*>(m_pMonster->Get_Part(CFalmer_UnEquip::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))), dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
+		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerWeaponCollider))
 		{
-			m_isReadyAtk = false;
 			m_pMonster->Play_Animation(false, "1hmrecoil1");
 			m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_STAGGERL);
 			m_pPlayer->Set_State(CPlayer::ONEHAND_ANTICIPATE);
 			m_pPlayer->Play_Animation(false, "1hm_blockanticipate");
 		}
 	}
-
-	else if (m_isReadyAtk && pGameInstance->Collision_ColCheck(dynamic_cast<CCollider*>(m_pMonster->Get_Part(CFalmer_UnEquip::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))), dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+	else
 	{
-		//if (m_pMonster->Get_CurFrameIndex() >= 12 &&
-		//	m_pMonster->Get_CurFrameIndex() <= 20)
-		//{
-			// 데미지 처리.
-			m_isReadyAtk = false;
-		//}
+		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
+		{
+			//if (m_pMonster->Get_CurFrameIndex() >= 12 &&
+			//	m_pMonster->Get_CurFrameIndex() <= 20)
+			//{
+				// 데미지 처리.
+			//}
+		}
 	}
 
 	Safe_Release(pGameInstance);
@@ -60,22 +60,20 @@ void CStateFalmerUE_Attack::Late_Update()
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "1hm_attack1"))
 	{
-		m_isReadyAtk = true;
-		if (!pGameInstance->Collision_ColCheck(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_ATKROUND], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+		if (pGameInstance->Collision_Stay(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_ATKROUND], m_pPlayerBodyCollider))
+		{
+			m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+
+			m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_ATK2);
+			m_pMonster->Play_Animation(false, "1hm_attack3");
+		}
+		else
 		{
 			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
 
 			m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_CHASE);
 			m_pMonster->Play_Animation(true, "mtrunforward");
-		}
-		else
-		{
-			CTransform* pTragetTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")));
-			m_pMonsterTransform->LookAt(pTragetTransform->Get_State(CTransform::STATE_POSITION));
-			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
-
-			m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_ATK2);
-			m_pMonster->Play_Animation(false, "1hm_attack3");
 		}
 	}
 
