@@ -188,6 +188,9 @@
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Building.h" />
     <ClInclude Include="..\Public\Camera_Player.h" />
+    <ClInclude Include="..\Public\CarlottaPart_Base.h" />
+    <ClInclude Include="..\Public\Carlotta_Body.h" />
+    <ClInclude Include="..\Public\Carlotta_Skeleton.h" />
     <ClInclude Include="..\Public\CavePillars.h" />
     <ClInclude Include="..\Public\CLevel_Tool.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
@@ -208,6 +211,7 @@
     <ClInclude Include="..\Public\Light_Town.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Navigation_Client.h" />
+    <ClInclude Include="..\Public\NPC_Carlotta.h" />
     <ClInclude Include="..\Public\ParticleRect.h" />
     <ClInclude Include="..\Public\Player_Armor.h" />
     <ClInclude Include="..\Public\Player_CameraPart.h" />
@@ -218,10 +222,12 @@
     <ClInclude Include="..\Public\Skeever_Weapon.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\SkyrimArmor.h" />
+    <ClInclude Include="..\Public\SkyrimClothes.h" />
     <ClInclude Include="..\Public\SkyrimHelmet.h" />
     <ClInclude Include="..\Public\SkyrimRock.h" />
     <ClInclude Include="..\Public\SkyrimUI.h" />
     <ClInclude Include="..\Public\SkyrimWeapon.h" />
+    <ClInclude Include="..\Public\Skyrim_NPC.h" />
     <ClInclude Include="..\Public\SpiderEgg.h" />
     <ClInclude Include="..\Public\StateFalmerOH_Attack.h" />
     <ClInclude Include="..\Public\StateFalmerOH_Attack2.h" />
@@ -333,6 +339,9 @@
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Building.cpp" />
     <ClCompile Include="..\Private\Camera_Player.cpp" />
+    <ClCompile Include="..\Private\CarlottaPart_Base.cpp" />
+    <ClCompile Include="..\Private\Carlotta_Body.cpp" />
+    <ClCompile Include="..\Private\Carlotta_Skeleton.cpp" />
     <ClCompile Include="..\Private\CavePillars.cpp" />
     <ClCompile Include="..\Private\CLevel_Tool.cpp" />
     <ClCompile Include="..\Private\CaveRock.cpp" />
@@ -352,6 +361,7 @@
     <ClCompile Include="..\Private\Light_Town.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Navigation_Client.cpp" />
+    <ClCompile Include="..\Private\NPC_Carlotta.cpp" />
     <ClCompile Include="..\Private\ParticleRect.cpp" />
     <ClCompile Include="..\Private\Player_Armor.cpp" />
     <ClCompile Include="..\Private\Player_CameraPart.cpp" />
@@ -362,10 +372,12 @@
     <ClCompile Include="..\Private\Skeever_Weapon.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SkyrimArmor.cpp" />
+    <ClCompile Include="..\Private\SkyrimClothes.cpp" />
     <ClCompile Include="..\Private\SkyrimHelmet.cpp" />
     <ClCompile Include="..\Private\SkyrimRock.cpp" />
     <ClCompile Include="..\Private\SkyrimUI.cpp" />
     <ClCompile Include="..\Private\SkyrimWeapon.cpp" />
+    <ClCompile Include="..\Private\Skyrim_NPC.cpp" />
     <ClCompile Include="..\Private\SpiderEgg.cpp" />
     <ClCompile Include="..\Private\StateFalmerOH_Attack.cpp" />
     <ClCompile Include="..\Private\StateFalmerOH_Attack2.cpp" />

@@ -35,7 +35,7 @@ void CStateFalmerOH_Chase::Update(_float _fTimeDelta)
 	/* RunPowerAtk 범위에 들어왔을 때 */
 	if (pGameInstance->Collision_Enter(m_pVecCollider[CFalmer_OneHand::FALMEROH_COL_ATKROUND], m_pPlayerBodyCollider))
 	{
-		m_pMonsterTransform->Set_Speed(m_pMonster->Get_FalmerUESpeedDesc().fChargeSpeed);
+		m_pMonsterTransform->Set_Speed(m_pMonster->Get_FalmerOHSpeedDesc().fChargeSpeed);
 
 		m_pMonster->Set_State(CFalmer_OneHand::FALMEROH_CHARGE);
 		m_pMonster->Play_Animation(false, "1hm_forwardpowerattack1");

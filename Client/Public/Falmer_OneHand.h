@@ -51,9 +51,9 @@ public:
 	virtual HRESULT Render();
 
 public:
-	HRESULT Set_State(CFalmer_OneHand::FALMEROH_STATE _eState);
+	HRESULT Set_State(FALMEROH_STATE _eState);
 
-	FALMEROH_SPEEDDESC   Get_FalmerUESpeedDesc() { return m_tSpeedDesc; }
+	FALMEROH_SPEEDDESC   Get_FalmerOHSpeedDesc() { return m_tSpeedDesc; }
 
 	/* ÆÄÃ÷ °ü·Ã */
 	CGameObject* Get_Part(FALMEROH_PARTS _ePart) { return m_vecMonsterPart[_ePart]; }

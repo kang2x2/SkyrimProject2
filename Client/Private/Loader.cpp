@@ -22,6 +22,16 @@
 #include "Player_Armor.h"
 #include "Player_Helmet.h"
 
+#pragma region NPC
+
+/* Carlotta */
+#include "NPC_Carlotta.h"
+#include "Carlotta_Skeleton.h"
+#include "Carlotta_Body.h"
+
+
+#pragma endregion
+
 #pragma region Monster 
 
 /* Skeever */
@@ -656,9 +666,23 @@ HRESULT CLoader::Set_ProtoType_WhiteRunMesh(LEVELID _eLevel)
 	Safe_AddRef(pGameInstance);
 
 	_matrix matInitialize = XMMatrixIdentity();
-	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+#pragma region NPC
+	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
+	/* Carlotta */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Carlotta_Skeleton"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_NPC/Skyrim_Carlotta/Carlotta_Skeleton.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	// Part
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Carlotta_Body"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_NPCPart/Skyrim_Carlotta/Body/Carlotta_Body.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+#pragma endregion
 
 #pragma region SkyrimTerrain
+	matInitialize = XMMatrixIdentity();
+	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	/* Terrain */
  	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_ArcadiaBase01"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Terrain/ArcadiaBase01/ArcadiaBase01.bin", matInitialize, CModel::TYPE_NONANIM))))
@@ -2152,6 +2176,22 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+#pragma region NPC
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Carlotta_Skeleton"),
+		CNPC_Carlotta::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Carlotta_SkeletonPart"),
+		CCarlotta_Skeleton::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Carlotta_Body"),
+		CCarlotta_Body::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+#pragma endregion
 
 #pragma region SkyrimTerrain
 	/* Terrain */ 

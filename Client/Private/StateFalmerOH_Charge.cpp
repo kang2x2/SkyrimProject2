@@ -57,7 +57,7 @@ void CStateFalmerOH_Charge::Update(_float _fTimeDelta)
 void CStateFalmerOH_Charge::Late_Update()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_Release(pGameInstance);
+	Safe_AddRef(pGameInstance);
 
 	/* 동작이 끝났을 때 */
 	if (m_pMonster->Get_IsAnimationFin() &&

@@ -29,6 +29,13 @@ CPlayer::CPlayer(const CPlayer& rhs)
 
 HRESULT CPlayer::Initialize_ProtoType()
 {
+	m_vecPlayerPart.resize(PART_END);
+
+	for (_int i = 0; i < m_vecPlayerPart.size(); ++i)
+	{
+		m_vecPlayerPart[i] = nullptr;
+	}
+
 	return S_OK;
 }
 
@@ -339,14 +346,15 @@ void CPlayer::Free()
 {
 	__super::Free();
 
+#ifdef _DEBUG
 	// 이 새끼 주석 하냐 안하냐에 따라 릴리즈, 디버그에서 종료 시 에러남.
-	for (auto& iter : m_vecPlayerPart)
+	for (_int i = 0; i < m_vecPlayerPart.size(); ++i)
 	{
-		if(iter != nullptr)
-			Safe_Release(iter);
+		if (m_vecPlayerPart[i] != nullptr)
+			Safe_Release(m_vecPlayerPart[i]);
 	}
-
 	m_vecPlayerPart.clear();
+#endif
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);

@@ -9,11 +9,13 @@
 CPlayer_Body::CPlayer_Body(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CPlayerPart_Base(_pDevice, _pContext)
 {
+
 }
 
 CPlayer_Body::CPlayer_Body(const CPlayer_Body& rhs)
 	: CPlayerPart_Base(rhs)
 {
+
 }
 
 HRESULT CPlayer_Body::Initialize_ProtoType()

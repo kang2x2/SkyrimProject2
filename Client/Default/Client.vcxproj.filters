@@ -529,6 +529,24 @@
     <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\07. Stagger\03. Stagger_Heavy2">
       <UniqueIdentifier>{7b69e7da-63df-4647-8f73-162be0ba8cd2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC">
+      <UniqueIdentifier>{655c7a46-3b12-4036-a6d6-aa6c75a0db11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia">
+      <UniqueIdentifier>{4bf9ea94-e659-4f1b-b65d-b3a20d8b5e31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part">
+      <UniqueIdentifier>{326e0cbf-216d-4ba5-bb69-e15c211c2863}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\01. Body">
+      <UniqueIdentifier>{e449a5ca-550f-4521-a477-d71bcb8a0f5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\00. Skeleton">
+      <UniqueIdentifier>{a4d20934-72c2-40a0-99d1-b758e3b7fb6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\02. Clothes">
+      <UniqueIdentifier>{95734f05-14c3-4e48-a232-df382507e15c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -963,6 +981,24 @@
     <ClInclude Include="..\Public\State_Monster.h">
       <Filter>03. State\01. Monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Skyrim_NPC.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\NPC_Carlotta.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CarlottaPart_Base.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Carlotta_Skeleton.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\00. Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Carlotta_Body.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\01. Body</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimClothes.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\02. Clothes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1389,6 +1425,24 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Monster.cpp">
       <Filter>03. State\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Skyrim_NPC.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC_Carlotta.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CarlottaPart_Base.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Carlotta_Skeleton.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\00. Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Carlotta_Body.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\01. Body</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimClothes.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\02. Clothes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

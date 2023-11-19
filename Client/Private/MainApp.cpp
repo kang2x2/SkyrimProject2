@@ -35,7 +35,7 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 
 	// 레벨 생성
-	if (FAILED(Open_Level(LEVEL_LOGO)))
+	if (FAILED(Open_Level(LEVEL_TOOL)))
 		return E_FAIL;
 
 	return S_OK;

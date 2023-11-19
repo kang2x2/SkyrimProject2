@@ -54,8 +54,6 @@ HRESULT CFalmer_UnEquip::Initialize_Clone(_uint _iLevel, const wstring& _strMode
 	if (FAILED(Ready_State()))
 		return E_FAIL;
 
-	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-15.0f));
-
 	return S_OK;
 }
 
@@ -133,15 +131,6 @@ void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 	}
 
 	Safe_Release(pGameInstance);
-
-	for (size_t i = 0; i < FALMERUE_COL_END; ++i)
-	{
-		if (m_pVecCollider[i] != nullptr)
-		{
-			m_pVecCollider[i]->Late_Update();
-		}
-	}
-
 }
 
 HRESULT CFalmer_UnEquip::Render()

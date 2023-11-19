@@ -155,28 +155,28 @@ HRESULT CPlayer_CameraPart::Ready_Camera(void* _pArg)
 
 CPlayer_CameraPart* CPlayer_CameraPart::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 {
-	CPlayer_CameraPart* pGameInstance = new CPlayer_CameraPart(_pDevice, _pContext);
+	CPlayer_CameraPart* pInstance = new CPlayer_CameraPart(_pDevice, _pContext);
 	
-	if (FAILED(pGameInstance->Initialize_ProtoType()))
+	if (FAILED(pInstance->Initialize_ProtoType()))
 	{
 		MSG_BOX("Fail Create : CPlayer_CameraPart");
-		Safe_Release(pGameInstance);
+		Safe_Release(pInstance);
 	}
 
-	return pGameInstance;
+	return pInstance;
 }
 
 CGameObject* CPlayer_CameraPart::Clone(void* _pArg)
 {
-	CPlayer_CameraPart* pGameInstance = new CPlayer_CameraPart(*this);
+	CPlayer_CameraPart* pInstance = new CPlayer_CameraPart(*this);
 
-	if (FAILED(pGameInstance->Initialize_Clone(_pArg)))
+	if (FAILED(pInstance->Initialize_Clone(_pArg)))
 	{
 		MSG_BOX("Fail Clone : CPlayer_CameraPart");
-		Safe_Release(pGameInstance);
+		Safe_Release(pInstance);
 	}
 
-	return pGameInstance;
+	return pInstance;
 }
 
 void CPlayer_CameraPart::Free()
