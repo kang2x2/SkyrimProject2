@@ -109,7 +109,7 @@ _uint CMonster::Get_CurFrameIndex()
 
 HRESULT CMonster::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
@@ -129,7 +129,7 @@ HRESULT CMonster::Ready_Component()
 		CNavigation::DESC_NAVIGATION		NavigationDesc;
 		NavigationDesc.iCurIndex = -1;
 
-		if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_Dungeon"),
+		if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Navigation_Dungeon"),
 			TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
 			return E_FAIL;
 

@@ -8,6 +8,9 @@
 
 #include "Carlotta_Skeleton.h"
 #include "Carlotta_Body.h"
+#include "Carlotta_Head.h"
+#include "Carlotta_Hand.h"
+#include "Carlotta_Foot.h"
 
 CNPC_Carlotta::CNPC_Carlotta(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CSkyrim_NPC(_pDevice, _pContext)
@@ -26,6 +29,26 @@ HRESULT CNPC_Carlotta::Initialize_ProtoType()
 
 HRESULT CNPC_Carlotta::Initialize_Clone(void* pArg)
 {
+	pMatPivot = (_matrix*)pArg;
+
+	if (FAILED(Ready_Component(LEVEL_GAMEPLAY)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Part()))
+		return E_FAIL;
+
+	m_bHasMesh = true;
+	m_bCreature = true;
+	m_strName = TEXT("NPC_CarlottaValentia");
+	m_vOriginPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	m_pTransformCom->Set_Speed(3.f);
+
+	Play_Animation(true, "mt_runforward");
+
+	if (FAILED(Ready_State()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -48,10 +71,10 @@ HRESULT CNPC_Carlotta::Initialize_Clone(_uint _iLevel, const wstring& _strModelC
 
 	m_pTransformCom->Set_Speed(3.f);
 
-	Play_Animation(true, "animobjectcounteridlearmsloopright");
-
 	if (FAILED(Ready_State()))
 		return E_FAIL;
+
+	Play_Animation(true, "mt_runforward");
 
 	return S_OK;
 }
@@ -67,7 +90,6 @@ void CNPC_Carlotta::PriorityTick(_float _fTimeDelta)
 
 void CNPC_Carlotta::Tick(_float _fTimeDelta)
 {
-	m_pModelCom->Play_Animation(_fTimeDelta);
 
 	for (auto& iter : m_vecNpcPart)
 	{
@@ -142,26 +164,6 @@ HRESULT CNPC_Carlotta::Render()
 			iter->Render();
 	}
 
-	__super::Bind_ShaderResource();
-
-	// 메시 몇개
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; ++i)
-	{
-		if (FAILED(m_pModelCom->Bind_BondMatrices(m_pShaderCom, i, "g_BoneMatrices")))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Render(i)))
-			return E_FAIL;
-	}
-
 	__super::Render();
 
 	return S_OK;
@@ -174,10 +176,28 @@ HRESULT CNPC_Carlotta::Set_State(CARLOTTA_STATE _eState)
 	return S_OK;
 }
 
-void CNPC_Carlotta::Set_WeaponSocket(const char* _strBoneName)
+/* 어차피 모든 파츠들의 프레임, 애니메이션 이름 등등은 모두 같다. */
+void CNPC_Carlotta::Play_Animation( _bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
 {
-	//dynamic_cast<CFalmerOH_Weapon*>(m_vecMonsterPart[PART_WEAPON])->Set_SoketBone(
-	//	m_pModelCom->Get_BonePtr(_strBoneName));
+	dynamic_cast<CCarlotta_Body*>(m_vecNpcPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+	dynamic_cast<CCarlotta_Head*>(m_vecNpcPart[PART_HEAD])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+	dynamic_cast<CCarlotta_Hand*>(m_vecNpcPart[PART_HAND])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+	dynamic_cast<CCarlotta_Foot*>(m_vecNpcPart[PART_FOOT])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+}
+
+_bool CNPC_Carlotta::Get_IsAnimationFin()
+{
+	return dynamic_cast<CCarlotta_Body*>(m_vecNpcPart[PART_BODY])->Get_IsAnimationFin();
+}
+
+string CNPC_Carlotta::Get_CurAnimationName()
+{
+	return dynamic_cast<CCarlotta_Body*>(m_vecNpcPart[PART_BODY])->Get_CurAnimationName();
+}
+
+_uint CNPC_Carlotta::Get_CurFrameIndex()
+{
+	return dynamic_cast<CCarlotta_Body*>(m_vecNpcPart[PART_BODY])->Get_CurFrameIndex();
 }
 
 HRESULT CNPC_Carlotta::Ready_Part()
@@ -187,28 +207,45 @@ HRESULT CNPC_Carlotta::Ready_Part()
 
 	CGameObject* pPart = nullptr;
 
-	/* For. Skeleton */
-	CCarlotta_Skeleton::PART_DESC SkeletonPartDesc;
-	SkeletonPartDesc.pParent = this;
-	SkeletonPartDesc.pParentTransform = m_pTransformCom;
-
-	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Carlotta_SkeletonPart"), &SkeletonPartDesc);
-	if (pPart == nullptr)
-		return E_FAIL;
-	m_vecNpcPart.push_back(pPart);
-
 	/* For. Body */
-	CCarlotta_Body::BODY_DESC BodyPartDesc;
+	CCarlotta_Body::PART_DESC BodyPartDesc;
 	BodyPartDesc.pParent = this;
 	BodyPartDesc.pParentTransform = m_pTransformCom;
-	BodyPartDesc.pSocketBone = dynamic_cast<CCarlottaPart_Base*>(m_vecNpcPart[PART_SKELETON])->Get_SocketBonePtr("NPC COM [COM ]");
-	BodyPartDesc.matSocketPivot = dynamic_cast<CCarlottaPart_Base*>(m_vecNpcPart[PART_SKELETON])->Get_SocketPivotMatrix();
 	
-	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Carlotta_Body"), &BodyPartDesc);
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Carlotta_BodyPart"), &BodyPartDesc);
 	if (pPart == nullptr)
 		return E_FAIL;
 	m_vecNpcPart.push_back(pPart);
 
+	/* For. Head */
+	CCarlotta_Head::PART_DESC HeadPartDesc;
+	HeadPartDesc.pParent = this;
+	HeadPartDesc.pParentTransform = m_pTransformCom;
+
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Carlotta_HeadPart"), &HeadPartDesc);
+	if (pPart == nullptr)
+		return E_FAIL;
+	m_vecNpcPart.push_back(pPart);
+
+	/* For. Head */
+	CCarlotta_Hand::PART_DESC HandPartDesc;
+	HandPartDesc.pParent = this;
+	HandPartDesc.pParentTransform = m_pTransformCom;
+
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Carlotta_HandPart"), &HandPartDesc);
+	if (pPart == nullptr)
+		return E_FAIL;
+	m_vecNpcPart.push_back(pPart);
+
+	/* For. Foot */
+	CCarlotta_Foot::PART_DESC FootPartDesc;
+	FootPartDesc.pParent = this;
+	FootPartDesc.pParentTransform = m_pTransformCom;
+
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Carlotta_FootPart"), &FootPartDesc);
+	if (pPart == nullptr)
+		return E_FAIL;
+	m_vecNpcPart.push_back(pPart);
 
 	Safe_Release(pGameInstance);
 
@@ -217,11 +254,12 @@ HRESULT CNPC_Carlotta::Ready_Part()
 
 HRESULT CNPC_Carlotta::Ready_Component(_uint _iLevel)
 {
-	if (FAILED(__super::Add_CloneComponent(_iLevel, m_strModelComTag,
-		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
-		return E_FAIL;
-
 	__super::Ready_Component();
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(10.f, -1.3f, 12.f, 1.f));
+	m_pNavigationCom->Set_CurCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	_vector	vPosition = m_pNavigationCom->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
 #pragma region Collider
 
@@ -232,7 +270,7 @@ HRESULT CNPC_Carlotta::Ready_Component(_uint _iLevel)
 	AABBDesc.vExtents = _float3(0.5f, 0.7f, 0.5f);
 	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),
 		TEXT("Com_Collider_AABB"), (CComponent**)&m_pVecCollider[CARLOTTA_COL_AABB], &AABBDesc)))
 		return E_FAIL;
 
@@ -243,7 +281,7 @@ HRESULT CNPC_Carlotta::Ready_Component(_uint _iLevel)
 	SphereDesc.fRadius = 4.f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_Sphere"),
 		TEXT("Com_Collider_Detection"), (CComponent**)&m_pVecCollider[CARLOTTA_COL_DIALOG], &SphereDesc)))
 		return E_FAIL;
 
@@ -253,7 +291,7 @@ HRESULT CNPC_Carlotta::Ready_Component(_uint _iLevel)
 	SphereDesc.fRadius = 4.f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_Sphere"),
 		TEXT("Com_Collider_MissDetection"), (CComponent**)&m_pVecCollider[CARLOTTA_COL_ACTIVE], &SphereDesc)))
 		return E_FAIL;
 

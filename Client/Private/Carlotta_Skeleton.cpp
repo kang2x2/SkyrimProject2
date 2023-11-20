@@ -85,7 +85,7 @@ string CCarlotta_Skeleton::Get_CurAnimationName()
 
 HRESULT CCarlotta_Skeleton::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_Carlotta_Body"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_Carlotta_Skeleton"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -102,7 +102,7 @@ HRESULT CCarlotta_Skeleton::Ready_Component()
 	AABBDesc.vExtents = _float3(0.3f, 0.7f, 0.3f);
 	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),
 		TEXT("Com_Collider_AABB"), (CComponent**)&m_pColliderCom, &AABBDesc)))
 		return E_FAIL;
 

@@ -64,52 +64,9 @@ HRESULT CSkyrim_NPC::Render()
 	return S_OK;
 }
 
-HRESULT CSkyrim_NPC::Bind_ShaderResource()
-{
-	//if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
-	//	return E_FAIL;
-
-	_float4x4 matWorld = m_pTransformCom->Get_WorldMatrix_Float4x4();
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &matWorld)))
-		return E_FAIL;
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	// 뷰, 투영 행렬을 던져준다.
-	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ViewMatrix", CPipeLine::D3DTS_VIEW)))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ProjMatrix", CPipeLine::D3DTS_PROJ)))
-		return E_FAIL;
-
-	Safe_Release(pGameInstance);
-
-	return S_OK;
-}
-
-void CSkyrim_NPC::Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
-{
-	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
-}
-
-
-_bool CSkyrim_NPC::Get_IsAnimationFin()
-{
-	return m_pModelCom->Get_IsAnimationFin();
-}
-
-string CSkyrim_NPC::Get_CurAnimationName()
-{
-	return m_pModelCom->Get_CurAnimationName();
-}
-
-_uint CSkyrim_NPC::Get_CurFrameIndex()
-{
-	return m_pModelCom->Get_CurFrameIndex();
-}
-
 HRESULT CSkyrim_NPC::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
@@ -121,21 +78,19 @@ HRESULT CSkyrim_NPC::Ready_Component()
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
 		return E_FAIL;
 
-	m_pTransformCom->Set_WorldMatrix(*pMatPivot);
+	if(pMatPivot != nullptr)
+		m_pTransformCom->Set_WorldMatrix(*pMatPivot);
 
 	if (g_curLevel != LEVEL_TOOL)
 	{
 		/* Com_Navigation */
 		CNavigation::DESC_NAVIGATION		NavigationDesc;
-		NavigationDesc.iCurIndex = -1;
+		NavigationDesc.iCurIndex = 0;
 
-		if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_WhiteRun"),
+		if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Navigation_WhiteRun"),
 			TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
 			return E_FAIL;
-
-		m_pNavigationCom->Set_CurCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	}
-
 
 	return S_OK;
 }

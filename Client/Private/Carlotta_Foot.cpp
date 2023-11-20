@@ -1,29 +1,29 @@
 #include "framework.h"
-#include "Carlotta_Body.h"
+#include "Carlotta_Foot.h"
 
 #include "GameInstance.h"
 #include "Layer.h"
 
 #include "Player.h"
 
-CCarlotta_Body::CCarlotta_Body(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CCarlotta_Foot::CCarlotta_Foot(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CCarlottaPart_Base(_pDevice, _pContext)
 {
 
 }
 
-CCarlotta_Body::CCarlotta_Body(const CCarlotta_Body& rhs)
+CCarlotta_Foot::CCarlotta_Foot(const CCarlotta_Foot& rhs)
 	: CCarlottaPart_Base(rhs)
 {
 
 }
 
-HRESULT CCarlotta_Body::Initialize_ProtoType()
+HRESULT CCarlotta_Foot::Initialize_ProtoType()
 {
 	return S_OK;
 }
 
-HRESULT CCarlotta_Body::Initialize_Clone(void* _pArg)
+HRESULT CCarlotta_Foot::Initialize_Clone(void* _pArg)
 {
 	if (FAILED(__super::Initialize_Clone(_pArg)))
 		return E_FAIL;
@@ -31,12 +31,12 @@ HRESULT CCarlotta_Body::Initialize_Clone(void* _pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	m_strName = TEXT("Carlotta_Body");
+	m_strName = TEXT("Carlotta_Foot");
 
 	return S_OK;
 }
 
-void CCarlotta_Body::Tick(_float _fTimeDelta)
+void CCarlotta_Foot::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
@@ -46,7 +46,7 @@ void CCarlotta_Body::Tick(_float _fTimeDelta)
 	m_pColliderCom->Update(XMLoadFloat4x4(&m_matWorld));
 }
 
-void CCarlotta_Body::LateTick(_float _fTimeDelta)
+void CCarlotta_Foot::LateTick(_float _fTimeDelta)
 {
 #ifdef _DEBUG
 	m_pRendererCom->Add_Debug(m_pColliderCom);
@@ -56,7 +56,7 @@ void CCarlotta_Body::LateTick(_float _fTimeDelta)
 	m_pColliderCom->Late_Update();
 }
 
-HRESULT CCarlotta_Body::Render()
+HRESULT CCarlotta_Foot::Render()
 {
 	if (FAILED(Bind_ShaderResource()))
 		return E_FAIL;
@@ -82,35 +82,35 @@ HRESULT CCarlotta_Body::Render()
 	return S_OK;
 }
 
-void CCarlotta_Body::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CCarlotta_Foot::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
 {
 	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
 }
 
-_uint CCarlotta_Body::Get_CurFrameIndex()
+_uint CCarlotta_Foot::Get_CurFrameIndex()
 {
 	return m_pModelCom->Get_CurFrameIndex();
 }
 
-_bool CCarlotta_Body::Get_CurAnimationIsLoop()
+_bool CCarlotta_Foot::Get_CurAnimationIsLoop()
 {
 	return m_pModelCom->Get_CurAnimationIsLoop();
 }
 
-_bool CCarlotta_Body::Get_IsAnimationFin()
+_bool CCarlotta_Foot::Get_IsAnimationFin()
 {
 	return m_pModelCom->Get_IsAnimationFin();
 }
 
-string CCarlotta_Body::Get_CurAnimationName()
+string CCarlotta_Foot::Get_CurAnimationName()
 {
 	return m_pModelCom->Get_CurAnimationName().c_str();
 }
 
 
-HRESULT CCarlotta_Body::Ready_Component()
+HRESULT CCarlotta_Foot::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_Carlotta_Body"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_Carlotta_Foot"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -140,7 +140,7 @@ HRESULT CCarlotta_Body::Ready_Component()
 	return S_OK;
 }
 
-HRESULT CCarlotta_Body::Bind_ShaderResource()
+HRESULT CCarlotta_Foot::Bind_ShaderResource()
 {
 	//if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
 	//	return E_FAIL;
@@ -162,33 +162,33 @@ HRESULT CCarlotta_Body::Bind_ShaderResource()
 	return S_OK;
 }
 
-CCarlotta_Body* CCarlotta_Body::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CCarlotta_Foot* CCarlotta_Foot::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 {
-	CCarlotta_Body* pInstance = new CCarlotta_Body(_pDevice, _pContext);
+	CCarlotta_Foot* pInstance = new CCarlotta_Foot(_pDevice, _pContext);
 
 	if (FAILED(pInstance->Initialize_ProtoType()))
 	{
-		MSG_BOX("Fail Create : CCarlotta_Body");
+		MSG_BOX("Fail Create : CCarlotta_Foot");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CCarlotta_Body::Clone(void* _pArg)
+CGameObject* CCarlotta_Foot::Clone(void* _pArg)
 {
-	CCarlotta_Body* pInstance = new CCarlotta_Body(*this);
+	CCarlotta_Foot* pInstance = new CCarlotta_Foot(*this);
 
 	if (FAILED(pInstance->Initialize_Clone(_pArg)))
 	{
-		MSG_BOX("Fail Clone : CCarlotta_Body");
+		MSG_BOX("Fail Clone : CCarlotta_Foot");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CCarlotta_Body::Free()
+void CCarlotta_Foot::Free()
 {
 	__super::Free();
 

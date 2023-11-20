@@ -26,9 +26,10 @@
 
 /* Carlotta */
 #include "NPC_Carlotta.h"
-#include "Carlotta_Skeleton.h"
 #include "Carlotta_Body.h"
-
+#include "Carlotta_Head.h"
+#include "Carlotta_Hand.h"
+#include "Carlotta_Foot.h"
 
 #pragma endregion
 
@@ -74,8 +75,13 @@
 #include "CavePillars.h"
 
 /* Equip */
+// Weapon
 #include "Weapon_IronSword.h"
 #include "Weapon_FalmerAxe.h"
+
+// Armor
+#include "Nude_Female.h"
+
 #include "Armor_Glass.h"
 #include "Helmet_Glass.h"
 
@@ -173,24 +179,24 @@ HRESULT CLoader::Loading_For_Level_Tool()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxPosCol.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNonAnimMesh.hlsl"), VTX_NONANIMMESH::Elements, VTX_NONANIMMESH::iNumElements))))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxAnimMesh.hlsl"), VTX_ANIMMESH::Elements, VTX_ANIMMESH::iNumElements))))
 		return E_FAIL;
 
 	/* For.ProtoType_Component_Collider_AABB */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Collider_AABB"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
 		return E_FAIL;
 	/* For.ProtoType_Component_Collider_OBB */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_OBB"),
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Collider_OBB"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB))))
 		return E_FAIL;
 	/* For.ProtoType_Component_Collider_Sphere */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Collider_Sphere"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
 		return E_FAIL;
 
@@ -302,7 +308,7 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 
 #pragma endregion
 		m_strLoadingText = TEXT("Loading Public Data.");
-		Loading_For_Level_Public();
+		Loading_For_Level_Public(LEVEL_GAMEPLAY);
 
 		Safe_Release(pGameInstance);
 
@@ -312,7 +318,7 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 	/* 로딩 끝 */
 	m_strLoadingText = TEXT("Loading Complete");
 	m_bIsFinish = true;
-
+	// 레벨 다시 설정 해야겠다. 여기서 다 로딩하고 curlevel을 바꾸네 
 	g_curLevel = LEVEL_GAMEPLAY;
 	g_curStage = STAGE_WHITERUN;
 
@@ -356,7 +362,7 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 		Set_ProtoType_DungeonObject();
 #pragma endregion
 		m_strLoadingText = TEXT("Loading Public Data.");
-		Loading_For_Level_Public();
+		Loading_For_Level_Public(LEVEL_GAMEPLAY);
 
 		Safe_Release(pGameInstance);
 
@@ -372,7 +378,7 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 
 	return S_OK;
 }
-HRESULT CLoader::Loading_For_Level_Public()
+HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -381,12 +387,12 @@ HRESULT CLoader::Loading_For_Level_Public()
 	{
 #pragma region Texture
 		/* Sky */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Texture_Sky"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Texture_Sky"),
 			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/SkyBox/SkyCube.dds"), 1))))
 			return E_FAIL;
 
 		/* Snow */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Snow"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Texture_Snow"),
 			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Snow/sun.dds"), 1))))
 			return E_FAIL;
 
@@ -394,15 +400,15 @@ HRESULT CLoader::Loading_For_Level_Public()
 
 #pragma region Collider
 		/* For.Prototype_Component_Collider_AABB */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Collider_AABB"),
 			CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
 			return E_FAIL;
 		/* For.ProtoType_Component_Collider_OBB */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_OBB"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Collider_OBB"),
 			CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB))))
 			return E_FAIL;
 		/* For.ProtoType_Component_Collider_Sphere */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Collider_Sphere"),
 			CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
 			return E_FAIL;
 
@@ -410,7 +416,7 @@ HRESULT CLoader::Loading_For_Level_Public()
 
 #pragma region Buffer
 		/* VIBuffer_Cube */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_VIBuffer_Cube"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_VIBuffer_Cube"),
 			CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
 			return E_FAIL;
 
@@ -427,7 +433,7 @@ HRESULT CLoader::Loading_For_Level_Public()
 		InstanceDesc.fSpeedMin = 0.1f;
 		InstanceDesc.fSpeedMax = 0.5f;
 
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_VIBuffer_Rect_Instance"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_VIBuffer_Rect_Instance"),
 			CVIBuffer_Rect_Instance::Create(m_pDevice, m_pContext, InstanceDesc))))
 			return E_FAIL;
 
@@ -436,45 +442,45 @@ HRESULT CLoader::Loading_For_Level_Public()
 #pragma region Shader
 		/* Shader */
 		/* Shader_VtxNorTex */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxNorTex"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_VtxNorTex"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
 			return E_FAIL;
 
 		/* Shader_VtxAnimMesh */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxAnimMesh.hlsl"), VTX_ANIMMESH::Elements, VTX_ANIMMESH::iNumElements))))
 			return E_FAIL;
 
 		/* Shader_VtxNonAnimMesh */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNonAnimMesh.hlsl"), VTX_NONANIMMESH::Elements, VTX_NONANIMMESH::iNumElements))))
 			return E_FAIL;
 
 		/* Shader_VtxCube */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxCube"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_VtxCube"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxCube.hlsl"), VTXCUBE::Elements, VTXCUBE::iNumElements))))
 			return E_FAIL;
 
 		/* Shader_Rect_Instance */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_Rect_Instance"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_Rect_Instance"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Rect_Instance.hlsl"), VTX_RECT_INSTANCE::Elements, VTX_RECT_INSTANCE::iNumElements))))
 			return E_FAIL;
 #pragma endregion
 
 #pragma region Navigation
 		/* 화이트런 */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_WhiteRun"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Navigation_WhiteRun"),
 			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/WhiteRun_Cell")))))
 			return E_FAIL;
 
 		/* 던전 */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Navigation_Dungeon"),
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Navigation_Dungeon"),
 			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Dungeon_Cell")))))
 			return E_FAIL;
 #pragma endregion
 
 #pragma region Mesh
-		Set_ProtoType_PublicMesh(LEVEL_GAMEPLAY);
+		Set_ProtoType_PublicMesh(_eLevel);
 #pragma endregion
 
 #pragma region GameObject
@@ -508,8 +514,28 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_1stPlayer/1stPlayer.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
+#pragma region NPC
+
+	/* Carlotta */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Carlotta_Body"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Nude/Carlotta/CarlottaNude_Body/Carlotta_Body.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Carlotta_Head"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Nude/Carlotta/CarlottaNude_HEad/Carlotta_Head.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Carlotta_Hand"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Nude/Carlotta/CarlottaNude_Hand/Carlotta_Hand.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Carlotta_Foot"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Nude/Carlotta/CarlottaNude_Foot/Carlotta_Foot.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+
+#pragma endregion
+
 	/* Item */
 	matInitialize = XMMatrixIdentity();
+	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
+
 	/* Weapon */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Weapon_IronSword"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/IronSword/Iron_LongSword.bin", matInitialize, CModel::TYPE_NONANIM))))
@@ -519,22 +545,21 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 		return E_FAIL;
 
 	/* Armor */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Boots"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Armor/Glass/Glass_Boots/Glass_Boots.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Curiass"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Armor/Glass/Glass_Curiass/Glass_Curiass.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Gauntlet"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Armor/Glass/Glass_Gauntlet/Glass_Gauntlet.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Helmet"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Armor/Glass/Glass_Helmet/Glass_Helmet.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Boots"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Glass/Glass_Boots/Glass_Boots.bin", matInitialize, CModel::TYPE_ANIM))))
+	//	return E_FAIL;
+	//
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Curiass"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Glass/Glass_Curiass/Glass_Curiass.bin", matInitialize, CModel::TYPE_ANIM))))
+	//	return E_FAIL;
+	//
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Gauntlet"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Glass/Glass_Gauntlet/Glass_Gauntlet.bin", matInitialize, CModel::TYPE_ANIM))))
+	//	return E_FAIL;
+	//
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Helmet"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Glass/Glass_Helmet/Glass_Helmet.bin", matInitialize, CModel::TYPE_ANIM))))
+	//	return E_FAIL;
 
 #pragma region Rock
 
@@ -666,19 +691,6 @@ HRESULT CLoader::Set_ProtoType_WhiteRunMesh(LEVELID _eLevel)
 	Safe_AddRef(pGameInstance);
 
 	_matrix matInitialize = XMMatrixIdentity();
-
-#pragma region NPC
-	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
-	/* Carlotta */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Carlotta_Skeleton"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_NPC/Skyrim_Carlotta/Carlotta_Skeleton.bin", matInitialize, CModel::TYPE_ANIM))))
-		return E_FAIL;
-	// Part
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Carlotta_Body"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_NPCPart/Skyrim_Carlotta/Body/Carlotta_Body.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-#pragma endregion
 
 #pragma region SkyrimTerrain
 	matInitialize = XMMatrixIdentity();
@@ -2039,7 +2051,7 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Glass_Boots"),
 	//	CWeapon_IronSword::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
-
+	/* Armor */
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Glass_Curiass"),
 		CArmor_Glass::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -2179,18 +2191,23 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 
 #pragma region NPC
 
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Carlotta_Skeleton"),
+	/* Carlotta */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Npc_Carlotta"),
 		CNPC_Carlotta::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Carlotta_SkeletonPart"),
-		CCarlotta_Skeleton::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Carlotta_Body"),
+	// Part
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Carlotta_BodyPart"),
 		CCarlotta_Body::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Carlotta_HeadPart"),
+		CCarlotta_Head::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Carlotta_HandPart"),
+		CCarlotta_Hand::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Carlotta_FootPart"),
+		CCarlotta_Foot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region SkyrimTerrain

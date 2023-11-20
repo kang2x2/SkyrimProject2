@@ -16,12 +16,12 @@ END
 
 BEGIN(Client)
 
-class CCarlotta_Body final : public CCarlottaPart_Base
+class CCarlotta_Foot final : public CCarlottaPart_Base
 {
 private:
-	CCarlotta_Body(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
-	CCarlotta_Body(const CCarlotta_Body& rhs);
-	virtual ~CCarlotta_Body() = default;
+	CCarlotta_Foot(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	CCarlotta_Foot(const CCarlotta_Foot& rhs);
+	virtual ~CCarlotta_Foot() = default;
 
 public:
 	_bool Get_IsAnimationFin();
@@ -46,7 +46,7 @@ private:
 	CCollider* m_pColliderCom = nullptr;
 
 public:
-	static CCarlotta_Body* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	static CCarlotta_Foot* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;
 	virtual void Free() override;
 };

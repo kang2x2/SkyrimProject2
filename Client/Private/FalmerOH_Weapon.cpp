@@ -52,7 +52,7 @@ HRESULT CFalmerOH_Weapon::Initialize_Clone(void* _pArg)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	m_pWeapon = pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Equip"), TEXT("FalmerAxe"));
+	m_pWeapon = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Layer_Equip"), TEXT("FalmerAxe"));
 
 	Safe_Release(pGameInstance);
 
@@ -118,7 +118,7 @@ HRESULT CFalmerOH_Weapon::Ready_Component()
 	OBBDesc.vDegree = _float3(0.f, 0.f, 0.f);
 	OBBDesc.vCenter = _float3(0.f, 0.f, OBBDesc.vExtents.z / 2.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_OBB"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_OBB"),
 		TEXT("Com_Collider_OBB"), (CComponent**)&m_pColliderCom, &OBBDesc)))
 		return E_FAIL;
 

@@ -14,7 +14,7 @@ class CNPC_Carlotta final : public CSkyrim_NPC
 {
 public:
 	// HEAD에서 이목구비들을 또 가지고 있게 하자.
-	enum CARLOTTA_PARTS { PART_SKELETON, PART_BODY, PART_FOOT, PART_HAND, PART_HEAD, PART_END };
+	enum CARLOTTA_PARTS { PART_BODY, PART_HEAD, PART_HAND, PART_FOOT, PART_END };
 
 	enum CARLOTTA_COLTYPE {
 		CARLOTTA_COL_AABB,
@@ -48,6 +48,15 @@ public:
 	/* 파츠 관련 */
 	CGameObject* Get_Part(CARLOTTA_PARTS _ePart) { return m_vecNpcPart[_ePart]; }
 	void		 Set_WeaponSocket(const char* _strBoneName);
+
+	/* 애니메이션 관련 */
+	virtual void			Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
+	virtual _bool			Get_IsAnimationFin();
+	virtual string			Get_CurAnimationName();
+	virtual _uint			Get_CurFrameIndex();
+
+	virtual _vector			Get_OriginPos() { return m_vOriginPos; }
+
 
 public:
 	HRESULT Ready_Part();

@@ -190,7 +190,9 @@
     <ClInclude Include="..\Public\Camera_Player.h" />
     <ClInclude Include="..\Public\CarlottaPart_Base.h" />
     <ClInclude Include="..\Public\Carlotta_Body.h" />
-    <ClInclude Include="..\Public\Carlotta_Skeleton.h" />
+    <ClInclude Include="..\Public\Carlotta_Foot.h" />
+    <ClInclude Include="..\Public\Carlotta_Hand.h" />
+    <ClInclude Include="..\Public\Carlotta_Head.h" />
     <ClInclude Include="..\Public\CavePillars.h" />
     <ClInclude Include="..\Public\CLevel_Tool.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
@@ -222,7 +224,6 @@
     <ClInclude Include="..\Public\Skeever_Weapon.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\SkyrimArmor.h" />
-    <ClInclude Include="..\Public\SkyrimClothes.h" />
     <ClInclude Include="..\Public\SkyrimHelmet.h" />
     <ClInclude Include="..\Public\SkyrimRock.h" />
     <ClInclude Include="..\Public\SkyrimUI.h" />
@@ -341,7 +342,9 @@
     <ClCompile Include="..\Private\Camera_Player.cpp" />
     <ClCompile Include="..\Private\CarlottaPart_Base.cpp" />
     <ClCompile Include="..\Private\Carlotta_Body.cpp" />
-    <ClCompile Include="..\Private\Carlotta_Skeleton.cpp" />
+    <ClCompile Include="..\Private\Carlotta_Foot.cpp" />
+    <ClCompile Include="..\Private\Carlotta_Hand.cpp" />
+    <ClCompile Include="..\Private\Carlotta_Head.cpp" />
     <ClCompile Include="..\Private\CavePillars.cpp" />
     <ClCompile Include="..\Private\CLevel_Tool.cpp" />
     <ClCompile Include="..\Private\CaveRock.cpp" />
@@ -372,7 +375,6 @@
     <ClCompile Include="..\Private\Skeever_Weapon.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SkyrimArmor.cpp" />
-    <ClCompile Include="..\Private\SkyrimClothes.cpp" />
     <ClCompile Include="..\Private\SkyrimHelmet.cpp" />
     <ClCompile Include="..\Private\SkyrimRock.cpp" />
     <ClCompile Include="..\Private\SkyrimUI.cpp" />

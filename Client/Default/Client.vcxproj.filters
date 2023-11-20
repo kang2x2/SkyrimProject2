@@ -538,14 +538,20 @@
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part">
       <UniqueIdentifier>{326e0cbf-216d-4ba5-bb69-e15c211c2863}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\01. Body">
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\01. Clothes">
+      <UniqueIdentifier>{12d96d51-3e62-4e16-85ca-e283976f6079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\00. Body">
       <UniqueIdentifier>{e449a5ca-550f-4521-a477-d71bcb8a0f5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\00. Skeleton">
-      <UniqueIdentifier>{a4d20934-72c2-40a0-99d1-b758e3b7fb6f}</UniqueIdentifier>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\01. Head">
+      <UniqueIdentifier>{95cb67dd-18f3-4333-a932-a565b2ea7d93}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\02. Clothes">
-      <UniqueIdentifier>{95734f05-14c3-4e48-a232-df382507e15c}</UniqueIdentifier>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\02. Hand">
+      <UniqueIdentifier>{4742a210-3605-48bb-be6b-d39a1b08cafb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\03. Foot">
+      <UniqueIdentifier>{49a4c7c0-bc98-4857-92f1-07e185bfd641}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -990,14 +996,17 @@
     <ClInclude Include="..\Public\CarlottaPart_Base.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Carlotta_Skeleton.h">
-      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\00. Skeleton</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Carlotta_Body.h">
-      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\01. Body</Filter>
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\00. Body</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\SkyrimClothes.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\02. Clothes</Filter>
+    <ClInclude Include="..\Public\Carlotta_Head.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\01. Head</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Carlotta_Hand.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\02. Hand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Carlotta_Foot.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\03. Foot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1435,14 +1444,17 @@
     <ClCompile Include="..\Private\CarlottaPart_Base.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Carlotta_Skeleton.cpp">
-      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\00. Skeleton</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Carlotta_Body.cpp">
-      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\01. Body</Filter>
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\00. Body</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\SkyrimClothes.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\02. Clothes</Filter>
+    <ClCompile Include="..\Private\Carlotta_Head.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\01. Head</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Carlotta_Hand.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\02. Hand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Carlotta_Foot.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\03. Foot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

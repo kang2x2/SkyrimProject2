@@ -35,7 +35,7 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 
 	// 레벨 생성
-	if (FAILED(Open_Level(LEVEL_TOOL)))
+	if (FAILED(Open_Level(LEVEL_LOGO)))
 		return E_FAIL;
 
 	return S_OK;
@@ -48,10 +48,10 @@ void CMainApp::Tick(_float _fTimeDelta)
 
 HRESULT CMainApp::Render()
 {
-	if(g_curLevel == LEVEL_GAMEPLAY && g_curStage == STAGE_DUNGEON)
+	if(g_curLevel == LEVEL_GAMEPLAY || g_curStage == STAGE_DUNGEON)
 		m_pGameInstance->Clear_BackBuffer_View(_float4(0.f, 0.f, 0.f, 1.f));
 	else
-		m_pGameInstance->Clear_BackBuffer_View(_float4(0.05f, 0.05f, 0.05f, 1.f));
+		m_pGameInstance->Clear_BackBuffer_View(_float4(0.7f, 0.7f, 0.7f, 1.f));
 
 	m_pGameInstance->Clear_DepthStencil_View();
 

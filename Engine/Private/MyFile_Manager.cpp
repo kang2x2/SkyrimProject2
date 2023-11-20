@@ -304,7 +304,6 @@ HRESULT CMyFile_Manager::Binary_OutFile(ofstream& _outFile, const char* _strFile
 
 	return S_OK;
 }
-
 HRESULT CMyFile_Manager::Write_FBXNode(ofstream& _outFile, aiNode* _pNode, unsigned int _iParentIndex)
 {
 	if (_pNode->mNumChildren > 0)
@@ -330,7 +329,6 @@ HRESULT CMyFile_Manager::Write_FBXNode(ofstream& _outFile, aiNode* _pNode, unsig
 	}
 	return S_OK;
 }
-
 HRESULT CMyFile_Manager::Write_FBXMesh(ofstream& _outFile, CModel::MODEL_TYPE _eType)
 {
 	_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mNumMeshes), sizeof(unsigned int));
@@ -398,7 +396,6 @@ HRESULT CMyFile_Manager::Write_FBXMesh(ofstream& _outFile, CModel::MODEL_TYPE _e
 
 	return S_OK;
 }
-
 HRESULT CMyFile_Manager::Write_FBXMaterial(ofstream& _outFile, const char* _strFilePath)
 {
 	_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mNumMaterials), sizeof(unsigned int));
@@ -449,7 +446,6 @@ HRESULT CMyFile_Manager::Write_FBXMaterial(ofstream& _outFile, const char* _strF
 
 	return S_OK;
 }
-
 HRESULT CMyFile_Manager::Write_FBXAnimation(ofstream& _outFile)
 {
 	_outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mNumAnimations), sizeof(unsigned int));
@@ -539,7 +535,6 @@ CBin_AIScene* CMyFile_Manager::Binary_InFile(const char* _strFilePath, CModel::M
 
 	return m_pBinAiScene;
 }
-
 HRESULT CMyFile_Manager::Read_FBXNode(ifstream& _inFile)
 {
 	size_t iStrLength = 0;
@@ -574,7 +569,6 @@ HRESULT CMyFile_Manager::Read_FBXNode(ifstream& _inFile)
 
 	return S_OK;
 }
-
 HRESULT CMyFile_Manager::Read_FBXMesh(ifstream& _inFile, CModel::MODEL_TYPE _eType)
 {
 	size_t iStrLength = 0;
@@ -661,7 +655,6 @@ HRESULT CMyFile_Manager::Read_FBXMesh(ifstream& _inFile, CModel::MODEL_TYPE _eTy
 
 	return S_OK;
 }
-
 HRESULT CMyFile_Manager::Read_FBXMaterial(ifstream& _inFile)
 {
 	_inFile.read(reinterpret_cast<char*>(&m_pBinAiScene->mNumMaterials), sizeof(unsigned int));
@@ -689,7 +682,6 @@ HRESULT CMyFile_Manager::Read_FBXMaterial(ifstream& _inFile)
 
 	return S_OK;
 }
-
 HRESULT CMyFile_Manager::Read_FBXAnimation(ifstream& _inFile)
 {
 	size_t iStrLength = 0;
@@ -710,6 +702,12 @@ HRESULT CMyFile_Manager::Read_FBXAnimation(ifstream& _inFile)
 		if (string(tempAnimationDesc.mName.C_Str()).find("skeleton.nif|") == 0 ||
 			string(tempAnimationDesc.mName.C_Str()).find("Skeleton.nif|") == 0) {
 			tempAnimationDesc.mName = aiString(std::string(tempAnimationDesc.mName.C_Str()).substr(13).c_str());
+		}
+
+		if (string(tempAnimationDesc.mName.C_Str()).find("skeleton_female.nif|") == 0 ||
+			string(tempAnimationDesc.mName.C_Str()).find("Skeleton_female.nif|") == 0)
+		{
+			tempAnimationDesc.mName = aiString(std::string(tempAnimationDesc.mName.C_Str()).substr(20).c_str());
 		}
 
 		delete[] newData;

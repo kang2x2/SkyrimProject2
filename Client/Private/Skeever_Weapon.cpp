@@ -114,7 +114,7 @@ HRESULT CSkeever_Weapon::Ready_Component()
 	OBBDesc.vDegree = _float3(0.f, 0.f, 0.f);
 	OBBDesc.vCenter = _float3(0.f, 0.f, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_OBB"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_OBB"),
 		TEXT("Com_Collider_OBB"), (CComponent**)&m_pColliderCom, &OBBDesc)))
 		return E_FAIL;
 

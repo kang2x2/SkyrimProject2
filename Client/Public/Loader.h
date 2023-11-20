@@ -44,7 +44,7 @@ private:
 	HRESULT					Loading_For_Level_WhiteRun();
 	HRESULT					Loading_For_Level_Dungeon();
 
-	HRESULT					Loading_For_Level_Public();
+	HRESULT					Loading_For_Level_Public(LEVELID _eLevel);
 
 	HRESULT					Set_ProtoType_PublicMesh(LEVELID _eLevel);
 	HRESULT					Set_ProtoType_WhiteRunMesh(LEVELID _eLevel);

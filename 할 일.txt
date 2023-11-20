@@ -14,5 +14,4 @@
 현재 릴리즈 모드 실행 시 종료할 때 에러 남.
 Monster State Engine에서 Client로 이사.
 
-메시가 없으면 바이너리화가 잘 안돼나?
-디버깅 해보자.
+Level Enum 관련 수정 중.

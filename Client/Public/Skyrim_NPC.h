@@ -33,16 +33,9 @@ public:
 
 protected:
 	HRESULT Ready_Component();
-	HRESULT Bind_ShaderResource();
 
 public:
-	void			Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
-
-	_bool			Get_IsAnimationFin();
-	string			Get_CurAnimationName();
-	_uint			Get_CurFrameIndex();
-
-	_vector			Get_OriginPos() { return m_vOriginPos; }
+	virtual _vector			Get_OriginPos() { return m_vOriginPos; }
 
 protected:
 	_matrix* pMatPivot;

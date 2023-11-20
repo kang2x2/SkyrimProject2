@@ -84,7 +84,7 @@ HRESULT CSkyrimTerrain::Ready_Component(_uint _iLevel)
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
@@ -103,7 +103,7 @@ HRESULT CSkyrimTerrain::Ready_Component(_uint _iLevel)
 	AABBDesc.vExtents = _float3(0.5f, 1.5f, 2.0f);
 	AABBDesc.vCenter = _float3(0.f, 0.f, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),
 		TEXT("Com_Collider_AABB"), (CComponent**)&m_pColliderCom, &AABBDesc)))
 		return E_FAIL;
 

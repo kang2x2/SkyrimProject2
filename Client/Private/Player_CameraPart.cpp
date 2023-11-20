@@ -143,7 +143,7 @@ HRESULT CPlayer_CameraPart::Ready_Camera(void* _pArg)
 	PlayerCameraDesc.fSpeedPerSec = 0.001f;
 	PlayerCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_PlayerCamera"), TEXT("ProtoType_GameObject_Camera_Player"), &PlayerCameraDesc)))
+	if (FAILED(pGameInstance->Add_CloneObject(g_curLevel, TEXT("Layer_PlayerCamera"), TEXT("ProtoType_GameObject_Camera_Player"), &PlayerCameraDesc)))
 		return E_FAIL;
 
 	m_pPlayerCamera = dynamic_cast<CCamera_Player*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_PlayerCamera"), TEXT("GamePlay_PlayerCamera")));

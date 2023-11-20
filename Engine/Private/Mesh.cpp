@@ -247,16 +247,16 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* _pModel, const CBin_AIS
 	if (m_iNumBones == 0)
 	{
 		m_iNumBones = 1; // 강제로 늘려준다.
-
+	
 		_uint iIndex = _pModel->Get_BoneIndex(m_szName);
 		if (iIndex == -1)
 			return E_FAIL;
-
+	
 		_float4x4 matOffset;
 		XMStoreFloat4x4(&matOffset, XMMatrixIdentity());
-
+	
 		m_OffsetMatrices.push_back(matOffset);
-
+	
 		m_vecBoneIndex.push_back(iIndex);
 	}
 

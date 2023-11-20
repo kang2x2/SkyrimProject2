@@ -22,6 +22,9 @@ HRESULT CLevel_Tool::Initialize()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Equip(TEXT("Layer_Equip"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_FreeCamera"))))
 		return E_FAIL;
 
@@ -94,6 +97,22 @@ HRESULT CLevel_Tool::Ready_Light()
 
 }
 
+HRESULT CLevel_Tool::Ready_Layer_Equip(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (FAILED(pGameInstance->Add_CloneObject(g_curLevel, _strLayerTag, TEXT("ProtoType_GameObject_Weapon_FalmerAxe"))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_CloneObject(g_curLevel, _strLayerTag, TEXT("ProtoType_GameObject_Carlotta_Nude"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CLevel_Tool::Ready_Layer_Camera(const wstring& _strLayerTag)
 {
 	/* 원형객체를 복제하여 사본객체를 생성하고 레이어에 추가한다. */
@@ -115,7 +134,7 @@ HRESULT CLevel_Tool::Ready_Layer_Camera(const wstring& _strLayerTag)
 	ToolCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
 	ToolCameraDesc.fZoomPerSec = 500.f;
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, _strLayerTag, TEXT("ProtoType_GameObject_ToolCamera"), &ToolCameraDesc)))
+	if (FAILED(pGameInstance->Add_CloneObject(g_curLevel, _strLayerTag, TEXT("ProtoType_GameObject_ToolCamera"), &ToolCameraDesc)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -129,7 +148,7 @@ HRESULT CLevel_Tool::Ready_Layer_Terrain(const wstring& _strLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, _strLayerTag, TEXT("ProtoType_GameObject_GridTerrain"))))
+	if (FAILED(pGameInstance->Add_CloneObject(g_curLevel, _strLayerTag, TEXT("ProtoType_GameObject_GridTerrain"))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

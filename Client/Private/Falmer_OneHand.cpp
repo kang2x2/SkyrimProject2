@@ -222,7 +222,7 @@ HRESULT CFalmer_OneHand::Ready_Component(_uint _iLevel)
 	AABBDesc.vExtents = _float3(0.5f, 0.7f, 0.5f);
 	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_AABB"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),
 		TEXT("Com_Collider_AABB"), (CComponent**)&m_pVecCollider[FALMEROH_COL_AABB], &AABBDesc)))
 		return E_FAIL;
 
@@ -233,7 +233,7 @@ HRESULT CFalmer_OneHand::Ready_Component(_uint _iLevel)
 	SphereDesc.fRadius = 6.f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_Sphere"),
 		TEXT("Com_Collider_Detection"), (CComponent**)&m_pVecCollider[FALMEROH_COL_DETECTION], &SphereDesc)))
 		return E_FAIL;
 
@@ -243,7 +243,7 @@ HRESULT CFalmer_OneHand::Ready_Component(_uint _iLevel)
 	SphereDesc.fRadius = 9.f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_Sphere"),
 		TEXT("Com_Collider_MissDetection"), (CComponent**)&m_pVecCollider[FALMEROH_COL_MISSDETECTION], &SphereDesc)))
 		return E_FAIL;
 
@@ -253,7 +253,7 @@ HRESULT CFalmer_OneHand::Ready_Component(_uint _iLevel)
 	SphereDesc.fRadius = 2.5f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Collider_Sphere"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_Sphere"),
 		TEXT("Com_Collider_AtkRound"), (CComponent**)&m_pVecCollider[FALMEROH_COL_ATKROUND], &SphereDesc)))
 		return E_FAIL;
 
@@ -276,7 +276,7 @@ HRESULT CFalmer_OneHand::Ready_State()
 	Safe_AddRef(pGameInstance);
 
 	m_pStateManager = CStateManager_FalmerOH::Create(this,
-		pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")),
+		pGameInstance->Find_CloneObject(g_curLevel, TEXT("Layer_Player"), TEXT("Player")),
 		m_pTransformCom, m_pNavigationCom, m_pVecCollider);
 
 	Safe_Release(pGameInstance);
