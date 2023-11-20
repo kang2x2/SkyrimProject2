@@ -41,6 +41,9 @@ public:
 	HRESULT Play_Animation(_float _fTimeDelta);
 	HRESULT Render(_uint _iMeshIndex);
 
+public:
+	HRESULT SwapDesc_Armor(CModel* _pModel);
+
 private:
 	HRESULT Ready_Mesh(MODEL_TYPE _eType);
 	HRESULT Ready_Material(const char* _pModelFilePath);
@@ -78,6 +81,8 @@ private:
 	_uint						m_iChangeIndex = 0; /* 바뀔 애니메이션의 시작 프레임 */
 	vector<class CAnimation*>	m_vecAnimation; /* 모델이 가지고 있는 애니메이션 배열 */
 
+	/* 모델 경로 */
+	const char*					m_strModelPath = "";
 
 public:
 	static CModel* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const char* _strModleFilePath, _fmatrix _matPivot, MODEL_TYPE _eType);

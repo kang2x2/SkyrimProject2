@@ -78,10 +78,10 @@ HRESULT CLight_Town::Ready_Light()
 	/* Á¡ ±¤¿ø Ãß°¡ */
 	ZeroMemory(&LightDesc, sizeof(LightDesc));
 	LightDesc.eLightType = LIGHT_DESC::LIGHT_POINT;
-	LightDesc.vLightPos = _float4(1.f, -1.3f, 12.f, 1.f);
+	LightDesc.vLightPos = {};
 	LightDesc.fLightRange = 25.f;
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 0.7f, 1.f);
-	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
 	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 	
 	XMStoreFloat4(&LightDesc.vLightPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));

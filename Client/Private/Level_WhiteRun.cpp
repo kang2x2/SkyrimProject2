@@ -120,9 +120,9 @@ HRESULT CLevel_WhiteRun::Ready_Light()
 	LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
 	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
 	
-	LightDesc.vDiffuse = _float4(0.1f, 0.1f, 0.1f, 1.f);
-	LightDesc.vAmbient = _float4(0.2f, 0.2f, 0.2f, 1.f);
-	LightDesc.vSpecular = _float4(0.2f, 0.2f, 0.2f, 1.f);
+	LightDesc.vDiffuse = _float4(0.01f, 0.01f, 0.01f, 1.f);
+	LightDesc.vAmbient = _float4(0.01f, 0.01f, 0.01f, 1.f);
+	LightDesc.vSpecular = _float4(0.05f, 0.05f, 0.05f, 1.f);
 	
 	if (FAILED(pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
@@ -134,14 +134,14 @@ HRESULT CLevel_WhiteRun::Ready_Light()
 	ifstream fileStream(filePath, ios::binary);
 	if (fileStream.is_open()) {
 		// 파일 내용을 읽기.
-
+	
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
-
+	
 		pGameInstance->Light_FileLoad(fileStream, LEVEL_GAMEPLAY);
-
+	
 		Safe_Release(pGameInstance);
-
+	
 		fileStream.close();
 		MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
 	}

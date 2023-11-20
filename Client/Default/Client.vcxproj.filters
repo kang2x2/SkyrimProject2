@@ -538,9 +538,6 @@
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part">
       <UniqueIdentifier>{326e0cbf-216d-4ba5-bb69-e15c211c2863}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\01. Clothes">
-      <UniqueIdentifier>{12d96d51-3e62-4e16-85ca-e283976f6079}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\00. Body">
       <UniqueIdentifier>{e449a5ca-550f-4521-a477-d71bcb8a0f5f}</UniqueIdentifier>
     </Filter>
@@ -552,6 +549,9 @@
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\03. Foot">
       <UniqueIdentifier>{49a4c7c0-bc98-4857-92f1-07e185bfd641}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\01. Merchant01">
+      <UniqueIdentifier>{168fad06-917f-4ae8-a25b-1ea1b422de60}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1008,6 +1008,9 @@
     <ClInclude Include="..\Public\Carlotta_Foot.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\03. Foot</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Armor_Merchant01_Female.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\01. Merchant01</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1455,6 +1458,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Carlotta_Foot.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\03. Foot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Armor_Merchant01_Female.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\01. Merchant01</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

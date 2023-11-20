@@ -49,9 +49,9 @@ void CMainApp::Tick(_float _fTimeDelta)
 HRESULT CMainApp::Render()
 {
 	if(g_curLevel == LEVEL_GAMEPLAY || g_curStage == STAGE_DUNGEON)
-		m_pGameInstance->Clear_BackBuffer_View(_float4(0.f, 0.f, 0.f, 1.f));
+		m_pGameInstance->Clear_BackBuffer_View(_float4(0.01f, 0.02f, 0.1f, 1.f));
 	else
-		m_pGameInstance->Clear_BackBuffer_View(_float4(0.7f, 0.7f, 0.7f, 1.f));
+		m_pGameInstance->Clear_BackBuffer_View(_float4(0.01f, 0.02f, 0.1f, 1.f));
 
 	m_pGameInstance->Clear_DepthStencil_View();
 

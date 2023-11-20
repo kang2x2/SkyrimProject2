@@ -85,6 +85,8 @@
 #include "Armor_Glass.h"
 #include "Helmet_Glass.h"
 
+#include "Armor_Merchant01_Female.h"
+
 CLoader::CLoader(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: m_pDevice(_pDevice)
 	, m_pContext(_pContext)
@@ -534,32 +536,30 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 
 	/* Item */
 	matInitialize = XMMatrixIdentity();
-	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
+	//matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
 
-	/* Weapon */
+#pragma region Weapon
+
+	/* Iron Sword*/
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Weapon_IronSword"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/IronSword/Iron_LongSword.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
+
+	/* Falmer Axe*/
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Weapon_FalmerAxe"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/FalmerAxe/FalmerAxe.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
-	/* Armor */
-	//if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Boots"),
-	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Glass/Glass_Boots/Glass_Boots.bin", matInitialize, CModel::TYPE_ANIM))))
-	//	return E_FAIL;
-	//
-	//if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Curiass"),
-	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Glass/Glass_Curiass/Glass_Curiass.bin", matInitialize, CModel::TYPE_ANIM))))
-	//	return E_FAIL;
-	//
-	//if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Gauntlet"),
-	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Glass/Glass_Gauntlet/Glass_Gauntlet.bin", matInitialize, CModel::TYPE_ANIM))))
-	//	return E_FAIL;
-	//
-	//if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Glass_Helmet"),
-	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Glass/Glass_Helmet/Glass_Helmet.bin", matInitialize, CModel::TYPE_ANIM))))
-	//	return E_FAIL;
+#pragma endregion
+
+#pragma region Armor
+
+	/* Merchant01 */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Armor_Merchant01_Female"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Merchant01/Armor/Armor_Merchant01_Female.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+
+#pragma endregion
 
 #pragma region Rock
 
@@ -2039,7 +2039,8 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_Helmet"),
 		CPlayer_Armor::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	// Item
+
+#pragma region Weapon
 	/* Weapon */
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Weapon_IronSword"),
 		CWeapon_IronSword::Create(m_pDevice, m_pContext))))
@@ -2047,22 +2048,17 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Weapon_FalmerAxe"),
 		CWeapon_FalmerAxe::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+#pragma endregion
 
-	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Glass_Boots"),
-	//	CWeapon_IronSword::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-	/* Armor */
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Glass_Curiass"),
-		CArmor_Glass::Create(m_pDevice, m_pContext))))
+#pragma region Armor
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Armor_Merchant01_Female"),
+		CArmor_Merchant01_Female::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	//
-	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Glass_Gauntlet"),
-	//	CWeapon_IronSword::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-	//
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Glass_Helmet"),
-		CHelmet_Glass::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+
+#pragma endregion
+
+
 
 #pragma region Rock
 

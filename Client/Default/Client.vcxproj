@@ -185,6 +185,7 @@
     <ClInclude Include="..\IMGUI\imstb_textedit.h" />
     <ClInclude Include="..\IMGUI\imstb_truetype.h" />
     <ClInclude Include="..\Public\Armor_Glass.h" />
+    <ClInclude Include="..\Public\Armor_Merchant01_Female.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Building.h" />
     <ClInclude Include="..\Public\Camera_Player.h" />
@@ -337,6 +338,7 @@
     <ClCompile Include="..\IMGUI\imgui_tables.cpp" />
     <ClCompile Include="..\IMGUI\imgui_widgets.cpp" />
     <ClCompile Include="..\Private\Armor_Glass.cpp" />
+    <ClCompile Include="..\Private\Armor_Merchant01_Female.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Building.cpp" />
     <ClCompile Include="..\Private\Camera_Player.cpp" />

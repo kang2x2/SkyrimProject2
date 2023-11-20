@@ -121,95 +121,9 @@ HRESULT CModel::Bind_MaterialTexture(CShader* _pShader, const char* _pConstantNa
 		return E_FAIL;
 
 	if (m_vecMaterial[iMaterialIndex].pTextures[_eType] == nullptr)
-		return E_FAIL;
+		return S_OK;
 
 	return m_vecMaterial[iMaterialIndex].pTextures[_eType]->Bind_ShaderResource(_pShader, _pConstantName, 0);
-}
-
-HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
-{
-	m_bIsFindAnimation = false;
-	_int iAnimationIndex = -1;
-
-	/* 예외 처리 */
-	/* 이미 진행 중인 애니메이션인지 */
-	// if (!strcmp(m_vecAnimation[m_iCurAnimationIndex]->Get_AnimationName(), _strAnimationName.c_str()))
-	// {
-	// 	return S_OK;
-	// }
-
-	/* 존재하는 애니메이션인지 */
-	for (_uint i = 0; i < m_iNumAnimation; ++i)
-	{
-		if (!strcmp(m_vecAnimation[i]->Get_AnimationName(), _strAnimationName.c_str()))
-		{
-			iAnimationIndex = i;
-			m_bIsFindAnimation = true;
-			break;
-		}
-	}
-
-	if (!m_bIsFindAnimation)
-		return S_OK;
-
-
-	if (m_bIsChanging)
-	{
-		m_iNextAnimationIndex = iAnimationIndex;
-		m_bIsChanging = false;
-	}
-
-	// 리셋 하기 전 보간
-	if (m_iCurAnimationIndex != iAnimationIndex)
-	{
-		m_iNextAnimationIndex = iAnimationIndex;
-		m_vecAnimation[m_iNextAnimationIndex]->Set_Loop(_bIsLoop);
-		m_iChangeIndex = _iChangeIndex;
-		m_vecAnimation[m_iCurAnimationIndex]->Ready_ChangeAnimation(m_iChangeIndex);
-		m_bIsChanging = true;
-	}
-	//else
-	//{
-	//	m_vecAnimation[m_iCurAnimationIndex]->ReSet();
-	//	//m_iCurAnimationIndex = iAnimationIndex;
-	//	m_vecAnimation[m_iCurAnimationIndex]->Set_Loop(_bIsLoop);
-	//}
-
-	return S_OK;
-}
-
-HRESULT CModel::Play_Animation(_float _fTimeDelta)
-{
-	/* Non Anim 모델이면 바로 return */
-	if (0 == m_iNumAnimation)
-		return S_OK;
-
-	/* 뼈들의 TransformationMatrix를 애니메이션 상태에 맞도록 바꿔준다. 
-	   (Animation -> Channel -> 시간에 맞는 KeyFrame)*/
-
-	/* 이 애니메이션에 사용되는 부모에 상대적인 자기 자신의 뼈를 갱신하고 */
-	if (!m_bIsChanging)
-	{
-		m_vecAnimation[m_iCurAnimationIndex]->Update_TransformationMatrix(m_vecBone, _fTimeDelta);
-	}
-	else if (m_bIsChanging)
-	{
-		if (m_vecAnimation[m_iCurAnimationIndex]->Change_TransformationMatrix(m_vecBone, m_vecAnimation[m_iNextAnimationIndex]->Get_Channel(), _fTimeDelta))
-		{
-			m_bIsChanging = false;
-			m_vecAnimation[m_iCurAnimationIndex]->ReSet();
-			m_iCurAnimationIndex = m_iNextAnimationIndex;
-			m_vecAnimation[m_iNextAnimationIndex]->Reset_TrackPosition(m_iChangeIndex);
-		}
-	}
-
-	/* 모든 뼈들의 CombinedTransformationMatrix를 갱신한다. */
-	for (size_t i = 0; i < m_vecBone.size(); ++i)
-	{
-		m_vecBone[i]->Update_CombinedTransformationMatrix(m_vecBone);
-	}
-
-	return S_OK;
 }
 
 HRESULT CModel::Render(_uint _iMeshIndex)
@@ -228,6 +142,76 @@ HRESULT CModel::Render(_uint _iMeshIndex)
 	return S_OK;
 }
 
+HRESULT CModel::SwapDesc_Armor(CModel* _pModel)
+{
+	for (auto& iter : m_vecMaterial)
+	{
+		for (size_t i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
+		{
+			Safe_Release(iter.pTextures[i]);
+		}
+	}
+	m_vecMaterial.clear();
+
+	for (auto& iter : m_vecMesh)
+	{
+		Safe_Release(iter);
+	}
+	m_vecMesh.clear();
+
+	for (auto& iter : m_vecBone)
+	{
+		Safe_Release(iter);
+	}
+	m_vecBone.clear();
+
+
+	// safe_addref
+	// safe_release는 무조건 지우는게 아니라 카운트가 0이면 지운다.
+
+	m_vecBone = _pModel->m_vecBone;
+	m_iNumMeshes = _pModel->m_iNumMeshes;
+	m_vecMesh = _pModel->m_vecMesh;
+	m_iNumMaterails = _pModel->m_iNumMaterails;
+	m_vecMaterial = _pModel->m_vecMaterial;
+
+	//Ready_Bone();
+	//Ready_Mesh(TYPE_ANIM);
+	// Ready_Material();
+
+	return S_OK;
+}
+
+HRESULT CModel::Ready_Bone()
+{
+	for (size_t i = 0; i < m_pAIScene->mVecNode.size(); ++i)
+	{
+		CBone* pBone = CBone::Create(&m_pAIScene->mVecNode[i], m_pAIScene->mVecNode[i].mParentIndex);
+		m_vecBone.push_back(pBone);
+	}
+
+	// 뼈 생성 (최상위 부모 노드가 가장 처음에 들어오기 때문에 매개로 -1을 받음)
+	//CBone* pBone = CBone::Create(_pRootNode, _iParentBoneIndex);
+	//if (pBone == nullptr)
+	//	return E_FAIL;
+	//
+
+	// 	m_vecBone.push_back(pBone);
+
+	// 뼈의 부모 인덱스 설정.
+	//_int iParentIndex = m_vecBone.size() - 1;
+
+	// 자식 노드 수 만큼 재귀 함수 수행하여 뼈 생성.
+	// 더 이상 생성 할 자식이 없을 때 까지 계속해서 재귀를 수행 할 것이다.
+	//for (size_t i = 0; i < _pRootNode->mNumChildren; ++i)
+	//{
+	//	// 재귀를 돌며 i번째 자식 노드를 생성한다.
+	//	// 부모의 인덱스는 반복문 이전에 세팅해 둔 인덱스가 될 것이다.
+	//	Ready_Bone(&_pRootNode->mChildren[i], iParentIndex);
+	//}
+
+	return S_OK;
+}
 HRESULT CModel::Ready_Mesh(MODEL_TYPE _eType)
 {
 	m_iNumMeshes = m_pAIScene->mNumMeshes;
@@ -236,7 +220,7 @@ HRESULT CModel::Ready_Mesh(MODEL_TYPE _eType)
 
 	for (size_t i = 0; i < m_iNumMeshes; ++i)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, this, &m_pAIScene->mMeshs[i], XMLoadFloat4x4(&m_matPivot), _eType);
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, this, &m_pAIScene->mMeshs[i], XMLoadFloat4x4(&m_matPivot), _eType, &m_vecBone);
 		if (pMesh == nullptr)
 			return E_FAIL;
 
@@ -245,7 +229,6 @@ HRESULT CModel::Ready_Mesh(MODEL_TYPE _eType)
 
 	return S_OK;
 }
-
 HRESULT CModel::Ready_Material(const char* _pModelFilePath)
 {
 	// 재질 정보가 몇개인지
@@ -304,39 +287,6 @@ HRESULT CModel::Ready_Material(const char* _pModelFilePath)
 
 	return S_OK;
 }
-
-
-HRESULT CModel::Ready_Bone()
-{
-	for (size_t i = 0; i < m_pAIScene->mVecNode.size(); ++i)
-	{
-		CBone* pBone = CBone::Create(&m_pAIScene->mVecNode[i], m_pAIScene->mVecNode[i].mParentIndex);
-		m_vecBone.push_back(pBone);
-	}
-
-	// 뼈 생성 (최상위 부모 노드가 가장 처음에 들어오기 때문에 매개로 -1을 받음)
-	//CBone* pBone = CBone::Create(_pRootNode, _iParentBoneIndex);
-	//if (pBone == nullptr)
-	//	return E_FAIL;
-	//
-
-	// 	m_vecBone.push_back(pBone);
-
-	// 뼈의 부모 인덱스 설정.
-	//_int iParentIndex = m_vecBone.size() - 1;
-
-	// 자식 노드 수 만큼 재귀 함수 수행하여 뼈 생성.
-	// 더 이상 생성 할 자식이 없을 때 까지 계속해서 재귀를 수행 할 것이다.
-	//for (size_t i = 0; i < _pRootNode->mNumChildren; ++i)
-	//{
-	//	// 재귀를 돌며 i번째 자식 노드를 생성한다.
-	//	// 부모의 인덱스는 반복문 이전에 세팅해 둔 인덱스가 될 것이다.
-	//	Ready_Bone(&_pRootNode->mChildren[i], iParentIndex);
-	//}
-
-	return S_OK;
-}
-
 HRESULT CModel::Ready_Animation()
 {
 	m_iNumAnimation = m_pAIScene->m_iNumAnimation;
@@ -363,7 +313,6 @@ _int CModel::Get_BoneIndex(const char* _strBoneName) const
 
 	return -1;
 }
-
 CBone* CModel::Get_BonePtr(const char* _strBoneName) const
 {
 	//auto	iter = find_if(m_vecBone.begin(), m_vecBone.end(), [&](CBone* pBone)
@@ -384,21 +333,102 @@ CBone* CModel::Get_BonePtr(const char* _strBoneName) const
 	return nullptr;
 }
 
+HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+{
+	m_bIsFindAnimation = false;
+	_int iAnimationIndex = -1;
+
+	/* 예외 처리 */
+	/* 이미 진행 중인 애니메이션인지 */
+	// if (!strcmp(m_vecAnimation[m_iCurAnimationIndex]->Get_AnimationName(), _strAnimationName.c_str()))
+	// {
+	// 	return S_OK;
+	// }
+
+	/* 존재하는 애니메이션인지 */
+	for (_uint i = 0; i < m_iNumAnimation; ++i)
+	{
+		if (!strcmp(m_vecAnimation[i]->Get_AnimationName(), _strAnimationName.c_str()))
+		{
+			iAnimationIndex = i;
+			m_bIsFindAnimation = true;
+			break;
+		}
+	}
+
+	if (!m_bIsFindAnimation)
+		return S_OK;
+
+
+	if (m_bIsChanging)
+	{
+		m_iNextAnimationIndex = iAnimationIndex;
+		m_bIsChanging = false;
+	}
+
+	// 리셋 하기 전 보간
+	if (m_iCurAnimationIndex != iAnimationIndex)
+	{
+		m_iNextAnimationIndex = iAnimationIndex;
+		m_vecAnimation[m_iNextAnimationIndex]->Set_Loop(_bIsLoop);
+		m_iChangeIndex = _iChangeIndex;
+		m_vecAnimation[m_iCurAnimationIndex]->Ready_ChangeAnimation(m_iChangeIndex);
+		m_bIsChanging = true;
+	}
+	//else
+	//{
+	//	m_vecAnimation[m_iCurAnimationIndex]->ReSet();
+	//	//m_iCurAnimationIndex = iAnimationIndex;
+	//	m_vecAnimation[m_iCurAnimationIndex]->Set_Loop(_bIsLoop);
+	//}
+
+	return S_OK;
+}
+HRESULT CModel::Play_Animation(_float _fTimeDelta)
+{
+	/* Non Anim 모델이면 바로 return */
+	if (0 == m_iNumAnimation)
+		return S_OK;
+
+	/* 뼈들의 TransformationMatrix를 애니메이션 상태에 맞도록 바꿔준다.
+	   (Animation -> Channel -> 시간에 맞는 KeyFrame)*/
+
+	   /* 이 애니메이션에 사용되는 부모에 상대적인 자기 자신의 뼈를 갱신하고 */
+	if (!m_bIsChanging)
+	{
+		m_vecAnimation[m_iCurAnimationIndex]->Update_TransformationMatrix(m_vecBone, _fTimeDelta);
+	}
+	else if (m_bIsChanging)
+	{
+		if (m_vecAnimation[m_iCurAnimationIndex]->Change_TransformationMatrix(m_vecBone, m_vecAnimation[m_iNextAnimationIndex]->Get_Channel(), _fTimeDelta))
+		{
+			m_bIsChanging = false;
+			m_vecAnimation[m_iCurAnimationIndex]->ReSet();
+			m_iCurAnimationIndex = m_iNextAnimationIndex;
+			m_vecAnimation[m_iNextAnimationIndex]->Reset_TrackPosition(m_iChangeIndex);
+		}
+	}
+
+	/* 모든 뼈들의 CombinedTransformationMatrix를 갱신한다. */
+	for (size_t i = 0; i < m_vecBone.size(); ++i)
+	{
+		m_vecBone[i]->Update_CombinedTransformationMatrix(m_vecBone);
+	}
+
+	return S_OK;
+}
 string CModel::Get_CurAnimationName()
 {
 	return m_vecAnimation[m_iCurAnimationIndex]->Get_AnimationName();
 }
-
 _bool CModel::Get_IsAnimationFin()
 {
 	return m_vecAnimation[m_iCurAnimationIndex]->Get_Finish();
 }
-
 _bool CModel::Get_CurAnimationIsLoop()
 {
 	return m_vecAnimation[m_iCurAnimationIndex]->Get_CurAnimationIsLoop();
 }
-
 _uint CModel::Get_CurFrameIndex()
 {
 	_uint iIdx = 0;

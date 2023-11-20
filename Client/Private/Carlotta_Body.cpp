@@ -33,6 +33,18 @@ HRESULT CCarlotta_Body::Initialize_Clone(void* _pArg)
 
 	m_strName = TEXT("Carlotta_Body");
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_Armor_Merchant01_Female"));
+
+	CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("Armor_Merchant01_Female"));
+
+	m_pModelCom->SwapDesc_Armor(
+		dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_Model"))));
+
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -71,6 +83,9 @@ HRESULT CCarlotta_Body::Render()
 
 		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
 			return E_FAIL;
+		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_NormalTexture", i, aiTextureType_NORMALS)))
+			return E_FAIL;
+
 
 		if (FAILED(m_pShaderCom->Begin(0)))
 			return E_FAIL;

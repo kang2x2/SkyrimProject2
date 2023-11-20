@@ -191,14 +191,14 @@ HRESULT CLevel_Dungeon::Ready_Layer_Equip(const wstring& _strLayerTag)
 	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Boots"))))
 	//	return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Curiass"))))
-		return E_FAIL;
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Curiass"))))
+	//	return E_FAIL;
 
 	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Gauntlet"))))
 	//	return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Helmet"))))
-		return E_FAIL;
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Helmet"))))
+	//	return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

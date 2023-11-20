@@ -13,7 +13,7 @@ CMesh::CMesh(const CMesh& rhs)
 {
 }
 
-HRESULT CMesh::Initialize_ProtoType(const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType)
+HRESULT CMesh::Initialize_ProtoType(const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType, vector<class CBone*>* _pVecBone)
 {
 	strcpy_s(m_szName, _pAIMesh->mName.data);
 
@@ -41,7 +41,7 @@ HRESULT CMesh::Initialize_ProtoType(const CModel* _pModel, const CBin_AIScene::D
 
 	HRESULT hr = CModel::TYPE_NONANIM == _eType ?
 		Ready_VertexBuffer_For_NonAnim(_pAIMesh, _matPivot) :
-		Ready_VertexBuffer_For_Anim(_pModel, _pAIMesh);
+		Ready_VertexBuffer_For_Anim(_pModel, _pAIMesh, _pVecBone);
 
 	if (FAILED(hr))
 		return E_FAIL;
@@ -156,7 +156,9 @@ HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(const CBin_AIScene::DESC_MESH* _pA
 		XMStoreFloat3(&pVertices[i].vNormal, XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), _matPivot));
 
 		memcpy(&pVertices[i].vTexcoord, &_pAIMesh->mTextureCoords[i], sizeof(_float2));
+		
 		memcpy(&pVertices[i].vTangent, &_pAIMesh->mTangents[i], sizeof(_float3));
+		XMStoreFloat3(&pVertices[i].vTangent, XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vTangent), _matPivot));
 	}
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);
@@ -170,7 +172,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(const CBin_AIScene::DESC_MESH* _pA
 	return S_OK;
 }
 
-HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh)
+HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh, vector<class CBone*>* _pVecBone)
 {
 	VTX_ANIMMESH* pVertices = new VTX_ANIMMESH[m_iNumVertices];
 	ZeroMemory(pVertices, sizeof(VTX_ANIMMESH) * m_iNumVertices);
@@ -271,11 +273,11 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* _pModel, const CBin_AIS
 	return S_OK;
 }
 
-CMesh* CMesh::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType)
+CMesh* CMesh::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType, vector<class CBone*>* _pVecBone)
 {
 	CMesh* pInstance = new CMesh(_pDevice, _pContext);
 
-	if (FAILED(pInstance->Initialize_ProtoType(_pModel, _pAIMesh, _matPivot, _eType)))
+	if (FAILED(pInstance->Initialize_ProtoType(_pModel, _pAIMesh, _matPivot, _eType, _pVecBone)))
 	{
 		MSG_BOX("Fail Create : CMesh ProtoType");
 		Safe_Release(pInstance);

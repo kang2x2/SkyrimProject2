@@ -1,59 +1,50 @@
 #include "framework.h"
-#include "DGPlaceableObj.h"
+#include "Armor_Merchant01_Female.h"
 
 #include "GameInstance.h"
+#include "Bone.h"
 
-CDGPlaceableObj::CDGPlaceableObj(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CGameObject(_pDevice, _pContext)
+CArmor_Merchant01_Female::CArmor_Merchant01_Female(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+	: CSkyrimArmor(_pDevice, _pContext)
 {
 }
 
-CDGPlaceableObj::CDGPlaceableObj(const CDGPlaceableObj& rhs)
-	: CGameObject(rhs)
+CArmor_Merchant01_Female::CArmor_Merchant01_Female(const CArmor_Merchant01_Female& rhs)
+	: CSkyrimArmor(rhs)
 {
 }
 
-HRESULT CDGPlaceableObj::Initialize_ProtoType()
+HRESULT CArmor_Merchant01_Female::Initialize_ProtoType()
 {
 	return S_OK;
 }
 
-HRESULT CDGPlaceableObj::Initialize_Clone(void* pArg)
+HRESULT CArmor_Merchant01_Female::Initialize_Clone(void* _pArg)
 {
-	return S_OK;
-}
-
-HRESULT CDGPlaceableObj::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag, void* pArg)
-{
-	_matrix* pMatPivot = (_matrix*)pArg;
-
-	m_strModelComTag = _strModelComTag;
-
-	if (FAILED(Ready_Component(_iLevel)))
+	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_WorldMatrix(*pMatPivot);
-
-	m_bHasMesh = true;
-	m_strName = TEXT("DGPlaceableObj");
+	m_pTransformCom->Set_Scaling(_float3(0.01f, 0.01f, 0.01f));
+	// m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(-90.0f));
+	// matInitialize = XMMatrixRotationY(XMConvertToRadians(-90.f));
+	m_strName = TEXT("Armor_Merchant01_Female");
 
 	return S_OK;
-
 }
 
-void CDGPlaceableObj::Tick(_float _fTimeDelta)
+void CArmor_Merchant01_Female::Tick(_float _fTimeDelta)
 {
 
 }
 
-void CDGPlaceableObj::LateTick(_float _fTimeDelta)
+void CArmor_Merchant01_Female::LateTick(_float _fTimeDelta)
 {
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 }
 
-HRESULT CDGPlaceableObj::Render()
+HRESULT CArmor_Merchant01_Female::Render()
 {
-	if (FAILED(Bind_ShaderResource()))
+	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
 
 	// 메시 몇개
@@ -66,18 +57,19 @@ HRESULT CDGPlaceableObj::Render()
 		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_NormalTexture", i, aiTextureType_NORMALS)))
 			return E_FAIL;
 
-		m_pShaderCom->Begin(0);
+		if (FAILED(m_pShaderCom->Begin(0)))
+			return E_FAIL;
 
-		m_pModelCom->Render(i);
+		if (FAILED(m_pModelCom->Render(i)))
+			return E_FAIL;
 	}
 
 	return S_OK;
-
 }
 
-HRESULT CDGPlaceableObj::Ready_Component(_uint _iLevel)
+HRESULT CArmor_Merchant01_Female::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(_iLevel, m_strModelComTag,
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_Armor_Merchant01_Female"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -94,17 +86,16 @@ HRESULT CDGPlaceableObj::Ready_Component(_uint _iLevel)
 		return E_FAIL;
 
 	return S_OK;
-
 }
 
-HRESULT CDGPlaceableObj::Bind_ShaderResource()
+HRESULT CArmor_Merchant01_Female::Bind_ShaderResources()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	// 뷰, 투영 행렬과 카메라의 위치을 던져준다.
+	// 뷰, 투영 행렬을 던져준다.
 	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ViewMatrix", CPipeLine::D3DTS_VIEW)))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ProjMatrix", CPipeLine::D3DTS_PROJ)))
@@ -115,51 +106,39 @@ HRESULT CDGPlaceableObj::Bind_ShaderResource()
 	return S_OK;
 }
 
-CDGPlaceableObj* CDGPlaceableObj::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CArmor_Merchant01_Female* CArmor_Merchant01_Female::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 {
-	CDGPlaceableObj* pInstance = new CDGPlaceableObj(_pDevice, _pContext);
+	CArmor_Merchant01_Female* pInstance = new CArmor_Merchant01_Female(_pDevice, _pContext);
 
 	if (FAILED(pInstance->Initialize_ProtoType()))
 	{
-		MSG_BOX("Fail Create : CDGPlaceableObj");
+		MSG_BOX("Fail Create : CArmor_Merchant01_Female");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CDGPlaceableObj::Clone(void* _pArg)
+CGameObject* CArmor_Merchant01_Female::Clone(void* _pArg)
 {
-	CDGPlaceableObj* pInstance = new CDGPlaceableObj(*this);
+	CArmor_Merchant01_Female* pInstance = new CArmor_Merchant01_Female(*this);
 
 	if (FAILED(pInstance->Initialize_Clone(_pArg)))
 	{
-		MSG_BOX("Fail Clone : CDGPlaceableObj");
+		MSG_BOX("Fail Clone : CArmor_Merchant01_Female");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CDGPlaceableObj::Clone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg)
-{
-	CDGPlaceableObj* pInstance = new CDGPlaceableObj(*this);
-
-	if (FAILED(pInstance->Initialize_Clone(_iLevel, _strModelComTag, _pArg)))
-	{
-		MSG_BOX("Fail Clone : CDGPlaceableObj");
-		Safe_Release(pInstance);
-	}
-
-	return pInstance;
-}
-
-void CDGPlaceableObj::Free()
+void CArmor_Merchant01_Female::Free()
 {
 	__super::Free();
 
 	Safe_Release(m_pModelCom);
-	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pRendererCom);
+	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTransformCom);
 }
+

@@ -26,7 +26,7 @@ public:
 	void Update_VI(const _fmatrix& _matPivot);
 
 public:
-	virtual HRESULT Initialize_ProtoType(const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType);
+	virtual HRESULT Initialize_ProtoType(const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType, vector<class CBone*>* _pVecBone);
 	virtual HRESULT Initialize_Clone(void* _pArg) override;
 
 public:
@@ -46,10 +46,10 @@ private:
 
 private:
 	HRESULT Ready_VertexBuffer_For_NonAnim(const CBin_AIScene::DESC_MESH* _pAIMesh, _fmatrix _matPivot);
-	HRESULT Ready_VertexBuffer_For_Anim(const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh);
+	HRESULT Ready_VertexBuffer_For_Anim(const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh, vector<class CBone*>* _pVecBone);
 
 public:
-	static CMesh* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType);
+	static CMesh* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const CModel* _pModel, const CBin_AIScene::DESC_MESH* _pAIMesh, _fmatrix _matPivot, CModel::MODEL_TYPE _eType, vector<class CBone*>* _pVecBone);
 	virtual CComponent* Clone(void* _pArg) override;
 	virtual void Free() override;
 };
