@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "CarlottaPart_Base.h"
+#include "PlayerPart_Base.h"
 
 BEGIN(Engine)
 
@@ -15,12 +15,12 @@ END
 
 BEGIN(Client)
 
-class CCarlotta_Foot final : public CCarlottaPart_Base
+class CPlayer_Foot final : public CPlayerPart_Base
 {
 private:
-	CCarlotta_Foot(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
-	CCarlotta_Foot(const CCarlotta_Foot& rhs);
-	virtual ~CCarlotta_Foot() = default;
+	CPlayer_Foot(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	CPlayer_Foot(const CPlayer_Foot& rhs);
+	virtual ~CPlayer_Foot() = default;
 
 public:
 	_bool Get_IsAnimationFin();
@@ -42,7 +42,7 @@ private:
 	HRESULT Bind_ShaderResource();
 
 public:
-	static CCarlotta_Foot* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	static CPlayer_Foot* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;
 	virtual void Free() override;
 };

@@ -4,7 +4,7 @@
 #include "GameInstance.h" 
 #include "Bone.h"
 
-#include "Weapon_IronSword.h"
+#include "Weapon_AkaviriSword.h"
 
 #include "Layer.h"
 #include "Player.h"
@@ -45,18 +45,20 @@ HRESULT CPlayer_Weapon::Initialize_Clone(void* _pArg)
 
 	m_pTransformCom->Set_Scaling(_float3(0.0128f, 0.0128f, 0.0128f));
 	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-105.0f));
-	_float4 vInitPos;
-	XMStoreFloat4(&vInitPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	vInitPos.x -= 0.05f;
-	vInitPos.y -= 0.03f;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vInitPos));
+	// _float4 vInitPos;
+	// XMStoreFloat4(&vInitPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	// vInitPos.x -= 0.05f;
+	// vInitPos.y -= 0.03f;
+	// m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vInitPos));
 	
 	m_strName = TEXT("PlayerWeapon");
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	m_pWeapon = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Layer_Equip"), TEXT("IronSword"));
+	pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_Weapon_AkaviriSword"));
+
+	m_pWeapon = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("Weapon_AkaviriSword"));
 
 	Safe_Release(pGameInstance);
 
@@ -155,6 +157,11 @@ void CPlayer_Weapon::Set_SoketBone(CBone* _pSocketBone)
 const char* CPlayer_Weapon::Get_SoketBoneName()
 {
 	return m_pSocketBone->Get_BoneName();
+}
+
+void CPlayer_Weapon::Set_ViewType(CSkyrimWeapon::WEAPON_VIEWTYPE _eType)
+{
+	dynamic_cast<CSkyrimWeapon*>(m_pWeapon)->Set_ViewType(_eType);
 }
 
 void CPlayer_Weapon::CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame)

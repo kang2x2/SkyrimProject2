@@ -88,7 +88,7 @@ void CStatePlayer_RunFoward::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIKeyUp('W'))
 	{
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_IDLE);
-		m_pPlayer->Play_Animation(true, "mt_idle");
+		m_pPlayer->Play_Animation_All(true, "mt_idle");
 	}
 
 	__super::Key_Input(_fTimeDelta);

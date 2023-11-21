@@ -183,22 +183,8 @@ HRESULT CLevel_Dungeon::Ready_Layer_Equip(const wstring& _strLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Weapon_IronSword"))))
-		return E_FAIL;
-
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Weapon_FalmerAxe"))))
 		return E_FAIL;
-	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Boots"))))
-	//	return E_FAIL;
-
-	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Curiass"))))
-	//	return E_FAIL;
-
-	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Gauntlet"))))
-	//	return E_FAIL;
-
-	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Glass_Helmet"))))
-	//	return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

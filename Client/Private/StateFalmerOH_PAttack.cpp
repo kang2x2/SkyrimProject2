@@ -31,7 +31,7 @@ void CStateFalmerOH_PAttack::Update(_float _fTimeDelta)
 			m_pMonster->Play_Animation(false, "1hmrecoillarge");
 			m_pMonster->Set_State(CFalmer_OneHand::FALMEROH_STAGGERH);
 			m_pPlayer->Set_State(CPlayer::ONEHAND_ANTICIPATE);
-			m_pPlayer->Play_Animation(false, "1hm_blockanticipate");
+			m_pPlayer->Play_Animation_All(false, "1hm_blockanticipate");
 		}
 	}
 

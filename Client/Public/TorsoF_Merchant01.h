@@ -1,15 +1,24 @@
 #pragma once
 
-#include "SkyrimWeapon.h"
+#include "SkyrimArmor.h"
+
+BEGIN(Engine)
+
+class CModel;
+class CRenderer;
+class CShader;
+class CTransform;
+
+END
 
 BEGIN(Client)
 
-class CWeapon_IronSword final : public CSkyrimWeapon
+class CTorsoF_Merchant01 final : public CSkyrimArmor
 {
 private:
-	CWeapon_IronSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
-	CWeapon_IronSword(const CWeapon_IronSword& rhs);
-	virtual ~CWeapon_IronSword() = default;
+	CTorsoF_Merchant01(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	CTorsoF_Merchant01(const CTorsoF_Merchant01& rhs);
+	virtual ~CTorsoF_Merchant01() = default;
 
 public:
 	virtual HRESULT Initialize_ProtoType(); // ¿øº»
@@ -28,11 +37,10 @@ private:
 	CShader* m_pShaderCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
 
-	CBone*		m_pSocketBone =  nullptr;
 	_float4x4	m_matSocketPivot;
 
 public:
-	static  CWeapon_IronSword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	static  CTorsoF_Merchant01* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;
 	virtual void Free() override;
 };

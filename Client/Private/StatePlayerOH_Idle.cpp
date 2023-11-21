@@ -38,13 +38,13 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIKeyPress('W'))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_F);
-		m_pPlayer->Play_Animation(true, "1hm_runforward");
+		m_pPlayer->Play_Animation_All(true, "1hm_runforward");
 	}
 
 	if (pGameInstance->Get_DIKeyPress('S'))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_B);
-		m_pPlayer->Play_Animation(true, "1hm_runbackward");
+		m_pPlayer->Play_Animation_All(true, "1hm_runbackward");
 	}
 
 	if (pGameInstance->Get_DIKeyPress('A'))
@@ -52,7 +52,7 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 			Player_SetLook(-90.f);
 
-		m_pPlayer->Play_Animation(true, "1hm_runforward");
+		m_pPlayer->Play_Animation_All(true, "1hm_runforward");
 		m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_L);
 		
 	}
@@ -62,7 +62,7 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 			Player_SetLook(90.f);
 
-		m_pPlayer->Play_Animation(true, "1hm_runforward");
+		m_pPlayer->Play_Animation_All(true, "1hm_runforward");
 		m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_R);
 
 	}
@@ -70,7 +70,7 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACK);
-		m_pPlayer->Play_Animation(false, "1hm_attackleft");
+		m_pPlayer->Play_Animation_All(false, "1hm_attackleft");
 	}
 
 	if (pGameInstance->Get_DIKeyDown('R'))
@@ -78,13 +78,13 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 		m_pPlayer->Set_PlayerEquipState(CPlayer::EQUIP_UNEQUIP);
 
 		m_pPlayer->Set_State(CPlayer::ONEHAND_UNEQUIP);
-		m_pPlayer->Play_Animation(false, "1hm_unequip");
+		m_pPlayer->Play_Animation_All(false, "1hm_unequip");
 	}
 
 	if (pGameInstance->Get_DIKeyPress(VK_RBUTTON))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_BLOCK);
-		m_pPlayer->Play_Animation(true, "1hm_blockidle");
+		m_pPlayer->Play_Animation_All(true, "1hm_blockidle");
 	}
 
 	__super::Key_Input(_fTimeDelta);

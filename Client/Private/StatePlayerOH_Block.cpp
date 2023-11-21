@@ -36,7 +36,7 @@ void CStatePlayerOH_Block::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIKeyUp(VK_RBUTTON))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
-		m_pPlayer->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 	}
 
 	Safe_Release(pGameInstance);

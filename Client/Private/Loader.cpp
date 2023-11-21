@@ -2,90 +2,9 @@
 #include "Loader.h"
 
 #include "GameInstance.h"
-
 #include "Collider.h"
 
-// Logo Level
-#include "BackGround.h"
-
-// GamePlay Level
-#include "Navigation_Client.h"
-#include "Terrain.h"
-#include "Sky.h"
-#include "ParticleRect.h"
-
-/* Player */
-#include "Player.h"
-#include "Player_CameraPart.h"
-#include "Player_Body.h"
-#include "Player_Weapon.h"
-#include "Player_Armor.h"
-#include "Player_Helmet.h"
-
-#pragma region NPC
-
-/* Carlotta */
-#include "NPC_Carlotta.h"
-#include "Carlotta_Body.h"
-#include "Carlotta_Head.h"
-#include "Carlotta_Hand.h"
-#include "Carlotta_Foot.h"
-
-#pragma endregion
-
-#pragma region Monster 
-
-/* Skeever */
-#include "Skeever.h"
-#include "Skeever_Weapon.h"
-
-/* FalmerUE */
-#include "Falmer_UnEquip.h"
-#include "FalmerUE_Weapon.h"
-
-/* FalmerOH */
-#include "Falmer_OneHand.h"
-#include "FalmerOH_Weapon.h"
-
-#pragma endregion
-
-// Tool Level
-#include "Tool_Camera.h"
-#include "Terrain_Grid.h"
-
-/* Camera */
-#include "Camera_Player.h"
-
-/* Light */
-#include "Light_Town.h"
-#include "Light_Fire.h"
-
-/* Building & Terrain*/
-#include "SkyrimRock.h"
-#include "SkyrimTerrain.h"
-#include "Building.h"
-#include "StoneWork.h"
-#include "DGPlaceableObj.h"
-
-/* Collisible Object*/
-#include "CaveRock.h"
-#include "SpiderEgg.h"
-#include "FalmerHouse.h"
-#include "FalmerFence.h"
-#include "CavePillars.h"
-
-/* Equip */
-// Weapon
-#include "Weapon_IronSword.h"
-#include "Weapon_FalmerAxe.h"
-
-// Armor
-#include "Nude_Female.h"
-
-#include "Armor_Glass.h"
-#include "Helmet_Glass.h"
-
-#include "Armor_Merchant01_Female.h"
+#include "Loading_Include.h"
 
 CLoader::CLoader(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: m_pDevice(_pDevice)
@@ -506,14 +425,26 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 	_matrix matInitialize = XMMatrixIdentity();
 
 	/* Player */
-	//  * XMMatrixTranslation(1.f, -1.3f, 12.f)
 	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Player_Body"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Player/Player.bin", matInitialize, CModel::TYPE_ANIM))))
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_PlayerNude_Body"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Nude/Player/PlayerNude_Body/PlayerNude_Body.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_PlayerNude_Head"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Nude/Player/PlayerNude_Head/PlayerNude_Head.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_PlayerNude_Hand"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Nude/Player/PlayerNude_Hand/PlayerNude_Hand.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_PlayerNude_Foot"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Nude/Player/PlayerNude_Foot/PlayerNude_Foot.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Player_1stBody"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_1stPlayer/1stPlayer.bin", matInitialize, CModel::TYPE_ANIM))))
+	/* Player1st */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_PlayerNude_1stBody"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Nude/Player1st/Player1stNude_Body/Player1stNude_Body.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_PlayerNude_1stHand"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Nude/Player1st/Player1stNude_Hand/Player1stNude_Hand.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
 #pragma region NPC
@@ -539,15 +470,17 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 	//matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
 
 #pragma region Weapon
-
-	/* Iron Sword*/
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Weapon_IronSword"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/IronSword/Iron_LongSword.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
 	/* Falmer Axe*/
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Weapon_FalmerAxe"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/FalmerAxe/FalmerAxe.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	/* Akaviri Sword */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Weapon_AkaviriSword"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/AkaviriSword/3st/AkaviriSword.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Weapon_AkaviriSword1st"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/AkaviriSword/1st/AkaviriSword1st.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
 #pragma endregion
@@ -555,8 +488,11 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 #pragma region Armor
 
 	/* Merchant01 */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Armor_Merchant01_Female"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Merchant01/Armor/Armor_Merchant01_Female.bin", matInitialize, CModel::TYPE_ANIM))))
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_TorsoF_Merchant01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Merchant01/TorsoF/TorsoF_Merchant01.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_BootsF_Merchant01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Merchant01/BootsF/BootsF_Merchant01.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
 #pragma endregion
@@ -2024,36 +1960,47 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_CameraPart"),
-		CPlayer_CameraPart::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_Body"),
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_BodyPart"),
 		CPlayer_Body::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_HeadPart"),
+		CPlayer_Head::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_HandPart"),
+		CPlayer_Hand::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_FootPart"),
+		CPlayer_Foot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_Weapon"),
 		CPlayer_Weapon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_Armor"),
-		CPlayer_Armor::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_Helmet"),
-		CPlayer_Armor::Create(m_pDevice, m_pContext))))
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Player_CameraPart"),
+		CPlayer_CameraPart::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma region Weapon
-	/* Weapon */
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Weapon_IronSword"),
-		CWeapon_IronSword::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	/* Falmer Axe */
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Weapon_FalmerAxe"),
 		CWeapon_FalmerAxe::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* Akaviri Swrod*/
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Weapon_AkaviriSword"),
+		CWeapon_AkaviriSword::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region Armor
 
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Armor_Merchant01_Female"),
-		CArmor_Merchant01_Female::Create(m_pDevice, m_pContext))))
+	/* Merchant01 */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_TorsoF_Merchant01"),
+		CTorsoF_Merchant01::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BootsF_Merchant01"),
+		CBootsF_Merchant01::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

@@ -50,12 +50,12 @@ void CState_Player::Key_Input(_float _fTimeDelta)
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST &&
 			m_pPlayer->Get_CurState() == CPlayer::UNEQUIP_RUN_F)
 		{
-			m_pPlayer->Play_Animation(true, "1hm_runforward", m_pPlayer->Get_CurFrameIndex());
+			m_pPlayer->Play_Animation_All(true, "1hm_runforward", m_pPlayer->Get_CurFrameIndex());
 		}
 		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST &&
 			m_pPlayer->Get_CurState() == CPlayer::UNEQUIP_RUN_F)
 		{
-			m_pPlayer->Play_Animation(true, "mt_runforward", m_pPlayer->Get_CurFrameIndex());
+			m_pPlayer->Play_Animation_All(true, "mt_runforward", m_pPlayer->Get_CurFrameIndex());
 		}
 	}
 

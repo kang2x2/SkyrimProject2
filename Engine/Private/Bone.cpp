@@ -48,7 +48,14 @@ HRESULT CBone::Update_CombinedTransformationMatrix(const vector<class CBone*>& _
 		XMStoreFloat4x4(&m_CombinedTransformationMatrix,
 			XMLoadFloat4x4(&m_TransformationMatrix) *
 			XMLoadFloat4x4(&_vecBone[m_iParentBoneIndex]->m_CombinedTransformationMatrix));
+	
+		//if (!strcmp("NPC COM[COM]", m_szName))
+		//{
+		//	_vector Zero = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+		//	memcpy(&m_CombinedTransformationMatrix.m[3], &Zero, sizeof(_vector));
+		//}
 	}
+
 
 	return S_OK;
 }

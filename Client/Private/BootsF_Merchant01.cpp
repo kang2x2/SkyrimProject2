@@ -1,48 +1,47 @@
 #include "framework.h"
-#include "Weapon_IronSword.h"
+#include "BootsF_Merchant01.h"
 
 #include "GameInstance.h"
-#include "Bone.h"
 
-CWeapon_IronSword::CWeapon_IronSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CSkyrimWeapon(_pDevice, _pContext)
+CBootsF_Merchant01::CBootsF_Merchant01(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+	: CSkyrimArmor(_pDevice, _pContext)
 {
 }
 
-CWeapon_IronSword::CWeapon_IronSword(const CWeapon_IronSword& rhs)
-	: CSkyrimWeapon(rhs)
+CBootsF_Merchant01::CBootsF_Merchant01(const CBootsF_Merchant01& rhs)
+	: CSkyrimArmor(rhs)
 {
 }
 
-HRESULT CWeapon_IronSword::Initialize_ProtoType()
+HRESULT CBootsF_Merchant01::Initialize_ProtoType()
 {
 	return S_OK;
 }
 
-HRESULT CWeapon_IronSword::Initialize_Clone(void* _pArg)
+HRESULT CBootsF_Merchant01::Initialize_Clone(void* _pArg)
 {
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaling(_float3(0.01f, 0.01f, 0.01f));
-	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
+	// m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(-90.0f));
 	// matInitialize = XMMatrixRotationY(XMConvertToRadians(-90.f));
-	m_strName = TEXT("IronSword");
+	m_strName = TEXT("BootsF_Merchant01");
 
 	return S_OK;
 }
 
-void CWeapon_IronSword::Tick(_float _fTimeDelta)
+void CBootsF_Merchant01::Tick(_float _fTimeDelta)
 {
 
 }
 
-void CWeapon_IronSword::LateTick(_float _fTimeDelta)
+void CBootsF_Merchant01::LateTick(_float _fTimeDelta)
 {
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 }
 
-HRESULT CWeapon_IronSword::Render()
+HRESULT CBootsF_Merchant01::Render()
 {
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
@@ -54,7 +53,6 @@ HRESULT CWeapon_IronSword::Render()
 	{
 		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
 			return E_FAIL;
-
 		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_NormalTexture", i, aiTextureType_NORMALS)))
 			return E_FAIL;
 
@@ -68,9 +66,9 @@ HRESULT CWeapon_IronSword::Render()
 	return S_OK;
 }
 
-HRESULT CWeapon_IronSword::Ready_Component()
+HRESULT CBootsF_Merchant01::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_Weapon_IronSword"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_BootsF_Merchant01"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -89,7 +87,7 @@ HRESULT CWeapon_IronSword::Ready_Component()
 	return S_OK;
 }
 
-HRESULT CWeapon_IronSword::Bind_ShaderResources()
+HRESULT CBootsF_Merchant01::Bind_ShaderResources()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
@@ -107,33 +105,33 @@ HRESULT CWeapon_IronSword::Bind_ShaderResources()
 	return S_OK;
 }
 
-CWeapon_IronSword* CWeapon_IronSword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CBootsF_Merchant01* CBootsF_Merchant01::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 {
-	CWeapon_IronSword* pInstance = new CWeapon_IronSword(_pDevice, _pContext);
+	CBootsF_Merchant01* pInstance = new CBootsF_Merchant01(_pDevice, _pContext);
 
 	if (FAILED(pInstance->Initialize_ProtoType()))
 	{
-		MSG_BOX("Fail Create : CWeapon_IronSword");
+		MSG_BOX("Fail Create : CBootsF_Merchant01");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CWeapon_IronSword::Clone(void* _pArg)
+CGameObject* CBootsF_Merchant01::Clone(void* _pArg)
 {
-	CWeapon_IronSword* pInstance = new CWeapon_IronSword(*this);
+	CBootsF_Merchant01* pInstance = new CBootsF_Merchant01(*this);
 
 	if (FAILED(pInstance->Initialize_Clone(_pArg)))
 	{
-		MSG_BOX("Fail Clone : CWeapon_IronSword");
+		MSG_BOX("Fail Clone : CBootsF_Merchant01");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CWeapon_IronSword::Free()
+void CBootsF_Merchant01::Free()
 {
 	__super::Free();
 

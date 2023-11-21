@@ -4,12 +4,12 @@
 
 BEGIN(Client)
 
-class CWeapon_FalmerAxe final : public CSkyrimWeapon
+class CWeapon_AkaviriSword final : public CSkyrimWeapon
 {
 private:
-	CWeapon_FalmerAxe(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
-	CWeapon_FalmerAxe(const CWeapon_FalmerAxe& rhs);
-	virtual ~CWeapon_FalmerAxe() = default;
+	CWeapon_AkaviriSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	CWeapon_AkaviriSword(const CWeapon_AkaviriSword& rhs);
+	virtual ~CWeapon_AkaviriSword() = default;
 
 public:
 	virtual HRESULT Initialize_ProtoType(); // ¿øº»
@@ -22,10 +22,9 @@ public:
 	HRESULT Ready_Component();
 
 public:
-	static  CWeapon_FalmerAxe* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	static  CWeapon_AkaviriSword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;
 	virtual void Free() override;
-
 };
 
 END

@@ -36,9 +36,9 @@ HRESULT CCarlotta_Body::Initialize_Clone(void* _pArg)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_Armor_Merchant01_Female"));
+	pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_TorsoF_Merchant01"));
 
-	CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("Armor_Merchant01_Female"));
+	CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("TorsoF_Merchant01"));
 
 	m_pModelCom->SwapDesc_Armor(
 		dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_Model"))));

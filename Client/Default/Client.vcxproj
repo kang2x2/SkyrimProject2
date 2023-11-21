@@ -185,7 +185,11 @@
     <ClInclude Include="..\IMGUI\imstb_textedit.h" />
     <ClInclude Include="..\IMGUI\imstb_truetype.h" />
     <ClInclude Include="..\Public\Armor_Glass.h" />
-    <ClInclude Include="..\Public\Armor_Merchant01_Female.h" />
+    <ClInclude Include="..\Public\BootsF_Merchant01.h" />
+    <ClInclude Include="..\Public\Player_Foot.h" />
+    <ClInclude Include="..\Public\Player_Hand.h" />
+    <ClInclude Include="..\Public\Player_Head.h" />
+    <ClInclude Include="..\Public\TorsoF_Merchant01.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Building.h" />
     <ClInclude Include="..\Public\Camera_Player.h" />
@@ -216,9 +220,7 @@
     <ClInclude Include="..\Public\Navigation_Client.h" />
     <ClInclude Include="..\Public\NPC_Carlotta.h" />
     <ClInclude Include="..\Public\ParticleRect.h" />
-    <ClInclude Include="..\Public\Player_Armor.h" />
     <ClInclude Include="..\Public\Player_CameraPart.h" />
-    <ClInclude Include="..\Public\Player_Helmet.h" />
     <ClInclude Include="..\Public\Player_Weapon.h" />
     <ClInclude Include="..\Public\Skeever.h" />
     <ClInclude Include="..\Public\SkeeverPart_Base.h" />
@@ -291,7 +293,6 @@
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\StateManager_Player.h" />
     <ClInclude Include="..\Public\Player_Body.h" />
-    <ClInclude Include="..\Public\Player_Hair.h" />
     <ClInclude Include="..\Public\SkyrimTerrain.h" />
     <ClInclude Include="..\Public\StatePlayerOH_PAttack.h" />
     <ClInclude Include="..\Public\StatePlayerOH_RAttack.h" />
@@ -322,10 +323,11 @@
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Terrain_Grid.h" />
     <ClInclude Include="..\Public\Tool_Camera.h" />
+    <ClInclude Include="..\Public\Weapon_AkaviriSword.h" />
     <ClInclude Include="..\Public\Weapon_FalmerAxe.h" />
-    <ClInclude Include="..\Public\Weapon_IronSword.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Loading_Include.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -338,7 +340,11 @@
     <ClCompile Include="..\IMGUI\imgui_tables.cpp" />
     <ClCompile Include="..\IMGUI\imgui_widgets.cpp" />
     <ClCompile Include="..\Private\Armor_Glass.cpp" />
-    <ClCompile Include="..\Private\Armor_Merchant01_Female.cpp" />
+    <ClCompile Include="..\Private\BootsF_Merchant01.cpp" />
+    <ClCompile Include="..\Private\Player_Foot.cpp" />
+    <ClCompile Include="..\Private\Player_Hand.cpp" />
+    <ClCompile Include="..\Private\Player_Head.cpp" />
+    <ClCompile Include="..\Private\TorsoF_Merchant01.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Building.cpp" />
     <ClCompile Include="..\Private\Camera_Player.cpp" />
@@ -368,9 +374,7 @@
     <ClCompile Include="..\Private\Navigation_Client.cpp" />
     <ClCompile Include="..\Private\NPC_Carlotta.cpp" />
     <ClCompile Include="..\Private\ParticleRect.cpp" />
-    <ClCompile Include="..\Private\Player_Armor.cpp" />
     <ClCompile Include="..\Private\Player_CameraPart.cpp" />
-    <ClCompile Include="..\Private\Player_Helmet.cpp" />
     <ClCompile Include="..\Private\Player_Weapon.cpp" />
     <ClCompile Include="..\Private\Skeever.cpp" />
     <ClCompile Include="..\Private\SkeeverPart_Base.cpp" />
@@ -443,7 +447,6 @@
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\StateManager_Player.cpp" />
     <ClCompile Include="..\Private\Player_Body.cpp" />
-    <ClCompile Include="..\Private\Player_Hair.cpp" />
     <ClCompile Include="..\Private\SkyrimTerrain.cpp" />
     <ClCompile Include="..\Private\StatePlayerOH_PAttack.cpp" />
     <ClCompile Include="..\Private\StatePlayerOH_RAttack.cpp" />
@@ -474,8 +477,8 @@
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Terrain_Grid.cpp" />
     <ClCompile Include="..\Private\Tool_Camera.cpp" />
+    <ClCompile Include="..\Private\Weapon_AkaviriSword.cpp" />
     <ClCompile Include="..\Private\Weapon_FalmerAxe.cpp" />
-    <ClCompile Include="..\Private\Weapon_IronSword.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>

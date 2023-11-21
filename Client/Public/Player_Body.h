@@ -39,7 +39,7 @@ public:
 	_uint		Get_CurFrameIndex();
 	_bool		Get_CurAnimationIsLoop();
 
-	void		Set_BodyType(CPlayer::PLAYERCAMERA _eCamType, string _strAnimationName, _uint _iChangeIndex, _bool _bIsLoop);
+	void		Set_MeshType(CPlayer::PLAYERCAMERA _eCamType, string _strAnimationName, _uint _iChangeIndex, _bool _bIsLoop);
 private:
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResource();

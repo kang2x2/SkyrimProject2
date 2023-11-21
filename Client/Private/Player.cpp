@@ -9,9 +9,10 @@
 
 #include "Player_CameraPart.h"
 #include "Player_Body.h"
+#include "Player_Head.h"
+#include "Player_Hand.h"
+#include "Player_Foot.h"
 #include "Player_Weapon.h"
-#include "Player_Armor.h"
-#include "Player_Helmet.h"
 
 CPlayer::CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CCreatureObject(_pDevice, _pContext)
@@ -21,7 +22,6 @@ CPlayer::CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 		m_pNavigationCom[i] = nullptr;
 	}
 }
-
 CPlayer::CPlayer(const CPlayer& rhs)
 	: CCreatureObject(rhs)
 {
@@ -38,7 +38,6 @@ HRESULT CPlayer::Initialize_ProtoType()
 
 	return S_OK;
 }
-
 HRESULT CPlayer::Initialize_Clone(void* pArg)
 {
 	if (FAILED(Ready_Component()))
@@ -60,7 +59,7 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 
 	m_pTransformCom->Set_Speed(m_fRunSpeed);
 
-	Play_Animation(true, "mt_idle");
+	Play_Animation_All(true, "mt_idle");
 
 	//m_eCurCamMode = CAM_1ST;
 	m_eCurCamMode = CAM_3ST;
@@ -76,7 +75,6 @@ void CPlayer::PriorityTick(_float _fTimeDelta)
 			iter->PriorityTick(_fTimeDelta);
 	}
 }
-
 void CPlayer::Tick(_float _fTimeDelta)
 {
 	m_pStateManager->Update(_fTimeDelta);
@@ -90,7 +88,6 @@ void CPlayer::Tick(_float _fTimeDelta)
 	_vector	vPosition = m_pNavigationCom[g_curStage]->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 }
-
 void CPlayer::LateTick(_float _fTimeDelta)
 {
 	m_pStateManager->Late_Update();
@@ -103,7 +100,6 @@ void CPlayer::LateTick(_float _fTimeDelta)
 
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 }
-
 HRESULT CPlayer::Render()
 {
 	if (FAILED(Bind_ShaderResource()))
@@ -129,7 +125,6 @@ HRESULT CPlayer::Set_State(PLAYERSTATE _eState)
 
 	return S_OK;
 }
-
 _bool CPlayer::Get_IsAnimationFin()
 {
 	return dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_IsAnimationFin();
@@ -150,9 +145,25 @@ const char* CPlayer::Get_CurSocketBonName()
 {
 	return dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])->Get_SoketBoneName();
 }
-void CPlayer::Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CPlayer::Play_Animation_All(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
 {
 	dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+	dynamic_cast<CPlayer_Head*>(m_vecPlayerPart[PART_HEAD])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+	dynamic_cast<CPlayer_Hand*>(m_vecPlayerPart[PART_HAND])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+	dynamic_cast<CPlayer_Foot*>(m_vecPlayerPart[PART_FOOT])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+}
+
+void CPlayer::Play_Animation(PLAYER_PARTS _ePart, _bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+{
+	if(_ePart == PART_BODY)
+		dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+	else if (_ePart == PART_HEAD)
+		dynamic_cast<CPlayer_Head*>(m_vecPlayerPart[PART_HEAD])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+	else if (_ePart == PART_HAND)
+		dynamic_cast<CPlayer_Hand*>(m_vecPlayerPart[PART_HAND])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+	else if (_ePart == PART_FOOT)
+		dynamic_cast<CPlayer_Foot*>(m_vecPlayerPart[PART_FOOT])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+
 }
 
 void CPlayer::Set_SoketBone(const char* _pBoneName)
@@ -172,23 +183,32 @@ void CPlayer::Set_PlayerCam(string _strAnimationName, _uint _iChangeIndex, _bool
 	else if (m_eCurCamMode == CAM_3ST)
 		m_eCurCamMode = CAM_1ST;
 
+	/* Body Set */
 	CPlayer_Body* pBody = dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY]);
-	pBody->Set_BodyType(m_eCurCamMode, _strAnimationName, _iChangeIndex, _bIsLoop);
+	pBody->Set_MeshType(m_eCurCamMode, _strAnimationName, _iChangeIndex, _bIsLoop);
+	/* Hand Set */
+	CPlayer_Hand* pHand = dynamic_cast<CPlayer_Hand*>(m_vecPlayerPart[PART_HAND]);
+	pHand->Set_MeshType(m_eCurCamMode, _strAnimationName, _iChangeIndex, _bIsLoop);
 
-	if(m_eCurCamMode == CAM_1ST)
+	/* Camera Set */
+	if (m_eCurCamMode == CAM_1ST)
+	{
 		dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_SoketBone(
 			pBody->Get_SocketBonePtr("Camera1st [Cam1]"));
+		
+		dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])->Set_ViewType(CSkyrimWeapon::VIEW_1ST);
+	}
 	else if (m_eCurCamMode == CAM_3ST)
 	{
 		dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_SoketBone(
 			pBody->Get_SocketBonePtr("Camera3rd [Cam3]"));
 		m_pTransformCom->SetLook(dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Get_PlayerCamLook());
+		
+		dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])->Set_ViewType(CSkyrimWeapon::VIEW_3ST);
 	}
 
 	dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_PivotMatrix(
 		pBody->Get_SocketPivotMatrix());
-
-	
 }
 
 void CPlayer::Set_CurCell()
@@ -240,21 +260,40 @@ HRESULT CPlayer::Ready_Part()
 	BodyPartDesc.pParent = this;
 	BodyPartDesc.pParentTransform = m_pTransformCom;
 
-	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Body"), &BodyPartDesc);
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_BodyPart"), &BodyPartDesc);
 	if (pPart == nullptr)
 		return E_FAIL;
 	m_vecPlayerPart.push_back(pPart);
 
-	/* For. Player Camera */
-	CPlayer_CameraPart::PLAYER_CAMERAPART_DESC CameraPartDesc;
-	CameraPartDesc.pParent = this;
-	CameraPartDesc.pParentTransform = m_pTransformCom;
-	CameraPartDesc.pBodyTransform = dynamic_cast<CTransform*>(m_vecPlayerPart[PART_BODY]->Get_Component(TEXT("Com_Transform")));
-	CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera3rd [Cam3]");
-	//CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera1st [Cam1]");
-	CameraPartDesc.matSocketPivot = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
-	
-	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_CameraPart"), &CameraPartDesc);
+	/* Root Bone ¿˙¿Â. */
+	m_pRootBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Root [Root]");
+
+	/* For. Player Head*/
+	CPlayer_Head::PART_DESC HeadPartDesc;
+	HeadPartDesc.pParent = this;
+	HeadPartDesc.pParentTransform = m_pTransformCom;
+
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_HeadPart"), &HeadPartDesc);
+	if (pPart == nullptr)
+		return E_FAIL;
+	m_vecPlayerPart.push_back(pPart);
+
+	/* For. Player Hand */
+	CPlayer_Hand::PART_DESC HandPartDesc;
+	HandPartDesc.pParent = this;
+	HandPartDesc.pParentTransform = m_pTransformCom;
+
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_HandPart"), &HandPartDesc);
+	if (pPart == nullptr)
+		return E_FAIL;
+	m_vecPlayerPart.push_back(pPart);
+
+	/* For. Player Foot */
+	CPlayer_Foot::PART_DESC FootPartDesc;
+	FootPartDesc.pParent = this;
+	FootPartDesc.pParentTransform = m_pTransformCom;
+
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_FootPart"), &FootPartDesc);
 	if (pPart == nullptr)
 		return E_FAIL;
 	m_vecPlayerPart.push_back(pPart);
@@ -271,25 +310,16 @@ HRESULT CPlayer::Ready_Part()
 		return E_FAIL;
 	m_vecPlayerPart.push_back(pPart);
 
-	/* For. Armor */
-	CPlayer_Armor::ARMOR_DESC ArmorPartDesc;
-	ArmorPartDesc.pParent = this;
-	ArmorPartDesc.pParentTransform = m_pTransformCom; //NPC Spine [Spn0]
-	ArmorPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Spine [Spn0]");
-	ArmorPartDesc.matSocketPivot = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
-	
-	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Armor"), &ArmorPartDesc);
-	if (pPart == nullptr)
-		return E_FAIL;
-	m_vecPlayerPart.push_back(pPart);
-	
-	CPlayer_Helmet::HELMET_DESC HelmetPartDesc;
-	HelmetPartDesc.pParent = this;
-	HelmetPartDesc.pParentTransform = m_pTransformCom; //NPC Spine [Spn0]
-	HelmetPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("NPC Spine [Spn0]");
-	HelmetPartDesc.matSocketPivot = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
-	
-	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_Helmet"), &HelmetPartDesc);
+	/* For. Player Camera */
+	CPlayer_CameraPart::PLAYER_CAMERAPART_DESC CameraPartDesc;
+	CameraPartDesc.pParent = this;
+	CameraPartDesc.pParentTransform = m_pTransformCom;
+	CameraPartDesc.pBodyTransform = dynamic_cast<CTransform*>(m_vecPlayerPart[PART_BODY]->Get_Component(TEXT("Com_Transform")));
+	CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera3rd [Cam3]");
+	//CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera1st [Cam1]");
+	CameraPartDesc.matSocketPivot = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
+
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_CameraPart"), &CameraPartDesc);
 	if (pPart == nullptr)
 		return E_FAIL;
 	m_vecPlayerPart.push_back(pPart);

@@ -53,7 +53,7 @@ void CStatePlayer_RunBackward::Key_Input(_float _fTimeDelta)
 			{
 				Player_SetLook(135.f);
 
-				m_pPlayer->Play_Animation(true, "mt_runforward");
+				m_pPlayer->Play_Animation_All(true, "mt_runforward");
 				m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_L);
 			}
 		}
@@ -75,7 +75,7 @@ void CStatePlayer_RunBackward::Key_Input(_float _fTimeDelta)
 			{
 				Player_SetLook(-45.f);
 
-				m_pPlayer->Play_Animation(true, "mt_runforward");
+				m_pPlayer->Play_Animation_All(true, "mt_runforward");
 				m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_R);
 			}
 
@@ -86,7 +86,7 @@ void CStatePlayer_RunBackward::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyUp('S'))
 	{
-		m_pPlayer->Play_Animation(true, "mt_idle");
+		m_pPlayer->Play_Animation_All(true, "mt_idle");
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_IDLE);
 	}
 

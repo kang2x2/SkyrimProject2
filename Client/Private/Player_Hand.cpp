@@ -1,25 +1,24 @@
 #include "framework.h"
-#include "Player_Body.h"
+#include "Player_Hand.h"
 
 #include "GameInstance.h"
 #include "Layer.h"
-#include "Bone.h"
 
 #include "Player.h"
 
-CPlayer_Body::CPlayer_Body(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CPlayer_Hand::CPlayer_Hand(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CPlayerPart_Base(_pDevice, _pContext)
 {
 
 }
 
-CPlayer_Body::CPlayer_Body(const CPlayer_Body& rhs)
+CPlayer_Hand::CPlayer_Hand(const CPlayer_Hand& rhs)
 	: CPlayerPart_Base(rhs)
 {
 
 }
 
-HRESULT CPlayer_Body::Initialize_ProtoType()
+HRESULT CPlayer_Hand::Initialize_ProtoType()
 {
 	for (_int i = 0; i < CPlayer::CAM_END; ++i)
 		m_pModelComAry[i] = nullptr;
@@ -27,7 +26,7 @@ HRESULT CPlayer_Body::Initialize_ProtoType()
 	return S_OK;
 }
 
-HRESULT CPlayer_Body::Initialize_Clone(void* _pArg)
+HRESULT CPlayer_Hand::Initialize_Clone(void* _pArg)
 {
 	for (_int i = 0; i < CPlayer::CAM_END; ++i)
 		m_pModelComAry[i] = nullptr;
@@ -38,54 +37,24 @@ HRESULT CPlayer_Body::Initialize_Clone(void* _pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	m_strName = TEXT("Player_Body");
+	m_strName = TEXT("Player_Hand");
 
 	return S_OK;
 }
 
-void CPlayer_Body::Tick(_float _fTimeDelta)
+void CPlayer_Hand::Tick(_float _fTimeDelta)
 {
 	m_pModelComAry[m_ePlayerCamMode]->Play_Animation(_fTimeDelta);
 
 	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix());
-
-	/* aabb오리지널 바운딩 * 행렬을 해서 실제 충돌하기위한 데이터(aabb)에게 전달한다.*/
-	m_pColliderCom->Update(XMLoadFloat4x4(&m_matWorld));
 }
 
-void CPlayer_Body::LateTick(_float _fTimeDelta)
+void CPlayer_Hand::LateTick(_float _fTimeDelta)
 {
-#ifdef _DEBUG
-	m_pRendererCom->Add_Debug(m_pColliderCom);
-#endif
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	
-	map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_GAMEPLAY);
-	
-	for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
-	{
-		list<CGameObject*> ltbjList = Layer->second->Get_ObjList();
-	
-		for (auto obj : ltbjList)
-		{
-			if (obj->Get_IsCreature())
-			{
-				pGameInstance->Collision_AABBTransition(m_pColliderCom,
-					dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB"))));
-			}
-		}
-	}
-	
-	
-	Safe_Release(pGameInstance);
-
-	m_pColliderCom->Late_Update();
 }
 
-HRESULT CPlayer_Body::Render()
+HRESULT CPlayer_Hand::Render()
 {
 	if (FAILED(Bind_ShaderResource()))
 		return E_FAIL;
@@ -113,46 +82,46 @@ HRESULT CPlayer_Body::Render()
 	return S_OK;
 }
 
-void CPlayer_Body::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CPlayer_Hand::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
 {
 	m_pModelComAry[m_ePlayerCamMode]->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
 }
 
-_uint CPlayer_Body::Get_CurFrameIndex()
+_uint CPlayer_Hand::Get_CurFrameIndex()
 {
 	return m_pModelComAry[m_ePlayerCamMode]->Get_CurFrameIndex();
 }
 
-_bool CPlayer_Body::Get_CurAnimationIsLoop()
+_bool CPlayer_Hand::Get_CurAnimationIsLoop()
 {
 	return m_pModelComAry[m_ePlayerCamMode]->Get_CurAnimationIsLoop();
 }
 
-void CPlayer_Body::Set_MeshType(CPlayer::PLAYERCAMERA _eCamType, string _strAnimationName, _uint _iChangeIndex, _bool _bIsLoop)
+void CPlayer_Hand::Set_MeshType(CPlayer::PLAYERCAMERA _eCamType, string _strAnimationName, _uint _iChangeIndex, _bool _bIsLoop)
 {
 	m_ePlayerCamMode = _eCamType;
 	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
 	m_pModelComAry[m_ePlayerCamMode]->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
 }
 
-_bool CPlayer_Body::Get_IsAnimationFin()
+_bool CPlayer_Hand::Get_IsAnimationFin()
 {
 	return m_pModelComAry[m_ePlayerCamMode]->Get_IsAnimationFin();
 }
 
-string CPlayer_Body::Get_CurAnimationName()
+string CPlayer_Hand::Get_CurAnimationName()
 {
 	return m_pModelComAry[m_ePlayerCamMode]->Get_CurAnimationName().c_str();
 }
 
 
-HRESULT CPlayer_Body::Ready_Component()
+HRESULT CPlayer_Hand::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_PlayerNude_Body"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_PlayerNude_Hand"),
 		TEXT("Com_3stModel"), (CComponent**)&m_pModelComAry[CPlayer::CAM_3ST])))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_PlayerNude_1stBody"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_PlayerNude_1stHand"),
 		TEXT("Com_1stModel"), (CComponent**)&m_pModelComAry[CPlayer::CAM_1ST])))
 		return E_FAIL;
 
@@ -172,21 +141,10 @@ HRESULT CPlayer_Body::Ready_Component()
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
 		return E_FAIL;
 
-	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
-
-	AABBDesc.vExtents = _float3(0.3f, 0.7f, 0.3f );
-	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
-
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),
-		TEXT("Com_Collider_AABB"), (CComponent**)&m_pColliderCom, &AABBDesc)))
-		return E_FAIL;
-
-	m_pColliderCom->Set_OwnerObj(m_pParent);
-
 	return S_OK;
 }
 
-HRESULT CPlayer_Body::Bind_ShaderResource()
+HRESULT CPlayer_Hand::Bind_ShaderResource()
 {
 	//if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
 	//	return E_FAIL;
@@ -208,38 +166,37 @@ HRESULT CPlayer_Body::Bind_ShaderResource()
 	return S_OK;
 }
 
-CPlayer_Body* CPlayer_Body::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CPlayer_Hand* CPlayer_Hand::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 {
-	CPlayer_Body* pInstance = new CPlayer_Body(_pDevice, _pContext);
+	CPlayer_Hand* pInstance = new CPlayer_Hand(_pDevice, _pContext);
 
 	if (FAILED(pInstance->Initialize_ProtoType()))
 	{
-		MSG_BOX("Fail Create : CPlayer_Body");
+		MSG_BOX("Fail Create : CPlayer_Hand");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CPlayer_Body::Clone(void* _pArg)
+CGameObject* CPlayer_Hand::Clone(void* _pArg)
 {
-	CPlayer_Body* pInstance = new CPlayer_Body(*this);
+	CPlayer_Hand* pInstance = new CPlayer_Hand(*this);
 
 	if (FAILED(pInstance->Initialize_Clone(_pArg)))
 	{
-		MSG_BOX("Fail Clone : CPlayer_Body");
+		MSG_BOX("Fail Clone : CPlayer_Hand");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CPlayer_Body::Free()
+void CPlayer_Hand::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pColliderCom);
-
+	// 지울 때 누수나 에러 나는지 확인.
 	for (_int i = 0; i < CPlayer::CAM_END; ++i)
 	{
 		if (m_pModelComAry[i] != nullptr)

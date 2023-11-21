@@ -1,25 +1,24 @@
 #include "framework.h"
-#include "Armor_Merchant01_Female.h"
+#include "TorsoF_Merchant01.h"
 
 #include "GameInstance.h"
-#include "Bone.h"
 
-CArmor_Merchant01_Female::CArmor_Merchant01_Female(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CTorsoF_Merchant01::CTorsoF_Merchant01(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CSkyrimArmor(_pDevice, _pContext)
 {
 }
 
-CArmor_Merchant01_Female::CArmor_Merchant01_Female(const CArmor_Merchant01_Female& rhs)
+CTorsoF_Merchant01::CTorsoF_Merchant01(const CTorsoF_Merchant01& rhs)
 	: CSkyrimArmor(rhs)
 {
 }
 
-HRESULT CArmor_Merchant01_Female::Initialize_ProtoType()
+HRESULT CTorsoF_Merchant01::Initialize_ProtoType()
 {
 	return S_OK;
 }
 
-HRESULT CArmor_Merchant01_Female::Initialize_Clone(void* _pArg)
+HRESULT CTorsoF_Merchant01::Initialize_Clone(void* _pArg)
 {
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
@@ -27,22 +26,22 @@ HRESULT CArmor_Merchant01_Female::Initialize_Clone(void* _pArg)
 	m_pTransformCom->Set_Scaling(_float3(0.01f, 0.01f, 0.01f));
 	// m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(-90.0f));
 	// matInitialize = XMMatrixRotationY(XMConvertToRadians(-90.f));
-	m_strName = TEXT("Armor_Merchant01_Female");
+	m_strName = TEXT("TorsoF_Merchant01");
 
 	return S_OK;
 }
 
-void CArmor_Merchant01_Female::Tick(_float _fTimeDelta)
+void CTorsoF_Merchant01::Tick(_float _fTimeDelta)
 {
 
 }
 
-void CArmor_Merchant01_Female::LateTick(_float _fTimeDelta)
+void CTorsoF_Merchant01::LateTick(_float _fTimeDelta)
 {
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 }
 
-HRESULT CArmor_Merchant01_Female::Render()
+HRESULT CTorsoF_Merchant01::Render()
 {
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
@@ -67,9 +66,9 @@ HRESULT CArmor_Merchant01_Female::Render()
 	return S_OK;
 }
 
-HRESULT CArmor_Merchant01_Female::Ready_Component()
+HRESULT CTorsoF_Merchant01::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_Armor_Merchant01_Female"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_TorsoF_Merchant01"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -88,7 +87,7 @@ HRESULT CArmor_Merchant01_Female::Ready_Component()
 	return S_OK;
 }
 
-HRESULT CArmor_Merchant01_Female::Bind_ShaderResources()
+HRESULT CTorsoF_Merchant01::Bind_ShaderResources()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
@@ -106,33 +105,33 @@ HRESULT CArmor_Merchant01_Female::Bind_ShaderResources()
 	return S_OK;
 }
 
-CArmor_Merchant01_Female* CArmor_Merchant01_Female::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CTorsoF_Merchant01* CTorsoF_Merchant01::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 {
-	CArmor_Merchant01_Female* pInstance = new CArmor_Merchant01_Female(_pDevice, _pContext);
+	CTorsoF_Merchant01* pInstance = new CTorsoF_Merchant01(_pDevice, _pContext);
 
 	if (FAILED(pInstance->Initialize_ProtoType()))
 	{
-		MSG_BOX("Fail Create : CArmor_Merchant01_Female");
+		MSG_BOX("Fail Create : CTorsoF_Merchant01");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CArmor_Merchant01_Female::Clone(void* _pArg)
+CGameObject* CTorsoF_Merchant01::Clone(void* _pArg)
 {
-	CArmor_Merchant01_Female* pInstance = new CArmor_Merchant01_Female(*this);
+	CTorsoF_Merchant01* pInstance = new CTorsoF_Merchant01(*this);
 
 	if (FAILED(pInstance->Initialize_Clone(_pArg)))
 	{
-		MSG_BOX("Fail Clone : CArmor_Merchant01_Female");
+		MSG_BOX("Fail Clone : CTorsoF_Merchant01");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CArmor_Merchant01_Female::Free()
+void CTorsoF_Merchant01::Free()
 {
 	__super::Free();
 

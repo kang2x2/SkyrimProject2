@@ -43,7 +43,7 @@ void CStatePlayerOH_RunLeft::Key_Input(_float _fTimeDelta)
 
 		if (pGameInstance->Get_DIKeyPress('S'))
 		{
-			m_pPlayer->Play_Animation(true, "1hm_runbackward");
+			m_pPlayer->Play_Animation_All(true, "1hm_runbackward");
 			m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_B);
 		}
 
@@ -54,14 +54,14 @@ void CStatePlayerOH_RunLeft::Key_Input(_float _fTimeDelta)
 			m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
 			m_pPlayer->Set_State(CPlayer::ONEHAND_LWATTACKL);
-			m_pPlayer->Play_Animation(false, "1hm_walkleftattackleft");
+			m_pPlayer->Play_Animation_All(false, "1hm_walkleftattackleft");
 		}
 	}
 
 	if (pGameInstance->Get_DIKeyUp('A'))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
-		m_pPlayer->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 	}
 
 	Safe_Release(pGameInstance);

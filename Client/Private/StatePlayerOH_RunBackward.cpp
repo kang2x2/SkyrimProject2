@@ -53,7 +53,7 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 			{
 				Player_SetLook(135.f);
 
-				m_pPlayer->Play_Animation(true, "1hm_runforward");
+				m_pPlayer->Play_Animation_All(true, "1hm_runforward");
 				m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_L);
 			}
 
@@ -63,7 +63,7 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 				m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
 				m_pPlayer->Set_State(CPlayer::ONEHAND_BWATTACKL);
-				m_pPlayer->Play_Animation(false, "1hm_walkbwdattackleft");
+				m_pPlayer->Play_Animation_All(false, "1hm_walkbwdattackleft");
 			}
 		}
 
@@ -85,7 +85,7 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 			{
 				Player_SetLook(135.f);
 
-				m_pPlayer->Play_Animation(true, "1hm_runforward");
+				m_pPlayer->Play_Animation_All(true, "1hm_runforward");
 				m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_R);
 			}
 
@@ -95,7 +95,7 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 				m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
 				m_pPlayer->Set_State(CPlayer::ONEHAND_BWATTACKL);
-				m_pPlayer->Play_Animation(false, "1hm_walkbwdattackleft");
+				m_pPlayer->Play_Animation_All(false, "1hm_walkbwdattackleft");
 			}
 		}
 
@@ -105,7 +105,7 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 			m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
 			m_pPlayer->Set_State(CPlayer::ONEHAND_BWATTACKL);
-			m_pPlayer->Play_Animation(false, "1hm_walkbwdattackleft");
+			m_pPlayer->Play_Animation_All(false, "1hm_walkbwdattackleft");
 		}
 
 		else
@@ -114,7 +114,7 @@ void CStatePlayerOH_RunBackward::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyUp('S'))
 	{
-		m_pPlayer->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
 	}
 

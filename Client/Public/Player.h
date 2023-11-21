@@ -5,6 +5,7 @@
 
 BEGIN(Engine)
 
+class CBone;
 class CRenderer;
 class CTransform;
 class CNavigation;
@@ -16,7 +17,7 @@ BEGIN(Client)
 class CPlayer final : public CCreatureObject
 {
 public:
-	enum PLAYER_PARTS { PART_BODY, PART_CAMERA, PART_WEAPON, PART_ARMOR, PART_HELMET, PART_HAIR, PART_END };
+	enum PLAYER_PARTS { PART_BODY, PART_HEAD, PART_HAND, PART_FOOT, PART_WEAPON, PART_CAMERA, PART_END };
 	enum PLAYERCAMERA { CAM_3ST, CAM_1ST, CAM_END };
 	enum PLAYER_EQUIPSTATE { EQUIP_UNEQUIP, EQUIP_ONEHAND, EQUIP_BOW, EQUIP_MAGIC, EQUIP_END };
 
@@ -78,7 +79,8 @@ public:
 	string			Get_CurAnimationName();
 	_uint			Get_CurFrameIndex();
 	const char*		Get_CurSocketBonName();
-	void			Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
+	void			Play_Animation_All(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
+	void			Play_Animation(PLAYER_PARTS _ePart, _bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
 	void			Set_SoketBone(const char* _pBoneName);
 
 	/* 플레이어 카메라 관련*/
@@ -97,10 +99,10 @@ public:
 	void			  CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);
 
 
-
 private:
 	vector<class CGameObject*>		m_vecPlayerPart;
 
+	CBone*							m_pRootBone	= nullptr;
 	CRenderer*						m_pRendererCom = nullptr;
 	CTransform*						m_pTransformCom = nullptr;
 	CNavigation*					m_pNavigationCom[STAGE_END];

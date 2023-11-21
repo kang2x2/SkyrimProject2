@@ -29,7 +29,7 @@ void CStatePlayerOH_PAttack::Late_Update()
 	if (m_pPlayer->Get_IsAnimationFin())
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
-		m_pPlayer->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 	}
 }
 

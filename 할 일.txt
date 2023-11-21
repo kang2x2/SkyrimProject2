@@ -14,4 +14,5 @@
 현재 릴리즈 모드 실행 시 종료할 때 에러 남.
 Monster State Engine에서 Client로 이사.
 
-Level Enum 관련 수정 중.
+이제보니까 Release나 Debug에서 터지는게
+Model을 Ary로 들고 있는 클래스 중에 초기화를 안 한 인덱스가 있으면 터지는 듯? 나중에 확인해보자.

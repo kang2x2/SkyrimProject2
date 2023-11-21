@@ -227,7 +227,7 @@ HRESULT CNPC_Carlotta::Ready_Part()
 		return E_FAIL;
 	m_vecNpcPart.push_back(pPart);
 
-	/* For. Head */
+	/* For. Hand */
 	CCarlotta_Hand::PART_DESC HandPartDesc;
 	HandPartDesc.pParent = this;
 	HandPartDesc.pParentTransform = m_pTransformCom;

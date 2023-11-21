@@ -41,19 +41,11 @@ void CCarlotta_Hand::Tick(_float _fTimeDelta)
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
 	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix());
-
-	/* aabb오리지널 바운딩 * 행렬을 해서 실제 충돌하기위한 데이터(aabb)에게 전달한다.*/
-	m_pColliderCom->Update(XMLoadFloat4x4(&m_matWorld));
 }
 
 void CCarlotta_Hand::LateTick(_float _fTimeDelta)
 {
-#ifdef _DEBUG
-	m_pRendererCom->Add_Debug(m_pColliderCom);
-#endif
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
-
-	m_pColliderCom->Late_Update();
 }
 
 HRESULT CCarlotta_Hand::Render()
@@ -128,17 +120,6 @@ HRESULT CCarlotta_Hand::Ready_Component()
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
 		return E_FAIL;
 
-	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
-
-	AABBDesc.vExtents = _float3(0.3f, 0.7f, 0.3f);
-	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
-
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),
-		TEXT("Com_Collider_AABB"), (CComponent**)&m_pColliderCom, &AABBDesc)))
-		return E_FAIL;
-
-	m_pColliderCom->Set_OwnerObj(m_pParent);
-
 	return S_OK;
 }
 
@@ -193,6 +174,4 @@ CGameObject* CCarlotta_Hand::Clone(void* _pArg)
 void CCarlotta_Hand::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pColliderCom);
 }

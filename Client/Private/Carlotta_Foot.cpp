@@ -31,6 +31,18 @@ HRESULT CCarlotta_Foot::Initialize_Clone(void* _pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_BootsF_Merchant01"));
+
+	CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("BootsF_Merchant01"));
+
+	m_pModelCom->SwapDesc_Armor(
+		dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_Model"))));
+
+	Safe_Release(pGameInstance);
+
 	m_strName = TEXT("Carlotta_Foot");
 
 	return S_OK;
@@ -41,19 +53,11 @@ void CCarlotta_Foot::Tick(_float _fTimeDelta)
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
 	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix());
-
-	/* aabb오리지널 바운딩 * 행렬을 해서 실제 충돌하기위한 데이터(aabb)에게 전달한다.*/
-	m_pColliderCom->Update(XMLoadFloat4x4(&m_matWorld));
 }
 
 void CCarlotta_Foot::LateTick(_float _fTimeDelta)
 {
-#ifdef _DEBUG
-	m_pRendererCom->Add_Debug(m_pColliderCom);
-#endif
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
-
-	m_pColliderCom->Late_Update();
 }
 
 HRESULT CCarlotta_Foot::Render()
@@ -127,18 +131,7 @@ HRESULT CCarlotta_Foot::Ready_Component()
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
 		return E_FAIL;
-
-	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
-
-	AABBDesc.vExtents = _float3(0.3f, 0.7f, 0.3f);
-	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
-
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),
-		TEXT("Com_Collider_AABB"), (CComponent**)&m_pColliderCom, &AABBDesc)))
-		return E_FAIL;
-
-	m_pColliderCom->Set_OwnerObj(m_pParent);
-
+	
 	return S_OK;
 }
 
@@ -193,6 +186,4 @@ CGameObject* CCarlotta_Foot::Clone(void* _pArg)
 void CCarlotta_Foot::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pColliderCom);
 }

@@ -37,7 +37,7 @@ void CStateSkeever_Charge::Update(_float _fTimeDelta)
 			m_pMonster->Play_Animation(false, "recoil");
 			m_pMonster->Set_State(CSkeever::SKEEVER_STAGGER);
 			m_pPlayer->Set_State(CPlayer::ONEHAND_BLOCKHIT);
-			m_pPlayer->Play_Animation(false, "1hm_blockhit");
+			m_pPlayer->Play_Animation_All(false, "1hm_blockhit");
 			dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")))->Set_Speed(m_pPlayer->GetWalkSpeed());
 		}
 	}

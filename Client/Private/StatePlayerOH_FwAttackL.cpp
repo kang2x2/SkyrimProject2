@@ -36,7 +36,7 @@ void CStatePlayerOH_FwAttackL::Late_Update()
 		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_FWATTACKR);
-		m_pPlayer->Play_Animation(false, "1hm_walkfwdattackright");
+		m_pPlayer->Play_Animation_All(false, "1hm_walkfwdattackright");
 	}
 
 	Safe_Release(pGameInstance);
@@ -46,7 +46,7 @@ void CStatePlayerOH_FwAttackL::Late_Update()
 		m_pPlayerTransform->Set_Speed(m_pPlayer->GetRunSpeed());
 
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
-		m_pPlayer->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 	}
 }
 
@@ -62,19 +62,19 @@ void CStatePlayerOH_FwAttackL::Key_Input(_float _fTimeDelta)
 	else if (pGameInstance->Get_DIKeyPress('A'))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_LWATTACKL);
-		m_pPlayer->Play_Animation(false, "1hm_walkleftattackleft", m_pPlayer->Get_CurFrameIndex());
+		m_pPlayer->Play_Animation_All(false, "1hm_walkleftattackleft", m_pPlayer->Get_CurFrameIndex());
 	
 	}
 	else if (pGameInstance->Get_DIKeyPress('D'))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_RWATTACKL);
-		m_pPlayer->Play_Animation(false, "1hm_walkrightattackleft", m_pPlayer->Get_CurFrameIndex());
+		m_pPlayer->Play_Animation_All(false, "1hm_walkrightattackleft", m_pPlayer->Get_CurFrameIndex());
 	
 	}
 	else if (pGameInstance->Get_DIKeyPress('S'))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_BWATTACKL);
-		m_pPlayer->Play_Animation(false, "1hm_walkbwdattackleft", m_pPlayer->Get_CurFrameIndex());
+		m_pPlayer->Play_Animation_All(false, "1hm_walkbwdattackleft", m_pPlayer->Get_CurFrameIndex());
 	}
 
 	Safe_Release(pGameInstance);

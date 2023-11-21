@@ -35,10 +35,10 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIKeyPress('W'))
 	{
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
-			m_pPlayer->Play_Animation(true, "1hm_runforward");
+			m_pPlayer->Play_Animation_All(true, "1hm_runforward");
 
 		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
-			m_pPlayer->Play_Animation(true, "mt_runforward");
+			m_pPlayer->Play_Animation_All(true, "mt_runforward");
 
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_F);
 	}
@@ -46,10 +46,10 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIKeyPress('S'))
 	{
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
-			m_pPlayer->Play_Animation(true, "1hm_runbackward");
+			m_pPlayer->Play_Animation_All(true, "1hm_runbackward");
 
 		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
-			m_pPlayer->Play_Animation(true, "mt_runbackward");
+			m_pPlayer->Play_Animation_All(true, "mt_runbackward");
 
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_B);
 	}
@@ -58,12 +58,12 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	{
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 		{
-			m_pPlayer->Play_Animation(true, "1hm_runforward");
+			m_pPlayer->Play_Animation_All(true, "1hm_runforward");
 		}
 		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 		{
 			Player_SetLook(-90.f);
-			m_pPlayer->Play_Animation(true, "mt_runforward");
+			m_pPlayer->Play_Animation_All(true, "mt_runforward");
 		}
 
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_L);
@@ -73,12 +73,12 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	{
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 		{
-			m_pPlayer->Play_Animation(true, "1hm_runforward");
+			m_pPlayer->Play_Animation_All(true, "1hm_runforward");
 		}
 		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 		{
 			Player_SetLook(90.f);
-			m_pPlayer->Play_Animation(true, "mt_runforward");
+			m_pPlayer->Play_Animation_All(true, "mt_runforward");
 		}
 
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_RUN_R);
@@ -88,7 +88,7 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 	{
 		m_pPlayer->Set_PlayerEquipState(CPlayer::EQUIP_ONEHAND);
 		m_pPlayer->Set_State(CPlayer::ONEHAND_EQUIP);
-		m_pPlayer->Play_Animation(false, "1hm_equip");
+		m_pPlayer->Play_Animation_All(false, "1hm_equip");
 	}
 
 	__super::Key_Input(_fTimeDelta);

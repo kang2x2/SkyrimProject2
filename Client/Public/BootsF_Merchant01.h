@@ -4,7 +4,6 @@
 
 BEGIN(Engine)
 
-class CBone;
 class CModel;
 class CRenderer;
 class CShader;
@@ -14,12 +13,12 @@ END
 
 BEGIN(Client)
 
-class CArmor_Merchant01_Female final : public CSkyrimArmor
+class CBootsF_Merchant01 final : public CSkyrimArmor
 {
 private:
-	CArmor_Merchant01_Female(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
-	CArmor_Merchant01_Female(const CArmor_Merchant01_Female& rhs);
-	virtual ~CArmor_Merchant01_Female() = default;
+	CBootsF_Merchant01(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	CBootsF_Merchant01(const CBootsF_Merchant01& rhs);
+	virtual ~CBootsF_Merchant01() = default;
 
 public:
 	virtual HRESULT Initialize_ProtoType(); // ¿øº»
@@ -38,13 +37,13 @@ private:
 	CShader* m_pShaderCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
 
-	CBone* m_pSocketBone = nullptr;
 	_float4x4	m_matSocketPivot;
 
 public:
-	static  CArmor_Merchant01_Female* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	static  CBootsF_Merchant01* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;
 	virtual void Free() override;
+
 };
 
 END

@@ -33,7 +33,7 @@ void CStatePlayerOH_BlockHit::Late_Update()
 	{
 		m_pPlayerTransform->Set_Speed(m_pPlayer->GetRunSpeed());
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
-		m_pPlayer->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 	}
 
 }

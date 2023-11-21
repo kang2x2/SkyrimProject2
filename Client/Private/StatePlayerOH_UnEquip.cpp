@@ -33,7 +33,7 @@ void CStatePlayerOH_UnEquip::Late_Update()
 	if (m_pPlayer->Get_IsAnimationFin() &&
 		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_unequip"))
 	{
-		m_pPlayer->Play_Animation(true, "mt_idle");
+		m_pPlayer->Play_Animation_All(true, "mt_idle");
 		m_pPlayer->Set_State(CPlayer::UNEQUIP_IDLE);
 	}
 }

@@ -1,29 +1,29 @@
 #include "framework.h"
-#include "Carlotta_Head.h"
+#include "Player_Head.h"
 
 #include "GameInstance.h"
 #include "Layer.h"
 
 #include "Player.h"
 
-CCarlotta_Head::CCarlotta_Head(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CCarlottaPart_Base(_pDevice, _pContext)
+CPlayer_Head::CPlayer_Head(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+	: CPlayerPart_Base(_pDevice, _pContext)
 {
 
 }
 
-CCarlotta_Head::CCarlotta_Head(const CCarlotta_Head& rhs)
-	: CCarlottaPart_Base(rhs)
+CPlayer_Head::CPlayer_Head(const CPlayer_Head& rhs)
+	: CPlayerPart_Base(rhs)
 {
 
 }
 
-HRESULT CCarlotta_Head::Initialize_ProtoType()
+HRESULT CPlayer_Head::Initialize_ProtoType()
 {
 	return S_OK;
 }
 
-HRESULT CCarlotta_Head::Initialize_Clone(void* _pArg)
+HRESULT CPlayer_Head::Initialize_Clone(void* _pArg)
 {
 	if (FAILED(__super::Initialize_Clone(_pArg)))
 		return E_FAIL;
@@ -31,80 +31,83 @@ HRESULT CCarlotta_Head::Initialize_Clone(void* _pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	m_strName = TEXT("Carlotta_Head");
+	m_strName = TEXT("Player_Head");
 
 	return S_OK;
 }
 
-void CCarlotta_Head::Tick(_float _fTimeDelta)
+void CPlayer_Head::Tick(_float _fTimeDelta)
 {
 	m_pModelCom->Play_Animation(_fTimeDelta);
 
 	Compute_RenderMatrix(m_pTransformCom->Get_WorldMatrix());
 }
 
-void CCarlotta_Head::LateTick(_float _fTimeDelta)
+void CPlayer_Head::LateTick(_float _fTimeDelta)
 {
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 }
 
-HRESULT CCarlotta_Head::Render()
+HRESULT CPlayer_Head::Render()
 {
-	if (FAILED(Bind_ShaderResource()))
-		return E_FAIL;
-
-	// 메시 몇개
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; ++i)
+	if (dynamic_cast<CPlayer*>(m_pParent)->Get_CamMode() == CPlayer::CAM_3ST)
 	{
-		if (FAILED(m_pModelCom->Bind_BondMatrices(m_pShaderCom, i, "g_BoneMatrices")))
+		if (FAILED(Bind_ShaderResource()))
 			return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
-			return E_FAIL;
-		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_NormalTexture", i, aiTextureType_NORMALS)))
-			return E_FAIL;
+		// 메시 몇개
+		_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
+		for (_uint i = 0; i < iNumMeshes; ++i)
+		{
+			if (FAILED(m_pModelCom->Bind_BondMatrices(m_pShaderCom, i, "g_BoneMatrices")))
+				return E_FAIL;
 
-		if (FAILED(m_pModelCom->Render(i)))
-			return E_FAIL;
+			if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
+				return E_FAIL;
+			if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_NormalTexture", i, aiTextureType_NORMALS)))
+				return E_FAIL;
+
+			if (FAILED(m_pShaderCom->Begin(0)))
+				return E_FAIL;
+
+			if (FAILED(m_pModelCom->Render(i)))
+				return E_FAIL;
+		}
 	}
 
 	return S_OK;
 }
 
-void CCarlotta_Head::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CPlayer_Head::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
 {
 	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
 }
 
-_uint CCarlotta_Head::Get_CurFrameIndex()
+_uint CPlayer_Head::Get_CurFrameIndex()
 {
 	return m_pModelCom->Get_CurFrameIndex();
 }
 
-_bool CCarlotta_Head::Get_CurAnimationIsLoop()
+_bool CPlayer_Head::Get_CurAnimationIsLoop()
 {
 	return m_pModelCom->Get_CurAnimationIsLoop();
 }
 
-_bool CCarlotta_Head::Get_IsAnimationFin()
+_bool CPlayer_Head::Get_IsAnimationFin()
 {
 	return m_pModelCom->Get_IsAnimationFin();
 }
 
-string CCarlotta_Head::Get_CurAnimationName()
+string CPlayer_Head::Get_CurAnimationName()
 {
 	return m_pModelCom->Get_CurAnimationName().c_str();
 }
 
 
-HRESULT CCarlotta_Head::Ready_Component()
+HRESULT CPlayer_Head::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_Carlotta_Head"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_PlayerNude_Head"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -123,7 +126,7 @@ HRESULT CCarlotta_Head::Ready_Component()
 	return S_OK;
 }
 
-HRESULT CCarlotta_Head::Bind_ShaderResource()
+HRESULT CPlayer_Head::Bind_ShaderResource()
 {
 	//if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
 	//	return E_FAIL;
@@ -145,33 +148,33 @@ HRESULT CCarlotta_Head::Bind_ShaderResource()
 	return S_OK;
 }
 
-CCarlotta_Head* CCarlotta_Head::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
+CPlayer_Head* CPlayer_Head::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 {
-	CCarlotta_Head* pInstance = new CCarlotta_Head(_pDevice, _pContext);
+	CPlayer_Head* pInstance = new CPlayer_Head(_pDevice, _pContext);
 
 	if (FAILED(pInstance->Initialize_ProtoType()))
 	{
-		MSG_BOX("Fail Create : CCarlotta_Head");
+		MSG_BOX("Fail Create : CPlayer_Head");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CCarlotta_Head::Clone(void* _pArg)
+CGameObject* CPlayer_Head::Clone(void* _pArg)
 {
-	CCarlotta_Head* pInstance = new CCarlotta_Head(*this);
+	CPlayer_Head* pInstance = new CPlayer_Head(*this);
 
 	if (FAILED(pInstance->Initialize_Clone(_pArg)))
 	{
-		MSG_BOX("Fail Clone : CCarlotta_Head");
+		MSG_BOX("Fail Clone : CPlayer_Head");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CCarlotta_Head::Free()
+void CPlayer_Head::Free()
 {
 	__super::Free();
 }

@@ -27,7 +27,7 @@ void CStatePlayerOH_Anticipate::Late_Update()
 		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_blockanticipate"))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
-		m_pPlayer->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 	}
 }
 

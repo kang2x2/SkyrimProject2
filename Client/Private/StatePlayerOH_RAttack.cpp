@@ -35,7 +35,7 @@ void CStatePlayerOH_RAttack::Late_Update()
 	if (m_pPlayer->Get_IsAnimationFin())
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
-		m_pPlayer->Play_Animation(true, "1hm_idle");
+		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 	}
 }
 
@@ -50,7 +50,7 @@ void CStatePlayerOH_RAttack::Key_Input(_float _fTimeDelta)
 		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACK);
-		m_pPlayer->Play_Animation(false, "1hm_attackleft");
+		m_pPlayer->Play_Animation_All(false, "1hm_attackleft");
 	}
 
 	else if (pGameInstance->Get_DIKeyPress('A'))
@@ -58,28 +58,28 @@ void CStatePlayerOH_RAttack::Key_Input(_float _fTimeDelta)
 		m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
 		m_pPlayer->Set_State(CPlayer::ONEHAND_LWATTACKR);
-		m_pPlayer->Play_Animation(false, "1hm_walkleftattackright", m_pPlayer->Get_CurFrameIndex());
+		m_pPlayer->Play_Animation_All(false, "1hm_walkleftattackright", m_pPlayer->Get_CurFrameIndex());
 	}
 	else if (pGameInstance->Get_DIKeyPress('D'))
 	{
 		m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
 		m_pPlayer->Set_State(CPlayer::ONEHAND_RWATTACKR);
-		m_pPlayer->Play_Animation(false, "1hm_walkrightattackright", m_pPlayer->Get_CurFrameIndex());
+		m_pPlayer->Play_Animation_All(false, "1hm_walkrightattackright", m_pPlayer->Get_CurFrameIndex());
 	}
 	else if (pGameInstance->Get_DIKeyPress('W'))
 	{
 		m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
 		m_pPlayer->Set_State(CPlayer::ONEHAND_FWATTACKR);
-		m_pPlayer->Play_Animation(false, "1hm_walkfwdattackright", m_pPlayer->Get_CurFrameIndex());
+		m_pPlayer->Play_Animation_All(false, "1hm_walkfwdattackright", m_pPlayer->Get_CurFrameIndex());
 	}
 	else if (pGameInstance->Get_DIKeyPress('S'))
 	{
 		m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
 		m_pPlayer->Set_State(CPlayer::ONEHAND_BWATTACKR);
-		m_pPlayer->Play_Animation(false, "1hm_walkbwdattackright", m_pPlayer->Get_CurFrameIndex());
+		m_pPlayer->Play_Animation_All(false, "1hm_walkbwdattackright", m_pPlayer->Get_CurFrameIndex());
 	}
 
 	Safe_Release(pGameInstance);

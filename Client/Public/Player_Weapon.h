@@ -40,14 +40,14 @@ public:
 	void		Set_PivotMatrix(_float4x4 _matPivot) { m_matSocketPivot = _matPivot; }
 	void		Set_SoketBone(CBone* _pSocketBone);
 	const char* Get_SoketBoneName();
-	
+
+	virtual void Set_ViewType(CSkyrimWeapon::WEAPON_VIEWTYPE _eType);
 
 public:
 	void		CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);
 
 public:
 	HRESULT Ready_Component();
-	HRESULT Bind_ShaderResources();
 
 private:
 	CCollider*		m_pColliderCom = nullptr;

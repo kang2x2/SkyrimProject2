@@ -38,7 +38,7 @@ void CStateFalmerUE_Charge::Update(_float _fTimeDelta)
 			m_pMonster->Play_Animation(false, "1hmstaggerbackheavy");
 			m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_STAGGERH);
 			m_pPlayer->Set_State(CPlayer::ONEHAND_BLOCKHIT);
-			m_pPlayer->Play_Animation(false, "1hm_blockhit");
+			m_pPlayer->Play_Animation_All(false, "1hm_blockhit");
 			m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 		}
 	}
