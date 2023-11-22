@@ -55,6 +55,10 @@ protected:
 	CTransform* m_pParentTransform = nullptr;
 	_float4x4		m_matWorld;
 
+	/* Âø¿ë Àåºñ */
+	CGameObject* m_pArmor = nullptr;
+	CGameObject* m_pWeapon = nullptr;
+
 public:
 	static CCarlottaPart_Base* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg)override;

@@ -40,6 +40,21 @@ HRESULT CPlayer_Body::Initialize_Clone(void* _pArg)
 
 	m_strName = TEXT("Player_Body");
 
+	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//Safe_AddRef(pGameInstance);
+	//
+	//pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_TorsoM_Blades"));
+	//
+	//CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("TorsoM_Blades"));
+	//
+	//m_pModelComAry[CPlayer::CAM_1ST]->SwapDesc_Armor(
+	//	dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_1stModel"))));
+	//
+	//m_pModelComAry[CPlayer::CAM_3ST]->SwapDesc_Armor(
+	//	dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_3stModel"))));
+	//
+	//Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -128,11 +143,10 @@ _bool CPlayer_Body::Get_CurAnimationIsLoop()
 	return m_pModelComAry[m_ePlayerCamMode]->Get_CurAnimationIsLoop();
 }
 
-void CPlayer_Body::Set_MeshType(CPlayer::PLAYERCAMERA _eCamType, string _strAnimationName, _uint _iChangeIndex, _bool _bIsLoop)
+void CPlayer_Body::Set_MeshType(CPlayer::PLAYERCAMERA _eCamType)
 {
 	m_ePlayerCamMode = _eCamType;
 	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
-	m_pModelComAry[m_ePlayerCamMode]->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
 }
 
 _bool CPlayer_Body::Get_IsAnimationFin()

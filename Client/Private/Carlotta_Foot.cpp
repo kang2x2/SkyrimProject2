@@ -31,17 +31,17 @@ HRESULT CCarlotta_Foot::Initialize_Clone(void* _pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_BootsF_Merchant01"));
-
-	CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("BootsF_Merchant01"));
-
-	m_pModelCom->SwapDesc_Armor(
-		dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_Model"))));
-
-	Safe_Release(pGameInstance);
+	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//Safe_AddRef(pGameInstance);
+	//
+	//pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_BootsF_Merchant01"));
+	//
+	//CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("BootsF_Merchant01"));
+	//
+	//m_pModelCom->SwapDesc_Armor(
+	//	dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_3stModel"))));
+	//
+	//Safe_Release(pGameInstance);
 
 	m_strName = TEXT("Carlotta_Foot");
 

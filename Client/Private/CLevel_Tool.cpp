@@ -102,11 +102,8 @@ HRESULT CLevel_Tool::Ready_Layer_Equip(const wstring& _strLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_CloneObject(g_curLevel, _strLayerTag, TEXT("ProtoType_GameObject_Weapon_FalmerAxe"))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_CloneObject(g_curLevel, _strLayerTag, TEXT("ProtoType_GameObject_Carlotta_Nude"))))
-		return E_FAIL;
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, TEXT("Temp"), TEXT("ProtoType_GameObject_Npc_Carlotta"))))
+	//	return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

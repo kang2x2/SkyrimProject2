@@ -85,10 +85,13 @@ void CCarlottaPart_Base::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pModelCom);
+	Safe_Release(m_pModelCom); // 이걸 주석 하냐 마냐에 따라 릴리즈 가능.
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pParentTransform);
+
+	Safe_Release(m_pArmor);
+	Safe_Release(m_pWeapon);
 
 }

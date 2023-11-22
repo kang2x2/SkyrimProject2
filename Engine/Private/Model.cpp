@@ -144,26 +144,26 @@ HRESULT CModel::Render(_uint _iMeshIndex)
 
 HRESULT CModel::SwapDesc_Armor(CModel* _pModel)
 {
-	for (auto& iter : m_vecMaterial)
-	{
-		for (size_t i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
-		{
-			Safe_Release(iter.pTextures[i]);
-		}
-	}
-	m_vecMaterial.clear();
-
-	for (auto& iter : m_vecMesh)
-	{
-		Safe_Release(iter);
-	}
-	m_vecMesh.clear();
-
-	for (auto& iter : m_vecBone)
-	{
-		Safe_Release(iter);
-	}
-	m_vecBone.clear();
+	//for (auto& iter : m_vecMaterial)
+	//{
+	//	for (size_t i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
+	//	{
+	//		Safe_Release(iter.pTextures[i]);
+	//	}
+	//}
+	//m_vecMaterial.clear();
+	//
+	//for (auto& iter : m_vecMesh)
+	//{
+	//	Safe_Release(iter);
+	//}
+	//m_vecMesh.clear();
+	//
+	//for (auto& iter : m_vecBone)
+	//{
+	//	Safe_Release(iter);
+	//}
+	//m_vecBone.clear();
 
 
 	// safe_addref
@@ -174,10 +174,7 @@ HRESULT CModel::SwapDesc_Armor(CModel* _pModel)
 	m_vecMesh = _pModel->m_vecMesh;
 	m_iNumMaterails = _pModel->m_iNumMaterails;
 	m_vecMaterial = _pModel->m_vecMaterial;
-
-	//Ready_Bone();
-	//Ready_Mesh(TYPE_ANIM);
-	// Ready_Material();
+	m_strModelPath = _pModel->m_strModelPath;
 
 	return S_OK;
 }
@@ -242,7 +239,7 @@ HRESULT CModel::Ready_Material(const char* _pModelFilePath)
 		MESH_MATERIAL MeshMaterial;
 		ZeroMemory(&MeshMaterial, sizeof(MeshMaterial));
 
-		for (size_t j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
+		for (_int j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
 		{
 			//aiString strTexturePath;
 			//

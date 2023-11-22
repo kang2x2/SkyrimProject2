@@ -2,15 +2,6 @@
 
 #include "SkyrimArmor.h"
 
-BEGIN(Engine)
-
-class CModel;
-class CRenderer;
-class CShader;
-class CTransform;
-
-END
-
 BEGIN(Client)
 
 class CBootsF_Merchant01 final : public CSkyrimArmor
@@ -29,15 +20,6 @@ public:
 
 public:
 	HRESULT Ready_Component();
-	HRESULT Bind_ShaderResources();
-
-private:
-	CModel* m_pModelCom = nullptr;
-	CRenderer* m_pRendererCom = nullptr;
-	CShader* m_pShaderCom = nullptr;
-	CTransform* m_pTransformCom = nullptr;
-
-	_float4x4	m_matSocketPivot;
 
 public:
 	static  CBootsF_Merchant01* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

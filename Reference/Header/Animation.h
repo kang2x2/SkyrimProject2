@@ -27,7 +27,7 @@ public:
 	_char* Get_AnimationName() { return m_szName; }
 	_bool  Get_CurAnimationIsLoop() { return m_bIsLoop; }
 	
-	void  Reset_TrackPosition(_uint _iInitIndex) { m_fTrackPosition = _iInitIndex; }
+	void  Reset_TrackPosition(_float _fInitIndex) { m_fTrackPosition = _fInitIndex; }
 	_bool Get_Finish() { return m_bIsFinish; }
 	const vector<CChannel*>& Get_Channel() { return m_vecChannel; }
 	const vector<_uint>& Get_CurKeyFrame() { return m_vecCurKeyFrame; }

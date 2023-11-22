@@ -15,6 +15,8 @@ CBootsF_Merchant01::CBootsF_Merchant01(const CBootsF_Merchant01& rhs)
 
 HRESULT CBootsF_Merchant01::Initialize_ProtoType()
 {
+	__super::Initialize_ProtoType();
+
 	return S_OK;
 }
 
@@ -33,35 +35,16 @@ HRESULT CBootsF_Merchant01::Initialize_Clone(void* _pArg)
 
 void CBootsF_Merchant01::Tick(_float _fTimeDelta)
 {
-
 }
 
 void CBootsF_Merchant01::LateTick(_float _fTimeDelta)
 {
-	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
+	__super::LateTick(_fTimeDelta);
 }
 
 HRESULT CBootsF_Merchant01::Render()
 {
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
-
-	// 메시 몇개
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; ++i)
-	{
-		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
-			return E_FAIL;
-		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_NormalTexture", i, aiTextureType_NORMALS)))
-			return E_FAIL;
-
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Render(i)))
-			return E_FAIL;
-	}
+	__super::Render();
 
 	return S_OK;
 }
@@ -69,38 +52,14 @@ HRESULT CBootsF_Merchant01::Render()
 HRESULT CBootsF_Merchant01::Ready_Component()
 {
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_BootsF_Merchant01"),
-		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+		TEXT("Com_3stModel"), (CComponent**)&m_pModelComAry[VIEW_3ST])))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
-		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_BootsF_Merchant01"),
+		TEXT("Com_1stModel"), (CComponent**)&m_pModelComAry[VIEW_1ST])))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Renderer"),
-		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
-		return E_FAIL;
-
-	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
-		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CBootsF_Merchant01::Bind_ShaderResources()
-{
-	if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	// 뷰, 투영 행렬을 던져준다.
-	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ViewMatrix", CPipeLine::D3DTS_VIEW)))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Bind_TransformToShader(m_pShaderCom, "g_ProjMatrix", CPipeLine::D3DTS_PROJ)))
-		return E_FAIL;
-
-	Safe_Release(pGameInstance);
+	__super::Ready_Component();
 
 	return S_OK;
 }
@@ -134,10 +93,5 @@ CGameObject* CBootsF_Merchant01::Clone(void* _pArg)
 void CBootsF_Merchant01::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pModelCom);
-	Safe_Release(m_pRendererCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTransformCom);
 }
 

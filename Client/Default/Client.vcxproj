@@ -186,6 +186,9 @@
     <ClInclude Include="..\IMGUI\imstb_truetype.h" />
     <ClInclude Include="..\Public\Armor_Glass.h" />
     <ClInclude Include="..\Public\BootsF_Merchant01.h" />
+    <ClInclude Include="..\Public\BootsM_Blades.h" />
+    <ClInclude Include="..\Public\GlovesM_Blades.h" />
+    <ClInclude Include="..\Public\HelmetM_Blades.h" />
     <ClInclude Include="..\Public\Player_Foot.h" />
     <ClInclude Include="..\Public\Player_Hand.h" />
     <ClInclude Include="..\Public\Player_Head.h" />
@@ -211,7 +214,6 @@
     <ClInclude Include="..\Public\FalmerUE_Weapon.h" />
     <ClInclude Include="..\Public\Falmer_OneHand.h" />
     <ClInclude Include="..\Public\Falmer_UnEquip.h" />
-    <ClInclude Include="..\Public\Helmet_Glass.h" />
     <ClInclude Include="..\Public\Inventory.h" />
     <ClInclude Include="..\Public\Level_Dungeon.h" />
     <ClInclude Include="..\Public\Light_Fire.h" />
@@ -227,7 +229,6 @@
     <ClInclude Include="..\Public\Skeever_Weapon.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\SkyrimArmor.h" />
-    <ClInclude Include="..\Public\SkyrimHelmet.h" />
     <ClInclude Include="..\Public\SkyrimRock.h" />
     <ClInclude Include="..\Public\SkyrimUI.h" />
     <ClInclude Include="..\Public\SkyrimWeapon.h" />
@@ -323,6 +324,7 @@
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Terrain_Grid.h" />
     <ClInclude Include="..\Public\Tool_Camera.h" />
+    <ClInclude Include="..\Public\TorsoM_Blades.h" />
     <ClInclude Include="..\Public\Weapon_AkaviriSword.h" />
     <ClInclude Include="..\Public\Weapon_FalmerAxe.h" />
     <ClInclude Include="Client.h" />
@@ -341,6 +343,9 @@
     <ClCompile Include="..\IMGUI\imgui_widgets.cpp" />
     <ClCompile Include="..\Private\Armor_Glass.cpp" />
     <ClCompile Include="..\Private\BootsF_Merchant01.cpp" />
+    <ClCompile Include="..\Private\BootsM_Blades.cpp" />
+    <ClCompile Include="..\Private\GlovesM_Blades.cpp" />
+    <ClCompile Include="..\Private\HelmetM_Blades.cpp" />
     <ClCompile Include="..\Private\Player_Foot.cpp" />
     <ClCompile Include="..\Private\Player_Hand.cpp" />
     <ClCompile Include="..\Private\Player_Head.cpp" />
@@ -365,7 +370,6 @@
     <ClCompile Include="..\Private\FalmerUE_Weapon.cpp" />
     <ClCompile Include="..\Private\Falmer_OneHand.cpp" />
     <ClCompile Include="..\Private\Falmer_UnEquip.cpp" />
-    <ClCompile Include="..\Private\Helmet_Glass.cpp" />
     <ClCompile Include="..\Private\Inventory.cpp" />
     <ClCompile Include="..\Private\Level_Dungeon.cpp" />
     <ClCompile Include="..\Private\Light_Fire.cpp" />
@@ -381,7 +385,6 @@
     <ClCompile Include="..\Private\Skeever_Weapon.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SkyrimArmor.cpp" />
-    <ClCompile Include="..\Private\SkyrimHelmet.cpp" />
     <ClCompile Include="..\Private\SkyrimRock.cpp" />
     <ClCompile Include="..\Private\SkyrimUI.cpp" />
     <ClCompile Include="..\Private\SkyrimWeapon.cpp" />
@@ -477,6 +480,7 @@
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Terrain_Grid.cpp" />
     <ClCompile Include="..\Private\Tool_Camera.cpp" />
+    <ClCompile Include="..\Private\TorsoM_Blades.cpp" />
     <ClCompile Include="..\Private\Weapon_AkaviriSword.cpp" />
     <ClCompile Include="..\Private\Weapon_FalmerAxe.cpp" />
     <ClCompile Include="Client.cpp" />

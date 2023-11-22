@@ -52,6 +52,7 @@ public: /* For.Object_Manager */
 	HRESULT Delete_CloneObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strName);
 	class CGameObject* Find_CloneObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strName);
 	map<const wstring, class CLayer*>* Get_CloneObjectMapAry(_uint _iLevel);
+	map<const wstring, class CGameObject*> Get_ProtoObjectMapAry();
 
 public: /* For.Component_Manager */
 	HRESULT Add_ProtoType_Component(_uint _iLevelIndex, const wstring & _strProtoTypeTag, class CComponent* _pProtoTypeComponent);

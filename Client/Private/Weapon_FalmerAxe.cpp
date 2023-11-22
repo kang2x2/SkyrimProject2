@@ -55,6 +55,12 @@ HRESULT CWeapon_FalmerAxe::Ready_Component()
 		TEXT("Com_3stModel"), (CComponent**)&m_pModelComAry[CSkyrimWeapon::VIEW_3ST])))
 		return E_FAIL;
 
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_Weapon_FalmerAxe"),
+		TEXT("Com_1stModel"), (CComponent**)&m_pModelComAry[CSkyrimWeapon::VIEW_1ST])))
+		return E_FAIL;
+
+	__super::Ready_Component();
+
 	// 후에 1st 추가.
 
 	return S_OK;

@@ -4,12 +4,12 @@
 
 BEGIN(Client)
 
-class CTorsoF_Merchant01 final : public CSkyrimArmor
+class CTorsoM_Blades final : public CSkyrimArmor
 {
 private:
-	CTorsoF_Merchant01(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
-	CTorsoF_Merchant01(const CTorsoF_Merchant01& rhs);
-	virtual ~CTorsoF_Merchant01() = default;
+	CTorsoM_Blades(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	CTorsoM_Blades(const CTorsoM_Blades& rhs);
+	virtual ~CTorsoM_Blades() = default;
 
 public:
 	virtual HRESULT Initialize_ProtoType(); // ¿øº»
@@ -22,9 +22,10 @@ public:
 	HRESULT Ready_Component();
 
 public:
-	static  CTorsoF_Merchant01* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	static  CTorsoM_Blades* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;
 	virtual void Free() override;
+
 };
 
 END

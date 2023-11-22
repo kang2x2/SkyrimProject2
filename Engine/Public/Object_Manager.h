@@ -26,6 +26,9 @@ public:
 public:
 	class CGameObject* Find_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName);
 	map<const wstring, class CLayer*>* Get_CloneObjectMapAry(_uint _iLevel){ return &m_mapLayer[_iLevel]; }
+	class CGameObject* Find_ProtoObject(const wstring& _strPrototypeTag);
+	map<const wstring, class CGameObject*> Get_ProtoObjectMapAry() { return m_mapProtoTypeObj; }
+	class CLayer* Find_Layer(_uint _iLevelIndex, const wstring& _strLayerTag);
 
 private:
 	// 원본
@@ -33,10 +36,6 @@ private:
 	// 사본(레벨별로 그룹지어 레이어로 관리)
 	map<const wstring, class CLayer*>*	   m_mapLayer = nullptr;
 	_uint								   m_iLevelNum = 0;
-
-private:
-	class CGameObject* Find_ProtoObject(const wstring& _strPrototypeTag);
-	class CLayer*	   Find_Layer(_uint _iLevelIndex, const wstring& _strLayerTag);
 
 public:
 	virtual void Free() override;

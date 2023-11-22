@@ -1,3 +1,6 @@
+CarlottaPart_Base.cpp의 free 부분에서 modelcom을 주석처리 해야 릴리즈 모드에서 안터진다.
+무엇이 이유인가?
+
 툴에서 라이트 지우는거 만들기
 
 체력0되면 죽게.
@@ -15,4 +18,7 @@
 Monster State Engine에서 Client로 이사.
 
 이제보니까 Release나 Debug에서 터지는게
-Model을 Ary로 들고 있는 클래스 중에 초기화를 안 한 인덱스가 있으면 터지는 듯? 나중에 확인해보자.
+Model을 Ary로 들고 있는 클래스 중에 Ready_Component에서 
+초기화를 안 한 인덱스가 있으면 터지는 듯? 나중에 확인해보자.
+특히 모델
+

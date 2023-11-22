@@ -36,7 +36,7 @@ HRESULT CVIBuffer_Grid::Initialize_ProtoType(_uint _iTerrainWidth, _uint _iTerra
 		{
 			_uint iIndex = i * m_iNumVerticesX + j;
 
-			pVertices[iIndex].vPosition = _float3(j + 49.f, -7.82f, i);
+			pVertices[iIndex].vPosition = _float3((_float)j + 49.f, -7.82f, i);
 			pVertices[iIndex].vColor = _float4(1.f, 1.f, 1.f, 1.f);
 
 			m_pPos[iIndex] = pVertices[iIndex].vPosition;

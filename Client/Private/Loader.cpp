@@ -487,13 +487,31 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 
 #pragma region Armor
 
-	/* Merchant01 */
+	/* Merchant01 Female */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_TorsoF_Merchant01"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Merchant01/TorsoF/TorsoF_Merchant01.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_BootsF_Merchant01"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Merchant01/BootsF/BootsF_Merchant01.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
+
+	/* Blades Male */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_1stTorsoM_Blades"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Blades/TorsoM/1st/1stTorsoM_Blades.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_TorsoM_Blades"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Blades/TorsoM/3st/TorsoM_Blades.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_HelmetM_Blades"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Blades/HelmetM/HelmetM_Blades.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_GlovesM_Blades"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Blades/GlovesM/GlovesM_Blades.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_BootsM_Blades"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Blades/BootsM/BootsM_Blades.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+
 
 #pragma endregion
 
@@ -1995,13 +2013,28 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 
 #pragma region Armor
 
-	/* Merchant01 */
+	/* Merchant01 Female */
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_TorsoF_Merchant01"),
 		CTorsoF_Merchant01::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BootsF_Merchant01"),
 		CBootsF_Merchant01::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* Blades Male*/
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_TorsoM_Blades"),
+		CTorsoM_Blades::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HelmetM_Blades"),
+		CHelmetM_Blades::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_GlovesM_Blades"),
+		CGlovesM_Blades::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BootsM_Blades"),
+		CBootsM_Blades::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 #pragma endregion
 

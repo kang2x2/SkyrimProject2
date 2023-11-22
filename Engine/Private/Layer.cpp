@@ -44,7 +44,12 @@ void CLayer::PriorityTick(_float _fTimeDelta)
 	for (auto& iter : m_ltCloneObj)
 	{
 		if (iter != nullptr)
+		{
 			iter->PriorityTick(_fTimeDelta);
+
+			if (iter->Get_IsReadyDead())
+				iter->Set_IsDead(true);
+		}
 	}
 }
 
@@ -53,7 +58,10 @@ void CLayer::Tick(_float _fTimeDelta)
 	for (auto& iter : m_ltCloneObj)
 	{
 		if (iter != nullptr)
-			iter->Tick(_fTimeDelta);
+		{
+			if (!(iter->Get_IsReadyDead()))
+				iter->Tick(_fTimeDelta);
+		}
 	}
 }
 
@@ -68,19 +76,6 @@ void CLayer::LateTick(_float _fTimeDelta)
 				Safe_Release(iter);
 		}
 	}
-
-	//for (auto iter = m_ltCloneObj.begin(); iter != m_ltCloneObj.end(); )
-	//{
-	//	if ((*iter)->Get_IsDead())
-	//	{
-	//		Safe_Release(*iter);
-	//		iter = m_ltCloneObj.erase(iter);
-	//	}
-	//	else
-	//	{
-	//		++iter;
-	//	}
-	//}
 }
 
 CGameObject* CLayer::Find_CloneObject(const wstring& _strName)

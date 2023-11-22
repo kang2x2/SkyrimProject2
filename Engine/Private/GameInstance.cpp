@@ -276,6 +276,11 @@ map<const wstring, class CLayer*>* CGameInstance::Get_CloneObjectMapAry(_uint _i
 	return m_pObject_Manager->Get_CloneObjectMapAry(_iLevel);
 }
 
+map<const wstring, class CGameObject*> CGameInstance::Get_ProtoObjectMapAry()
+{
+	return m_pObject_Manager->Get_ProtoObjectMapAry();
+}
+
 /* Component Manager */
 HRESULT CGameInstance::Add_ProtoType_Component(_uint _iLevelIndex, const wstring& _strProtoTypeTag, CComponent* _pProtoTypeComponent)
 {

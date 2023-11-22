@@ -39,24 +39,6 @@ void CState_Player::Key_Input(_float _fTimeDelta)
 	if (pGameInstance->Get_DIKeyDown('F'))
 	{
 		m_pPlayer->Set_PlayerCam(m_pPlayer->Get_CurAnimationName().c_str(), m_pPlayer->Get_CurFrameIndex(), m_pPlayer->Get_CurAnimationIsLoop());
-
-		/* 무기 */
-		if (m_pPlayer->Get_PlayerEquipState() == CPlayer::EQUIP_ONEHAND)
-			m_pPlayer->Set_SoketBone("WEAPON");
-		else if (m_pPlayer->Get_PlayerEquipState() == CPlayer::EQUIP_UNEQUIP)
-			m_pPlayer->Set_SoketBone("WeaponSword");
-
-		/* 일반 상태 달리기가 이름이 다름. */
-		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST &&
-			m_pPlayer->Get_CurState() == CPlayer::UNEQUIP_RUN_F)
-		{
-			m_pPlayer->Play_Animation_All(true, "1hm_runforward", m_pPlayer->Get_CurFrameIndex());
-		}
-		else if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST &&
-			m_pPlayer->Get_CurState() == CPlayer::UNEQUIP_RUN_F)
-		{
-			m_pPlayer->Play_Animation_All(true, "mt_runforward", m_pPlayer->Get_CurFrameIndex());
-		}
 	}
 
 	Safe_Release(pGameInstance);

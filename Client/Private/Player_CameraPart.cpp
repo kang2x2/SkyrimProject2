@@ -53,6 +53,12 @@ HRESULT CPlayer_CameraPart::Initialize_Clone(void* _pArg)
 
 	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
 
+	/* 블레이즈 아머 꼈을 때 이상해서 임시로 설정해 둠. */
+	_float4 vPos;
+	XMStoreFloat4(&vPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	vPos.z -= 0.8f;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPos));
+
 	return S_OK;
 
 }

@@ -93,6 +93,20 @@ HRESULT CGameObject::Add_CloneComponent(_uint _iLevelIndex, const wstring& _strP
 	return S_OK;
 }
 
+HRESULT CGameObject::Add_CloneComponent(const wstring& _strComponentTag, CComponent* _pCopyTargetCom, CComponent** _ppOut)
+{
+	// 이미 등록 되어있는 컴포넌트 그룹이라면 실패. 
+	if (Find_ProtoTypeComponent(_strComponentTag) != nullptr)
+		return E_FAIL;
+
+	// 검색이 가능하게 map에 삽입
+	*_ppOut = _pCopyTargetCom;
+	m_mapComponent.emplace(_strComponentTag, _pCopyTargetCom);
+	Safe_AddRef(_pCopyTargetCom);
+
+	return S_OK;
+}
+
 CComponent* CGameObject::Find_ProtoTypeComponent(const wstring& _strProtoTypeTag)
 {
 	auto iter = m_mapComponent.find(_strProtoTypeTag);

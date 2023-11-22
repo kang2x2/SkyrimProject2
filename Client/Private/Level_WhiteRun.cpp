@@ -103,6 +103,33 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 	}
 #pragma endregion
 
+#pragma region Dynamic
+
+	filePath = TEXT("../Bin/SaveLoad/Outfit_NPC");
+	
+	// 파일을 열기 모드로 열기.
+	ifstream fileStream2(filePath, ios::binary);
+	if (fileStream2.is_open()) {
+		// 파일 내용을 읽기.
+	
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+	
+		pGameInstance->Object_FileLoad(fileStream2, LEVEL_GAMEPLAY);
+	
+		Safe_Release(pGameInstance);
+	
+		fileStream2.close();
+		MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
+	}
+	else {
+		MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
+		return E_FAIL;
+	}
+
+#pragma endregion
+
+
 	return S_OK;
 }
 
@@ -173,8 +200,8 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Player(const wstring& _strLayerTag)
 	Safe_AddRef(pGameInstance);
 
 	/* NPC 임시 생성 */
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Npc_Carlotta"))))
-		return E_FAIL;
+	// if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Npc_Carlotta"))))
+	// 	return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
 		return E_FAIL;

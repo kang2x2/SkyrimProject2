@@ -217,20 +217,8 @@
     <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor">
       <UniqueIdentifier>{daa3cf22-d568-4858-8e2c-ec448c7f1614}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\01. Boots">
-      <UniqueIdentifier>{5c473ff2-6cc8-4944-9a7e-3e78c5a76207}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet">
-      <UniqueIdentifier>{8dab02aa-99f6-47b1-af29-d04e8c0f58f8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\03. Gloves">
-      <UniqueIdentifier>{22d48169-c373-4961-8c30-3e09a7e8ef47}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\00. Glass">
       <UniqueIdentifier>{fbcddc44-d96c-49aa-aa30-cbb59c0937d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet\00. Glass">
-      <UniqueIdentifier>{85104bb0-dbf3-43fe-ab72-ca1191abb5b0}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip">
       <UniqueIdentifier>{fabeb582-8e47-4b5c-876b-525c5c38864d}</UniqueIdentifier>
@@ -544,6 +532,21 @@
     <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\02. AkaviriSword">
       <UniqueIdentifier>{08ca9abe-0a7e-4329-96ab-425bd43e3317}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades">
+      <UniqueIdentifier>{6023d684-f4a5-40e9-8360-cf4b0716914a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\00. Torso">
+      <UniqueIdentifier>{2f27a4b3-8e4f-4ee4-af2c-d08dfb705a92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\01. Helmet">
+      <UniqueIdentifier>{03777d23-171b-45a8-a22e-ccd335c2a2b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\02. Gloves">
+      <UniqueIdentifier>{f42ab91b-0e6c-44de-9108-05313e72d645}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\03. Boots">
+      <UniqueIdentifier>{88200998-9285-4022-90c3-522952e74a96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -728,12 +731,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\SkyrimArmor.h">
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\SkyrimHelmet.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Helmet_Glass.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet\00. Glass</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Falmer_UnEquip.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip</Filter>
@@ -1008,6 +1005,18 @@
     <ClInclude Include="..\Public\Weapon_AkaviriSword.h">
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\02. AkaviriSword</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TorsoM_Blades.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\00. Torso</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BootsM_Blades.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\03. Boots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GlovesM_Blades.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\02. Gloves</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\HelmetM_Blades.h">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\01. Helmet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1188,12 +1197,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\SkyrimArmor.cpp">
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\SkyrimHelmet.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Helmet_Glass.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\02. Helmet\00. Glass</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Falmer_UnEquip.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip</Filter>
@@ -1461,6 +1464,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Weapon_AkaviriSword.cpp">
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\02. AkaviriSword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TorsoM_Blades.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\00. Torso</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BootsM_Blades.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\03. Boots</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GlovesM_Blades.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\02. Gloves</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\HelmetM_Blades.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\01. Helmet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

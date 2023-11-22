@@ -35,10 +35,18 @@ public:
 	typedef struct tagAfterFileDesc
 	{
 		const char* m_strFileName;
-		wstring m_strObjTag;
+		wstring m_strObjTag = TEXT("");;
 		wstring m_strComTag = TEXT("");
 		_bool	m_bCheck = false;
 	}TOOL_AFTER_FILEDESC;
+
+	typedef struct tagProtoObjDesc 
+	{
+		string  m_strFileName;
+		wstring m_strObjTag = TEXT("");;
+		wstring m_strComTag = TEXT("");
+		_bool	m_bCheck = false;
+	}TOOL_PROTO_OBJDESC;
 
 	typedef struct tagLayOutDesc
 	{
@@ -78,6 +86,7 @@ private:
 
 	// Object Content
 	void    LayOut_FBX_List();
+	void    LayOut_Obj_List();
 	void    LayOut_Object_Transform();
 
 	// Light Content
@@ -136,8 +145,11 @@ private:
 	_bool m_bFindFolder = true;
 	_bool m_bFindFBX = true;
 
+	_bool m_bFindObj = true;
+
 	// 파일 확장자 불리언
 	_bool showFBXListShow = true;
+	_bool showOBJListShow = true;
 
 	// 파일 배열
 	set<filesystem::path> visitedDirectories;
@@ -148,8 +160,11 @@ private:
 	vector<wstring> m_vecBeforeFileList; // 변환 전 파일 이름 리스트
 	vector<TOOL_AFTER_FILEDESC> m_vecAfterFileDesc; // 변환 후 파일 정보 리스트
 
+	// OBJ
+	vector<TOOL_PROTO_OBJDESC> m_vecProtoObjDesc; // ProtoObj 저장 벡터
+
 	// 현재 list에서 선택된 파일 변수에 저장.
-	TOOL_AFTER_FILEDESC* m_pCurFile = nullptr;
+	TOOL_AFTER_FILEDESC  m_pCurFile;
 	wstring				 m_strCurLayerTag = TEXT(""); // 현재 선택된 폴더명을 레이어 태그로.
 	// 선택된 오브젝트
 	class CGameObject*   m_pSelectObject = nullptr;
@@ -162,7 +177,7 @@ private:
 	_bool				 m_bObjCreateMode = false;
 	_bool				 m_bObjDeleteMode = false;
 	_bool				 m_bObjSelectMode = false;	
-	_bool				 m_bDelete = false; // gui의 모든 작업이 끝나고 객체를 삭제하기 위함.
+	_bool				 m_bDead = false; // gui의 모든 작업이 끝나고 객체를 삭제하기 위함.
 
 	_float			     m_fRotValue = 0.f; // 오브젝트 회전을 위한 변수.
 

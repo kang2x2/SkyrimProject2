@@ -163,7 +163,6 @@ void CPlayer::Play_Animation(PLAYER_PARTS _ePart, _bool _bIsLoop, string _strAni
 		dynamic_cast<CPlayer_Hand*>(m_vecPlayerPart[PART_HAND])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
 	else if (_ePart == PART_FOOT)
 		dynamic_cast<CPlayer_Foot*>(m_vecPlayerPart[PART_FOOT])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
-
 }
 
 void CPlayer::Set_SoketBone(const char* _pBoneName)
@@ -185,10 +184,10 @@ void CPlayer::Set_PlayerCam(string _strAnimationName, _uint _iChangeIndex, _bool
 
 	/* Body Set */
 	CPlayer_Body* pBody = dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY]);
-	pBody->Set_MeshType(m_eCurCamMode, _strAnimationName, _iChangeIndex, _bIsLoop);
+	pBody->Set_MeshType(m_eCurCamMode);
 	/* Hand Set */
 	CPlayer_Hand* pHand = dynamic_cast<CPlayer_Hand*>(m_vecPlayerPart[PART_HAND]);
-	pHand->Set_MeshType(m_eCurCamMode, _strAnimationName, _iChangeIndex, _bIsLoop);
+	pHand->Set_MeshType(m_eCurCamMode);
 
 	/* Camera Set */
 	if (m_eCurCamMode == CAM_1ST)
@@ -209,6 +208,30 @@ void CPlayer::Set_PlayerCam(string _strAnimationName, _uint _iChangeIndex, _bool
 
 	dynamic_cast<CPlayer_CameraPart*>(m_vecPlayerPart[PART_CAMERA])->Set_PivotMatrix(
 		pBody->Get_SocketPivotMatrix());
+
+	/* 무기 */
+	if (m_eEquipState == EQUIP_ONEHAND)
+		Set_SoketBone("WEAPON");
+	else if (m_eEquipState == EQUIP_UNEQUIP)
+		Set_SoketBone("WeaponSword");
+
+	/* 일반 상태 달리기가 이름이 다름. */
+	if (m_eCurCamMode == CAM_1ST && m_eCurState == CPlayer::UNEQUIP_RUN_F)
+	{
+		Play_Animation_All(true, "1hm_runforward", dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_CurFrameIndex());
+	}
+	else if (m_eCurCamMode == CAM_3ST && m_eCurState == CPlayer::UNEQUIP_RUN_F)
+	{
+		Play_Animation_All(true, "mt_runforward", dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_CurFrameIndex());
+	}
+	else
+	{
+		Play_Animation_All(_bIsLoop, _strAnimationName, _iChangeIndex);
+	}
+
+
+
+
 }
 
 void CPlayer::Set_CurCell()

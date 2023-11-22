@@ -52,7 +52,9 @@ HRESULT CFalmerOH_Weapon::Initialize_Clone(void* _pArg)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	m_pWeapon = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Layer_Equip"), TEXT("FalmerAxe"));
+	pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_Weapon_FalmerAxe"));
+
+	m_pWeapon = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("FalmerAxe"));
 
 	Safe_Release(pGameInstance);
 

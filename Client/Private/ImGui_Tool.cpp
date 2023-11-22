@@ -55,7 +55,7 @@ void CImGui_Tool::Frame()
 		LayOut_CellSaveLoad();
 		LayOut_Navigation();
 
-		if (m_bDelete)
+		if (m_bDead)
 		{
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
 			Safe_AddRef(pGameInstance);
@@ -65,7 +65,7 @@ void CImGui_Tool::Frame()
 
 			Safe_Release(pGameInstance);
 
-			m_bDelete = false;
+			m_bDead = false;
 		}
 	
 		m_pNavigationCom->Update();
@@ -110,14 +110,14 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 			Create_Object();
 		if (m_bObjDeleteMode)
 		{
-			if (!m_bDelete)
+			if (!m_bDead)
 			{
 				m_pSelectObject = pGameInstance->Picking_Object(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
 
 				if (m_pSelectObject != nullptr)
 				{
 					m_pSelectObject->Set_IsDead(true);
-					m_bDelete = true;
+					m_bDead = true;
 				}
 			}
 
@@ -249,8 +249,8 @@ void CImGui_Tool::LayOut_Object_PickMode()
 
 	if (ImGui::Button("Create"))
 	{
-		if (m_pCurFile != nullptr)
-		{
+		//if (m_pCurFile != nullptr)
+		//{
 			m_bObjCreateMode = true;
 			m_bObjDeleteMode = false;
 			m_bObjSelectMode = false;
@@ -261,7 +261,7 @@ void CImGui_Tool::LayOut_Object_PickMode()
 			m_pSelectObject = nullptr;
 
 			m_bCellCreateMode = false;
-		}
+		//}
 	}
 	if (ImGui::Button("Delete"))
 	{
@@ -365,11 +365,21 @@ void CImGui_Tool::LayOut_Main()
 			m_bFindFBX = true;
 
 			showFBXListShow = true;
+			showOBJListShow = false;
+		}
+
+		if (ImGui::TabItemButton("OBJ"))
+		{
+			m_bFindObj = true;
+
+			showOBJListShow = true;
+			showFBXListShow = false;
 		}
 
 		ImGui::EndTabBar(); // 탭 그룹 종료
 
 		LayOut_FBX_List();
+		LayOut_Obj_List();
 		LayOut_Object_Transform();
 	}
 
@@ -450,7 +460,7 @@ void CImGui_Tool::LayOut_FBX_List()
 					// 현재 선택한 항목만 true로 설정.
 					m_vecAfterFileDesc[i].m_bCheck = true;
 					// 현재 선택된 파일 변수에 저장.
-					m_pCurFile = &m_vecAfterFileDesc[i];
+					m_pCurFile = m_vecAfterFileDesc[i];
 				}
 			}
 			ImGui::EndListBox();
@@ -458,6 +468,77 @@ void CImGui_Tool::LayOut_FBX_List()
 	}
 
 	LayOut_Object_PickMode();
+}
+
+void CImGui_Tool::LayOut_Obj_List()
+{
+	if (showOBJListShow)
+	{
+		ImGui::Text("File List");
+		ImGui::Image(nullptr, ImVec2(150, 150));
+
+		// 한 번만 오브젝트 검색
+		if (m_bFindObj)
+		{
+			m_vecProtoObjDesc.clear();
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			map<const wstring, CGameObject*> pTempMap = pGameInstance->Get_ProtoObjectMapAry();
+
+			for (auto iter = pTempMap.begin(); iter != pTempMap.end(); ++iter)
+			{
+				if (iter->second->Get_LayerTag() == TEXT("ProtoType_NPC"))
+				{
+					TOOL_PROTO_OBJDESC tempDesc;
+					/* 이름 유니코드 -> 멀티바이트 변환 */
+					wstring tempName = iter->second->Get_Name();
+					tempDesc.m_strFileName.assign(tempName.begin(), tempName.end());
+					tempDesc.m_strObjTag = iter->first;
+					tempDesc.m_bCheck = false;
+					m_vecProtoObjDesc.push_back(tempDesc);
+				}
+			}
+
+			Safe_Release(pGameInstance);
+
+			m_bFindObj = false;
+		}
+
+		// 파일 리스트
+		if (ImGui::BeginListBox("##listBox", ImVec2(215, 300)))
+		{
+			for (size_t i = 0; i < m_vecProtoObjDesc.size(); ++i)
+			{
+				// 현재 항목이 선택되었는지 확인
+				bool isSelected = m_vecProtoObjDesc[i].m_bCheck;
+
+				if (ImGui::Selectable(m_vecProtoObjDesc[i].m_strFileName.c_str(), isSelected))
+				{
+					// 항목을 클릭했을 때 다른 아이템들의 선택 상태를 false로 변경.
+					for (size_t i = 0; i < m_vecProtoObjDesc.size(); ++i)
+					{
+						if (m_vecProtoObjDesc[i].m_bCheck)
+						{
+							m_vecProtoObjDesc[i].m_bCheck = false;
+						}
+					}
+
+					// 현재 선택한 항목만 true로 설정.
+					m_vecProtoObjDesc[i].m_bCheck = true;
+					// 현재 선택된 파일 변수에 저장.
+					//if (m_pCurFile == nullptr)
+					//	m_pCurFile = new TOOL_AFTER_FILEDESC;
+
+					m_strCurLayerTag.assign(m_vecProtoObjDesc[i].m_strFileName.begin(), m_vecProtoObjDesc[i].m_strFileName.end());
+					m_pCurFile.m_strObjTag = m_vecProtoObjDesc[i].m_strObjTag;
+					m_pCurFile.m_strComTag = m_vecProtoObjDesc[i].m_strComTag;
+				}
+			}
+			ImGui::EndListBox();
+		}
+	}
 }
 
 void CImGui_Tool::LayOut_Object_Transform()
@@ -1047,7 +1128,7 @@ HRESULT CImGui_Tool::Create_Object()
 
 	// clone object
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, m_strCurLayerTag,
-		m_pCurFile->m_strObjTag, m_pCurFile->m_strComTag, &matInitialize)))
+		m_pCurFile.m_strObjTag, m_pCurFile.m_strComTag, &matInitialize)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -1077,6 +1158,11 @@ HRESULT CImGui_Tool::Select_Object()
 	XMStoreFloat4(&objPos, pTransform->Get_State(CTransform::STATE_POSITION));
 
 	Key_Input(pTransform);
+
+	string strObjName = "";
+	strObjName.assign(m_pSelectObject->Get_Name().begin(), m_pSelectObject->Get_Name().end());
+
+	ImGui::Text(strObjName.c_str());
 
 	ImGui::Text("PosX   ");
 	ImGui::SameLine();

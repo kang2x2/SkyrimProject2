@@ -83,4 +83,9 @@
 
 #include "TorsoF_Merchant01.h"
 #include "BootsF_Merchant01.h"
+
+#include "TorsoM_Blades.h"
+#include "HelmetM_Blades.h"
+#include "GlovesM_Blades.h"
+#include "BootsM_Blades.h"
 #pragma endregion

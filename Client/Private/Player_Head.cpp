@@ -33,6 +33,18 @@ HRESULT CPlayer_Head::Initialize_Clone(void* _pArg)
 
 	m_strName = TEXT("Player_Head");
 
+	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//Safe_AddRef(pGameInstance);
+	//
+	//pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_HelmetM_Blades"));
+	//
+	//CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("HelmetM_Blades"));
+	//
+	//m_pModelCom->SwapDesc_Armor(
+	//	dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_3stModel"))));
+	//
+	//Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -45,7 +57,10 @@ void CPlayer_Head::Tick(_float _fTimeDelta)
 
 void CPlayer_Head::LateTick(_float _fTimeDelta)
 {
-	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
+	if (dynamic_cast<CPlayer*>(m_pParent)->Get_CamMode() == CPlayer::CAM_3ST)
+	{
+		m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
+	}
 }
 
 HRESULT CPlayer_Head::Render()

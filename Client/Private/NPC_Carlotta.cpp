@@ -15,6 +15,7 @@
 CNPC_Carlotta::CNPC_Carlotta(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CSkyrim_NPC(_pDevice, _pContext)
 {
+	Initialize_ProtoType();
 }
 
 CNPC_Carlotta::CNPC_Carlotta(const CNPC_Carlotta& rhs)
@@ -24,6 +25,9 @@ CNPC_Carlotta::CNPC_Carlotta(const CNPC_Carlotta& rhs)
 
 HRESULT CNPC_Carlotta::Initialize_ProtoType()
 {
+	m_strName = TEXT("NPC_CarlottaValentia");
+	m_strLayerTag = TEXT("ProtoType_NPC");
+
 	return S_OK;
 }
 
@@ -64,17 +68,24 @@ HRESULT CNPC_Carlotta::Initialize_Clone(_uint _iLevel, const wstring& _strModelC
 	if (FAILED(Ready_Part()))
 		return E_FAIL;
 
+	/* 피킹할 때 메시가 무조건 있어야 한다. 즉, 바디의 모델을 가지고 있자. */
+	if (FAILED(__super::Add_CloneComponent(TEXT("Com_Model"), dynamic_cast<CModel*>(m_vecNpcPart[PART_BODY]->Get_Component(TEXT("Com_Model"))),
+		(CComponent**)&m_pModelCom)))
+		return E_FAIL;
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pMatPivot->r[3]);
+	m_pTransformCom->Set_Speed(3.f);
+
 	m_bHasMesh = true;
 	m_bCreature = true;
 	m_strName = TEXT("NPC_CarlottaValentia");
 	m_vOriginPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	m_pTransformCom->Set_Speed(3.f);
 
 	if (FAILED(Ready_State()))
 		return E_FAIL;
 
-	Play_Animation(true, "mt_runforward");
+	Play_Animation(true, "animobjectcounteridleloopleft");
 
 	return S_OK;
 }
@@ -90,7 +101,6 @@ void CNPC_Carlotta::PriorityTick(_float _fTimeDelta)
 
 void CNPC_Carlotta::Tick(_float _fTimeDelta)
 {
-
 	for (auto& iter : m_vecNpcPart)
 	{
 		if (iter != nullptr)
@@ -98,7 +108,9 @@ void CNPC_Carlotta::Tick(_float _fTimeDelta)
 	}
 
 	if (g_curLevel == LEVEL_GAMEPLAY)
+	{
 		//m_pStateManager->Update(_fTimeDelta);
+	}
 
 	__super::Tick(_fTimeDelta);
 
@@ -112,27 +124,36 @@ void CNPC_Carlotta::Tick(_float _fTimeDelta)
 		}
 	}
 
+	if (g_curLevel != LEVEL_TOOL)
+	{
+		_vector	vPosition = m_pNavigationCom->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		_float4 tempPos;
+		XMStoreFloat4(&tempPos, vPosition);
+		tempPos.y += 0.25f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&tempPos));
+	}
+
 }
 
 void CNPC_Carlotta::LateTick(_float _fTimeDelta)
 {
-	if (g_curLevel == LEVEL_GAMEPLAY)
-		// m_pStateManager->Late_Update();
-
-	for (auto& iter : m_vecNpcPart)
-	{
-		if (iter != nullptr)
-			iter->LateTick(_fTimeDelta);
-	}
+	//if (g_curLevel == LEVEL_GAMEPLAY)
+	//	// m_pStateManager->Late_Update();
+	//
+	//for (auto& iter : m_vecNpcPart)
+	//{
+	//	if (iter != nullptr)
+	//		iter->LateTick(_fTimeDelta);
+	//}
 
 #ifdef _DEBUG
 
-	for (auto& collider : m_pVecCollider)
-	{
-		/* 콜라이더를 그 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
-		if (collider != nullptr)
-			m_pRendererCom->Add_Debug(collider);
-	}
+	//for (auto& collider : m_pVecCollider)
+	//{
+	//	/* 콜라이더를 그 때도 오리지널을 그리는 게 아니라 행렬을 곱해놓은 aabb를 그린다. */
+	//	if (collider != nullptr)
+	//		m_pRendererCom->Add_Debug(collider);
+	//}
 
 #endif 
 
@@ -204,7 +225,7 @@ HRESULT CNPC_Carlotta::Ready_Part()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
+	
 	CGameObject* pPart = nullptr;
 
 	/* For. Body */
@@ -216,37 +237,37 @@ HRESULT CNPC_Carlotta::Ready_Part()
 	if (pPart == nullptr)
 		return E_FAIL;
 	m_vecNpcPart.push_back(pPart);
-
-	/* For. Head */
+	
+	///* For. Head */
 	CCarlotta_Head::PART_DESC HeadPartDesc;
 	HeadPartDesc.pParent = this;
 	HeadPartDesc.pParentTransform = m_pTransformCom;
-
+	
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Carlotta_HeadPart"), &HeadPartDesc);
 	if (pPart == nullptr)
 		return E_FAIL;
 	m_vecNpcPart.push_back(pPart);
-
+	
 	/* For. Hand */
 	CCarlotta_Hand::PART_DESC HandPartDesc;
 	HandPartDesc.pParent = this;
 	HandPartDesc.pParentTransform = m_pTransformCom;
-
+	
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Carlotta_HandPart"), &HandPartDesc);
 	if (pPart == nullptr)
 		return E_FAIL;
 	m_vecNpcPart.push_back(pPart);
-
+	
 	/* For. Foot */
 	CCarlotta_Foot::PART_DESC FootPartDesc;
 	FootPartDesc.pParent = this;
 	FootPartDesc.pParentTransform = m_pTransformCom;
-
+	
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Carlotta_FootPart"), &FootPartDesc);
 	if (pPart == nullptr)
 		return E_FAIL;
 	m_vecNpcPart.push_back(pPart);
-
+	
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -257,9 +278,13 @@ HRESULT CNPC_Carlotta::Ready_Component(_uint _iLevel)
 	__super::Ready_Component();
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(10.f, -1.3f, 12.f, 1.f));
-	m_pNavigationCom->Set_CurCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	_vector	vPosition = m_pNavigationCom->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	
+	if (g_curLevel != LEVEL_TOOL)
+	{
+		m_pNavigationCom->Set_CurCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		_vector	vPosition = m_pNavigationCom->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	}
 
 #pragma region Collider
 

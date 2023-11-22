@@ -33,6 +33,18 @@ HRESULT CPlayer_Foot::Initialize_Clone(void* _pArg)
 
 	m_strName = TEXT("Player_Foot");
 
+	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//Safe_AddRef(pGameInstance);
+	//
+	//pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_BootsM_Blades"));
+	//
+	//CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("BootsM_Blades"));
+	//
+	//m_pModelCom->SwapDesc_Armor(
+	//	dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_3stModel"))));
+	//
+	//Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -45,7 +57,10 @@ void CPlayer_Foot::Tick(_float _fTimeDelta)
 
 void CPlayer_Foot::LateTick(_float _fTimeDelta)
 {
-	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
+	if (dynamic_cast<CPlayer*>(m_pParent)->Get_CamMode() == CPlayer::CAM_3ST)
+	{
+		m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
+	}
 }
 
 HRESULT CPlayer_Foot::Render()

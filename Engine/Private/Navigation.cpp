@@ -338,7 +338,7 @@ HRESULT CNavigation::Set_CurCell(_fvector vPos)
 	_float fMinDistance = FLT_MAX;
 	_int   iSaveCellIndex = -1;
 
-	for(size_t i = 0; i < m_vecCell.size(); ++i)
+	for(_int i = 0; i < m_vecCell.size(); ++i)
 	{
 		_float3 PosA = *m_vecCell[i]->Get_LocalPoints(CCell::POINT_A);
 		_float3 PosB = *m_vecCell[i]->Get_LocalPoints(CCell::POINT_B);
