@@ -184,6 +184,12 @@
     <Filter Include="01. Utiltiy\07 Collison">
       <UniqueIdentifier>{164008c9-aec4-42b8-be94-0ebdb3640ad3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utiltiy\10. Font">
+      <UniqueIdentifier>{89186f63-e43c-4d2e-94b1-0cee3a512efb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\10. Font\00. Manager">
+      <UniqueIdentifier>{11208408-89f6-4115-9827-e44efd0dca76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -357,6 +363,12 @@
     <ClInclude Include="..\Public\Target_Manager.h">
       <Filter>01. Utiltiy\09. RenderTarget\00. Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\CustomFont.h">
+      <Filter>01. Utiltiy\10. Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MyFont_Manager.h">
+      <Filter>01. Utiltiy\10. Font\00. Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Graphic_Device.cpp">
@@ -514,6 +526,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Target_Manager.cpp">
       <Filter>01. Utiltiy\09. RenderTarget\00. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CustomFont.cpp">
+      <Filter>01. Utiltiy\10. Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MyFont_Manager.cpp">
+      <Filter>01. Utiltiy\10. Font\00. Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@
 #include "Light_Manager.h"
 #include "Collision_Manager.h"
 #include "Target_Manager.h"
+#include "MyFont_Manager.h"
 #include "MyFile_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -23,6 +24,7 @@ CGameInstance::CGameInstance()
 	, m_pLight_Manager(CLight_Manager::GetInstance())
 	, m_pCollision_Manager(CCollision_Manager::GetInstance())
 	, m_pTarget_Manager(CTarget_Manager::GetInstance())
+	, m_pMyFont_Manager(CMyFont_Manager::GetInstance())
 	, m_pPipeLine(CPipeLine::GetInstance())
 	, m_pMyFile_Manager(CMyFile_Manager::GetInstance())
 {
@@ -36,6 +38,7 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pLight_Manager);
 	Safe_AddRef(m_pCollision_Manager);
 	Safe_AddRef(m_pTarget_Manager);
+	Safe_AddRef(m_pMyFont_Manager);
 	Safe_AddRef(m_pPipeLine);
 	Safe_AddRef(m_pMyFile_Manager);
 }
@@ -391,6 +394,23 @@ _bool CGameInstance::Collision_Out(CCollider* _pCollider, CCollider* _pTargetCol
 	return m_pCollision_Manager->Collision_Out(_pCollider, _pTargetCollider);
 }
 
+/* Font_Manager */
+HRESULT CGameInstance::Add_Font(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const wstring& _strFontTag, const wstring& _strFontFilePath)
+{
+	if (m_pMyFont_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pMyFont_Manager->Add_Font(_pDevice, _pContext, _strFontTag, _strFontFilePath);
+}
+
+HRESULT CGameInstance::Render_Font(const wstring& _strFontTag, const wstring& _strText, const _float2& _vPos, FXMVECTOR _vColor, float _fRotation, XMFLOAT2 const& _vOrigin, float _fScale)
+{
+	if (m_pMyFont_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pMyFont_Manager->Render(_strFontTag, _strText, _vPos, _vColor, _fRotation, _vOrigin, _fScale);
+}
+
 /* File Manager */
 HRESULT CGameInstance::StaticObject_FileSave(ofstream& _outFile, _uint _iLevelIndex) const
 {
@@ -467,6 +487,7 @@ CBin_AIScene* CGameInstance::Binary_InFile(const char* _strFilePath, CModel::MOD
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::GetInstance()->DestroyInstance();
+	CMyFont_Manager::GetInstance()->DestroyInstance();
 	CMyFile_Manager::GetInstance()->DestroyInstance();
 	CPipeLine::GetInstance()->DestroyInstance();
 	CTarget_Manager::GetInstance()->DestroyInstance();
@@ -494,5 +515,6 @@ void CGameInstance::Free()
 	Safe_Release(m_pLight_Manager);
 	Safe_Release(m_pTarget_Manager);
 	Safe_Release(m_pCollision_Manager);
+	Safe_Release(m_pMyFont_Manager);
 	Safe_Release(m_pMyFile_Manager);
 }

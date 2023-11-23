@@ -148,8 +148,8 @@ HRESULT CLevel_WhiteRun::Ready_Light()
 	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
 	
 	LightDesc.vDiffuse = _float4(0.01f, 0.01f, 0.01f, 1.f);
-	LightDesc.vAmbient = _float4(0.01f, 0.01f, 0.01f, 1.f);
-	LightDesc.vSpecular = _float4(0.05f, 0.05f, 0.05f, 1.f);
+	LightDesc.vAmbient = _float4(0.1f, 0.1f, 0.1f, 1.f);
+	LightDesc.vSpecular = _float4(0.1f, 0.1f, 0.1f, 1.f);
 	
 	if (FAILED(pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;

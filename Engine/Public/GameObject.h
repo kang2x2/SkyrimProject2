@@ -8,7 +8,7 @@ BEGIN(Engine)
 class ENGINE_DLL CGameObject abstract : public CBase
 {
 protected:
-	// 레이어와 행렬을 겟함수를 따로 만들거임
+	// 레이어와 행렬은 겟함수를 따로 만들거임
 	typedef struct tagObjFileDesc
 	{
 		wstring		m_strLayerTag;

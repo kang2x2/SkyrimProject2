@@ -73,11 +73,18 @@ public: /* For. PipeLine */
 	_float4 Get_CamPosition_Float4()const;
 	_vector Get_CamPosition_Vector()const;
 
-public: /* For. Collision Manager */
+public: /* For. Collision_Manager */
 	void Collision_AABBTransition(CCollider * _pCollider, CCollider * _pTargetCollider);
 	_bool Collision_Enter(CCollider* _pCollider, CCollider* _pTargetCollider);
 	_bool Collision_Stay(CCollider * _pCollider, CCollider * _pTargetCollider);
 	_bool Collision_Out(CCollider * _pCollider, CCollider * _pTargetCollider);
+
+public: /* For. MyFont_Manager*/
+	HRESULT Add_Font(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext,
+		const wstring & _strFontTag, const wstring & _strFontFilePath);
+	HRESULT Render_Font(const wstring & _strFontTag, const wstring & _strText, const _float2 & _vPos,
+		FXMVECTOR _vColor = XMVectorZero(), float _fRotation = 0.f,
+		XMFLOAT2 const& _vOrigin = _float2(0.f, 0.f), float _fScale = 1.f);
 
 public: /* For. File Manager */
 	HRESULT StaticObject_FileSave(ofstream & _outFile, _uint _iLevelIndex) const;
@@ -100,8 +107,9 @@ private:
 	class CComponent_Manager*	m_pComponent_Manager = nullptr;
 	class CLight_Manager*		m_pLight_Manager = nullptr;
 	class CCollision_Manager*	m_pCollision_Manager = nullptr;
-	class CTarget_Manager* m_pTarget_Manager = nullptr;
-	class CPipeLine*		    m_pPipeLine = nullptr;
+	class CMyFont_Manager*		m_pMyFont_Manager = nullptr;
+	class CTarget_Manager*		m_pTarget_Manager = nullptr;
+	class CPipeLine*			m_pPipeLine = nullptr;
 	class CMyFile_Manager*		m_pMyFile_Manager = nullptr;
 
 public:

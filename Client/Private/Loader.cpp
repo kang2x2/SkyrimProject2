@@ -178,14 +178,47 @@ HRESULT CLoader::Loading_For_Level_Logo()
 
 	/* Mesh */
 	m_strLoadingText = TEXT("Loading Mesh.");
+	_matrix matInitialize = XMMatrixIdentity();
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstanc);
+
+	/* Logo */
+	matInitialize = XMMatrixScaling(0.0011f, 0.0011f, 0.0011f);
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("ProtoType_Component_Model_LogoObj"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Logo/Logo.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstanc);
+
 
 	/* Shader */
 	m_strLoadingText = TEXT("Loading Shader.");
+	/* Shader_VtxNorTex */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("ProtoType_Component_Shader_VtxNorTex"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
+		return E_FAIL;
+	/* Shader_VtxNonAnimMesh */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNonAnimMesh.hlsl"), VTX_NONANIMMESH::Elements, VTX_NONANIMMESH::iNumElements))))
+		return E_FAIL;
+
 
 	/* GameObject(원본) */
 	m_strLoadingText = TEXT("Loading ProtoType_GameObject.");
-	// BackGround_ProtoType
-	if (FAILED(pGameInstanc->Add_ProtoObject(TEXT("ProtoType_GameObject_BackGround"), CBackGround::Create(m_pDevice, m_pContext))))
+	
+	/* Camera */
+	if (FAILED(pGameInstanc->Add_ProtoObject(TEXT("ProtoType_GameObject_Camera_Logo"),
+		CLogo_Camera::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* BackGround */
+	if (FAILED(pGameInstanc->Add_ProtoObject(TEXT("ProtoType_GameObject_BackGround"),
+		CBackGround::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* Logo Obj */
+	if (FAILED(pGameInstanc->Add_ProtoObject(TEXT("ProtoType_GameObject_Logo"), 
+		CSkyrim_LogoObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	
 	/* 로딩 끝 */

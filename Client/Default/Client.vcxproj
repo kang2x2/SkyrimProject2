@@ -189,9 +189,13 @@
     <ClInclude Include="..\Public\BootsM_Blades.h" />
     <ClInclude Include="..\Public\GlovesM_Blades.h" />
     <ClInclude Include="..\Public\HelmetM_Blades.h" />
+    <ClInclude Include="..\Public\Logo_Camera.h" />
     <ClInclude Include="..\Public\Player_Foot.h" />
     <ClInclude Include="..\Public\Player_Hand.h" />
     <ClInclude Include="..\Public\Player_Head.h" />
+    <ClInclude Include="..\Public\SkyrimUI.h" />
+    <ClInclude Include="..\Public\SkyrimUI_Text.h" />
+    <ClInclude Include="..\Public\Skyrim_LogoObj.h" />
     <ClInclude Include="..\Public\TorsoF_Merchant01.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Building.h" />
@@ -230,7 +234,6 @@
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\SkyrimArmor.h" />
     <ClInclude Include="..\Public\SkyrimRock.h" />
-    <ClInclude Include="..\Public\SkyrimUI.h" />
     <ClInclude Include="..\Public\SkyrimWeapon.h" />
     <ClInclude Include="..\Public\Skyrim_NPC.h" />
     <ClInclude Include="..\Public\SpiderEgg.h" />
@@ -346,9 +349,13 @@
     <ClCompile Include="..\Private\BootsM_Blades.cpp" />
     <ClCompile Include="..\Private\GlovesM_Blades.cpp" />
     <ClCompile Include="..\Private\HelmetM_Blades.cpp" />
+    <ClCompile Include="..\Private\Logo_Camera.cpp" />
     <ClCompile Include="..\Private\Player_Foot.cpp" />
     <ClCompile Include="..\Private\Player_Hand.cpp" />
     <ClCompile Include="..\Private\Player_Head.cpp" />
+    <ClCompile Include="..\Private\SkyrimUI.cpp" />
+    <ClCompile Include="..\Private\SkyrimUI_Text.cpp" />
+    <ClCompile Include="..\Private\Skyrim_LogoObj.cpp" />
     <ClCompile Include="..\Private\TorsoF_Merchant01.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Building.cpp" />
@@ -386,7 +393,6 @@
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SkyrimArmor.cpp" />
     <ClCompile Include="..\Private\SkyrimRock.cpp" />
-    <ClCompile Include="..\Private\SkyrimUI.cpp" />
     <ClCompile Include="..\Private\SkyrimWeapon.cpp" />
     <ClCompile Include="..\Private\Skyrim_NPC.cpp" />
     <ClCompile Include="..\Private\SpiderEgg.cpp" />

@@ -547,6 +547,15 @@
     <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\03. Boots">
       <UniqueIdentifier>{88200998-9285-4022-90c3-522952e74a96}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\00. Logo\00. Logo">
+      <UniqueIdentifier>{6a0599f1-778d-4887-baf8-bfae436f5ded}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\00. Logo\01. Camera">
+      <UniqueIdentifier>{c8427361-904f-4a89-a579-87c3e37dca70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\00. TextUI">
+      <UniqueIdentifier>{01694929-5a4d-41b7-9daa-eb89fb98b3b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -698,9 +707,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Inventory.h">
       <Filter>04. UI\05. Inventory</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\SkyrimUI.h">
-      <Filter>04. UI</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_UnEquip.h">
       <Filter>03. State\00. Player\01. State\01. OneHand\04. Equip</Filter>
@@ -894,9 +900,6 @@
     <ClInclude Include="..\Public\StatePlayerOH_BlockHit.h">
       <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\02. Hit</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\MainApp.h">
-      <Filter>01. Level</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Falmer_OneHand.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand</Filter>
     </ClInclude>
@@ -1016,6 +1019,21 @@
     </ClInclude>
     <ClInclude Include="..\Public\HelmetM_Blades.h">
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\01. Helmet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Skyrim_LogoObj.h">
+      <Filter>02. GameObject\00. Logo\00. Logo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Logo_Camera.h">
+      <Filter>02. GameObject\00. Logo\01. Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MainApp.h">
+      <Filter>00. MainApp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimUI.h">
+      <Filter>04. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimUI_Text.h">
+      <Filter>04. UI\00. TextUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1167,9 +1185,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Inventory.cpp">
       <Filter>04. UI\05. Inventory</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\SkyrimUI.cpp">
-      <Filter>04. UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_UnEquip.cpp">
       <Filter>03. State\00. Player\01. State\01. OneHand\04. Equip</Filter>
@@ -1476,6 +1491,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\HelmetM_Blades.cpp">
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\01. Helmet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Skyrim_LogoObj.cpp">
+      <Filter>02. GameObject\00. Logo\00. Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Logo_Camera.cpp">
+      <Filter>02. GameObject\00. Logo\01. Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimUI.cpp">
+      <Filter>04. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimUI_Text.cpp">
+      <Filter>04. UI\00. TextUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

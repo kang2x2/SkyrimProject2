@@ -34,6 +34,11 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Ready_ProtoType_Components()))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Bold"), TEXT("../Bin/Resource/Fonts/Bold.spriteFont"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_ExtraBold"), TEXT("../Bin/Resource/Fonts/ExtraBold.spriteFont"))))
+		return E_FAIL;
+
 	// 레벨 생성
 	if (FAILED(Open_Level(LEVEL_LOGO)))
 		return E_FAIL;
@@ -43,6 +48,10 @@ HRESULT CMainApp::Initialize()
 
 void CMainApp::Tick(_float _fTimeDelta)
 {
+#ifdef _DEBUG
+	m_fTimeAcc += _fTimeDelta;
+#endif
+
 	m_pGameInstance->Tick(_fTimeDelta);
 }
 
@@ -51,12 +60,31 @@ HRESULT CMainApp::Render()
 	if(g_curLevel == LEVEL_GAMEPLAY || g_curStage == STAGE_DUNGEON)
 		m_pGameInstance->Clear_BackBuffer_View(_float4(0.01f, 0.02f, 0.1f, 1.f));
 	else
-		m_pGameInstance->Clear_BackBuffer_View(_float4(0.01f, 0.02f, 0.1f, 1.f));
+		m_pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
 
 	m_pGameInstance->Clear_DepthStencil_View();
 
 	// 그리기
 	m_pRenderer->Draw_RenderObjects();
+
+#ifdef _DEBUG
+	++m_iRenderCount;
+
+	if (m_fTimeAcc >= 1.f)
+	{
+		m_fTimeAcc = 0;
+		wsprintf(m_szFPS, TEXT("금쪽아 Fighting : %d"), m_iRenderCount);
+
+		m_iRenderCount = 0;
+	}
+
+
+	m_pGameInstance->Render_Font(TEXT("Font_Default"), m_szFPS, _float2(0.f, 0.f), XMVectorSet(1.f, 0.f, 0.f, 1.f));
+
+#endif
+
+
+
 	m_pGameInstance->AfterRender();
 
 	m_pGameInstance->Present();

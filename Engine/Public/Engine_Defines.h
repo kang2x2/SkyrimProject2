@@ -38,6 +38,7 @@ using namespace DirectX;
 
 // imgui 문자열 관련
 #include <string>
+#include <tchar.h>
 #include <atlstr.h>
 #include <locale>
 #include <codecvt>

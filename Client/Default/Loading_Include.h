@@ -1,7 +1,9 @@
 #pragma once
 
 // Logo Level
+#include "Logo_Camera.h"
 #include "BackGround.h"
+#include "Skyrim_LogoObj.h"
 
 // GamePlay Level
 #include "Navigation_Client.h"
