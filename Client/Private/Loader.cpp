@@ -167,12 +167,12 @@ HRESULT CLoader::Loading_For_Level_Tool()
 
 HRESULT CLoader::Loading_For_Level_Logo()
 {
-	CGameInstance* pGameInstanc = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstanc);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
 	/* Texture */
 	m_strLoadingText = TEXT("Loading Texture.");
-	if(FAILED(pGameInstanc->Add_ProtoType_Component(LEVEL_LOGO, TEXT("Prototype_Component_Texture_BackGround"),
+	if(FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("Prototype_Component_Texture_BackGround"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/LogoBackGround.dds"), 1))))
 		return E_FAIL;
 
@@ -180,17 +180,11 @@ HRESULT CLoader::Loading_For_Level_Logo()
 	m_strLoadingText = TEXT("Loading Mesh.");
 	_matrix matInitialize = XMMatrixIdentity();
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstanc);
-
 	/* Logo */
 	matInitialize = XMMatrixScaling(0.0011f, 0.0011f, 0.0011f);
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("ProtoType_Component_Model_LogoObj"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Logo/Logo.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
-
-	Safe_Release(pGameInstanc);
-
 
 	/* Shader */
 	m_strLoadingText = TEXT("Loading Shader.");
@@ -208,21 +202,21 @@ HRESULT CLoader::Loading_For_Level_Logo()
 	m_strLoadingText = TEXT("Loading ProtoType_GameObject.");
 	
 	/* Camera */
-	if (FAILED(pGameInstanc->Add_ProtoObject(TEXT("ProtoType_GameObject_Camera_Logo"),
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Camera_Logo"),
 		CLogo_Camera::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* BackGround */
-	if (FAILED(pGameInstanc->Add_ProtoObject(TEXT("ProtoType_GameObject_BackGround"),
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BackGround"),
 		CBackGround::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	/* Logo Obj */
-	if (FAILED(pGameInstanc->Add_ProtoObject(TEXT("ProtoType_GameObject_Logo"), 
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Logo"),
 		CSkyrim_LogoObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	
 	/* ·Îµù ³¡ */
-	Safe_Release(pGameInstanc);
+	Safe_Release(pGameInstance);
 	
 	m_strLoadingText = TEXT("Loading Complete");
 	m_bIsFinish = true;
@@ -395,26 +389,30 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 
 #pragma region Shader
 		/* Shader */
+		// Shader_VtxPosTex
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Shader_VtxPosTex"),
+			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+			return E_FAIL;
+		// ViBuffer_Rect
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_VIBuffer_Rect"),
+			CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
 		/* Shader_VtxNorTex */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_VtxNorTex"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
 			return E_FAIL;
-
 		/* Shader_VtxAnimMesh */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxAnimMesh.hlsl"), VTX_ANIMMESH::Elements, VTX_ANIMMESH::iNumElements))))
 			return E_FAIL;
-
 		/* Shader_VtxNonAnimMesh */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNonAnimMesh.hlsl"), VTX_NONANIMMESH::Elements, VTX_NONANIMMESH::iNumElements))))
 			return E_FAIL;
-
 		/* Shader_VtxCube */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_VtxCube"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxCube.hlsl"), VTXCUBE::Elements, VTXCUBE::iNumElements))))
 			return E_FAIL;
-
 		/* Shader_Rect_Instance */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_Rect_Instance"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Rect_Instance.hlsl"), VTX_RECT_INSTANCE::Elements, VTX_RECT_INSTANCE::iNumElements))))
@@ -433,13 +431,8 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 			return E_FAIL;
 #pragma endregion
 
-#pragma region Mesh
 		Set_ProtoType_PublicMesh(_eLevel);
-#pragma endregion
-
-#pragma region GameObject
 		Set_ProtoType_PublicObject();
-#pragma endregion
 
 		g_bIsPublicInit = true;
 	}
@@ -2067,11 +2060,25 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BootsM_Blades"),
 		CBootsM_Blades::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
-
 #pragma endregion
 
+#pragma region UI
 
+	/* Inventory */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_UI_Inventory"),
+		CInventory::Create(m_pDevice, m_pContext))))
+		return E_FAIL;	
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Inventory_CategoryPart"),
+		CInventory_ItemCategory::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BootsM_Blades"),
+	//	CInventory_ItemList::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BootsM_Blades"),
+	//	CInventory_UnderBar::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+
+#pragma endregion
 
 #pragma region Rock
 

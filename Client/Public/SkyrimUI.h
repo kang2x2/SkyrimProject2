@@ -17,6 +17,8 @@ BEGIN(Client)
 
 class CSkyrimUI abstract : public CGameObject
 {
+public:
+	enum UI_EVENT { UIEVENT_NONE, UIEVENT_CHANGESCENE, UIEVENT_END };
 protected:
 	CSkyrimUI(ID3D11Device* _pDeviec, ID3D11DeviceContext* _pContext);
 	CSkyrimUI(const CSkyrimUI& rhs);
@@ -35,6 +37,8 @@ protected: /* 사용할 컴포넌트들 */
 	CVIBuffer_Rect* m_pVIBufferCom = nullptr;
 	CTexture*		m_pTextureCom = nullptr;
 	CTransform*		m_pTransformCom = nullptr;
+
+	UI_EVENT		m_eEvent = UIEVENT_NONE;
 
 protected:
 	HRESULT Ready_Component();

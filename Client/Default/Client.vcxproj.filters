@@ -16,9 +16,6 @@
     <Filter Include="01. Level\99. Loading">
       <UniqueIdentifier>{5e620f48-9fc8-4fe1-bc17-d4d06f45d5ff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Level\99. Loading\Loader">
-      <UniqueIdentifier>{8079db18-0aef-4bd2-a93d-a6c0f46b68c1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="97. ShaderFile">
       <UniqueIdentifier>{9d4008ed-1b3d-4abd-beca-3a3e09aad5e9}</UniqueIdentifier>
     </Filter>
@@ -547,14 +544,41 @@
     <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\03. Boots">
       <UniqueIdentifier>{88200998-9285-4022-90c3-522952e74a96}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\00. Logo\00. Logo">
-      <UniqueIdentifier>{6a0599f1-778d-4887-baf8-bfae436f5ded}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\00. Logo\01. Camera">
       <UniqueIdentifier>{c8427361-904f-4a89-a579-87c3e37dca70}</UniqueIdentifier>
     </Filter>
     <Filter Include="04. UI\00. TextUI">
       <UniqueIdentifier>{01694929-5a4d-41b7-9daa-eb89fb98b3b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\01. SceneChangeUI">
+      <UniqueIdentifier>{3816e05b-bd99-4894-a7d5-d917a483efc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Level\99. Loading\00. Loader">
+      <UniqueIdentifier>{8079db18-0aef-4bd2-a93d-a6c0f46b68c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\02. Loading">
+      <UniqueIdentifier>{0836be53-3dae-45d7-9d60-f910acc88bc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\02. Loading\00. Falmer">
+      <UniqueIdentifier>{1740203b-c1a6-4b1b-a373-08b789024ad0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\02. Loading\99. Camera">
+      <UniqueIdentifier>{536762bc-ca3e-407a-8830-2030625f3c4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\00. Logo\00. LogoObj">
+      <UniqueIdentifier>{6a0599f1-778d-4887-baf8-bfae436f5ded}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\05. Inventory\00. Part">
+      <UniqueIdentifier>{f424e583-2a99-4266-aafa-f102655fc60b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\05. Inventory\00. Part\00. ItemCategory">
+      <UniqueIdentifier>{ad386627-3726-4150-9316-fdea3cc79bc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\05. Inventory\00. Part\01. ItemList">
+      <UniqueIdentifier>{435c81cb-d84c-44fb-a8c4-d32dd158c5f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\05. Inventory\00. Part\02. UnderBar">
+      <UniqueIdentifier>{85e84c06-d84f-4709-9ea2-51303f4fd411}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -571,7 +595,7 @@
       <Filter>98. Default</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Loader.h">
-      <Filter>01. Level\99. Loading\Loader</Filter>
+      <Filter>01. Level\99. Loading\00. Loader</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Logo.h">
       <Filter>01. Level\01. Logo</Filter>
@@ -1021,7 +1045,7 @@
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\01. Helmet</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Skyrim_LogoObj.h">
-      <Filter>02. GameObject\00. Logo\00. Logo</Filter>
+      <Filter>02. GameObject\00. Logo\00. LogoObj</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Logo_Camera.h">
       <Filter>02. GameObject\00. Logo\01. Camera</Filter>
@@ -1032,8 +1056,26 @@
     <ClInclude Include="..\Public\SkyrimUI.h">
       <Filter>04. UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\SkyrimUI_Text.h">
-      <Filter>04. UI\00. TextUI</Filter>
+    <ClInclude Include="..\Public\SkyrimUI_SceneChange.h">
+      <Filter>04. UI\01. SceneChangeUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\LoadingObj_Falmer.h">
+      <Filter>02. GameObject\02. Loading\00. Falmer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Loading_Camera.h">
+      <Filter>02. GameObject\02. Loading\99. Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Inventory_ItemCategory.h">
+      <Filter>04. UI\05. Inventory\00. Part\00. ItemCategory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Inventory_ItemList.h">
+      <Filter>04. UI\05. Inventory\00. Part\01. ItemList</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Inventory_UnderBar.h">
+      <Filter>04. UI\05. Inventory\00. Part\02. UnderBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Inventory_PartBase.h">
+      <Filter>04. UI\05. Inventory\00. Part</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1052,7 +1094,7 @@
       <Filter>00. MainApp</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Loader.cpp">
-      <Filter>01. Level\99. Loading\Loader</Filter>
+      <Filter>01. Level\99. Loading\00. Loader</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Logo.cpp">
       <Filter>01. Level\01. Logo</Filter>
@@ -1493,7 +1535,7 @@
       <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\01. Helmet</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Skyrim_LogoObj.cpp">
-      <Filter>02. GameObject\00. Logo\00. Logo</Filter>
+      <Filter>02. GameObject\00. Logo\00. LogoObj</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Logo_Camera.cpp">
       <Filter>02. GameObject\00. Logo\01. Camera</Filter>
@@ -1501,8 +1543,26 @@
     <ClCompile Include="..\Private\SkyrimUI.cpp">
       <Filter>04. UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\SkyrimUI_Text.cpp">
-      <Filter>04. UI\00. TextUI</Filter>
+    <ClCompile Include="..\Private\SkyrimUI_SceneChange.cpp">
+      <Filter>04. UI\01. SceneChangeUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LoadingObj_Falmer.cpp">
+      <Filter>02. GameObject\02. Loading\00. Falmer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Loading_Camera.cpp">
+      <Filter>02. GameObject\02. Loading\99. Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Inventory_ItemCategory.cpp">
+      <Filter>04. UI\05. Inventory\00. Part\00. ItemCategory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Inventory_ItemList.cpp">
+      <Filter>04. UI\05. Inventory\00. Part\01. ItemList</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Inventory_UnderBar.cpp">
+      <Filter>04. UI\05. Inventory\00. Part\02. UnderBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Inventory_PartBase.cpp">
+      <Filter>04. UI\05. Inventory\00. Part</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

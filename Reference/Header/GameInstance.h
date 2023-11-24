@@ -43,6 +43,7 @@ public: /* For.Calculator */
 
 public: /* For.Level_Manager */
 	HRESULT Open_Level(_uint _iLevelIndex, class CLevel* _pLevel);
+	void	Set_IsChange(_bool _isChange, _uint _iLevelIdx, _uint _iStageIdx);
 
 public: /* For.Object_Manager */
 	HRESULT Add_ProtoObject(const wstring& _strProtoTypeTag, class CGameObject* _pGameObject);

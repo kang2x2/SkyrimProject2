@@ -10,6 +10,13 @@
 #include "Level_WhiteRun.h"
 #include "Level_Dungeon.h"
 
+#include "Loading_Camera.h"
+#include "LoadingObj_Falmer.h"
+
+#include "SkyrimUI_SceneChange.h"
+#include "Inventory.h"
+
+
 CLevel_Loading::CLevel_Loading(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CLevel(_pDevice, _pContext)
 {
@@ -18,6 +25,17 @@ CLevel_Loading::CLevel_Loading(ID3D11Device* _pDevice, ID3D11DeviceContext* _pCo
 HRESULT CLevel_Loading::Initialize(LEVELID _eNextLevel)
 {
 	m_eNextLevel = _eNextLevel;
+
+	if (!g_bIsStaticInit)
+	{
+		if (FAILED(Ready_StaticInit()))
+			return E_FAIL;
+
+		g_bIsStaticInit = true;
+	}
+
+	if (FAILED(Ready_LoadingClone(TEXT("Layer_Loading"))))
+		return E_FAIL;
 
 	// 다음 레벨에 대한 로딩을 수행
 	m_pLoader = CLoader::Create(m_pDevice, m_pContext, m_eNextLevel);
@@ -30,6 +48,11 @@ HRESULT CLevel_Loading::Initialize(LEVELID _eNextLevel)
 
 HRESULT CLevel_Loading::Tick(_float _fTimeDelta)
 {
+	if (m_eNextLevel != LEVEL_LOGO)
+	{
+
+	}
+
 	return S_OK;
 }
 
@@ -39,45 +62,129 @@ HRESULT CLevel_Loading::LateTick(_float _fTimeDelta)
 
 	SetWindowText(g_hWnd, strLoadingText.c_str());
 
- 	if (GetKeyState(VK_SPACE) & 0x8000)
+	if (m_pLoader->Get_Finished() == true)
 	{
-		if (m_pLoader->Get_Finished() == true)
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		CLevel* pNewLevel = nullptr;
+
+		switch (m_eNextLevel)
 		{
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
-
-			CLevel* pNewLevel = nullptr;
-
-			switch (m_eNextLevel)
-			{
-			case LEVEL_ZERO:
-				pNewLevel = CLevel_Zero::Create(m_pDevice, m_pContext);
-				break;
-			case LEVEL_TOOL:
-				pNewLevel = CLevel_Tool::Create(m_pDevice, m_pContext);
-				break;
-			case LEVEL_LOGO:
-				pNewLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
-				break;
-			case LEVEL_GAMEPLAY:
-				if(g_curStage == STAGE_WHITERUN)
-					pNewLevel = CLevel_WhiteRun::Create(m_pDevice, m_pContext);
-				else if(g_curStage == STAGE_DUNGEON)
-					pNewLevel = CLevel_Dungeon::Create(m_pDevice, m_pContext);
-				break;
-			}
-
-			if (pNewLevel == nullptr)
-				return E_FAIL;
-
-			if (FAILED(pGameInstance->Open_Level(m_eNextLevel, pNewLevel)))
-				return E_FAIL;
-
-			Safe_Release(pGameInstance);
-
+		case LEVEL_ZERO:
+			pNewLevel = CLevel_Zero::Create(m_pDevice, m_pContext);
+			break;
+		case LEVEL_TOOL:
+			pNewLevel = CLevel_Tool::Create(m_pDevice, m_pContext);
+			break;
+		case LEVEL_LOGO:
+			pNewLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
+			break;
+		case LEVEL_GAMEPLAY:
+			if (g_curStage == STAGE_WHITERUN)
+				pNewLevel = CLevel_WhiteRun::Create(m_pDevice, m_pContext);
+			else if (g_curStage == STAGE_DUNGEON)
+				pNewLevel = CLevel_Dungeon::Create(m_pDevice, m_pContext);
+			break;
 		}
+
+		if (pNewLevel == nullptr)
+			return E_FAIL;
+
+		if (FAILED(pGameInstance->Open_Level(m_eNextLevel, pNewLevel)))
+			return E_FAIL;
+
+		Safe_Release(pGameInstance);
+
 	}
 
+	return S_OK;
+}
+
+HRESULT CLevel_Loading::Ready_StaticInit()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+#pragma region Component
+
+	/* Shader_VtxNonAnimMesh */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOADING, TEXT("ProtoType_Component_Shader_VtxNonAnimMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNonAnimMesh.hlsl"), VTX_NONANIMMESH::Elements, VTX_NONANIMMESH::iNumElements))))
+		return E_FAIL;
+
+	// Shader_VtxPosTex
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxPosTex"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
+
+	// ViBuffer_Rect
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOADING, TEXT("Prototype_Component_VIBuffer_Rect"),
+		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	_matrix matInitialize = XMMatrixIdentity();
+	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOADING, TEXT("ProtoType_Component_Model_LoadingObj_Falmer"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Loading/Loading_Falmer/Loading_Falmer.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+#pragma endregion
+
+#pragma region Object
+
+	/* Camera */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Camera_Loading"),
+		CLoading_Camera::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Logo Obj */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_LoadingObj_Falmer"),
+		CLoadingObj_Falmer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Logo UI */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_UI_Text"),
+		CSkyrimUI_SceneChange::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+#pragma endregion
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_Loading::Ready_LoadingClone(const wstring& _strLayerTag)
+{
+	if (m_eNextLevel != LEVEL_LOGO)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		CLoading_Camera::LOADING_CAMERA_DESC LoadingCameraDesc;
+		ZeroMemory(&LoadingCameraDesc, sizeof LoadingCameraDesc);
+
+		LoadingCameraDesc.vEye = _float4(0.f, 0.f, -1.5f, 1.f);
+		LoadingCameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+		LoadingCameraDesc.fFovY = XMConvertToRadians(60.f);
+		LoadingCameraDesc.fAspect = g_iWinSizeX / (_float)g_iWinSizeY;
+		LoadingCameraDesc.fNear = 0.2f;
+		LoadingCameraDesc.fFar = 300.f;
+		LoadingCameraDesc.fSpeedPerSec = 0.01f;
+		LoadingCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
+		LoadingCameraDesc.fMouseSensitive = 0.1f;
+
+		if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOADING, _strLayerTag, TEXT("ProtoType_GameObject_Camera_Loading"), &LoadingCameraDesc)))
+			return E_FAIL;
+
+		CTransform::TRANSFORM_DESC transformDesc;
+		transformDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
+		if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOADING, _strLayerTag, TEXT("ProtoType_GameObject_LoadingObj_Falmer"), &transformDesc)))
+			return E_FAIL;
+
+		Safe_Release(pGameInstance);
+	}
 
 	return S_OK;
 }

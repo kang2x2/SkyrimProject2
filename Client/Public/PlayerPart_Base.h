@@ -56,8 +56,7 @@ protected:
 	_float4x4		m_matWorld;
 
 public:
-	static CPlayerPart_Base* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
-	virtual CGameObject* Clone(void* _pArg)override;
+	virtual CGameObject* Clone(void* _pArg) = 0;
 	virtual void Free()override;
 };
 

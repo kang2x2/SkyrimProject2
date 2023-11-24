@@ -71,16 +71,6 @@ HRESULT CPlayerPart_Base::Compute_RenderMatrix(_fmatrix ChildMatrix)
 	return S_OK;
 }
 
-CPlayerPart_Base* CPlayerPart_Base::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-{
-	return nullptr;
-}
-
-CGameObject* CPlayerPart_Base::Clone(void* _pArg)
-{
-	return nullptr;
-}
-
 void CPlayerPart_Base::Free()
 {
 	__super::Free();

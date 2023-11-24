@@ -33,6 +33,11 @@ void CLevel_Manager::AfterRender()
 	m_pCurLevel->AfterRender();
 }
 
+void CLevel_Manager::Set_IsChange(_bool _isChange, _uint _iLevelIdx, _uint _iStageIdx)
+{
+	m_pCurLevel->Set_IsChange(_isChange, _iLevelIdx, _iStageIdx);
+}
+
 HRESULT CLevel_Manager::Open_Level(_uint _iLevelIndex, CLevel* _pLevel)
 {
 	// 이미 레벨이 존재하면 파괴

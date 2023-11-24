@@ -71,8 +71,9 @@ void CLayer::LateTick(_float _fTimeDelta)
 	{
 		if (iter != nullptr)
 		{
-			iter->LateTick(_fTimeDelta);
-			if (iter->Get_IsDead())
+			if (!iter->Get_IsDead())
+				iter->LateTick(_fTimeDelta);
+			else
 				Safe_Release(iter);
 		}
 	}

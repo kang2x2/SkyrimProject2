@@ -18,6 +18,7 @@ HRESULT CVIBuffer_Rect::Initialize_ProtoType()
 	m_iNumIndices = 6;
 	m_eIndexFormat = m_iIndexStride == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
 	m_eTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	//m_eTopology = D3D_PRIMITIVE_TOPOLOGY_LINELIST;
 	m_iNumVBs = 1;
 
 #pragma region Vertex

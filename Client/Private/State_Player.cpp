@@ -36,7 +36,15 @@ void CState_Player::Key_Input(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown('F'))
+	if (pGameInstance->Get_DIKeyDown('I'))
+	{
+		if (m_pPlayer->Get_IsInvenShow())
+			m_pPlayer->Set_IsInvenShow(false);
+		else
+			m_pPlayer->Set_IsInvenShow(true);
+	}
+
+	else if (pGameInstance->Get_DIKeyDown('F'))
 	{
 		m_pPlayer->Set_PlayerCam(m_pPlayer->Get_CurAnimationName().c_str(), m_pPlayer->Get_CurFrameIndex(), m_pPlayer->Get_CurAnimationIsLoop());
 	}

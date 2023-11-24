@@ -4,6 +4,12 @@
 #include "GameInstance.h"
 #include "Level_Loading.h"
 
+#include "SkyrimUI_SceneChange.h"
+#include "Inventory.h"
+
+#include "Loading_Camera.h"
+#include "LoadingObj_Falmer.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
 {
@@ -57,10 +63,10 @@ void CMainApp::Tick(_float _fTimeDelta)
 
 HRESULT CMainApp::Render()
 {
-	if(g_curLevel == LEVEL_GAMEPLAY || g_curStage == STAGE_DUNGEON)
-		m_pGameInstance->Clear_BackBuffer_View(_float4(0.01f, 0.02f, 0.1f, 1.f));
-	else
+	if(g_curLevel == LEVEL_LOADING || g_curLevel == LEVEL_LOGO)
 		m_pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
+	else
+		m_pGameInstance->Clear_BackBuffer_View(_float4(0.01f, 0.02f, 0.1f, 1.f));
 
 	m_pGameInstance->Clear_DepthStencil_View();
 
@@ -106,6 +112,17 @@ HRESULT CMainApp::Open_Level(LEVELID _eLevelID)
 
 HRESULT CMainApp::Ready_ProtoType_Components()
 {
+	// Texture
+	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Black"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/black.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Gray"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/gray.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_WhiteEm"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/white_em.dds"), 1))))
+		return E_FAIL;
+
 	// Renderer
 	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("ProtoType_Component_Renderer"),
 		m_pRenderer = CRenderer::Create(m_pDevice, m_pContext))))
@@ -114,16 +131,6 @@ HRESULT CMainApp::Ready_ProtoType_Components()
 	// Transform
 	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
 		CTransform::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	// Shader_VtxPosTex
-	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxPosTex"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
-		return E_FAIL;
-
-	// ViBuffer_Rect
-	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
-		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	Safe_AddRef(m_pRenderer);

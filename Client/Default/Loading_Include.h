@@ -91,3 +91,13 @@
 #include "GlovesM_Blades.h"
 #include "BootsM_Blades.h"
 #pragma endregion
+
+#pragma region UI
+#include "SkyrimUI_SceneChange.h"
+
+#include "Inventory.h"
+#include "Inventory_ItemCategory.h"
+#include "Inventory_ItemList.h"
+#include "Inventory_UnderBar.h"
+
+#pragma endregion

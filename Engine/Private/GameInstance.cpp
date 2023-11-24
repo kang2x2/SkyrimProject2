@@ -221,6 +221,11 @@ HRESULT CGameInstance::Open_Level(_uint _iLevelIndex, CLevel* _pLevel)
 	return m_pLevel_Manager->Open_Level(_iLevelIndex, _pLevel);
 }
 
+void CGameInstance::Set_IsChange(_bool _isChange, _uint _iLevelIdx, _uint _iStageIdx)
+{
+	m_pLevel_Manager->Set_IsChange(_isChange, _iLevelIdx, _iStageIdx);
+}
+
 /* Object Manager */
 HRESULT CGameInstance::Add_ProtoObject(const wstring& _strProtoTypeTag, CGameObject* _pGameObject)
 {

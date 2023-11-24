@@ -17,6 +17,9 @@ public:
 
 public:
 	void	AfterRender();
+	
+public:
+	void	Set_IsChange(_bool _isChange, _uint _iLevelIdx, _uint _iStageIdx);
 	HRESULT Open_Level(_uint _iLevelIndex, class CLevel* _pLevel);
 
 private:

@@ -14,6 +14,8 @@
 #include "Player_Foot.h"
 #include "Player_Weapon.h"
 
+#include "Inventory.h"
+
 CPlayer::CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CCreatureObject(_pDevice, _pContext)
 {
@@ -49,6 +51,9 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 		return E_FAIL;
 
 	if (FAILED(Ready_State()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Inventory()))
 		return E_FAIL;
 
 	m_bIsMaintain = true;
@@ -244,6 +249,16 @@ void CPlayer::CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame)
 	dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])->CheckHit_Onehand(_iSourFrame, _iDestFrame);
 }
 
+void CPlayer::Set_IsInvenShow(_bool _bIsShow)
+{
+	m_pInven->Set_IsInvenShow(_bIsShow);
+}
+
+_bool CPlayer::Get_IsInvenShow()
+{
+	return m_pInven->Get_IsInvenShow();
+}
+
 HRESULT CPlayer::Ready_Component()
 {
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Renderer"),
@@ -360,6 +375,22 @@ HRESULT CPlayer::Ready_State()
 	m_iAtk = 25;
 
 	m_pStateManager = CStateManager_Player::Create(this, m_pTransformCom, m_pNavigationCom[g_curStage]);
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Ready_Inventory()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_Inventory"), TEXT("ProtoType_GameObject_UI_Inventory"))))
+		return E_FAIL;
+
+	m_pInven = dynamic_cast<CInventory*>
+		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_Inventory"), TEXT("UI_Inventory")));
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }

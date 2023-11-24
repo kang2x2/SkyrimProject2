@@ -91,13 +91,13 @@ public:
 	/* 파츠 관련 */
 	CGameObject* Get_Part(PLAYER_PARTS _ePart) { return m_vecPlayerPart[_ePart]; }
 
-
 	/* 셀 관련 */
 	void			  Set_CurCell();
-
 	/* 충돌 관련*/
 	void			  CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);
-
+	/* 인벤토리 */
+	void			  Set_IsInvenShow(_bool _bIsShow);
+	_bool			  Get_IsInvenShow();
 
 private:
 	vector<class CGameObject*>		m_vecPlayerPart;
@@ -115,10 +115,13 @@ private:
 	PLAYER_SPEEDDESC				m_tSpeedDesc;
 	PLAYERSTATE						m_eCurState;
 
+	class CInventory*				m_pInven = nullptr;
+
 private:
 	HRESULT Ready_Part();
 	HRESULT Ready_Component();
 	HRESULT Ready_State();
+	HRESULT Ready_Inventory();
 
 	HRESULT Bind_ShaderResource();
 
