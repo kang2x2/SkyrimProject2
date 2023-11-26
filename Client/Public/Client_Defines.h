@@ -9,7 +9,7 @@ namespace Client
 		LEVEL_GAMEPLAY,
 		LEVEL_LOADING, LEVEL_TOOL, LEVEL_END };
 
-	enum STAGEID { STAGE_WHITERUN, STAGE_DUNGEON, STAGE_END };
+	enum STAGEID { STAGE_WHITERUN, STAGE_DUNGEON, STAGE_CASTLE, STAGE_END };
 
 	const unsigned int		g_iWinSizeX = 1280;
 	const unsigned int		g_iWinSizeY = 720;
@@ -23,7 +23,10 @@ extern Client::STAGEID g_curStage;
 
 extern bool g_bIsWhiteRunInit;
 extern bool g_bIsDungeonInit; 
+extern bool g_bIsCastleInit;
 extern bool g_bIsStaticInit;
 extern bool g_bIsPublicInit;
+
+extern bool g_bIsPause;
 
 using namespace Client;

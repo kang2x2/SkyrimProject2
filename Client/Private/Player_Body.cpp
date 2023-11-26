@@ -86,14 +86,16 @@ void CPlayer_Body::LateTick(_float _fTimeDelta)
 	
 		for (auto obj : ltbjList)
 		{
-			if (obj->Get_IsCreature())
+			if (obj != nullptr)
 			{
-				pGameInstance->Collision_AABBTransition(m_pColliderCom,
-					dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB"))));
+				if (obj->Get_IsCreature())
+				{
+					pGameInstance->Collision_AABBTransition(m_pColliderCom,
+						dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB"))));
+				}
 			}
 		}
 	}
-	
 	
 	Safe_Release(pGameInstance);
 

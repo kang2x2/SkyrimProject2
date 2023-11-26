@@ -84,6 +84,8 @@ void CGameInstance::Tick(_float _fTimeDelta)
 
 	m_pObject_Manager->LateTick(_fTimeDelta);
 	m_pLevel_Manager->LateTick(_fTimeDelta);
+
+	m_pObject_Manager->ClearTick();
 }
 
 void CGameInstance::AfterRender()

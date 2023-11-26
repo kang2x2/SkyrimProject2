@@ -21,6 +21,7 @@ public:
 	void PriorityTick(_float _fTimeDelta);
 	void Tick(_float _fTimeDelta);
 	void LateTick(_float _fTimeDelta);
+	void ClearTick();
 	void Clear(_uint _iLevelIndex);
 
 public:

@@ -71,9 +71,21 @@ void CLayer::LateTick(_float _fTimeDelta)
 	{
 		if (iter != nullptr)
 		{
-			if (!iter->Get_IsDead())
-				iter->LateTick(_fTimeDelta);
-			else
+			iter->LateTick(_fTimeDelta);
+
+			if (iter->Get_IsReadyDead())
+				iter->Set_IsDead(true);
+		}
+	}
+}
+
+void CLayer::ClearTick()
+{
+	for (auto& iter : m_ltCloneObj)
+	{
+		if (iter != nullptr)
+		{
+			if (iter->Get_IsDead())
 				Safe_Release(iter);
 		}
 	}

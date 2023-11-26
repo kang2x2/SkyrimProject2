@@ -19,6 +19,7 @@ public:
 public:
 	virtual void AfterRender() {};
 private:
+	HRESULT Ready_Cursor(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Camera(const wstring& _strLayerTag);
 	HRESULT Ready_Light();
 	HRESULT Ready_Layer_BackGround(const wstring& _strLayerTag);

@@ -74,36 +74,64 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 
 void CPlayer::PriorityTick(_float _fTimeDelta)
 {
-	for (auto& iter : m_vecPlayerPart)
+	if (!g_bIsPause)
 	{
-		if (iter != nullptr)
-			iter->PriorityTick(_fTimeDelta);
+		for (auto& iter : m_vecPlayerPart)
+		{
+			if (iter != nullptr)
+				iter->PriorityTick(_fTimeDelta);
+		}
 	}
 }
 void CPlayer::Tick(_float _fTimeDelta)
 {
-	m_pStateManager->Update(_fTimeDelta);
-
-	for (auto& iter : m_vecPlayerPart)
+	if (!g_bIsPause)
 	{
-		if (iter != nullptr)
-			iter->Tick(_fTimeDelta);
+		m_pStateManager->Update(_fTimeDelta);
+
+		for (auto& iter : m_vecPlayerPart)
+		{
+			if (iter != nullptr)
+				iter->Tick(_fTimeDelta);
+		}
 	}
+
 
 	_vector	vPosition = m_pNavigationCom[g_curStage]->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 }
 void CPlayer::LateTick(_float _fTimeDelta)
 {
-	m_pStateManager->Late_Update();
-
-	for (auto& iter : m_vecPlayerPart)
+	if (!g_bIsPause)
 	{
-		if (iter != nullptr)
-			iter->LateTick(_fTimeDelta);
+		m_pStateManager->Late_Update();
+
+		for (auto& iter : m_vecPlayerPart)
+		{
+			if (iter != nullptr)
+				iter->LateTick(_fTimeDelta);
+		}
 	}
 
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	if (pGameInstance->Get_DIKeyDown('I'))
+	{
+		if (m_pInven->Get_IsInvenShow())
+		{
+			m_pInven->Set_IsInvenShow(false);
+			g_bIsPause = false;
+		}
+		else
+		{
+			m_pInven->Set_IsInvenShow(true);
+			g_bIsPause = true;
+		}
+	}
+	Safe_Release(pGameInstance);
+
 }
 HRESULT CPlayer::Render()
 {

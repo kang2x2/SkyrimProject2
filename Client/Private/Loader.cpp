@@ -60,10 +60,12 @@ _int CLoader::Loading()
  		hr = Loading_For_Level_Logo();
 		break;
 	case LEVEL_GAMEPLAY:
-		if(g_curStage == STAGE_WHITERUN)
+		if (g_curStage == STAGE_WHITERUN)
 			hr = Loading_For_Level_WhiteRun();
-		else if(g_curStage == STAGE_DUNGEON)
+		else if (g_curStage == STAGE_DUNGEON)
 			hr = Loading_For_Level_Dungeon();
+		else if (g_curStage == STAGE_CASTLE)
+			hr = Loading_For_Level_Castle();
 		break;
 	}
 
@@ -132,6 +134,8 @@ HRESULT CLoader::Loading_For_Level_Tool()
 	Set_ProtoType_WhiteRunMesh(LEVEL_TOOL);
 	m_strLoadingText = TEXT("Loading DungeonMesh.");
 	Set_ProtoType_DungeonMesh(LEVEL_TOOL);
+	m_strLoadingText = TEXT("Loading CastleMesh.");
+	Set_ProtoType_CastleMesh(LEVEL_TOOL);
 
 	_matrix matInitialize = XMMatrixIdentity();
 
@@ -150,6 +154,7 @@ HRESULT CLoader::Loading_For_Level_Tool()
 	Set_ProtoType_PublicObject();
 	Set_ProtoType_WhiteObject();
 	Set_ProtoType_DungeonObject();
+	Set_ProtoType_CastleObject();
 
 #pragma endregion
 
@@ -176,6 +181,11 @@ HRESULT CLoader::Loading_For_Level_Logo()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/LogoBackGround.dds"), 1))))
 		return E_FAIL;
 
+	// ViBuffer_Rect
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("Prototype_Component_VIBuffer_Rect"),
+		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* Mesh */
 	m_strLoadingText = TEXT("Loading Mesh.");
 	_matrix matInitialize = XMMatrixIdentity();
@@ -197,6 +207,9 @@ HRESULT CLoader::Loading_For_Level_Logo()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNonAnimMesh.hlsl"), VTX_NONANIMMESH::Elements, VTX_NONANIMMESH::iNumElements))))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("Prototype_Component_Shader_VtxPosTex"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
 
 	/* GameObject(원본) */
 	m_strLoadingText = TEXT("Loading ProtoType_GameObject.");
@@ -205,7 +218,10 @@ HRESULT CLoader::Loading_For_Level_Logo()
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Camera_Logo"),
 		CLogo_Camera::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
+	/* Cursor */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Cursor"),
+		CSkyrim_Cursor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	/* BackGround */
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BackGround"),
 		CBackGround::Create(m_pDevice, m_pContext))))
@@ -214,7 +230,7 @@ HRESULT CLoader::Loading_For_Level_Logo()
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Logo"),
 		CSkyrim_LogoObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	
+
 	/* 로딩 끝 */
 	Safe_Release(pGameInstance);
 	
@@ -326,6 +342,61 @@ HRESULT CLoader::Loading_For_Level_Dungeon()
 
 	return S_OK;
 }
+HRESULT CLoader::Loading_For_Level_Castle()
+{
+	if (!g_bIsCastleInit)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+#pragma region Texture
+		m_strLoadingText = TEXT("Loading Texture.");
+
+#pragma endregion
+
+#pragma region Collider
+
+		m_strLoadingText = TEXT("Loading Collider.");
+
+#pragma endregion
+
+#pragma region Mesh
+		/* Mesh */
+		m_strLoadingText = TEXT("Loading Mesh.");
+
+		Set_ProtoType_CastleMesh(LEVEL_GAMEPLAY);
+#pragma endregion
+
+#pragma region Shader
+		/* Shader */
+		m_strLoadingText = TEXT("Loading Shader.");
+
+#pragma endregion
+
+#pragma region GameObject
+		/* GameObject */
+		m_strLoadingText = TEXT("Loading ProtoType_GameObject.");
+
+		Set_ProtoType_CastleObject();
+#pragma endregion
+		m_strLoadingText = TEXT("Loading Public Data.");
+		Loading_For_Level_Public(LEVEL_GAMEPLAY);
+
+		Safe_Release(pGameInstance);
+
+		g_bIsCastleInit = true;
+	}
+
+	/* 로딩 끝 */
+	m_strLoadingText = TEXT("Loading Complete");
+	m_bIsFinish = true;
+
+	g_curLevel = LEVEL_GAMEPLAY;
+	g_curStage = STAGE_CASTLE;
+
+	return S_OK;
+
+}
 HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -422,6 +493,7 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 #pragma region Navigation
 		/* 화이트런 */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Navigation_WhiteRun"),
+			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/testCell")))))
 			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/WhiteRun_Cell")))))
 			return E_FAIL;
 
@@ -541,126 +613,6 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 
 #pragma endregion
 
-#pragma region Rock
-
-	matInitialize = XMMatrixIdentity();
-	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-
-	/* Rock */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderl01"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderl01.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderl02"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderl02.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderl03"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderl03.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderl04"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderl04.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderl05"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderl05.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderm01"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderm01.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderm02"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderm02.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderm03"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderm03.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderm04"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderm04.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderpiles01"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderpiles01.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderpiles02"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderpiles02.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulders01"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulders01.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulders02"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulders02.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulders03"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulders03.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockl01"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockl01.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockl02"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockl02.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockl03"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockl03.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockl04"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockl04.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockl05"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockl05.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockm01"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockm01.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockm02"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockm02.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockm03"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockm03.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockm04"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockm04.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockpiles01"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockpiles01.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockpiles02"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockpiles02.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrocks01"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrocks01.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrocks02"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrocks02.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrocks03"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrocks03.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-#pragma endregion 
-
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -673,7 +625,6 @@ HRESULT CLoader::Set_ProtoType_WhiteRunMesh(LEVELID _eLevel)
 	_matrix matInitialize = XMMatrixIdentity();
 
 #pragma region SkyrimTerrain
-	matInitialize = XMMatrixIdentity();
 	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	/* Terrain */
  	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_ArcadiaBase01"),
@@ -898,6 +849,10 @@ HRESULT CLoader::Set_ProtoType_WhiteRunMesh(LEVELID _eLevel)
 
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_GuardHouse"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Building/GuardHouse/GuardHouse.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_GuardTowerEntrance01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Building/GuardTowerEntrance01/GuardTowerEntrance01.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_HalloFtheDead01"),
@@ -1186,6 +1141,223 @@ HRESULT CLoader::Set_ProtoType_WhiteRunMesh(LEVELID _eLevel)
 
 #pragma endregion
 
+#pragma region WhiteRun Rock
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockcliff01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockcliff01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockcliff02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockcliff02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockcliff03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockcliff03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockcliff04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockcliff04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockcliff05"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockcliff05.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockcliff06"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockcliff06.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockcliff07"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockcliff07.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockcliff08"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockcliff08.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockl01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockl01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockl02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockl02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockl03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockl03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockl04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockl04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockl05"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockl05.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockm01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockm01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockm02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockm02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockm03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockm03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rockm04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rockm04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rocks01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rocks01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rocks02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rocks02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_rocks03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Rock/rocks03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion 
+
+#pragma region Grass
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_tundragrass01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Grass/tundragrass01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_tundragrassobj03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Grass/tundragrassobj03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_tundragrassobj04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Grass/tundragrassobj04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_volcanicgrassobj01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Grass/volcanicgrassobj01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_volcanicgrassobj02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Grass/volcanicgrassobj02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_watercoralgrass01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Grass/watercoralgrass01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_waterkelpshort01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Grass/waterkelpshort01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_waterkelptall01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Grass/waterkelptall01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Road
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_roadchunkl01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Road/roadchunkl01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_roadchunkl02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Road/roadchunkl02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_roadchunkl03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Road/roadchunkl03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_roadchunkm01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Road/roadchunkm01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_roadchunkm02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Road/roadchunkm02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_roadchunkm03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Road/roadchunkm03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_roadchunkm04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Road/roadchunkm04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_roadchunks01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Road/roadchunks01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_roadchunks02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Road/roadchunks02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_roadchunks03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Road/roadchunks03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_roadchunks04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Road/roadchunks04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Decoration
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_barrel01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/barrel01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_barrel02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/barrel02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_basket01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/basket01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_basket02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/basket02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_basketclosed01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/basketclosed01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_brewerycasklargeclosed02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/brewerycasklargeclosed02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Bucket01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/Bucket01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_chair"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/chair.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Coin"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/Coin.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_flowerbasket"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/flowerbasket.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_glazed02potterybase01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/glazed02potterybase01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_glazed02potterybase02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/glazed02potterybase02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_glazed02potterybase03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/glazed02potterybase03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_glazed02potteryjug01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/glazed02potteryjug01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_glazed02potteryurn01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/glazed02potteryurn01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_glazedcandles01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/glazedcandles01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_HoneyPot"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/HoneyPot.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_wrtempletreesaplingsample01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration/wrtempletreesaplingsample01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Decoration2
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_blacksmithworkbench01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration2/blacksmithworkbench01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_firespitcooking"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration2/firespitcooking.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_laddertall"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration2/laddertall.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_tanningrackmarker"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration2/tanningrackmarker.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_woodenchair01static"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration2/woodenchair01static.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_woodpickup"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration2/woodpickup.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Tree
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_wrtempletree02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Tree/wrtempletree02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_wrtempletreesapling01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Tree/wrtempletreesapling01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -1213,6 +1385,14 @@ HRESULT CLoader::Set_ProtoType_DungeonMesh(LEVELID _eLevel)
 	/* Falmer_OneHand */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Falmer_OneHand"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Falmer_OneHand/Falmer_OneHand.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+
+	/* Spider */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Spider"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Spider/Spider.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_SpiderBullet"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Effect/SpiderBullet/SpiderBullet.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
 #pragma endregion
@@ -1831,16 +2011,13 @@ HRESULT CLoader::Set_ProtoType_DungeonMesh(LEVELID _eLevel)
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SpiderWeb/ruinsspidersac02.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
-
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_ruinsspidersac03"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SpiderWeb/ruinsspidersac03.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
-
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_ruinsspidersac04"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SpiderWeb/ruinsspidersac04.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
-
 
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_ruinsspidersac05"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Dungeon_SpiderWeb/ruinsspidersac05.bin", matInitialize, CModel::TYPE_NONANIM))))
@@ -1972,6 +2149,605 @@ HRESULT CLoader::Set_ProtoType_DungeonMesh(LEVELID _eLevel)
 
 #pragma endregion
 
+#pragma region Dungeon Rock
+
+	matInitialize = XMMatrixIdentity();
+	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderl01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderl01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderl02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderl02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderl03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderl03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderl04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderl04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderl05"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderl05.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderm01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderm01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderm02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderm02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderm03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderm03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderm04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderm04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderpiles01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderpiles01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulderpiles02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulderpiles02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulders01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulders01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulders02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulders02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegboulders03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegboulders03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockl01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockl01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockl02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockl02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockl03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockl03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockl04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockl04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockl05"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockl05.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockm01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockm01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockm02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockm02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockm03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockm03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockm04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockm04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockpiles01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockpiles01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrockpiles02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrockpiles02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrocks01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrocks01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrocks02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrocks02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_cavegrocks03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Rock/cavegrocks03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+#pragma endregion 
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+HRESULT CLoader::Set_ProtoType_CastleMesh(LEVELID _eLevel)
+{
+	_matrix matInitialize = XMMatrixIdentity();
+	matInitialize = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+#pragma region Dragon Room
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomArch01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomArch01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomArch02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomArch02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomArch03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomArch03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomArchHalf01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomArchHalf01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomBalcony"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomBalcony.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomBalconyCap"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomBalconyCap.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomCeiling01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomCeiling01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomColBase01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomColBase01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomColBase02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomColBase02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomFloor01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomFloor01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomFloorCenter01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomFloorCenter01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomRib01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomRib01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomRib01Entrance"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomRib01Entrance.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomRibCap01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomRibCap01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomWallCorner01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomWallCorner01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomWallCornerA"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomWallCornerA.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomWallCornerIn01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomWallCornerIn01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomWallCornerL"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomWallCornerL.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomWallCornerL01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomWallCornerL01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomWallCornerR"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomWallCornerR.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomWallStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomWallStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomWallStr01Arch"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomWallStr01Arch.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomWallStr01Half"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomWallStr01Half.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomWallStr01HalfExt"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomWallStr01HalfExt.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomWallStr02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomWallStr02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_D_DragonRoomWallStrCustom01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/D_DragonRoomWallStrCustom01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Flat
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_CampFire"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_CampFire.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_CastlePiece02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_CastlePiece02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_PlatThrone01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_PlatThrone01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_StoneSideStonePalnSide01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_StoneSideStonePalnSide01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_StoneSideWoodPalnSide01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_StoneSideWoodPalnSide01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_StoneSideWoodPlanConer01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_StoneSideWoodPlanConer01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_StoneSidleStonePlanConer01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_StoneSidleStonePlanConer01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_StoneSidleStonePlanConer02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_StoneSidleStonePlanConer02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_WoodLoftStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_WoodLoftStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_WoodMid01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_WoodMid01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_WoodMid01Quad"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_WoodMid01Quad.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_WoodSideWoodPalnSide01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_WoodSideWoodPalnSide01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_WoodSideWoodPlanConer01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_WoodSideWoodPlanConer01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_WoodSideWoodPlanConer02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_WoodSideWoodPlanConer02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_WoodSideWoodPlanLong01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_WoodSideWoodPlanLong01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_WtosCapCorner01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_WtosCapCorner01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_WtosCapCorner01In"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_WtosCapCorner01In.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_WtosCapStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_WtosCapStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_F_WtosCapStr02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/F_WtosCapStr02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Pillars
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_P_StoneColumn01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/P_StoneColumn01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_P_WallBaseCorin01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/P_WallBaseCorin01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_P_WoodFreePillar01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/P_WoodFreePillar01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_P_WoodFreePillar01Mid"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/P_WoodFreePillar01Mid.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_P_WoodFreePillar01MidEndnubs01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/P_WoodFreePillar01MidEndnubs01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_P_WoodFreePillar01Top"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/P_WoodFreePillar01Top.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_P_WoodFreePillar02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/P_WoodFreePillar02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Stairs
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_S_Stairs01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/S_Stairs01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_S_Stairs01Ext"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/S_Stairs01Ext.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_S_Stairs01L"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/S_Stairs01L.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_S_Stairs01R"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/S_Stairs01R.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_S_StoneStairs01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/S_StoneStairs01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_S_StoneStairs02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/S_StoneStairs02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_S_StoneStairs03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/S_StoneStairs03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_S_StoneStairs03Ext"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/S_StoneStairs03Ext.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_S_StoneStairs03Ext01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/S_StoneStairs03Ext01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Top
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_T_RoofBaseCorinLtrans01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/T_RoofBaseCorinLtrans01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_T_RoofBaseCorinRtrans01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/T_RoofBaseCorinRtrans01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_T_RoofBaseCorL01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/T_RoofBaseCorL01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_T_RoofBaseCorR01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/T_RoofBaseCorR01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_T_RoofBaseStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/T_RoofBaseStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_T_RoofBaseStrCapL"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/T_RoofBaseStrCapL.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_T_RoofBaseStrCapR"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/T_RoofBaseStrCapR.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_T_RoofBaseStrDouble01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/T_RoofBaseStrDouble01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_T_RoofFlatStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/T_RoofFlatStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_T_RoofFlatStrQuad01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/T_RoofFlatStrQuad01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_T_RoofMidStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/T_RoofMidStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_T_RoofTopStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/T_RoofTopStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Wall
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_BaseStr01Win"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_BaseStr01Win.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_BaseStr01Win01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_BaseStr01Win01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_BaseStrDouble01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_BaseStrDouble01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_BaseStrDouble02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_BaseStrDouble02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_BaseStrDoubleExt01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_BaseStrDoubleExt01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_BaseStrL01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_BaseStrL01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_BaseStrR01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_BaseStrR01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_CastlePiece01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_CastlePiece01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_Corner01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_Corner01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_Corner01DoorL"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_Corner01DoorL.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_Corner01In"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_Corner01In.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighCorner01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighCorner01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighCorner01Door"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighCorner01Door.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighCorner01In"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighCorner01In.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighCustom01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighCustom01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighCustom02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighCustom02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighDoorExtrans01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighDoorExtrans01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighDoorTrans01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighDoorTrans01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighDoorTransDoor01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighDoorTransDoor01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighDoorTransShall01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighDoorTransShall01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExCorner01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExCorner01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExCorner01In"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExCorner01In.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExDoor01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExDoor01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExDoor02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExDoor02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExDoor03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExDoor03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExDoor04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExDoor04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExDoorTrans01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExDoorTrans01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExDoorTransB01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExDoorTransB01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExSlope01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExSlope01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExSlope02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExSlope02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExStr01Quad"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExStr01Quad.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighExStr02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighExStr02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighGapalCove01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighGapalCove01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighGapCorner01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighGapCorner01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighGapCorner01In"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighGapCorner01In.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighGapStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighGapStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighStr02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighStr02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighStrDoorWay01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighStrDoorWay01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_DoubleHighStrDoorWay02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_DoubleHighStrDoorWay02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_RoofBaseStrCapMid"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_RoofBaseStrCapMid.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_RoofBaseStrCapMidHarf"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_RoofBaseStrCapMidHarf.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_RoofTopCap01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_RoofTopCap01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_RoofTopStr01EndCap"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_RoofTopStr01EndCap.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StConerPlat01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StConerPlat01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_Str01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_Str01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_Str01Double"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_Str01Double.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StrChimney01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StrChimney01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StrDoor01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StrDoor01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StrDoorSm01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StrDoorSm01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StrDoorTrans01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StrDoorTrans01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StrMainDoor01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StrMainDoor01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StrTrans512"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StrTrans512.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StrTrans512R"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StrTrans512R.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StrWin01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StrWin01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StrWin01Double"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StrWin01Double.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StStrPlat"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StStrPlat.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_StStrPlatSecret01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_StStrPlatSecret01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_TallFreeStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_TallFreeStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_TallFreeStr01Top"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_TallFreeStr01Top.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_W_WallBaseStr01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/W_WallBaseStr01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Other
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_I_RoofSupportBeam01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/I_RoofSupportBeam01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_I_RoofSupportBeam02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/I_RoofSupportBeam02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_I_RoofSupportBeam02Str"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/I_RoofSupportBeam02Str.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_I_RoofSupportBeam03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/I_RoofSupportBeam03.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_I_RoofSupportBeam04"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/I_RoofSupportBeam04.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_I_RoofSupportBeam05"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/I_RoofSupportBeam05.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_I_RoofSupportBeamHigh01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/I_RoofSupportBeamHigh01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_I_RoofSupportBeamLoft01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/I_RoofSupportBeamLoft01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_I_RoofSupportBeamNub01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/I_RoofSupportBeamNub01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_I_RoofSupportBeamNubDouble01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/I_RoofSupportBeamNubDouble01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_I_RoofSupportBeamWing01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/I_RoofSupportBeamWing01.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_I_RoofSupportBeamWing02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/I_RoofSupportBeamWing02.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_O_Hubrack"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Castle/O_Hubrack.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+#pragma endregion
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -2080,122 +2856,6 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 
 #pragma endregion
 
-#pragma region Rock
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl01"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl02"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl03"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl04"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl05"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderm01"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderm02"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderm03"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderm04"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderpiles01"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderpiles02"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulders01"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulders02"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulders03"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl01"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl02"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl03"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl04"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl05"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockm01"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockm02"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockm03"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockm04"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockpiles01"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockpiles02"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrocks01"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrocks02"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrocks03"),
-		CCaveRock::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-#pragma endregion
-
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -2204,6 +2864,27 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+
+	_matrix matInitialize = XMMatrixIdentity();
+	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
+	/* Test */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Spider"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Spider/Spider.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_SpiderBullet"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Effect/SpiderBullet/SpiderBullet.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider"),
+		CSpider::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider_Weapon"),
+		CSpider_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CProjectile_Web"),
+		CProjectile_Web::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma region NPC
 
@@ -2449,6 +3130,10 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_GuardHouse"),
+		CBuilding::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_GuardTowerEntrance01"),
 		CBuilding::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
@@ -2738,6 +3423,220 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 
 #pragma endregion
 
+#pragma region WhiteRun Rock
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockcliff01"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockcliff02"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockcliff03"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockcliff04"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockcliff05"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockcliff06"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockcliff07"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockcliff08"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockl01"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockl02"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockl03"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockl04"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockl05"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockm01"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockm02"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockm03"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rockm04"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rocks01"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rocks02"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_rocks03"),
+		CSkyrimRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Grass
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_tundragrass01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_tundragrassobj03"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_tundragrassobj04"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_volcanicgrassobj01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_volcanicgrassobj02"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_watercoralgrass01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_waterkelpshort01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_waterkelptall01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Road
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_roadchunkl01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_roadchunkl02"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_roadchunkl03"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_roadchunkm01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_roadchunkm02"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_roadchunkm03"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_roadchunkm04"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_roadchunks01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_roadchunks02"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_roadchunks03"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_roadchunks04"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Decoration
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_barrel01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_barrel02"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_basket01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_basket02"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_basketclosed01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_brewerycasklargeclosed02"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Bucket01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_chair"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Coin"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_flowerbasket"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_glazed02potterybase01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_glazed02potterybase02"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_glazed02potterybase03"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_glazed02potteryjug01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_glazed02potteryurn01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_glazedcandles01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_HoneyPot"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_wrtempletreesaplingsample01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion 
+
+#pragma region Decoration2
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_blacksmithworkbench01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_firespitcooking"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_laddertall"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_tanningrackmarker"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_woodenchair01static"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_woodpickup"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Tree
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_wrtempletree02"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_wrtempletreesapling01"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -2770,6 +3669,17 @@ HRESULT CLoader::Set_ProtoType_DungeonObject()
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FalmerOH_Weapon"),
 		CFalmerOH_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Spider */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider"),
+		CSpider::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider_Weapon"),
+		CSpider_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CProjectile_Web"),
+		CProjectile_Web::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion
@@ -3527,6 +4437,599 @@ HRESULT CLoader::Set_ProtoType_DungeonObject()
 		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+#pragma endregion
+
+#pragma region Dungeon Rock
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl01"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl02"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl03"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl04"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderl05"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderm01"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderm02"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderm03"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderm04"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderpiles01"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulderpiles02"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulders01"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulders02"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegboulders03"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl01"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl02"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl03"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl04"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockl05"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockm01"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockm02"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockm03"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockm04"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockpiles01"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrockpiles02"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrocks01"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrocks02"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_cavegrocks03"),
+		CCaveRock::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+#pragma endregion
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+HRESULT CLoader::Set_ProtoType_CastleObject()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+#pragma region Dragon Room
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomArch01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomArch02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomArch03"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomArchHalf01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomBalcony"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomBalconyCap"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomCeiling01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomColBase01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomColBase02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomFloor01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomFloorCenter01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomRib01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomRib01Entrance"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomRibCap01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomWallCorner01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomWallCornerA"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomWallCornerIn01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomWallCornerL"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomWallCornerL01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomWallCornerR"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomWallStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomWallStr01Arch"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomWallStr01Half"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomWallStr01HalfExt"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomWallStr02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_D_DragonRoomWallStrCustom01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Flat
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_CampFire"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_CastlePiece02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_PlatThrone01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_StoneSideStonePalnSide01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_StoneSideWoodPalnSide01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_StoneSideWoodPlanConer01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_StoneSidleStonePlanConer01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_StoneSidleStonePlanConer02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_WoodLoftStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_WoodMid01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_WoodMid01Quad"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_WoodSideWoodPalnSide01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_WoodSideWoodPlanConer01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_WoodSideWoodPlanConer02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_WoodSideWoodPlanLong01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_WtosCapCorner01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_WtosCapCorner01In"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_WtosCapStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_F_WtosCapStr02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Pillars
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_P_StoneColumn01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_P_WallBaseCorin01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_P_WoodFreePillar01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_P_WoodFreePillar01Mid"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_P_WoodFreePillar01MidEndnubs01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_P_WoodFreePillar01Top"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_P_WoodFreePillar02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Stairs
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_S_Stairs01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_S_Stairs01Ext"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_S_Stairs01L"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_S_Stairs01R"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_S_StoneStairs01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_S_StoneStairs02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_S_StoneStairs03"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_S_StoneStairs03Ext"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_S_StoneStairs03Ext01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Top
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_T_RoofBaseCorinLtrans01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_T_RoofBaseCorinRtrans01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_T_RoofBaseCorL01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_T_RoofBaseCorR01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_T_RoofBaseStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_T_RoofBaseStrCapL"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_T_RoofBaseStrCapR"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_T_RoofBaseStrDouble01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_T_RoofFlatStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_T_RoofFlatStrQuad01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_T_RoofMidStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_T_RoofTopStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Wall
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_BaseStr01Win"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_BaseStr01Win01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_BaseStrDouble01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_BaseStrDouble02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_BaseStrDoubleExt01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_BaseStrL01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_BaseStrR01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_CastlePiece01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_Corner01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_Corner01DoorL"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_Corner01In"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighCorner01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighCorner01Door"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighCorner01In"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighCustom01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighCustom02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighDoorExtrans01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighDoorTrans01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighDoorTransDoor01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighDoorTransShall01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExCorner01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExCorner01In"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExDoor01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExDoor02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExDoor03"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExDoor04"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExDoorTrans01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExDoorTransB01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExSlope01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExSlope02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExStr01Quad"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighExStr02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighGapalCove01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighGapCorner01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighGapCorner01In"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighGapStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighStr02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighStrDoorWay01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_DoubleHighStrDoorWay02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_RoofBaseStrCapMid"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_RoofBaseStrCapMidHarf"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_RoofTopCap01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_RoofTopStr01EndCap"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StConerPlat01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_Str01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_Str01Double"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StrChimney01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StrDoor01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StrDoorSm01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StrDoorTrans01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StrMainDoor01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StrTrans512"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StrTrans512R"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StrWin01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StrWin01Double"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StStrPlat"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_StStrPlatSecret01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_TallFreeStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_TallFreeStr01Top"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_W_WallBaseStr01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Other
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_I_RoofSupportBeam01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_I_RoofSupportBeam02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_I_RoofSupportBeam02Str"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_I_RoofSupportBeam03"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_I_RoofSupportBeam04"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_I_RoofSupportBeam05"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_I_RoofSupportBeamHigh01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_I_RoofSupportBeamLoft01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_I_RoofSupportBeamNub01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_I_RoofSupportBeamNubDouble01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_I_RoofSupportBeamWing01"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_I_RoofSupportBeamWing02"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_O_Hubrack"),
+		CCastleObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 	Safe_Release(pGameInstance);

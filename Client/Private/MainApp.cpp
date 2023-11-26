@@ -18,8 +18,11 @@ CMainApp::CMainApp()
 
 HRESULT CMainApp::Initialize()
 {
+	ShowCursor(false);
+
 	g_bIsWhiteRunInit = false;
 	g_bIsDungeonInit = false;
+	g_bIsCastleInit = false;
 	g_bIsPublicInit = false;
 
 	/* 게임 초기화 */
@@ -54,10 +57,6 @@ HRESULT CMainApp::Initialize()
 
 void CMainApp::Tick(_float _fTimeDelta)
 {
-#ifdef _DEBUG
-	m_fTimeAcc += _fTimeDelta;
-#endif
-
 	m_pGameInstance->Tick(_fTimeDelta);
 }
 
@@ -65,6 +64,8 @@ HRESULT CMainApp::Render()
 {
 	if(g_curLevel == LEVEL_LOADING || g_curLevel == LEVEL_LOGO)
 		m_pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
+	else if (g_curLevel == LEVEL_TOOL)
+		m_pGameInstance->Clear_BackBuffer_View(_float4(0.1f, 0.1f, 0.6f, 1.f));
 	else
 		m_pGameInstance->Clear_BackBuffer_View(_float4(0.01f, 0.02f, 0.1f, 1.f));
 
@@ -72,24 +73,6 @@ HRESULT CMainApp::Render()
 
 	// 그리기
 	m_pRenderer->Draw_RenderObjects();
-
-#ifdef _DEBUG
-	++m_iRenderCount;
-
-	if (m_fTimeAcc >= 1.f)
-	{
-		m_fTimeAcc = 0;
-		wsprintf(m_szFPS, TEXT("금쪽아 Fighting : %d"), m_iRenderCount);
-
-		m_iRenderCount = 0;
-	}
-
-
-	m_pGameInstance->Render_Font(TEXT("Font_Default"), m_szFPS, _float2(0.f, 0.f), XMVectorSet(1.f, 0.f, 0.f, 1.f));
-
-#endif
-
-
 
 	m_pGameInstance->AfterRender();
 
@@ -113,6 +96,9 @@ HRESULT CMainApp::Open_Level(LEVELID _eLevelID)
 HRESULT CMainApp::Ready_ProtoType_Components()
 {
 	// Texture
+	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Cursor"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/Cursor.png"), 1))))
+		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Black"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/black.dds"), 1))))
 		return E_FAIL;
@@ -132,6 +118,8 @@ HRESULT CMainApp::Ready_ProtoType_Components()
 	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
 		CTransform::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+
 
 	Safe_AddRef(m_pRenderer);
 

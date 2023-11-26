@@ -128,12 +128,17 @@ HRESULT CMonster::Ready_Component()
 		/* Com_Navigation */
 		CNavigation::DESC_NAVIGATION		NavigationDesc;
 		NavigationDesc.iCurIndex = -1;
-
-		if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Navigation_Dungeon"),
+		// ProtoType_Component_Navigation_WhiteRun
+		//if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Navigation_Dungeon"),
+		//	TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
+		//	return E_FAIL;
+		if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Navigation_WhiteRun"),
 			TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
 			return E_FAIL;
 
 		m_pNavigationCom->Set_CurCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		_vector	vPosition = m_pNavigationCom->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 
 

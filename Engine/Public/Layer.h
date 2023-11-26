@@ -17,6 +17,7 @@ public:
 	void    PriorityTick(_float _fTimeDelta);
 	void    Tick(_float _fTimeDelta);
 	void    LateTick(_float _fTimeDelta);
+	void	ClearTick();
 
 public:
 	CGameObject* Find_CloneObject(const wstring& _strName);

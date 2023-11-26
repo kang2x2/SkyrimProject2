@@ -19,6 +19,8 @@ CLevel_Tool::CLevel_Tool(const CLevel_Tool& rhs)
 
 HRESULT CLevel_Tool::Initialize()
 {
+	ShowCursor(true);
+
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 

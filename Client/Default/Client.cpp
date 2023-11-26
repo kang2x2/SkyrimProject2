@@ -23,8 +23,10 @@ Client::LEVELID g_curLevel;
 Client::STAGEID g_curStage;
 bool g_bIsWhiteRunInit;
 bool g_bIsDungeonInit;
+bool g_bIsCastleInit;
 bool g_bIsStaticInit;
 bool g_bIsPublicInit;
+bool g_bIsPause;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);

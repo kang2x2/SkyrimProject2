@@ -19,6 +19,9 @@ CLevel_Dungeon::CLevel_Dungeon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pCo
 
 HRESULT CLevel_Dungeon::Initialize()
 {
+	if (FAILED(Ready_Cursor(TEXT("Layer_Cursor"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Equip(TEXT("Layer_Equip"))))
 		return E_FAIL;
 
@@ -70,6 +73,19 @@ HRESULT CLevel_Dungeon::LateTick(_float _fTimeDelta)
 
 void CLevel_Dungeon::AfterRender()
 {
+}
+
+HRESULT CLevel_Dungeon::Ready_Cursor(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Cursor"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
 }
 
 HRESULT CLevel_Dungeon::Ready_Level()

@@ -61,9 +61,6 @@
     <Filter Include="02. GameObject\99. Tool\00. Terrain">
       <UniqueIdentifier>{b6923e3d-1e14-4c77-85f6-c0be4029cac1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Level\01. Logo">
-      <UniqueIdentifier>{a4d92cd7-66f6-458a-81d1-88f5152aa687}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Level\02. GamePlay">
       <UniqueIdentifier>{fab423ab-56b6-4394-8d89-5b6d6aefc65e}</UniqueIdentifier>
     </Filter>
@@ -273,27 +270,6 @@
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\00. Rock">
       <UniqueIdentifier>{b30aa7ea-84e0-44b8-8cbd-463978edd489}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\04. DGPlaceableObj">
-      <UniqueIdentifier>{319e262f-aab9-40d5-8469-bb9e006cb248}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj">
-      <UniqueIdentifier>{339d7f2b-3fc1-47a9-8ce6-9b0ff35fa6e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\00. CaveRock">
-      <UniqueIdentifier>{0f49549a-c042-4f79-9a8d-5d2fe1173952}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\01. SpiderEgg">
-      <UniqueIdentifier>{71404931-5f13-4141-9f75-3fa90bf41002}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\02. FalmerHouse">
-      <UniqueIdentifier>{590d8b11-9343-4888-9853-7529429c5244}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\03. FalmerFence">
-      <UniqueIdentifier>{69f1c97b-c959-4533-b85f-93f66915eff4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\04. CavePillars">
-      <UniqueIdentifier>{8fbc00e8-04de-4530-9bfd-c593ad51b7af}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block\00. Fix">
       <UniqueIdentifier>{f0dc4d31-9403-4a14-b251-78e902700380}</UniqueIdentifier>
@@ -580,6 +556,66 @@
     <Filter Include="04. UI\05. Inventory\00. Part\02. UnderBar">
       <UniqueIdentifier>{85e84c06-d84f-4709-9ea2-51303f4fd411}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. UI\01. Cursor">
+      <UniqueIdentifier>{585fb4a4-945a-44a4-a164-99b3abdf3a53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider">
+      <UniqueIdentifier>{9618e49c-5b77-4f9a-afd4-0a7f490e9960}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\00. Manager">
+      <UniqueIdentifier>{e68779b7-1401-470f-bb3f-abedbc8d0ab1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State">
+      <UniqueIdentifier>{c1b70690-f04b-4560-a309-78eb53486e07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\00. Idle">
+      <UniqueIdentifier>{697a9ec2-0af1-41a0-8c09-d401c975d139}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts">
+      <UniqueIdentifier>{f1560012-52f3-40ae-8983-e5a4124c4d5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts\00. Weapon">
+      <UniqueIdentifier>{e3ce9dc3-8605-4918-b107-848a62e936b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\02. Chase">
+      <UniqueIdentifier>{073003f8-2a59-40ac-a8f7-1a6bc621ce60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\03. Spit">
+      <UniqueIdentifier>{2efa776c-e753-4923-a899-ecfb9e8c1e0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\01. GetUp">
+      <UniqueIdentifier>{7318c076-5dd3-41b6-98cd-c035033e6100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\01. Bullet">
+      <UniqueIdentifier>{a4f48d39-edd6-446c-9807-4fa27fd454f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\04. DGPlaceableObj">
+      <UniqueIdentifier>{319e262f-aab9-40d5-8469-bb9e006cb248}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj">
+      <UniqueIdentifier>{339d7f2b-3fc1-47a9-8ce6-9b0ff35fa6e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\00. CaveRock">
+      <UniqueIdentifier>{0f49549a-c042-4f79-9a8d-5d2fe1173952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\01. SpiderEgg">
+      <UniqueIdentifier>{71404931-5f13-4141-9f75-3fa90bf41002}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\02. FalmerHouse">
+      <UniqueIdentifier>{590d8b11-9343-4888-9853-7529429c5244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\03. FalmerFence">
+      <UniqueIdentifier>{69f1c97b-c959-4533-b85f-93f66915eff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\04. CavePillars">
+      <UniqueIdentifier>{8fbc00e8-04de-4530-9bfd-c593ad51b7af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Level\00. Zero\01. Logo">
+      <UniqueIdentifier>{a4d92cd7-66f6-458a-81d1-88f5152aa687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\06. CastleObject">
+      <UniqueIdentifier>{541469c3-8029-4e88-bc01-e85a1c915af3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -598,7 +634,7 @@
       <Filter>01. Level\99. Loading\00. Loader</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Logo.h">
-      <Filter>01. Level\01. Logo</Filter>
+      <Filter>01. Level\00. Zero\01. Logo</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Loading.h">
       <Filter>01. Level\99. Loading</Filter>
@@ -1077,6 +1113,45 @@
     <ClInclude Include="..\Public\Inventory_PartBase.h">
       <Filter>04. UI\05. Inventory\00. Part</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Skyrim_Cursor.h">
+      <Filter>04. UI\01. Cursor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Spider.h">
+      <Filter>03. State\01. Monster\03. Spider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateManager_Spider.h">
+      <Filter>03. State\01. Monster\03. Spider\00. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_Idle.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\00. Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Spider.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SpiderPart_Base.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Spider_Weapon.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts\00. Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_Spit.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\03. Spit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_Chase.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\02. Chase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_GetUp.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\01. GetUp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Projectile_Web.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\01. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Castle.h">
+      <Filter>01. Level\02. GamePlay\01. Castle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CastleObject.h">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\06. CastleObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1097,7 +1172,7 @@
       <Filter>01. Level\99. Loading\00. Loader</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Logo.cpp">
-      <Filter>01. Level\01. Logo</Filter>
+      <Filter>01. Level\00. Zero\01. Logo</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Loading.cpp">
       <Filter>01. Level\99. Loading</Filter>
@@ -1563,6 +1638,45 @@
     </ClCompile>
     <ClCompile Include="..\Private\Inventory_PartBase.cpp">
       <Filter>04. UI\05. Inventory\00. Part</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Skyrim_Cursor.cpp">
+      <Filter>04. UI\01. Cursor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Spider.cpp">
+      <Filter>03. State\01. Monster\03. Spider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateManager_Spider.cpp">
+      <Filter>03. State\01. Monster\03. Spider\00. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_Idle.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\00. Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Spider.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SpiderPart_Base.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Spider_Weapon.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts\00. Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_Spit.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\03. Spit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_Chase.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\02. Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_GetUp.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\01. GetUp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Projectile_Web.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\01. Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Castle.cpp">
+      <Filter>01. Level\02. GamePlay\01. Castle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CastleObject.cpp">
+      <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\06. CastleObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

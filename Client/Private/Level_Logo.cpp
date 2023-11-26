@@ -7,6 +7,7 @@
 #include "Logo_Camera.h"
 
 #include "SkyrimUI_SceneChange.h"
+#include "Skyrim_Cursor.h"
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CLevel(_pDevice, _pContext)
@@ -22,6 +23,9 @@ HRESULT CLevel_Logo::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Ready_Light()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Cursor(TEXT("Layer_Cursor"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_LogoObj(TEXT("Layer_LogoObj"))))
@@ -60,6 +64,19 @@ HRESULT CLevel_Logo::LateTick(_float _fTimeDelta)
 	//{
 
 	//}
+
+	return S_OK;
+}
+
+HRESULT CLevel_Logo::Ready_Cursor(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOGO, _strLayerTag, TEXT("ProtoType_GameObject_Cursor"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -190,6 +207,19 @@ HRESULT CLevel_Logo::Ready_Layer_LogoText(const wstring& _strLayerTag)
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOGO, _strLayerTag, TEXT("ProtoType_GameObject_UI_Text"), &textDesc)))
 		return E_FAIL;
 
+	textDesc.strText = TEXT("Data");
+	textDesc.strFontTag = TEXT("Font_Bold");
+	textDesc.fX = 1100.f;
+	textDesc.fY = 600.f;
+	textDesc.fSizeX = 50.f;
+	textDesc.fSizeY = 25.f;
+	textDesc.vColor = XMVectorSet(1.f, 1.f, 1.f, 1.f);
+	textDesc.fFontSize = 0.5f;
+	textDesc.iLevelID = LEVEL_ZERO;
+	textDesc.iStageID = STAGE_END;
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOGO, _strLayerTag, TEXT("ProtoType_GameObject_UI_Text"), &textDesc)))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

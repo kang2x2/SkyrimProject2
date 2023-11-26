@@ -157,12 +157,14 @@ HRESULT CCamera_Player::Ready_Component()
 
 void CCamera_Player::Mouse_Fix()
 {
-    ShowCursor(false);
+    if (!g_bIsPause)
+    {
+        POINT		pt{ g_iWinSizeX >> 1, g_iWinSizeY >> 1 };
 
-    POINT		pt{ g_iWinSizeX >> 1, g_iWinSizeY >> 1 };
+        ClientToScreen(g_hWnd, &pt);
+        SetCursorPos(pt.x, pt.y);
+    }
 
-    ClientToScreen(g_hWnd, &pt);
-    SetCursorPos(pt.x, pt.y);
 }
 
 void CCamera_Player::Zoom(_float _fTimeDelta)

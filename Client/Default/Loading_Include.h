@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Skyrim_Cursor.h"
+
 // Logo Level
 #include "Logo_Camera.h"
 #include "BackGround.h"
@@ -48,6 +50,11 @@
 #include "Falmer_OneHand.h"
 #include "FalmerOH_Weapon.h"
 
+/* Spider */
+#include "Spider.h"
+#include "Spider_Weapon.h"
+#include "Projectile_Web.h"
+
 #pragma endregion
 
 #pragma region Light
@@ -61,6 +68,7 @@
 #include "Building.h"
 #include "StoneWork.h"
 #include "DGPlaceableObj.h"
+#include "CastleObject.h"
 #pragma endregion
 
 #pragma region Collisible Object 

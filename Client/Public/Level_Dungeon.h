@@ -20,6 +20,7 @@ public:
 	virtual void AfterRender();
 
 private:
+	HRESULT Ready_Cursor(const wstring& _strLayerTag);
 	HRESULT Ready_Level();
 	HRESULT Ready_Light();
 

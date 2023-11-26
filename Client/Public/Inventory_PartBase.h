@@ -50,20 +50,22 @@ protected:
 protected: /* 사용할 컴포넌트들 */
 	CRenderer*		m_pRendererCom = nullptr;
 	CShader*		m_pShaderCom = nullptr;
-	CVIBuffer_Rect* m_pVIBufferCom = nullptr;
 
 	CTransform*		m_pTransformBlack = nullptr;
 	CTexture*		m_pTextureBlack = nullptr;
+	CVIBuffer_Rect* m_pVIBufferBlack = nullptr;
 	_float2			m_vBlackPos = {};
 	_float2			m_vBlackSize = {};
 
 	CTransform*		m_pTransformLine1 = nullptr;
 	CTexture*		m_pTextureLine1 = nullptr;
+	CVIBuffer_Rect* m_pVIBufferLine1 = nullptr;
 	_float2			m_vLine1Pos = {};
 	_float2			m_vLine1Size = {};
 
 	CTransform*		m_pTransformLine2 = nullptr;
 	CTexture*		m_pTextureLine2 = nullptr;
+	CVIBuffer_Rect* m_pVIBufferLine2 = nullptr;
 	_float2			m_vLine2Pos = {};
 	_float2			m_vLine2Size = {};
 

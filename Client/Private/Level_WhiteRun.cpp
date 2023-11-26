@@ -23,6 +23,9 @@ HRESULT CLevel_WhiteRun::Initialize()
 	// CIMGui_Manager 초기화
 	CIMGui_Manager::GetInstance()->Initialize(m_pDevice, m_pContext, LEVEL_GAMEPLAY);
 
+	if (FAILED(Ready_Cursor(TEXT("Layer_Cursor"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
@@ -79,11 +82,25 @@ void CLevel_WhiteRun::AfterRender()
 	// CIMGui_Manager::GetInstance()->Frame();
 }
 
+HRESULT CLevel_WhiteRun::Ready_Cursor(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Cursor"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CLevel_WhiteRun::Ready_Level()
 {
 #pragma region Static
 	/* 화이트런 */
-	wstring filePath = TEXT("../Bin/SaveLoad/Skyrim2");
+	wstring filePath = TEXT("../Bin/SaveLoad/Skyrim3");
+	//wstring filePath = TEXT("../Bin/SaveLoad/testMap");
 
 	ifstream fileStream(filePath, ios::binary);
 	if (fileStream.is_open()) {
@@ -105,7 +122,8 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 
 #pragma region Dynamic
 
-	filePath = TEXT("../Bin/SaveLoad/Outfit_NPC");
+	//filePath = TEXT("../Bin/SaveLoad/Outfit_NPC");
+	filePath = TEXT("../Bin/SaveLoad/testMonster");
 	
 	// 파일을 열기 모드로 열기.
 	ifstream fileStream2(filePath, ios::binary);
@@ -199,9 +217,6 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Player(const wstring& _strLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	/* NPC 임시 생성 */
-	// if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Npc_Carlotta"))))
-	// 	return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
 		return E_FAIL;

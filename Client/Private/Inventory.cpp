@@ -87,12 +87,12 @@ HRESULT CInventory::Ready_Part()
 
 	/* For. Category */
 	CInventory_ItemCategory::INVENPART_DESC categoryPartDesc;
-	categoryPartDesc.vBlackPos = { 200.f, g_iWinSizeY * 0.5f };
+	categoryPartDesc.vBlackPos = { 150.f, g_iWinSizeY * 0.5f };
 	categoryPartDesc.vBlackSize = { 200.f, g_iWinSizeY };
-	categoryPartDesc.vLine1Pos = { 100.f, g_iWinSizeY * 0.5f };
-	categoryPartDesc.vLine1Size = { 10.f, g_iWinSizeY };
-	categoryPartDesc.vLine2Pos = { 300.f, g_iWinSizeY * 0.5f };
-	categoryPartDesc.vLine2Size = { 10.f, g_iWinSizeY };
+	categoryPartDesc.vLine1Pos = { 50.f, g_iWinSizeY * 0.5f };
+	categoryPartDesc.vLine1Size = { 2.f, g_iWinSizeY };
+	categoryPartDesc.vLine2Pos = { 250.f, g_iWinSizeY * 0.5f };
+	categoryPartDesc.vLine2Size = { 2.f, g_iWinSizeY };
 
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Inventory_CategoryPart"), &categoryPartDesc);
 	if (pPart == nullptr)

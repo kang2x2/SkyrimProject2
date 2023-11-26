@@ -29,13 +29,6 @@ private:
 	CGameInstance*		 m_pGameInstance = nullptr;
 	CRenderer*			 m_pRenderer = nullptr; 
 
-#ifdef _DEBUG
-private:
-	_tchar					m_szFPS[MAX_PATH] = TEXT("");
-	_uint					m_iRenderCount = 0;
-	_float					m_fTimeAcc = 0;
-#endif
-
 private:
 	HRESULT Open_Level(LEVELID _eLevelID);
 

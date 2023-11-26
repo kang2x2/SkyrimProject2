@@ -159,6 +159,17 @@ void CObject_Manager::LateTick(_float _fTimeDelta)
 	}
 }
 
+void CObject_Manager::ClearTick()
+{
+	for (size_t i = 0; i < m_iLevelNum; ++i)
+	{
+		for (auto& iter : m_mapLayer[i])
+		{
+			iter.second->ClearTick();
+		}
+	}
+}
+
 void CObject_Manager::Clear(_uint _iLevelIndex)
 {
 	for (auto& iter : m_mapLayer[_iLevelIndex])
