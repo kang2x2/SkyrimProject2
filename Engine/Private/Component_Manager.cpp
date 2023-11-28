@@ -23,7 +23,10 @@ HRESULT CComponent_Manager::Add_ProtoType_Component(_uint _iLevelIndex, const ws
 {
 	if (m_mapProtoTypeObj == nullptr ||
 		Find_ProtoType(_iLevelIndex, _strProtoTypeTag) != nullptr)
+	{
+		MSG_BOX("이미 추가된 컴포넌트.");
 		return E_FAIL;
+	}
 
 	m_mapProtoTypeObj[_iLevelIndex].emplace(_strProtoTypeTag, _pProtoTypeComponent);
 
@@ -35,11 +38,17 @@ CComponent* CComponent_Manager::Clone_Component(_uint _iLevelIndex, const wstrin
 	// 컴포넌트 원본 탐색
 	CComponent* pProtoTypeComponent = Find_ProtoType(_iLevelIndex, _strProtoTypeTag);
 	if (pProtoTypeComponent == nullptr)
+	{
+		MSG_BOX("원본 컴포넌트가 존재하지 않음.");
 		return nullptr;
+	}
 	// 컴포넌트 복사
 	CComponent* pCloneComponent = pProtoTypeComponent->Clone(_pArg);
 	if (pCloneComponent == nullptr)
+	{
+		MSG_BOX("컴포넌트 복사 실패.");
 		return nullptr;
+	}
 
 	return pCloneComponent;
 }

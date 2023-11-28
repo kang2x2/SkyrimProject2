@@ -231,6 +231,15 @@ HRESULT CLoader::Loading_For_Level_Logo()
 		CSkyrim_LogoObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+#pragma region UI
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_UI_HpBar"),
+		CSkyrimUI_HpBar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_UI_SpBar"),
+		CSkyrimUI_SpBar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
 	/* 로딩 끝 */
 	Safe_Release(pGameInstance);
 	
@@ -415,6 +424,11 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Snow/sun.dds"), 1))))
 			return E_FAIL;
 
+		/* UI */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Texture_E"),
+			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/e.dds"), 1))))
+			return E_FAIL;
+
 #pragma endregion
 
 #pragma region Collider
@@ -437,6 +451,11 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 		/* VIBuffer_Cube */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_VIBuffer_Cube"),
 			CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+
+		// ViBuffer_Rect
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_VIBuffer_Rect"),
+			CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 			return E_FAIL;
 
 		/* VIBuffer_Rect_Instance */
@@ -464,10 +483,6 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Shader_VtxPosTex"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
 			return E_FAIL;
-		// ViBuffer_Rect
-		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_VIBuffer_Rect"),
-			CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
 		/* Shader_VtxNorTex */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_VtxNorTex"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
@@ -494,7 +509,7 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 		/* 화이트런 */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Navigation_WhiteRun"),
 			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/testCell")))))
-			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/WhiteRun_Cell")))))
+			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/WhiteRun_Cell2")))))
 			return E_FAIL;
 
 		/* 던전 */
@@ -1387,7 +1402,7 @@ HRESULT CLoader::Set_ProtoType_DungeonMesh(LEVELID _eLevel)
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Falmer_OneHand/Falmer_OneHand.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
-	/* Spider */
+	/* Spider */ 
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Spider"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Spider/Spider.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
@@ -2758,6 +2773,11 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	// SceneChangeCol
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_SceneChangeCol"),
+		CSceneChangeCol::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// Camera 
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Camera_Player"),
 		CCamera_Player::Create(m_pDevice, m_pContext))))
@@ -2847,6 +2867,9 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Inventory_CategoryPart"),
 		CInventory_ItemCategory::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Inventory_ItemListPart"),
+		CInventory_ItemList::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BootsM_Blades"),
 	//	CInventory_ItemList::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
@@ -2869,22 +2892,23 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 	_matrix matInitialize = XMMatrixIdentity();
 	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
 	/* Test */
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Spider"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Spider/Spider.bin", matInitialize, CModel::TYPE_ANIM))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_SpiderBullet"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Effect/SpiderBullet/SpiderBullet.bin", matInitialize, CModel::TYPE_NONANIM))))
-		return E_FAIL;
-
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider"),
-		CSpider::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider_Weapon"),
-		CSpider_Weapon::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CProjectile_Web"),
-		CProjectile_Web::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+	// Spider
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Spider"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Spider/Spider.bin", matInitialize, CModel::TYPE_ANIM))))
+	//	return E_FAIL;
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_SpiderBullet"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Effect/SpiderBullet/SpiderBullet.bin", matInitialize, CModel::TYPE_NONANIM))))
+	//	return E_FAIL;
+	//
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider"),
+	//	CSpider::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider_Weapon"),
+	//	CSpider_Weapon::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CProjectile_Web"),
+	//	CProjectile_Web::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
 #pragma region NPC
 

@@ -8,6 +8,7 @@
 #include "StatePlayer_RunBackward.h"
 #include "StatePlayer_RunLeft.h"
 #include "StatePlayer_RunRight.h"
+#include "StatePlayer_Sprint.h"
 
 #include "StatePlayerOH_Idle.h"
 #include "StatePlayerOH_Equip.h"
@@ -16,6 +17,7 @@
 #include "StatePlayerOH_RunBackward.h"
 #include "StatePlayerOH_RunLeft.h"
 #include "StatePlayerOH_RunRight.h"
+#include "StatePlayerOH_Sprint.h"
 
 #include "StatePlayerOH_LAttack.h"
 #include "StatePlayerOH_RAttack.h"
@@ -66,6 +68,10 @@ HRESULT CStateManager_Player::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 	pState = CStatePlayer_RunRight::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
+	/* Sprint */
+	pState = CStatePlayer_Sprint::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
+
 #pragma endregion
 
 #pragma region OneHand
@@ -91,6 +97,10 @@ HRESULT CStateManager_Player::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 	m_vecPlayerState.push_back(pState);
 
 	pState = CStatePlayerOH_RunRight::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
+
+	/* Sprint */
+	pState = CStatePlayerOH_Sprint::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
 	/* Attack */

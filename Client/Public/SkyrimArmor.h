@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Client_Defines.h"
-#include "GameObject.h"
+#include "SkyrimItem.h"
 
 BEGIN(Engine)
 
@@ -15,11 +14,11 @@ END
 
 BEGIN(Client)
 
-class CSkyrimArmor abstract : public CGameObject
+class CSkyrimArmor abstract : public CSkyrimItem
 {
 public:
 	enum ARMOR_VIEWTYPE { VIEW_3ST, VIEW_1ST, VIEW_END };
-
+	enum ARMOR_PARTTYPE { ARMOR_TORSO, ARMOR_HELMET, ARMOR_GLOVE, ARMOR_BOOT, ARMOR_END };
 protected:
 	CSkyrimArmor(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	CSkyrimArmor(const CSkyrimArmor& rhs);
@@ -34,6 +33,7 @@ public:
 
 public:
 	virtual void Set_ViewType(ARMOR_VIEWTYPE _eType) { m_eViewType = _eType; }
+	virtual ARMOR_PARTTYPE Get_ArmorPartType() { return m_ePartType; }
 
 protected:
 	HRESULT Ready_Component();
@@ -48,6 +48,7 @@ protected:
 	CBone* m_pSocketBone = nullptr;
 	_float4x4	m_matSocketPivot;
 
+	ARMOR_PARTTYPE m_ePartType = ARMOR_END;
 	ARMOR_VIEWTYPE m_eViewType = VIEW_3ST;
 
 public:

@@ -10,7 +10,9 @@
 #include "IMGui_Manager.h"
 #include "GameInstance.h"
 
+#include "SceneChangeCol.h"
 #include "Player.h"
+#include "Inventory.h"
 
 
 CLevel_WhiteRun::CLevel_WhiteRun(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
@@ -35,6 +37,9 @@ HRESULT CLevel_WhiteRun::Initialize()
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Inventory(TEXT("Layer_Inventory"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Level()))
 		return E_FAIL;
 
@@ -52,6 +57,13 @@ HRESULT CLevel_WhiteRun::Initialize()
 
 HRESULT CLevel_WhiteRun::Tick(_float _fTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	pGameInstance->Clear_BackBuffer_View(_float4(0.01f, 0.02f, 0.1f, 1.f));
+
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -59,18 +71,30 @@ HRESULT CLevel_WhiteRun::LateTick(_float _fTimeDelta)
 {
 	SetWindowText(g_hWnd, TEXT("Current Level : WhiteRun"));
 
-	if (GetKeyState(VK_F10) & 0x8000)
+	//if (GetKeyState(VK_F10) & 0x8000)
+	//{
+	//	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//	Safe_AddRef(pGameInstance);
+	//
+	//	g_curStage = STAGE_DUNGEON;
+	//	if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
+	//		return E_FAIL;
+	//
+	//	Safe_Release(pGameInstance);
+	//
+	//	int i = 0;
+	//}
+	if (m_bIsChangeScene)
 	{
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
-
-		g_curStage = STAGE_DUNGEON;
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
+	
+		g_curStage = (STAGEID)m_iChangeStageIdx;
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, (LEVELID)m_iChangeLevelIdx))))
 			return E_FAIL;
-
+	
+		m_bIsChangeScene = false;
 		Safe_Release(pGameInstance);
-
-		int i = 0;
 	}
 
 	return S_OK;
@@ -97,6 +121,16 @@ HRESULT CLevel_WhiteRun::Ready_Cursor(const wstring& _strLayerTag)
 
 HRESULT CLevel_WhiteRun::Ready_Level()
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CSceneChangeCol::tagSceneChangeColDesc tempDesc;
+	tempDesc.eDestStage = STAGE_DUNGEON;
+	tempDesc.vPos = { 3.f, 7.f, 64.f, 1.f };
+	tempDesc.strDestText = TEXT("지하수로");
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_SceneChangeCol"), TEXT("ProtoType_GameObject_SceneChangeCol"), &tempDesc)))
+		return E_FAIL;
+
 #pragma region Static
 	/* 화이트런 */
 	wstring filePath = TEXT("../Bin/SaveLoad/Skyrim3");
@@ -104,12 +138,8 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 
 	ifstream fileStream(filePath, ios::binary);
 	if (fileStream.is_open()) {
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
 
 		pGameInstance->Object_FileLoad(fileStream, LEVEL_GAMEPLAY);
-
-		Safe_Release(pGameInstance);
 
 		fileStream.close();
 		MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
@@ -122,20 +152,13 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 
 #pragma region Dynamic
 
-	//filePath = TEXT("../Bin/SaveLoad/Outfit_NPC");
-	filePath = TEXT("../Bin/SaveLoad/testMonster");
-	
-	// 파일을 열기 모드로 열기.
+	filePath = TEXT("../Bin/SaveLoad/Outfit_NPC");
+	//filePath = TEXT("../Bin/SaveLoad/testMonster");
+	//
 	ifstream fileStream2(filePath, ios::binary);
 	if (fileStream2.is_open()) {
-		// 파일 내용을 읽기.
-	
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
 	
 		pGameInstance->Object_FileLoad(fileStream2, LEVEL_GAMEPLAY);
-	
-		Safe_Release(pGameInstance);
 	
 		fileStream2.close();
 		MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
@@ -147,6 +170,7 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 
 #pragma endregion
 
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -231,6 +255,20 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Player(const wstring& _strLayerTag)
 
 	dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
 		TEXT("Player")))->Set_CurCell();
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_WhiteRun::Ready_Layer_Inventory(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	/* Inventory */
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_Inventory"), TEXT("ProtoType_GameObject_UI_Inventory"))))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

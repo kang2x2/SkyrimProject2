@@ -25,6 +25,15 @@ void CStatePlayerOH_RAttack::Update(_float _fTimeDelta)
 	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 		m_pPlayer->CheckHit_Onehand(14, 16);
 	
+	if (m_pPlayer->Get_CurFrameIndex() >= 14 && m_pPlayer->Get_CurFrameIndex() <= 20 &&
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_attackright"))
+	{
+		m_pPlayer->Set_IsAttack(true);
+	}
+	else
+		m_pPlayer->Set_IsAttack(false);
+
+
 	Key_Input(_fTimeDelta);
 
 	__super::Key_Input(_fTimeDelta);
@@ -34,6 +43,8 @@ void CStatePlayerOH_RAttack::Late_Update()
 {
 	if (m_pPlayer->Get_IsAnimationFin())
 	{
+		m_pPlayer->Set_IsAttack(false);
+
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
 		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 	}
@@ -51,6 +62,16 @@ void CStatePlayerOH_RAttack::Key_Input(_float _fTimeDelta)
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACK);
 		m_pPlayer->Play_Animation_All(false, "1hm_attackleft");
+	}
+
+	else if (m_pPlayer->Get_CurFrameIndex() >= 22 && m_pPlayer->Get_PlayerSp() > 0.f &&
+		strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_attackleft") &&
+		pGameInstance->Get_DIKeyDown('V'))
+	{
+		m_pPlayer->Set_PlayerSp(-20.f);
+
+		m_pPlayer->Set_State(CPlayer::ONEHAND_PATTACK);
+		m_pPlayer->Play_Animation_All(false, "1hm_attackpower");
 	}
 
 	else if (pGameInstance->Get_DIKeyPress('A'))

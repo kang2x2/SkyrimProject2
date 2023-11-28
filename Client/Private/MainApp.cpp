@@ -62,12 +62,12 @@ void CMainApp::Tick(_float _fTimeDelta)
 
 HRESULT CMainApp::Render()
 {
-	if(g_curLevel == LEVEL_LOADING || g_curLevel == LEVEL_LOGO)
-		m_pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
-	else if (g_curLevel == LEVEL_TOOL)
+	//if(g_curLevel == LEVEL_LOADING || g_curLevel == LEVEL_LOGO)
+	//	m_pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
+	if (g_curLevel == LEVEL_TOOL)
 		m_pGameInstance->Clear_BackBuffer_View(_float4(0.1f, 0.1f, 0.6f, 1.f));
-	else
-		m_pGameInstance->Clear_BackBuffer_View(_float4(0.01f, 0.02f, 0.1f, 1.f));
+	//else
+	//	m_pGameInstance->Clear_BackBuffer_View(_float4(0.01f, 0.02f, 0.1f, 1.f));
 
 	m_pGameInstance->Clear_DepthStencil_View();
 
@@ -95,6 +95,7 @@ HRESULT CMainApp::Open_Level(LEVELID _eLevelID)
 
 HRESULT CMainApp::Ready_ProtoType_Components()
 {
+#pragma region Texture
 	// Texture
 	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Cursor"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/Cursor.png"), 1))))
@@ -108,6 +109,22 @@ HRESULT CMainApp::Ready_ProtoType_Components()
 	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_WhiteEm"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/white_em.dds"), 1))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dissolve"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/Dissolve.png"), 1))))
+		return E_FAIL;
+	/* Bar */
+	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_EmptyBar"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/EmptyBar.png"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_SpBar"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/SpBar.png"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_HpBar"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/HpBar.png"), 1))))
+		return E_FAIL;
+
+#pragma endregion
+
 
 	// Renderer
 	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("ProtoType_Component_Renderer"),

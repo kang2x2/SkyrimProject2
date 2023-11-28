@@ -25,7 +25,10 @@ HRESULT CObject_Manager::Add_ProtoObject(const wstring& _strProtoTypeTag, CGameO
 {
 	// 새로 추가하는 것이기 때문에 이미 존재하여 반환값이 nullptr이 아니라면 실패.
 	if (Find_ProtoObject(_strProtoTypeTag) != nullptr)
+	{
+		MSG_BOX("이미 추가된 오브젝트.");
 		return E_FAIL;
+	}
 
 	m_mapProtoTypeObj.emplace(_strProtoTypeTag, _pGameObject);
 
@@ -37,12 +40,18 @@ HRESULT CObject_Manager::Add_CloneObject(_uint _iLevelIndex, const wstring& _str
 	// 복제하려는 원본을 찾는다.
 	CGameObject* pProtoTypeObject = Find_ProtoObject(_strProtoTypeTag);
 	if (pProtoTypeObject == nullptr) // 복제하려는 원본이 없으면 실패.
+	{
+		MSG_BOX("복제하려는 원본이 존재하지 않음.");
 		return E_FAIL;
+	}
 
 	// 찾은 원본을 복제하여 사본 생성.
 	CGameObject* pCloneObject = pProtoTypeObject->Clone(pArg);
 	if (pCloneObject == nullptr) // 복사에 실패 했을 시
+	{
+		MSG_BOX("오브젝트 복사 실패.");
 		return E_FAIL;
+	}
 
 	CLayer* pLayer = Find_Layer(_iLevelIndex, _strLayerTag);
 
@@ -73,12 +82,18 @@ HRESULT CObject_Manager::Add_CloneObject(_uint _iLevelIndex, const wstring& _str
 	// 복제하려는 원본을 찾는다.
 	CGameObject* pProtoTypeObject = Find_ProtoObject(_strProtoTypeTag);
 	if (pProtoTypeObject == nullptr) // 복제하려는 원본이 없으면 실패.
+	{
+		MSG_BOX("복제하려는 원본이 존재하지 않음.");
 		return E_FAIL;
+	}
 
 	// 찾은 원본을 복제하여 사본 생성.
 	CGameObject* pCloneObject = pProtoTypeObject->Clone(_iLevelIndex, _strModelComTag, pArg);
 	if (pCloneObject == nullptr) // 복사에 실패 했을 시
+	{
+		MSG_BOX("오브젝트 복사 실패.");
 		return E_FAIL;
+	}
 
 	CLayer* pLayer = Find_Layer(_iLevelIndex, _strLayerTag);
 
@@ -105,15 +120,40 @@ HRESULT CObject_Manager::Add_CloneObject(_uint _iLevelIndex, const wstring& _str
 
 }
 
+CGameObject* CObject_Manager::Add_InstanceCloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strPrototypeTag, void* _pArg)
+{
+	CGameObject* pProtoTypeObject = Find_ProtoObject(_strPrototypeTag);
+	if (nullptr == pProtoTypeObject)
+	{
+		MSG_BOX("원본 오브젝트가 존재하지 않음.(함수3)");
+		return nullptr;
+	}
+
+	CGameObject* pCloneObject = pProtoTypeObject->Clone(_pArg);
+	if (nullptr == pCloneObject)
+	{
+		MSG_BOX("오브젝트 복사 실패.(함수3)");
+		return nullptr;
+	}
+
+	return pCloneObject;
+}
+
 CGameObject* CObject_Manager::Add_ClonePartObject(const wstring& _strPrototypeTag, void* _pArg)
 {
 	CGameObject* pProtoTypeObject = Find_ProtoObject(_strPrototypeTag);
 	if (nullptr == pProtoTypeObject)
+	{
+		MSG_BOX("원본 파츠가 존재하지 않음.");
 		return nullptr;
+	}
 
 	CGameObject* pCloneObject = pProtoTypeObject->Clone(_pArg);
 	if (nullptr == pCloneObject)
+	{
+		MSG_BOX("파츠 복사 실패.");
 		return nullptr;
+	}
 
 	return pCloneObject;
 }

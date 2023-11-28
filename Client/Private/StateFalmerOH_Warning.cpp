@@ -19,6 +19,8 @@ HRESULT CStateFalmerOH_Warning::Initialize(CGameObject* _pMonster, CGameObject* 
 
 void CStateFalmerOH_Warning::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
 	m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
 }
 

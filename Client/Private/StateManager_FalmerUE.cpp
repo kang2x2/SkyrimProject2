@@ -21,6 +21,8 @@
 #include "StateFalmerUE_StaggerL2.h"
 #include "StateFalmerUE_StaggerH.h"
 
+#include "StateFalmerUE_Dead.h"
+
 CStateManager_FalmerUE::CStateManager_FalmerUE()
 {
 }
@@ -73,7 +75,9 @@ HRESULT CStateManager_FalmerUE::Initialize(CGameObject* _pMonster, CGameObject* 
 	pState = CStateFalmerUE_StaggerH::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
 
-
+	/* Dead */
+	pState = CStateFalmerUE_Dead::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
 
 	m_pCurState = m_vecMonsterState.front();
 

@@ -19,6 +19,7 @@ HRESULT CStateFalmerOH_Charge::Initialize(CGameObject* _pMonster, CGameObject* _
 
 void CStateFalmerOH_Charge::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
 
 	m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
 

@@ -19,6 +19,8 @@ HRESULT CStateFalmerUE_Attack2::Initialize(CGameObject* _pMonster, CGameObject* 
 
 void CStateFalmerUE_Attack2::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 

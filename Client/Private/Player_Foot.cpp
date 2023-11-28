@@ -38,12 +38,14 @@ HRESULT CPlayer_Foot::Initialize_Clone(void* _pArg)
 	//
 	//pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_BootsM_Blades"));
 	//
-	//CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("BootsM_Blades"));
+	//CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("블레이즈 부츠(남)"));
 	//
 	//m_pModelCom->SwapDesc_Armor(
 	//	dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_3stModel"))));
 	//
 	//Safe_Release(pGameInstance);
+
+	m_pModelCom->SwapDesc_Armor(m_pBasicModel);
 
 	return S_OK;
 }
@@ -108,6 +110,25 @@ _bool CPlayer_Foot::Get_CurAnimationIsLoop()
 	return m_pModelCom->Get_CurAnimationIsLoop();
 }
 
+void CPlayer_Foot::Change_Equip(CGameObject* _pItem)
+{
+	if (m_pModelCom == _pItem->Get_Component(TEXT("Com_3stModel")))
+	{
+		int i = 0;
+	}
+	else
+	{
+		//Safe_Release(m_pModelComAry[CPlayer::CAM_1ST]);
+		//Safe_Release(m_pModelComAry[CPlayer::CAM_3ST]);
+
+		m_pModelCom->SwapDesc_Armor(dynamic_cast<CModel*>(_pItem->Get_Component(TEXT("Com_3stModel"))));
+
+		//m_pModelComAry[CPlayer::CAM_1ST] = dynamic_cast<CModel*>(_pItem->Get_Component(TEXT("Com_1stModel")));
+		//m_pModelComAry[CPlayer::CAM_3ST] = dynamic_cast<CModel*>(_pItem->Get_Component(TEXT("Com_3stModel")));
+	}
+
+}
+
 _bool CPlayer_Foot::Get_IsAnimationFin()
 {
 	return m_pModelCom->Get_IsAnimationFin();
@@ -123,6 +144,10 @@ HRESULT CPlayer_Foot::Ready_Component()
 {
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_PlayerNude_Foot"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_PlayerNude_Foot"),
+		TEXT("Com_ModelBasic"), (CComponent**)&m_pBasicModel)))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
@@ -191,4 +216,7 @@ CGameObject* CPlayer_Foot::Clone(void* _pArg)
 void CPlayer_Foot::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pBasicModel);
+	Safe_Release(m_pModelCom);
 }

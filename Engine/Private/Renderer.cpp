@@ -274,7 +274,7 @@ HRESULT CRenderer::Render_Blend()
 
 HRESULT CRenderer::Render_UI()
 {
-	for (auto& iter : m_ltRenderObj[RG_UI])
+	for (auto& iter : m_ltRenderObj[RG_UI_0])
 	{
 		if (iter != nullptr)
 			iter->Render();
@@ -282,7 +282,27 @@ HRESULT CRenderer::Render_UI()
 		Safe_Release(iter);
 	}
 
-	m_ltRenderObj[RG_UI].clear();
+	m_ltRenderObj[RG_UI_0].clear();
+
+	for (auto& iter : m_ltRenderObj[RG_UI_1])
+	{
+		if (iter != nullptr)
+			iter->Render();
+
+		Safe_Release(iter);
+	}
+
+	m_ltRenderObj[RG_UI_1].clear();
+
+	for (auto& iter : m_ltRenderObj[RG_UI_2])
+	{
+		if (iter != nullptr)
+			iter->Render();
+
+		Safe_Release(iter);
+	}
+
+	m_ltRenderObj[RG_UI_2].clear();
 
 	return S_OK;
 }

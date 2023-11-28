@@ -19,7 +19,7 @@ public:
 private:
 	HRESULT Ready_StaticInit();
 	HRESULT Ready_LoadingClone(const wstring& _strLayerTag);
-
+	HRESULT Ready_Light(const wstring& _strLayerTag);
 private:
 	// 로딩 후 이동 할 레벨
 	LEVELID			m_eNextLevel = LEVEL_END;

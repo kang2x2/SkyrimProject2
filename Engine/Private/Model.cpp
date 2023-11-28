@@ -169,12 +169,15 @@ HRESULT CModel::SwapDesc_Armor(CModel* _pModel)
 	// safe_addref
 	// safe_release는 무조건 지우는게 아니라 카운트가 0이면 지운다.
 
-	m_vecBone = _pModel->m_vecBone;
+	// m_vecBone = _pModel->m_vecBone;
 	m_iNumMeshes = _pModel->m_iNumMeshes;
 	m_vecMesh = _pModel->m_vecMesh;
 	m_iNumMaterails = _pModel->m_iNumMaterails;
 	m_vecMaterial = _pModel->m_vecMaterial;
 	m_strModelPath = _pModel->m_strModelPath;
+	//m_vecBone = _pModel->m_vecBone;
+	//m_iNumAnimation = _pModel->m_iNumAnimation;
+	//m_vecAnimation = _pModel->m_vecAnimation;
 
 	return S_OK;
 }

@@ -22,13 +22,16 @@ HRESULT CTorsoM_Blades::Initialize_ProtoType()
 
 HRESULT CTorsoM_Blades::Initialize_Clone(void* _pArg)
 {
+	__super::Initialize_Clone(_pArg);
+
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaling(_float3(0.01f, 0.01f, 0.01f));
 	// m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(-90.0f));
 	// matInitialize = XMMatrixRotationY(XMConvertToRadians(-90.f));
-	m_strName = TEXT("TorsoM_Blades");
+	m_strName = TEXT("블레이즈 아머(남)");
+	m_ePartType = ARMOR_TORSO;
 
 	return S_OK;
 }

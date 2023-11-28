@@ -19,6 +19,8 @@ HRESULT CStateFalmerOH_Equip::Initialize(CGameObject* _pMonster, CGameObject* _p
 
 void CStateFalmerOH_Equip::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
 	m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
 
 	if (m_pMonster->Get_CurFrameIndex() >= 15 &&

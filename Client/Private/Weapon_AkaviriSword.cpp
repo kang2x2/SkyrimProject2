@@ -23,20 +23,21 @@ HRESULT CWeapon_AkaviriSword::Initialize_ProtoType()
 
 HRESULT CWeapon_AkaviriSword::Initialize_Clone(void* _pArg)
 {
+	__super::Initialize_Clone(_pArg);
+
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaling(_float3(0.01f, 0.01f, 0.01f));
 	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
 	// matInitialize = XMMatrixRotationY(XMConvertToRadians(-90.f));
-	m_strName = TEXT("Weapon_AkaviriSword");
+	m_strName = TEXT("아카비르 블레이드");
 
 	return S_OK;
 }
 
 void CWeapon_AkaviriSword::Tick(_float _fTimeDelta)
 {
-
 }
 
 void CWeapon_AkaviriSword::LateTick(_float _fTimeDelta)

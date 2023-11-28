@@ -18,7 +18,18 @@ HRESULT CStatePlayerOH_PAttack::Initialize(CGameObject* _pPlayer, CTransform* _p
 
 void CStatePlayerOH_PAttack::Update(_float _fTimeDelta)
 {
-	__super::Key_Input(_fTimeDelta);
+	m_pPlayer->Set_ReadyRecoverySp(false);
+
+	if (m_pPlayer->Get_CurFrameIndex() >= 18 && m_pPlayer->Get_CurFrameIndex() <= 24 &&
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_attackpower"))
+	{
+		m_pPlayer->Set_IsAttack(true);
+	}
+	else
+		m_pPlayer->Set_IsAttack(false);
+
+
+	Key_Input(_fTimeDelta);
 }
 
 void CStatePlayerOH_PAttack::Late_Update()
@@ -28,9 +39,32 @@ void CStatePlayerOH_PAttack::Late_Update()
 
 	if (m_pPlayer->Get_IsAnimationFin())
 	{
+		m_pPlayer->Set_IsAttack(false);
+
+		m_pPlayerTransform->Set_Speed(m_pPlayer->GetRunSpeed());
+
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
 		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 	}
+}
+
+void CStatePlayerOH_PAttack::Key_Input(_float _fTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_pPlayer->Get_CurFrameIndex() >= 35 &&
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_attackpower") &&
+		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+	{
+		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACK);
+		m_pPlayer->Play_Animation_All(false, "1hm_attackleft");
+	}
+
+	Safe_Release(pGameInstance);
+
+
+	__super::Key_Input(_fTimeDelta);
 }
 
 CStatePlayerOH_PAttack* CStatePlayerOH_PAttack::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation)

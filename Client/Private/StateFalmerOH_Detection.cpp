@@ -18,6 +18,8 @@ HRESULT CStateFalmerOH_Detection::Initialize(CGameObject* _pMonster, CGameObject
 
 void CStateFalmerOH_Detection::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
 }
 
 void CStateFalmerOH_Detection::Late_Update()

@@ -18,6 +18,7 @@ public:
 	void    Tick(_float _fTimeDelta);
 	void    LateTick(_float _fTimeDelta);
 	void	ClearTick();
+	void	Clear();
 
 public:
 	CGameObject* Find_CloneObject(const wstring& _strName);

@@ -14,7 +14,12 @@
 #include "Player_Foot.h"
 #include "Player_Weapon.h"
 
+#include "SkyrimArmor.h"
+
 #include "Inventory.h"
+#include "SkyrimUI_HpBar.h"
+#include "SkyrimUI_SpBar.h"
+
 
 CPlayer::CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CCreatureObject(_pDevice, _pContext)
@@ -53,9 +58,6 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	if (FAILED(Ready_State()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Inventory()))
-		return E_FAIL;
-
 	m_bIsMaintain = true;
 	m_bHasMesh = true;
 	m_bHasPart = true;
@@ -66,14 +68,23 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 
 	Play_Animation_All(true, "mt_idle");
 
-	//m_eCurCamMode = CAM_1ST;
-	m_eCurCamMode = CAM_3ST;
+	m_eCurCamMode = CAM_1ST;
+	//m_eCurCamMode = CAM_3ST;
+
+	if (FAILED(Ready_PlayerUI()))
+		return E_FAIL;
+
+	m_bIsMaintain = true;
 
 	return S_OK;
 }
 
 void CPlayer::PriorityTick(_float _fTimeDelta)
 {
+	// cout << "x : " << m_pTransformCom->Get_WorldMatrix_Float4x4()._41 << endl;
+	// cout << "y : " << m_pTransformCom->Get_WorldMatrix_Float4x4()._42 << endl;
+	// cout << "z : " << m_pTransformCom->Get_WorldMatrix_Float4x4()._43 << endl;
+
 	if (!g_bIsPause)
 	{
 		for (auto& iter : m_vecPlayerPart)
@@ -85,8 +96,52 @@ void CPlayer::PriorityTick(_float _fTimeDelta)
 }
 void CPlayer::Tick(_float _fTimeDelta)
 {
+	/* 임시 아이템 추가. */
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	if (m_pInven == nullptr)
+	{
+		m_pInven = dynamic_cast<CInventory*>
+			(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_Inventory"), TEXT("UI_Inventory")));
+	
+		m_pInven->Inven_AddItem(pGameInstance->Add_InstanceCloneObject(LEVEL_GAMEPLAY, TEXT("SkyrimItem"), TEXT("ProtoType_GameObject_Weapon_AkaviriSword"), nullptr));
+		m_pInven->Inven_AddItem(pGameInstance->Add_InstanceCloneObject(LEVEL_GAMEPLAY, TEXT("SkyrimItem"), TEXT("ProtoType_GameObject_TorsoM_Blades"), nullptr));
+		m_pInven->Inven_AddItem(pGameInstance->Add_InstanceCloneObject(LEVEL_GAMEPLAY, TEXT("SkyrimItem"), TEXT("ProtoType_GameObject_HelmetM_Blades"), nullptr));
+		m_pInven->Inven_AddItem(pGameInstance->Add_InstanceCloneObject(LEVEL_GAMEPLAY, TEXT("SkyrimItem"), TEXT("ProtoType_GameObject_GlovesM_Blades"), nullptr));
+		m_pInven->Inven_AddItem(pGameInstance->Add_InstanceCloneObject(LEVEL_GAMEPLAY, TEXT("SkyrimItem"), TEXT("ProtoType_GameObject_BootsM_Blades"), nullptr));
+	}
+	Safe_Release(pGameInstance);
+
 	if (!g_bIsPause)
 	{
+#pragma region SP
+		if (!m_bIsReadyRecoverySp)
+		{
+			m_bfRecoveryCoolTime += _fTimeDelta;
+			if (m_bfRecoveryCoolTime > 2.f)
+			{
+				m_bfRecoveryCoolTime = 2.f - m_bfRecoveryCoolTime;
+				m_bIsReadyRecoverySp = true;
+			}
+		}
+
+		if (m_bIsReadyRecoverySp && m_fSp < 100)
+		{
+			m_fSp += 0.05f;
+			if (m_fSp >= 100.f)
+			{
+				m_fSp = 100.f;
+				m_bIsReadyRecoverySp = false;
+			}
+		} 
+
+		if (m_fSp < 0.f) 
+			m_fSp = 0.f;
+#pragma endregion
+
+		m_pHpBar->Tick(m_iHp, _fTimeDelta);
+		m_pSpBar->Tick(m_fSp, _fTimeDelta);
+
 		m_pStateManager->Update(_fTimeDelta);
 
 		for (auto& iter : m_vecPlayerPart)
@@ -147,6 +202,9 @@ HRESULT CPlayer::Render()
 #ifdef _DEBUG
 	m_pNavigationCom[g_curStage]->Render();
 #endif
+
+	m_pHpBar->Render();
+	m_pSpBar->Render();
 
 	return S_OK;
 }
@@ -287,6 +345,25 @@ _bool CPlayer::Get_IsInvenShow()
 	return m_pInven->Get_IsInvenShow();
 }
 
+void CPlayer::Use_Item(CSkyrimItem* _pItem)
+{
+	if (_pItem->Get_ItemType() == CSkyrimItem::ITEM_WEAPON)
+	{
+		// dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_WEAPON])->Change_Equip(_pItem);
+	}
+	else if (_pItem->Get_ItemType() == CSkyrimItem::ITEM_ARMOR)
+	{
+		if (dynamic_cast<CSkyrimArmor*>(_pItem)->Get_ArmorPartType() == CSkyrimArmor::ARMOR_TORSO)
+			dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Change_Equip(_pItem);
+		
+		else if (dynamic_cast<CSkyrimArmor*>(_pItem)->Get_ArmorPartType() == CSkyrimArmor::ARMOR_GLOVE)
+			dynamic_cast<CPlayer_Hand*>(m_vecPlayerPart[PART_HAND])->Change_Equip(_pItem);
+		
+		else if (dynamic_cast<CSkyrimArmor*>(_pItem)->Get_ArmorPartType() == CSkyrimArmor::ARMOR_BOOT)
+			dynamic_cast<CPlayer_Foot*>(m_vecPlayerPart[PART_FOOT])->Change_Equip(_pItem);
+	}
+}
+
 HRESULT CPlayer::Ready_Component()
 {
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Renderer"),
@@ -307,6 +384,10 @@ HRESULT CPlayer::Ready_Component()
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Navigation_Dungeon"),
 		TEXT("Com_Navigation_Dungeon"), (CComponent**)&m_pNavigationCom[STAGE_DUNGEON], &NavigationDesc)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Navigation_Dungeon"),
+		TEXT("Com_Navigation_Castle"), (CComponent**)&m_pNavigationCom[STAGE_CASTLE], &NavigationDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -381,8 +462,8 @@ HRESULT CPlayer::Ready_Part()
 	CameraPartDesc.pParent = this;
 	CameraPartDesc.pParentTransform = m_pTransformCom;
 	CameraPartDesc.pBodyTransform = dynamic_cast<CTransform*>(m_vecPlayerPart[PART_BODY]->Get_Component(TEXT("Com_Transform")));
-	CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera3rd [Cam3]");
-	//CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera1st [Cam1]");
+	//CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera3rd [Cam3]");
+	CameraPartDesc.pSocketBone = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketBonePtr("Camera1st [Cam1]");
 	CameraPartDesc.matSocketPivot = dynamic_cast<CPlayerPart_Base*>(m_vecPlayerPart[PART_BODY])->Get_SocketPivotMatrix();
 
 	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Player_CameraPart"), &CameraPartDesc);
@@ -397,9 +478,10 @@ HRESULT CPlayer::Ready_Part()
 
 HRESULT CPlayer::Ready_State()
 {
-	m_fRunSpeed = 3.5f;
+	m_fRunSpeed = 2.5f;
 	m_fWalkSpeed = 1.5f;
 	m_iHp = 100;
+	m_fSp = 100.f;
 	m_iAtk = 25;
 
 	m_pStateManager = CStateManager_Player::Create(this, m_pTransformCom, m_pNavigationCom[g_curStage]);
@@ -407,16 +489,22 @@ HRESULT CPlayer::Ready_State()
 	return S_OK;
 }
 
-HRESULT CPlayer::Ready_Inventory()
-{
+HRESULT CPlayer::Ready_PlayerUI()
+{	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_Inventory"), TEXT("ProtoType_GameObject_UI_Inventory"))))
+	/* HpBar */
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_HpBar"), TEXT("ProtoType_GameObject_UI_HpBar"))))
 		return E_FAIL;
+	m_pHpBar = dynamic_cast<CSkyrimUI_HpBar*>
+		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_HpBar"), TEXT("UI_Hpbar")));
 
-	m_pInven = dynamic_cast<CInventory*>
-		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_Inventory"), TEXT("UI_Inventory")));
+	/* SpBar */
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_SpBar"), TEXT("ProtoType_GameObject_UI_SpBar"))))
+		return E_FAIL;
+	m_pSpBar = dynamic_cast<CSkyrimUI_SpBar*>
+		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_SpBar"), TEXT("UI_Spbar")));
 
 	Safe_Release(pGameInstance);
 

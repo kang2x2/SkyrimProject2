@@ -21,6 +21,14 @@ void CStatePlayerOH_BwAttackR::Update(_float _fTimeDelta)
 	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
+	if (m_pPlayer->Get_CurFrameIndex() >= 14 && m_pPlayer->Get_CurFrameIndex() <= 18 &&
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_walkfwdattackright.001"))
+	{
+		m_pPlayer->Set_IsAttack(true);
+	}
+	else
+		m_pPlayer->Set_IsAttack(false);
+
 	Key_Input(_fTimeDelta);
 
 	__super::Key_Input(_fTimeDelta);
@@ -39,10 +47,23 @@ void CStatePlayerOH_BwAttackR::Late_Update()
 		m_pPlayer->Play_Animation_All(false, "1hm_walkbwdattackleft");
 	}
 
+	else if (m_pPlayer->Get_CurFrameIndex() >= 20 && m_pPlayer->Get_PlayerSp() > 0.f &&
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_walkbwdattackright") &&
+		pGameInstance->Get_DIKeyDown('V'))
+	{
+		m_pPlayer->Set_PlayerSp(-20.f);
+
+		m_pPlayer->Set_State(CPlayer::ONEHAND_PATTACK);
+		m_pPlayer->Play_Animation_All(false, "1hm_attackpower");
+	}
+
+
 	Safe_Release(pGameInstance);
 
 	if (m_pPlayer->Get_IsAnimationFin())
 	{
+		m_pPlayer->Set_IsAttack(false);
+
 		m_pPlayerTransform->Set_Speed(m_pPlayer->GetRunSpeed());
 
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);

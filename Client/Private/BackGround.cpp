@@ -48,7 +48,7 @@ void CBackGround::Tick(_float _fTimeDelta)
 
 void CBackGround::LateTick(_float _fTimeDelta)
 {
-	m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI, this);
+	m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI_0, this);
 }
 
 HRESULT CBackGround::Render()

@@ -36,6 +36,8 @@ HRESULT CFalmer_UnEquip::Initialize_Clone(_uint _iLevel, const wstring& _strMode
 
 	m_strModelComTag = _strModelComTag;
 
+	__super::Initialize_Clone(pArg);
+
 	if (FAILED(Ready_Component(_iLevel)))
 		return E_FAIL;
 
@@ -90,10 +92,27 @@ void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 			m_pVecCollider[i]->Update(matWorld);
 		}
 	}
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_pPlayer->Get_IsAttack())
+	{
+		if (pGameInstance->Collision_Enter(m_pVecCollider[FALMERUE_COL_AABB],
+			dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
+		{
+			m_iHp -= 40;
+			cout << m_iHp << endl;
+		}
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 {
+	__super::LateTick(_fTimeDelta);
+
 	if (g_curLevel == LEVEL_GAMEPLAY)
 		m_pStateManager->Late_Update();
 
@@ -214,8 +233,8 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 
 	/* AABB */
 	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
-	AABBDesc.vExtents = _float3(0.5f, 0.7f, 0.5f);
-	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
+	AABBDesc.vExtents = _float3(0.5f, 0.7f, 0.8f);
+	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, -AABBDesc.vExtents.z / 2.f);
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),
 		TEXT("Com_Collider_AABB"), (CComponent**)&m_pVecCollider[FALMERUE_COL_AABB], &AABBDesc)))

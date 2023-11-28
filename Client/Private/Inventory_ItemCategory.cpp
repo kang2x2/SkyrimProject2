@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+#include "Inventory.h"
+
 CInventory_ItemCategory::CInventory_ItemCategory(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CInventory_PartBase(_pDevice, _pContext)
 {
@@ -57,7 +59,8 @@ void CInventory_ItemCategory::Tick(_float _fTimeDelta)
 
 			if (pGameInstance->Get_DIKeyDown(MK_LBUTTON))
 			{
-				// 해당 카테고리에 맞는 아이템들 표시.
+				m_eCurCategory = (INVEN_CATEGORY)i;
+				m_bIsChangeCategory = true;
 			}
 		}
 		else
@@ -72,7 +75,7 @@ void CInventory_ItemCategory::Tick(_float _fTimeDelta)
 
 void CInventory_ItemCategory::LateTick(_float _fTimeDelta)
 {
-	m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI, this);
+	m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI_0, this);
 }
 
 HRESULT CInventory_ItemCategory::Render()
@@ -101,7 +104,6 @@ HRESULT CInventory_ItemCategory::Render()
 
 HRESULT CInventory_ItemCategory::Ready_Component()
 {
-
 	return S_OK;
 }
 
@@ -113,7 +115,7 @@ void CInventory_ItemCategory::Ready_CategoryFont()
 	_float fMargin = 60.f;
 	_float fX = 200.f;
 
-	CATEGORY_DESC categoryDesc;
+	CATEGORYFONT_DESC categoryDesc;
 	/* 즐겨 찾기 */
 	categoryDesc.strText = TEXT("즐겨찾기");
 	categoryDesc.vPos = { fX, 200.f };

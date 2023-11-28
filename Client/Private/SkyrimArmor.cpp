@@ -4,12 +4,12 @@
 #include "GameInstance.h"
 
 CSkyrimArmor::CSkyrimArmor(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CGameObject(_pDevice, _pContext)
+	: CSkyrimItem(_pDevice, _pContext)
 {
 }
 
 CSkyrimArmor::CSkyrimArmor(const CSkyrimArmor& rhs)
-	: CGameObject(rhs)
+	: CSkyrimItem(rhs)
 {
 }
 
@@ -23,6 +23,8 @@ HRESULT CSkyrimArmor::Initialize_ProtoType()
 
 HRESULT CSkyrimArmor::Initialize_Clone(void* _pArg)
 {
+	m_eItemType = ITEM_ARMOR;
+
 	return S_OK;
 }
 
@@ -105,6 +107,7 @@ void CSkyrimArmor::Free()
 		if (m_pModelComAry[i] != nullptr)
 			Safe_Release(m_pModelComAry[i]);
 	}
+
 	
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pShaderCom);

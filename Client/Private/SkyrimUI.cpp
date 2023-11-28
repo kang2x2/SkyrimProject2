@@ -18,6 +18,9 @@ HRESULT CSkyrimUI::Initialize_ProtoType()
 
 HRESULT CSkyrimUI::Initialize_Clone(void* pArg)
 {
+	m_fX = 0.f - g_iWinSizeX / 2.f;
+	m_fY = 0.f + g_iWinSizeY / 2.f;
+
 	return S_OK;
 }
 
@@ -33,6 +36,12 @@ void CSkyrimUI::LateTick(_float _fTimeDelta)
 HRESULT CSkyrimUI::Render()
 {
 	return S_OK;
+}
+
+void CSkyrimUI::UI_InitPos(_float _fX, _float _fY)
+{
+	m_fX = _fX - (g_iWinSizeX / 2.f);
+	m_fY = 0.f + (g_iWinSizeY / 2.f) - _fY;
 }
 
 HRESULT CSkyrimUI::Ready_Component()

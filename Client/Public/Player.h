@@ -24,9 +24,11 @@ public:
 	enum PLAYERSTATE {
 		UNEQUIP_IDLE,
 		UNEQUIP_RUN_F, UNEQUIP_RUN_B, UNEQUIP_RUN_L, UNEQUIP_RUN_R,
+		UNEQUIP_SPRINT,
 
 		ONEHAND_IDLE, ONEHAND_EQUIP, ONEHAND_UNEQUIP,
 		ONEHAND_RUN_F, ONEHAND_RUN_B, ONEHAND_RUN_L, ONEHAND_RUN_R,
+		ONEHAND_SPRINT,
 
 		ONEHAND_LATTACK, ONEHAND_RATTACK, ONEHAND_PATTACK,
 
@@ -45,10 +47,10 @@ public:
 	};
 
 public:
-	typedef struct PlayerSpeedDesc
+	typedef struct PlayerDesc
 	{
 		_float fSprintSpeed = 4.5f;
-	}PLAYER_SPEEDDESC;
+	}PLAYER_DESC;
 
 private:
 	CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
@@ -71,7 +73,12 @@ public:
 	PLAYER_EQUIPSTATE Get_PlayerEquipState() { return m_eEquipState; }
 	void			  Set_PlayerEquipState(PLAYER_EQUIPSTATE _eState) { m_eEquipState = _eState; }
 
-	PLAYER_SPEEDDESC   Get_PlayerSpeedDesc() { return m_tSpeedDesc; }
+	PLAYER_DESC		  Get_PlayerDesc() { return m_tPlayerDesc; }
+	/* Sp 관련 */
+	_float			  Get_PlayerSp() { return m_fSp; }
+	void			  Set_PlayerSp(_float _fSp) { m_fSp += _fSp; }
+	_bool			  Get_ReadyRecoverySp() { return m_bIsReadyRecoverySp; }
+	void			  Set_ReadyRecoverySp(_bool _isRecovery) { m_bIsReadyRecoverySp = _isRecovery; }
 
 	/* 애니메이션 관련 */
 	_bool			Get_IsAnimationFin();
@@ -95,9 +102,13 @@ public:
 	void			  Set_CurCell();
 	/* 충돌 관련*/
 	void			  CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);
+	void			  Set_IsAttack(_bool _bIsAttack) { m_bIsAttack = _bIsAttack; }
+	_bool			  Get_IsAttack() { return m_bIsAttack; }
 	/* 인벤토리 */
 	void			  Set_IsInvenShow(_bool _bIsShow);
 	_bool			  Get_IsInvenShow();
+	void			  Use_Item(class CSkyrimItem* _pItem);
+
 
 private:
 	vector<class CGameObject*>		m_vecPlayerPart;
@@ -112,16 +123,28 @@ private:
 	_uint							m_iAnimKeyIndex = 0;
 
 	PLAYER_EQUIPSTATE				m_eEquipState = EQUIP_END;
-	PLAYER_SPEEDDESC				m_tSpeedDesc;
+	PLAYER_DESC						m_tPlayerDesc;
 	PLAYERSTATE						m_eCurState;
+	/* Hp 관련 */
+	_float							m_fHp = 0.f;
+	_bool							m_bIsReadyRecoveryHp = false;
+
+	/* Sp 관련 */
+	_float							m_fSp = 0.f;
+	_bool							m_bIsReadyRecoverySp = false;
+	_float							m_bfRecoveryCoolTime = 0;
 
 	class CInventory*				m_pInven = nullptr;
+	class CSkyrimUI_HpBar*			m_pHpBar = nullptr;
+	class CSkyrimUI_SpBar*			m_pSpBar = nullptr;
+
+	_bool							m_bIsAttack = false;
 
 private:
 	HRESULT Ready_Part();
 	HRESULT Ready_Component();
 	HRESULT Ready_State();
-	HRESULT Ready_Inventory();
+	HRESULT Ready_PlayerUI();
 
 	HRESULT Bind_ShaderResource();
 

@@ -41,6 +41,9 @@ private:
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResource();
 
+private:
+	CModel* m_pBasicModel = nullptr;
+
 public:
 	static CPlayer_Head* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;

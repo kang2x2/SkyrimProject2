@@ -70,9 +70,6 @@
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject">
       <UniqueIdentifier>{e05497c4-b118-49e0-9425-c35ab40c444f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject">
-      <UniqueIdentifier>{69f77692-08d7-4894-b133-ccfc0caded5b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject">
       <UniqueIdentifier>{3cce9b32-0226-4dee-bd2e-94f34993f7aa}</UniqueIdentifier>
     </Filter>
@@ -90,21 +87,6 @@
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\00. Body">
       <UniqueIdentifier>{465bf45a-a35c-41d0-a2b9-15d9b2b435ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon">
-      <UniqueIdentifier>{539ab7e2-78f3-4b0f-92bd-06e1ab3b2682}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand">
-      <UniqueIdentifier>{a4c202a1-9702-4170-a455-18a476f017ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\01. 2Hand">
-      <UniqueIdentifier>{35f1594b-0b57-4186-a420-271c92bef39e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\02. Bow">
-      <UniqueIdentifier>{f972224a-50b2-49f0-b5a7-8161d4111baa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor">
-      <UniqueIdentifier>{56b94b33-6dae-4dfe-b9cb-c6527f07ec04}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. State">
       <UniqueIdentifier>{21e9464d-c033-461e-8769-b62d75cdeab0}</UniqueIdentifier>
@@ -160,12 +142,6 @@
     <Filter Include="03. State\00. Player\01. State\00. UnEquip">
       <UniqueIdentifier>{bd6ce564-6c4e-4e53-9bee-0fbb89a7711a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack">
-      <UniqueIdentifier>{518b22ee-4786-4ec1-a785-b5688630cea6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Equip">
-      <UniqueIdentifier>{5ea3e558-6ee1-4016-9cca-70ac51c95b26}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. State\00. Player\01. State\00. UnEquip\00. Idle">
       <UniqueIdentifier>{7c153b31-9691-4f19-bc4b-ed6ecfab1d49}</UniqueIdentifier>
     </Filter>
@@ -208,38 +184,8 @@
     <Filter Include="03. State\00. Player\01. State\01. OneHand\02. Run\03. Back">
       <UniqueIdentifier>{fe04e746-05f9-4eef-905e-050115e63901}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor">
-      <UniqueIdentifier>{daa3cf22-d568-4858-8e2c-ec448c7f1614}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\00. Glass">
-      <UniqueIdentifier>{fbcddc44-d96c-49aa-aa30-cbb59c0937d3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip">
       <UniqueIdentifier>{fabeb582-8e47-4b5c-876b-525c5c38864d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\00. Fix">
-      <UniqueIdentifier>{fcf53f55-1570-4889-80da-c236218a8fa9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\03. Move_Foward">
-      <UniqueIdentifier>{900ffb4f-b479-41ae-b21c-218ec2e37bf5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\04. Move_Back">
-      <UniqueIdentifier>{a055c7a3-2682-4cf1-908d-ee23437adb6c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\05. PowerAttack">
-      <UniqueIdentifier>{ea14efa6-8b5a-4dbe-a066-75a761b1a7c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\06. RunPowerAttack">
-      <UniqueIdentifier>{616fe159-34d9-4a5d-8dde-b60a2ece5f3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\01. Move_Left">
-      <UniqueIdentifier>{56ddf63c-a0dc-4bbf-8f2c-f1a8ab938dc6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Attack\02. Move_Right">
-      <UniqueIdentifier>{4e0b42b8-1ea9-4f51-be76-239fa524ed72}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block">
-      <UniqueIdentifier>{92cab5e9-b7a6-435d-97cb-ee99b72b254b}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\05. LightObject">
       <UniqueIdentifier>{1e737ea3-ccc8-414e-abaf-3d45aa75bfda}</UniqueIdentifier>
@@ -270,9 +216,6 @@
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\00. Rock">
       <UniqueIdentifier>{b30aa7ea-84e0-44b8-8cbd-463978edd489}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block\00. Fix">
-      <UniqueIdentifier>{f0dc4d31-9403-4a14-b251-78e902700380}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. State\01. Monster">
       <UniqueIdentifier>{af586fd7-0aed-49b7-80c4-724d4abaec72}</UniqueIdentifier>
@@ -373,12 +316,6 @@
     <Filter Include="03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger\02. Stagger_Heavy">
       <UniqueIdentifier>{c0775960-ce03-424e-bc89-1ea56202e604}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block\01. Anticipate">
-      <UniqueIdentifier>{c1113b03-c2d9-45b3-8d50-6f6ab582ce5b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Block\02. Hit">
-      <UniqueIdentifier>{64448eb4-902a-495c-8011-5ea01e6ea05e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. State\01. Monster\00. Skeever\01. State\05. Attack\01. Charge">
       <UniqueIdentifier>{122c583a-2ed8-47a4-9e21-5b7fad715584}</UniqueIdentifier>
     </Filter>
@@ -393,9 +330,6 @@
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand\00. Parts\01. Shield">
       <UniqueIdentifier>{f59176e2-b6f8-4235-be26-62ae4ae8c4eb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\01. FalmerAxe">
-      <UniqueIdentifier>{0b620d88-f9d4-4fb7-839a-6ae48a806059}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. State\01. Monster\02. Falmer_OneHand">
       <UniqueIdentifier>{fbfef78e-15e7-46b3-9943-248355a8245f}</UniqueIdentifier>
@@ -481,15 +415,6 @@
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\03. Foot">
       <UniqueIdentifier>{49a4c7c0-bc98-4857-92f1-07e185bfd641}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\01. Merchant01">
-      <UniqueIdentifier>{168fad06-917f-4ae8-a25b-1ea1b422de60}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\01. Merchant01\00. Torso">
-      <UniqueIdentifier>{0281e9e5-5909-45a6-b8d3-814d1aca36f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\01. Merchant01\03. Boots">
-      <UniqueIdentifier>{19a652bc-9def-4255-b725-7f5c4468d9a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\01. Head">
       <UniqueIdentifier>{71a43894-bb60-4859-bbd5-f8b8421f07e3}</UniqueIdentifier>
     </Filter>
@@ -502,32 +427,11 @@
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\04. Weapon">
       <UniqueIdentifier>{ec712831-c2d5-43dc-be2f-91e14fe760af}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\02. AkaviriSword">
-      <UniqueIdentifier>{08ca9abe-0a7e-4329-96ab-425bd43e3317}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades">
-      <UniqueIdentifier>{6023d684-f4a5-40e9-8360-cf4b0716914a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\00. Torso">
-      <UniqueIdentifier>{2f27a4b3-8e4f-4ee4-af2c-d08dfb705a92}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\01. Helmet">
-      <UniqueIdentifier>{03777d23-171b-45a8-a22e-ccd335c2a2b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\02. Gloves">
-      <UniqueIdentifier>{f42ab91b-0e6c-44de-9108-05313e72d645}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\03. Boots">
-      <UniqueIdentifier>{88200998-9285-4022-90c3-522952e74a96}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\00. Logo\01. Camera">
       <UniqueIdentifier>{c8427361-904f-4a89-a579-87c3e37dca70}</UniqueIdentifier>
     </Filter>
     <Filter Include="04. UI\00. TextUI">
       <UniqueIdentifier>{01694929-5a4d-41b7-9daa-eb89fb98b3b3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04. UI\01. SceneChangeUI">
-      <UniqueIdentifier>{3816e05b-bd99-4894-a7d5-d917a483efc0}</UniqueIdentifier>
     </Filter>
     <Filter Include="01. Level\99. Loading\00. Loader">
       <UniqueIdentifier>{8079db18-0aef-4bd2-a93d-a6c0f46b68c1}</UniqueIdentifier>
@@ -610,11 +514,134 @@
     <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\04. CavePillars">
       <UniqueIdentifier>{8fbc00e8-04de-4530-9bfd-c593ad51b7af}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Level\00. Zero\01. Logo">
-      <UniqueIdentifier>{a4d92cd7-66f6-458a-81d1-88f5152aa687}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\03. PlaceableObject\06. CastleObject">
       <UniqueIdentifier>{541469c3-8029-4e88-bc01-e85a1c915af3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\00. UnEquip\03. Sprint">
+      <UniqueIdentifier>{c503200f-3035-48fd-82e7-4231770776ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\03. Sprint">
+      <UniqueIdentifier>{e01fcd7e-9cd1-40ec-8d6c-47a3e1bbb788}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Attack">
+      <UniqueIdentifier>{518b22ee-4786-4ec1-a785-b5688630cea6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Attack\00. Fix">
+      <UniqueIdentifier>{fcf53f55-1570-4889-80da-c236218a8fa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Attack\03. Move_Foward">
+      <UniqueIdentifier>{900ffb4f-b479-41ae-b21c-218ec2e37bf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Attack\04. Move_Back">
+      <UniqueIdentifier>{a055c7a3-2682-4cf1-908d-ee23437adb6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Attack\05. PowerAttack">
+      <UniqueIdentifier>{ea14efa6-8b5a-4dbe-a066-75a761b1a7c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Attack\06. RunPowerAttack">
+      <UniqueIdentifier>{616fe159-34d9-4a5d-8dde-b60a2ece5f3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Attack\01. Move_Left">
+      <UniqueIdentifier>{56ddf63c-a0dc-4bbf-8f2c-f1a8ab938dc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Attack\02. Move_Right">
+      <UniqueIdentifier>{4e0b42b8-1ea9-4f51-be76-239fa524ed72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\05. Equip">
+      <UniqueIdentifier>{5ea3e558-6ee1-4016-9cca-70ac51c95b26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\06. Block">
+      <UniqueIdentifier>{92cab5e9-b7a6-435d-97cb-ee99b72b254b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\06. Block\00. Fix">
+      <UniqueIdentifier>{f0dc4d31-9403-4a14-b251-78e902700380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\06. Block\01. Anticipate">
+      <UniqueIdentifier>{c1113b03-c2d9-45b3-8d50-6f6ab582ce5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\06. Block\02. Hit">
+      <UniqueIdentifier>{64448eb4-902a-495c-8011-5ea01e6ea05e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\02. SceneChangeUI">
+      <UniqueIdentifier>{3816e05b-bd99-4894-a7d5-d917a483efc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\03. Bar">
+      <UniqueIdentifier>{6cc6052b-da04-4cea-b9cb-d46edf57dff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\03. Bar\00. HpBar">
+      <UniqueIdentifier>{c3469f8a-ea3f-4e48-9676-4be4f0d941ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\03. Bar\01. SpBar">
+      <UniqueIdentifier>{fb194fdc-6791-47a0-8b85-e5a8b4c5deee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\98. SceneChangeCol">
+      <UniqueIdentifier>{d2a6c34a-316d-4f93-9ba1-c1737466b584}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Level\01. Logo">
+      <UniqueIdentifier>{a4d92cd7-66f6-458a-81d1-88f5152aa687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\02. Loading\01. Skeever">
+      <UniqueIdentifier>{fdab132c-34ba-46a8-98ef-376ba2d1ceb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject">
+      <UniqueIdentifier>{69f77692-08d7-4894-b133-ccfc0caded5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\00. Weapon">
+      <UniqueIdentifier>{539ab7e2-78f3-4b0f-92bd-06e1ab3b2682}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\00. Weapon\00. 1Hand">
+      <UniqueIdentifier>{a4c202a1-9702-4170-a455-18a476f017ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\00. Weapon\00. 1Hand\01. FalmerAxe">
+      <UniqueIdentifier>{0b620d88-f9d4-4fb7-839a-6ae48a806059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\00. Weapon\00. 1Hand\02. AkaviriSword">
+      <UniqueIdentifier>{08ca9abe-0a7e-4329-96ab-425bd43e3317}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\00. Weapon\01. 2Hand">
+      <UniqueIdentifier>{35f1594b-0b57-4186-a420-271c92bef39e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\00. Weapon\02. Bow">
+      <UniqueIdentifier>{f972224a-50b2-49f0-b5a7-8161d4111baa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\01. Armor">
+      <UniqueIdentifier>{56b94b33-6dae-4dfe-b9cb-c6527f07ec04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor">
+      <UniqueIdentifier>{daa3cf22-d568-4858-8e2c-ec448c7f1614}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\00. Glass">
+      <UniqueIdentifier>{fbcddc44-d96c-49aa-aa30-cbb59c0937d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\01. Merchant01">
+      <UniqueIdentifier>{168fad06-917f-4ae8-a25b-1ea1b422de60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\01. Merchant01\00. Torso">
+      <UniqueIdentifier>{0281e9e5-5909-45a6-b8d3-814d1aca36f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\01. Merchant01\03. Boots">
+      <UniqueIdentifier>{19a652bc-9def-4255-b725-7f5c4468d9a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades">
+      <UniqueIdentifier>{6023d684-f4a5-40e9-8360-cf4b0716914a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades\00. Torso">
+      <UniqueIdentifier>{2f27a4b3-8e4f-4ee4-af2c-d08dfb705a92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades\01. Helmet">
+      <UniqueIdentifier>{03777d23-171b-45a8-a22e-ccd335c2a2b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades\02. Gloves">
+      <UniqueIdentifier>{f42ab91b-0e6c-44de-9108-05313e72d645}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades\03. Boots">
+      <UniqueIdentifier>{88200998-9285-4022-90c3-522952e74a96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\01. Falmer_UnEquip\01. State\07. Dead">
+      <UniqueIdentifier>{e558d6c6-9f08-41aa-8196-90156729421d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\08. Dead">
+      <UniqueIdentifier>{8f9ae4e2-75b2-417f-8bc8-d9f12e968161}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -634,7 +661,7 @@
       <Filter>01. Level\99. Loading\00. Loader</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Logo.h">
-      <Filter>01. Level\00. Zero\01. Logo</Filter>
+      <Filter>01. Level\01. Logo</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Loading.h">
       <Filter>01. Level\99. Loading</Filter>
@@ -718,10 +745,10 @@
       <Filter>03. State\00. Player\01. State\00. UnEquip\02. Run\03. Back</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_PAttack.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\05. PowerAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\05. PowerAttack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_RunPAttack.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\06. RunPowerAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\06. RunPowerAttack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\02. Sky</Filter>
@@ -763,16 +790,16 @@
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\04. Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SkyrimWeapon.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\00. Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Inventory.h">
       <Filter>04. UI\05. Inventory</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_UnEquip.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\04. Equip</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\05. Equip</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_Equip.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\04. Equip</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\05. Equip</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_Idle.h">
       <Filter>03. State\00. Player\01. State\01. OneHand\00. Idle</Filter>
@@ -793,10 +820,10 @@
       <Filter>99. Define</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Armor_Glass.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\00. Glass</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\00. Glass</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SkyrimArmor.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Falmer_UnEquip.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip</Filter>
@@ -829,34 +856,34 @@
       <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\04. Return</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_LAttack.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\00. Fix</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\00. Fix</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_RwAttackL.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\02. Move_Right</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\02. Move_Right</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_RwAttackR.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\02. Move_Right</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\02. Move_Right</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_FwAttackL.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\03. Move_Foward</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\03. Move_Foward</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_FwAttackR.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\03. Move_Foward</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\03. Move_Foward</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_BwAttackL.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\04. Move_Back</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\04. Move_Back</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_BwAttackR.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\04. Move_Back</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\04. Move_Back</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_RAttack.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\00. Fix</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\00. Fix</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_LwAttackL.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. Move_Left</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\01. Move_Left</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_LwAttackR.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. Move_Left</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\01. Move_Left</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StateFalmerUE_Charge.h">
       <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\02. Charge</Filter>
@@ -901,7 +928,7 @@
       <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\04. CavePillars</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_Block.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\00. Fix</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\06. Block\00. Fix</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Skeever.h">
       <Filter>03. State\01. Monster\00. Skeever</Filter>
@@ -955,10 +982,10 @@
       <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger\01. Stagger_Light2</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_Anticipate.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\01. Anticipate</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\06. Block\01. Anticipate</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_BlockHit.h">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\02. Hit</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\06. Block\02. Hit</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Falmer_OneHand.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand</Filter>
@@ -970,7 +997,7 @@
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand\00. Parts\00. Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Weapon_FalmerAxe.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\01. FalmerAxe</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\00. Weapon\00. 1Hand\01. FalmerAxe</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_FalmerOH.h">
       <Filter>03. State\01. Monster\02. Falmer_OneHand</Filter>
@@ -1048,10 +1075,10 @@
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\03. Foot</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TorsoF_Merchant01.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\01. Merchant01\00. Torso</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\01. Merchant01\00. Torso</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\BootsF_Merchant01.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\01. Merchant01\03. Boots</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\01. Merchant01\03. Boots</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_Foot.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\03. Foot</Filter>
@@ -1066,19 +1093,19 @@
       <Filter>01. Level\99. Loading</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Weapon_AkaviriSword.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\02. AkaviriSword</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\00. Weapon\00. 1Hand\02. AkaviriSword</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TorsoM_Blades.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\00. Torso</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades\00. Torso</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\BootsM_Blades.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\03. Boots</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades\03. Boots</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\GlovesM_Blades.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\02. Gloves</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades\02. Gloves</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\HelmetM_Blades.h">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\01. Helmet</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades\01. Helmet</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Skyrim_LogoObj.h">
       <Filter>02. GameObject\00. Logo\00. LogoObj</Filter>
@@ -1093,7 +1120,7 @@
       <Filter>04. UI</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SkyrimUI_SceneChange.h">
-      <Filter>04. UI\01. SceneChangeUI</Filter>
+      <Filter>04. UI\02. SceneChangeUI</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\LoadingObj_Falmer.h">
       <Filter>02. GameObject\02. Loading\00. Falmer</Filter>
@@ -1152,6 +1179,33 @@
     <ClInclude Include="..\Public\CastleObject.h">
       <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\06. CastleObject</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\StatePlayer_Sprint.h">
+      <Filter>03. State\00. Player\01. State\00. UnEquip\03. Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_Sprint.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimUI_SpBar.h">
+      <Filter>04. UI\03. Bar\01. SpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SceneChangeCol.h">
+      <Filter>02. GameObject\01. GamePlay\98. SceneChangeCol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\LoadingObj_Skeever.h">
+      <Filter>02. GameObject\02. Loading\01. Skeever</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimItem.h">
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerUE_Dead.h">
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\07. Dead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimUI_HpBar.h">
+      <Filter>04. UI\03. Bar\00. HpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateFalmerOH_Dead.h">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\08. Dead</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1172,7 +1226,7 @@
       <Filter>01. Level\99. Loading\00. Loader</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Logo.cpp">
-      <Filter>01. Level\00. Zero\01. Logo</Filter>
+      <Filter>01. Level\01. Logo</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Loading.cpp">
       <Filter>01. Level\99. Loading</Filter>
@@ -1253,10 +1307,10 @@
       <Filter>03. State\00. Player\01. State\00. UnEquip\02. Run\03. Back</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_PAttack.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\05. PowerAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\05. PowerAttack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_RunPAttack.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\06. RunPowerAttack</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\06. RunPowerAttack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02. GameObject\01. GamePlay\99. BasicObject\02. Sky</Filter>
@@ -1298,16 +1352,16 @@
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\04. Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SkyrimWeapon.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\00. Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Inventory.cpp">
       <Filter>04. UI\05. Inventory</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_UnEquip.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\04. Equip</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\05. Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_Equip.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\04. Equip</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\05. Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_Idle.cpp">
       <Filter>03. State\00. Player\01. State\01. OneHand\00. Idle</Filter>
@@ -1325,10 +1379,10 @@
       <Filter>03. State\00. Player\01. State\01. OneHand\02. Run\02. Right</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Armor_Glass.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\00. Glass</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\00. Glass</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SkyrimArmor.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Falmer_UnEquip.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip</Filter>
@@ -1361,34 +1415,34 @@
       <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\04. Return</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_LAttack.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\00. Fix</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\00. Fix</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_RwAttackL.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\02. Move_Right</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\02. Move_Right</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_RwAttackR.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\02. Move_Right</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\02. Move_Right</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_FwAttackL.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\03. Move_Foward</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\03. Move_Foward</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_FwAttackR.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\03. Move_Foward</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\03. Move_Foward</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_BwAttackL.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\04. Move_Back</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\04. Move_Back</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_BwAttackR.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\04. Move_Back</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\04. Move_Back</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_RAttack.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\00. Fix</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\00. Fix</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_LwAttackL.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. Move_Left</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\01. Move_Left</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_LwAttackR.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\03. Attack\01. Move_Left</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\01. Move_Left</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StateFalmerUE_Charge.cpp">
       <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\02. Charge</Filter>
@@ -1433,7 +1487,7 @@
       <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\05. CollisibleObj\04. CavePillars</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_Block.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\00. Fix</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\06. Block\00. Fix</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Skeever.cpp">
       <Filter>03. State\01. Monster\00. Skeever</Filter>
@@ -1487,10 +1541,10 @@
       <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\06. Stagger\01. Stagger_Light2</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_Anticipate.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\01. Anticipate</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\06. Block\01. Anticipate</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_BlockHit.cpp">
-      <Filter>03. State\00. Player\01. State\01. OneHand\05. Block\02. Hit</Filter>
+      <Filter>03. State\00. Player\01. State\01. OneHand\06. Block\02. Hit</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Falmer_OneHand.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand</Filter>
@@ -1502,7 +1556,7 @@
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\03. Falmer_OneHand\00. Parts\00. Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Weapon_FalmerAxe.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\01. FalmerAxe</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\00. Weapon\00. 1Hand\01. FalmerAxe</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_FalmerOH.cpp">
       <Filter>03. State\01. Monster\02. Falmer_OneHand</Filter>
@@ -1580,10 +1634,10 @@
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\00. CarlottaValentia\00. Part\03. Foot</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TorsoF_Merchant01.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\01. Merchant01\00. Torso</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\01. Merchant01\00. Torso</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\BootsF_Merchant01.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\01. Merchant01\03. Boots</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\01. Merchant01\03. Boots</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_Foot.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\03. Foot</Filter>
@@ -1595,19 +1649,19 @@
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\01. Head</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Weapon_AkaviriSword.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\00. Weapon\00. 1Hand\02. AkaviriSword</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\00. Weapon\00. 1Hand\02. AkaviriSword</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TorsoM_Blades.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\00. Torso</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades\00. Torso</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\BootsM_Blades.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\03. Boots</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades\03. Boots</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\GlovesM_Blades.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\02. Gloves</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades\02. Gloves</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\HelmetM_Blades.cpp">
-      <Filter>02. GameObject\01. GamePlay\02. EquipObject\01. Armor\00. Armor\02. Blades\01. Helmet</Filter>
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject\01. Armor\00. Armor\02. Blades\01. Helmet</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Skyrim_LogoObj.cpp">
       <Filter>02. GameObject\00. Logo\00. LogoObj</Filter>
@@ -1619,7 +1673,7 @@
       <Filter>04. UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SkyrimUI_SceneChange.cpp">
-      <Filter>04. UI\01. SceneChangeUI</Filter>
+      <Filter>04. UI\02. SceneChangeUI</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\LoadingObj_Falmer.cpp">
       <Filter>02. GameObject\02. Loading\00. Falmer</Filter>
@@ -1678,6 +1732,33 @@
     <ClCompile Include="..\Private\CastleObject.cpp">
       <Filter>02. GameObject\01. GamePlay\03. PlaceableObject\06. CastleObject</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\StatePlayer_Sprint.cpp">
+      <Filter>03. State\00. Player\01. State\00. UnEquip\03. Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_Sprint.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\03. Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimUI_SpBar.cpp">
+      <Filter>04. UI\03. Bar\01. SpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SceneChangeCol.cpp">
+      <Filter>02. GameObject\01. GamePlay\98. SceneChangeCol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LoadingObj_Skeever.cpp">
+      <Filter>02. GameObject\02. Loading\01. Skeever</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimItem.cpp">
+      <Filter>02. GameObject\01. GamePlay\02. ItemObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerUE_Dead.cpp">
+      <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\07. Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimUI_HpBar.cpp">
+      <Filter>04. UI\03. Bar\00. HpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateFalmerOH_Dead.cpp">
+      <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\08. Dead</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -1704,6 +1785,9 @@
       <Filter>97. ShaderFile</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFile\Shader_Rect_Instance.hlsl">
+      <Filter>97. ShaderFile</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFile\Shader_Effect.hlsl">
       <Filter>97. ShaderFile</Filter>
     </FxCompile>
   </ItemGroup>

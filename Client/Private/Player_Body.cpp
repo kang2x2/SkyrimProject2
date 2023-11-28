@@ -6,6 +6,7 @@
 #include "Bone.h"
 
 #include "Player.h"
+#include "SkyrimArmor.h"
 
 CPlayer_Body::CPlayer_Body(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CPlayerPart_Base(_pDevice, _pContext)
@@ -24,6 +25,10 @@ HRESULT CPlayer_Body::Initialize_ProtoType()
 	for (_int i = 0; i < CPlayer::CAM_END; ++i)
 		m_pModelComAry[i] = nullptr;
 
+	for (_int i = 0; i < CPlayer::CAM_END; ++i)
+		m_pBasicModelAry[i] = nullptr;
+
+
 	return S_OK;
 }
 
@@ -40,20 +45,8 @@ HRESULT CPlayer_Body::Initialize_Clone(void* _pArg)
 
 	m_strName = TEXT("Player_Body");
 
-	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	//Safe_AddRef(pGameInstance);
-	//
-	//pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_TorsoM_Blades"));
-	//
-	//CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("TorsoM_Blades"));
-	//
-	//m_pModelComAry[CPlayer::CAM_1ST]->SwapDesc_Armor(
-	//	dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_1stModel"))));
-	//
-	//m_pModelComAry[CPlayer::CAM_3ST]->SwapDesc_Armor(
-	//	dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_3stModel"))));
-	//
-	//Safe_Release(pGameInstance);
+	m_pModelComAry[CPlayer::CAM_1ST]->SwapDesc_Armor(m_pBasicModelAry[CPlayer::CAM_1ST]);
+	m_pModelComAry[CPlayer::CAM_3ST]->SwapDesc_Armor(m_pBasicModelAry[CPlayer::CAM_3ST]);
 
 	return S_OK;
 }
@@ -74,30 +67,6 @@ void CPlayer_Body::LateTick(_float _fTimeDelta)
 	m_pRendererCom->Add_Debug(m_pColliderCom);
 #endif
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	
-	map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_GAMEPLAY);
-	
-	for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
-	{
-		list<CGameObject*> ltbjList = Layer->second->Get_ObjList();
-	
-		for (auto obj : ltbjList)
-		{
-			if (obj != nullptr)
-			{
-				if (obj->Get_IsCreature())
-				{
-					pGameInstance->Collision_AABBTransition(m_pColliderCom,
-						dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB"))));
-				}
-			}
-		}
-	}
-	
-	Safe_Release(pGameInstance);
 
 	m_pColliderCom->Late_Update();
 }
@@ -151,6 +120,25 @@ void CPlayer_Body::Set_MeshType(CPlayer::PLAYERCAMERA _eCamType)
 	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
 }
 
+void CPlayer_Body::Change_Equip(CGameObject* _pItem)
+{
+	if (m_pModelComAry[CPlayer::CAM_1ST] == _pItem->Get_Component(TEXT("Com_1stModel")))
+	{
+		int i = 0;
+	}
+	else
+	{
+		//Safe_Release(m_pModelComAry[CPlayer::CAM_1ST]);
+		//Safe_Release(m_pModelComAry[CPlayer::CAM_3ST]);
+
+		m_pModelComAry[CPlayer::CAM_1ST]->SwapDesc_Armor(dynamic_cast<CModel*>(_pItem->Get_Component(TEXT("Com_1stModel"))));
+		m_pModelComAry[CPlayer::CAM_3ST]->SwapDesc_Armor(dynamic_cast<CModel*>(_pItem->Get_Component(TEXT("Com_3stModel"))));
+
+		//m_pModelComAry[CPlayer::CAM_1ST] = dynamic_cast<CModel*>(_pItem->Get_Component(TEXT("Com_1stModel")));
+		//m_pModelComAry[CPlayer::CAM_3ST] = dynamic_cast<CModel*>(_pItem->Get_Component(TEXT("Com_3stModel")));
+	}
+}
+
 _bool CPlayer_Body::Get_IsAnimationFin()
 {
 	return m_pModelComAry[m_ePlayerCamMode]->Get_IsAnimationFin();
@@ -172,8 +160,16 @@ HRESULT CPlayer_Body::Ready_Component()
 		TEXT("Com_1stModel"), (CComponent**)&m_pModelComAry[CPlayer::CAM_1ST])))
 		return E_FAIL;
 
-	// m_ePlayerCamMode = CPlayer::CAM_1ST;
-	m_ePlayerCamMode = CPlayer::CAM_3ST;
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_PlayerNude_Body"),
+		TEXT("Com_3stModelBasic"), (CComponent**)&m_pBasicModelAry[CPlayer::CAM_3ST])))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_PlayerNude_1stBody"),
+		TEXT("Com_1stModelBasic"), (CComponent**)&m_pBasicModelAry[CPlayer::CAM_1ST])))
+		return E_FAIL;
+
+	m_ePlayerCamMode = CPlayer::CAM_1ST;
+	// m_ePlayerCamMode = CPlayer::CAM_3ST;
 	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
@@ -255,6 +251,12 @@ void CPlayer_Body::Free()
 	__super::Free();
 
 	Safe_Release(m_pColliderCom);
+
+	for (_int i = 0; i < CPlayer::CAM_END; ++i)
+	{
+		if (m_pBasicModelAry[i] != nullptr)
+			Safe_Release(m_pBasicModelAry[i]);
+	}
 
 	for (_int i = 0; i < CPlayer::CAM_END; ++i)
 	{

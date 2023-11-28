@@ -40,12 +40,14 @@ public:
 	_bool		Get_CurAnimationIsLoop();
 
 	void		Set_MeshType(CPlayer::PLAYERCAMERA _eCamType);
+	void		Change_Equip(CGameObject* _pItem);
 private:
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResource();
 
 private:
 	CCollider*  m_pColliderCom = nullptr;
+	CModel*		m_pBasicModelAry[CPlayer::CAM_END];
 	CModel*		m_pModelComAry[CPlayer::CAM_END];
 
 	CPlayer::PLAYERCAMERA m_ePlayerCamMode = CPlayer::CAM_END;

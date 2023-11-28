@@ -19,6 +19,8 @@ HRESULT CStateFalmerOH_StaggerL2::Initialize(CGameObject* _pMonster, CGameObject
 
 void CStateFalmerOH_StaggerL2::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
 }
 
 void CStateFalmerOH_StaggerL2::Late_Update()

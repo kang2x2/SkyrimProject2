@@ -23,6 +23,8 @@ HRESULT CWeapon_FalmerAxe::Initialize_ProtoType()
 
 HRESULT CWeapon_FalmerAxe::Initialize_Clone(void* pArg)
 {
+	__super::Initialize_Clone(pArg);
+
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 

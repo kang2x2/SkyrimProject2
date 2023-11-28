@@ -23,6 +23,9 @@ HRESULT CPlayer_Hand::Initialize_ProtoType()
 	for (_int i = 0; i < CPlayer::CAM_END; ++i)
 		m_pModelComAry[i] = nullptr;
 
+	for (_int i = 0; i < CPlayer::CAM_END; ++i)
+		m_pBasicModelAry[i] = nullptr;
+
 	return S_OK;
 }
 
@@ -44,7 +47,7 @@ HRESULT CPlayer_Hand::Initialize_Clone(void* _pArg)
 	//
 	//pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_GlovesM_Blades"));
 	//
-	//CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("GlovesM_Blades"));
+	//CGameObject* tempObject = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("블레이즈 건틀릿(남)"));
 	//
 	////m_pModelComAry[CPlayer::CAM_1ST]->SwapDesc_Armor(
 	////	dynamic_cast<CModel*>(tempObject->Get_Component(TEXT("Com_1stModel"))));
@@ -54,6 +57,9 @@ HRESULT CPlayer_Hand::Initialize_Clone(void* _pArg)
 	//
 	//
 	//Safe_Release(pGameInstance);
+
+	m_pModelComAry[CPlayer::CAM_1ST]->SwapDesc_Armor(m_pBasicModelAry[CPlayer::CAM_1ST]);
+	m_pModelComAry[CPlayer::CAM_3ST]->SwapDesc_Armor(m_pBasicModelAry[CPlayer::CAM_3ST]);
 
 	return S_OK;
 }
@@ -119,6 +125,26 @@ void CPlayer_Hand::Set_MeshType(CPlayer::PLAYERCAMERA _eCamType)
 	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
 }
 
+void CPlayer_Hand::Change_Equip(CGameObject* _pItem)
+{
+	if (m_pModelComAry[CPlayer::CAM_1ST] == _pItem->Get_Component(TEXT("Com_1stModel")))
+	{
+		int i = 0;
+	}
+	else
+	{
+		//Safe_Release(m_pModelComAry[CPlayer::CAM_1ST]);
+		//Safe_Release(m_pModelComAry[CPlayer::CAM_3ST]);
+
+		m_pModelComAry[CPlayer::CAM_1ST]->SwapDesc_Armor(dynamic_cast<CModel*>(_pItem->Get_Component(TEXT("Com_1stModel"))));
+		m_pModelComAry[CPlayer::CAM_3ST]->SwapDesc_Armor(dynamic_cast<CModel*>(_pItem->Get_Component(TEXT("Com_3stModel"))));
+
+		//m_pModelComAry[CPlayer::CAM_1ST] = dynamic_cast<CModel*>(_pItem->Get_Component(TEXT("Com_1stModel")));
+		//m_pModelComAry[CPlayer::CAM_3ST] = dynamic_cast<CModel*>(_pItem->Get_Component(TEXT("Com_3stModel")));
+	}
+
+}
+
 _bool CPlayer_Hand::Get_IsAnimationFin()
 {
 	return m_pModelComAry[m_ePlayerCamMode]->Get_IsAnimationFin();
@@ -140,8 +166,16 @@ HRESULT CPlayer_Hand::Ready_Component()
 		TEXT("Com_1stModel"), (CComponent**)&m_pModelComAry[CPlayer::CAM_1ST])))
 		return E_FAIL;
 
-	// m_ePlayerCamMode = CPlayer::CAM_1ST;
-	m_ePlayerCamMode = CPlayer::CAM_3ST;
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_PlayerNude_Hand"),
+		TEXT("Com_3stModelBasic"), (CComponent**)&m_pBasicModelAry[CPlayer::CAM_3ST])))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_PlayerNude_1stHand"),
+		TEXT("Com_1stModelBasic"), (CComponent**)&m_pBasicModelAry[CPlayer::CAM_1ST])))
+		return E_FAIL;
+
+	m_ePlayerCamMode = CPlayer::CAM_1ST;
+	// m_ePlayerCamMode = CPlayer::CAM_3ST;
 	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
@@ -212,6 +246,12 @@ void CPlayer_Hand::Free()
 	__super::Free();
 
 	// 지울 때 누수나 에러 나는지 확인.
+	for (_int i = 0; i < CPlayer::CAM_END; ++i)
+	{
+		if (m_pBasicModelAry[i] != nullptr)
+			Safe_Release(m_pBasicModelAry[i]);
+	}
+
 	for (_int i = 0; i < CPlayer::CAM_END; ++i)
 	{
 		if (m_pModelComAry[i] != nullptr)

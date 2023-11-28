@@ -19,6 +19,8 @@ HRESULT CStateFalmerOH_StaggerH::Initialize(CGameObject* _pMonster, CGameObject*
 
 void CStateFalmerOH_StaggerH::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
 	if (m_pMonster->Get_CurFrameIndex() < 20)
 		m_pMonsterTransform->Go_Backward(_fTimeDelta, m_pMonsterNavigation);
 }

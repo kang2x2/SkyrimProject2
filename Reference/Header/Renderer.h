@@ -9,7 +9,7 @@ BEGIN(Engine)
 class ENGINE_DLL CRenderer final : public CComponent
 {
 public:
-	enum RENDERGROUP { RG_PRIORITY, RG_NONLIGHT, RG_NONBLEND, RG_BLEND, RG_UI, RG_END };
+	enum RENDERGROUP { RG_PRIORITY, RG_NONLIGHT, RG_NONBLEND, RG_BLEND, RG_UI_0, RG_UI_1, RG_UI_2, RG_END };
 
 private:
 	CRenderer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

@@ -22,6 +22,13 @@ HRESULT CMonster::Initialize_ProtoType()
 
 HRESULT CMonster::Initialize_Clone(void* pArg)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	
+	m_pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
+
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -50,8 +57,6 @@ void CMonster::Tick(_float _fTimeDelta)
 
 void CMonster::LateTick(_float _fTimeDelta)
 {
-	if (m_iHp <= 0)
-		m_bDead = true;
 }
 
 HRESULT CMonster::Render()
@@ -119,7 +124,11 @@ HRESULT CMonster::Ready_Component()
 
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
-		return E_FAIL;
+		return E_FAIL; 
+
+	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dissolve"),
+		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+		return E_FAIL; 
 
 	m_pTransformCom->Set_WorldMatrix(*pMatPivot);
 
@@ -128,13 +137,12 @@ HRESULT CMonster::Ready_Component()
 		/* Com_Navigation */
 		CNavigation::DESC_NAVIGATION		NavigationDesc;
 		NavigationDesc.iCurIndex = -1;
-		// ProtoType_Component_Navigation_WhiteRun
-		//if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Navigation_Dungeon"),
-		//	TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
-		//	return E_FAIL;
-		if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Navigation_WhiteRun"),
+		if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Navigation_Dungeon"),
 			TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
 			return E_FAIL;
+		//if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Navigation_WhiteRun"),
+		//	TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
+		//	return E_FAIL;
 
 		m_pNavigationCom->Set_CurCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		_vector	vPosition = m_pNavigationCom->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));

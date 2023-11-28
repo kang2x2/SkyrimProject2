@@ -129,7 +129,7 @@ void CNPC_Carlotta::Tick(_float _fTimeDelta)
 		_vector	vPosition = m_pNavigationCom->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		_float4 tempPos;
 		XMStoreFloat4(&tempPos, vPosition);
-		tempPos.y += 0.25f;
+		tempPos.y += 0.10f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&tempPos));
 	}
 

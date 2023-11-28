@@ -19,6 +19,8 @@ HRESULT CStateFalmerUE_Chase::Initialize(CGameObject* _pMonster, CGameObject* _p
 
 void CStateFalmerUE_Chase::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 

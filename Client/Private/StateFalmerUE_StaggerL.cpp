@@ -19,7 +19,7 @@ HRESULT CStateFalmerUE_StaggerL::Initialize(CGameObject* _pMonster, CGameObject*
 
 void CStateFalmerUE_StaggerL::Update(_float _fTimeDelta)
 {
-
+	__super::Update(_fTimeDelta);
 }
 
 void CStateFalmerUE_StaggerL::Late_Update()

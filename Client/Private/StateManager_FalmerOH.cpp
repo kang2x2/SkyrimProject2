@@ -26,6 +26,7 @@
 #include "StateFalmerOH_StaggerH.h"
 #include "StateFalmerOH_StaggerH2.h"
 
+#include "StateFalmerOH_Dead.h"
 
 CStateManager_FalmerOH::CStateManager_FalmerOH()
 {
@@ -80,6 +81,10 @@ HRESULT CStateManager_FalmerOH::Initialize(CGameObject* _pMonster, CGameObject* 
 	pState = CStateFalmerOH_StaggerH::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
 	pState = CStateFalmerOH_StaggerH2::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+
+	/* Dead */
+	pState = CStateFalmerOH_Dead::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
 
 	m_pCurState = m_vecMonsterState.front();

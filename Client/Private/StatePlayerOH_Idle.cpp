@@ -87,6 +87,14 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 		m_pPlayer->Play_Animation_All(true, "1hm_blockidle");
 	}
 
+	if (pGameInstance->Get_DIKeyDown('V') && m_pPlayer->Get_PlayerSp() > 0.f)
+	{
+		m_pPlayer->Set_PlayerSp(-20.f);
+
+		m_pPlayer->Set_State(CPlayer::ONEHAND_PATTACK);
+		m_pPlayer->Play_Animation_All(false, "1hm_attackpower");
+	}
+
 	__super::Key_Input(_fTimeDelta);
 
 	Safe_Release(pGameInstance);

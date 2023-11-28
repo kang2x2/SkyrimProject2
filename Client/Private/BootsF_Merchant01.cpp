@@ -22,6 +22,8 @@ HRESULT CBootsF_Merchant01::Initialize_ProtoType()
 
 HRESULT CBootsF_Merchant01::Initialize_Clone(void* _pArg)
 {
+	__super::Initialize_Clone(_pArg);
+
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 

@@ -129,7 +129,7 @@ HRESULT CLevel_Tool::Ready_Layer_Camera(const wstring& _strLayerTag)
 	ToolCameraDesc.fAspect = g_iWinSizeX / (_float)g_iWinSizeY;
 	ToolCameraDesc.fNear = 0.2f;
 	ToolCameraDesc.fFar = 600.f;
-	ToolCameraDesc.fSpeedPerSec = 15.f;
+	ToolCameraDesc.fSpeedPerSec = 7.f;
 	ToolCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
 	ToolCameraDesc.fZoomPerSec = 500.f;
 

@@ -19,6 +19,8 @@ HRESULT CStateFalmerOH_UnEquip::Initialize(CGameObject* _pMonster, CGameObject* 
 
 void CStateFalmerOH_UnEquip::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
 	if (m_pMonster->Get_CurFrameIndex() >= 55 &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "1hmunequip"))
 	{

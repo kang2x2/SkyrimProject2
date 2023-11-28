@@ -58,7 +58,7 @@ HRESULT CPlayer_Weapon::Initialize_Clone(void* _pArg)
 
 	pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_Weapon_AkaviriSword"));
 
-	m_pWeapon = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("Weapon_AkaviriSword"));
+	m_pWeapon = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("아카비르 블레이드"));
 
 	Safe_Release(pGameInstance);
 
@@ -103,38 +103,38 @@ void CPlayer_Weapon::LateTick(_float _fTimeDelta)
 
 	_bool bIsCol = false;
 
-	if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_UNEQUIP &&
-		dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_MAGIC)
-	{
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
-
-		map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_GAMEPLAY);
-
-		for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
-		{
-			list<CGameObject*> ltbjList = Layer->second->Get_ObjList();
-
-			for (auto obj : ltbjList)
-			{
-				if (obj->Get_IsCreature())
-				{
-					if (!bIsCol)
-					{
-						if (m_pColliderCom->IsCollision(dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB")))))
-						{
-							bIsCol = true;
-						}
-					}
-
-					pGameInstance->Collision_Enter(m_pColliderCom,
-						dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB"))));
-				}
-			}
-		}
-
-		Safe_Release(pGameInstance);
-	}
+	//if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_UNEQUIP &&
+	//	dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_MAGIC)
+	//{
+	//	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//	Safe_AddRef(pGameInstance);
+	//
+	//	map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_GAMEPLAY);
+	//
+	//	for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
+	//	{
+	//		list<CGameObject*> ltbjList = Layer->second->Get_ObjList();
+	//
+	//		for (auto obj : ltbjList)
+	//		{
+	//			if (obj->Get_IsCreature())
+	//			{
+	//				if (!bIsCol)
+	//				{
+	//					if (m_pColliderCom->IsCollision(dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB")))))
+	//					{
+	//						bIsCol = true;
+	//					}
+	//				}
+	//
+	//				pGameInstance->Collision_Enter(m_pColliderCom,
+	//					dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB"))));
+	//			}
+	//		}
+	//	}
+	//
+	//	Safe_Release(pGameInstance);
+	//}
 
 	m_pColliderCom->Late_Update();
 }
@@ -166,38 +166,7 @@ void CPlayer_Weapon::Set_ViewType(CSkyrimWeapon::WEAPON_VIEWTYPE _eType)
 
 void CPlayer_Weapon::CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame)
 {
-	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	//Safe_AddRef(pGameInstance);
-	//
-	//map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_GAMEPLAY);
-	//
-	//for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
-	//{
-	//	list<CGameObject*> ltbjList = Layer->second->Get_ObjList();
-	//
-	//	for (auto obj : ltbjList)
-	//	{
-	//		if (obj->Get_IsCreature())
-	//		{
-	//			/* 공격 중 서로의 aabb 박스가 충돌하였으면. (피격) */
-	//			if (pGameInstance->Collision_Enter(m_pColliderCom, dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB")))))
-	//			{
-	//				if (dynamic_cast<CMonster*>(obj)->Get_CurFrameIndex() >= _iSourFrame &&
-	//					dynamic_cast<CMonster*>(obj)->Get_CurFrameIndex() <= _iDestFrame)
-	//				{
-	//					// 데미지 처리.
-	//					dynamic_cast<CCreatureObject*>(obj)->SetHp(-dynamic_cast<CCreatureObject*>(m_pParent)->GetAtk());
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-	//
-	//
-	//
-	//
-	//
-	//Safe_Release(pGameInstance);
+
 }
 
 HRESULT CPlayer_Weapon::Ready_Component()

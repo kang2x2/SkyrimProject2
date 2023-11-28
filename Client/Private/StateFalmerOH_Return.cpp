@@ -19,6 +19,8 @@ HRESULT CStateFalmerOH_Return::Initialize(CGameObject* _pMonster, CGameObject* _
 
 void CStateFalmerOH_Return::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
 	m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
 	// m_pMonsterTransform->Chase(dynamic_cast<CMonster*>(m_pMonster)->Get_OriginPos(), _fTimeDelta, 1.5f);
 	m_pMonsterTransform->LookAt(m_pMonster->Get_OriginPos());

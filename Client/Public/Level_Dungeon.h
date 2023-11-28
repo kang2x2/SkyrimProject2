@@ -26,6 +26,7 @@ private:
 
 	HRESULT Ready_Layer_Equip(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Player(const wstring& _strLayerTag);
+	HRESULT Ready_Layer_Inventory(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Navigation_Dungeon(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Sky(const wstring& _strLayerTag);
 	HRESULT Ready_Layer_Particle(const wstring& _strLayerTag);

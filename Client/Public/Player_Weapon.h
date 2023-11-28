@@ -43,7 +43,6 @@ public:
 
 	virtual void Set_ViewType(CSkyrimWeapon::WEAPON_VIEWTYPE _eType);
 
-public:
 	void		CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);
 
 public:

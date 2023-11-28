@@ -31,11 +31,14 @@ HRESULT CLevel_Dungeon::Initialize()
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Inventory(TEXT("Layer_Inventory"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Level()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Light()))
-		return E_FAIL;
+	//if (FAILED(Ready_Light()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Layer_Navigation_Dungeon(TEXT("Layer_Navigation_Dungeon"))))
 		return E_FAIL;
@@ -48,6 +51,13 @@ HRESULT CLevel_Dungeon::Initialize()
 
 HRESULT CLevel_Dungeon::Tick(_float _fTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
+
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -215,13 +225,13 @@ HRESULT CLevel_Dungeon::Ready_Layer_Player(const wstring& _strLayerTag)
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Player"))))
 		return E_FAIL;
 
-	//dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
-	//	TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
-	//	->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, 0.f, 3.f, 1.f));
-
 	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
 		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
-		->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, -4.f, 42.f, 1.f));
+		->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, 0.f, 3.f, 1.f));
+
+	//dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
+	//	TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
+	//	->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, -4.f, 42.f, 1.f));
 
 	dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
 		TEXT("Player")))->Set_CurCell();
@@ -230,6 +240,20 @@ HRESULT CLevel_Dungeon::Ready_Layer_Player(const wstring& _strLayerTag)
 
 	return S_OK;
 
+}
+
+HRESULT CLevel_Dungeon::Ready_Layer_Inventory(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	/* Inventory */
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_Inventory"), TEXT("ProtoType_GameObject_UI_Inventory"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
 }
 
 HRESULT CLevel_Dungeon::Ready_Layer_Navigation_Dungeon(const wstring& _strLayerTag)

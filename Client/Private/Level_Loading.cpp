@@ -12,6 +12,7 @@
 
 #include "Loading_Camera.h"
 #include "LoadingObj_Falmer.h"
+#include "LoadingObj_Skeever.h"
 
 #include "SkyrimUI_SceneChange.h"
 #include "Inventory.h"
@@ -34,6 +35,9 @@ HRESULT CLevel_Loading::Initialize(LEVELID _eNextLevel)
 		g_bIsStaticInit = true;
 	}
 
+	if (FAILED(Ready_Light(TEXT("Layer_Light"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_LoadingClone(TEXT("Layer_Loading"))))
 		return E_FAIL;
 
@@ -48,10 +52,12 @@ HRESULT CLevel_Loading::Initialize(LEVELID _eNextLevel)
 
 HRESULT CLevel_Loading::Tick(_float _fTimeDelta)
 {
-	if (m_eNextLevel != LEVEL_LOGO)
-	{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-	}
+	pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -123,10 +129,14 @@ HRESULT CLevel_Loading::Ready_StaticInit()
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// Loading Obj
 	_matrix matInitialize = XMMatrixIdentity();
 	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOADING, TEXT("ProtoType_Component_Model_LoadingObj_Falmer"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Loading/Loading_Falmer/Loading_Falmer.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOADING, TEXT("ProtoType_Component_Model_LoadingObj_Skeever"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Loading/Loading_Skeever/Loading_Skeever.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
 #pragma endregion
@@ -141,6 +151,9 @@ HRESULT CLevel_Loading::Ready_StaticInit()
 	/* Logo Obj */
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_LoadingObj_Falmer"),
 		CLoadingObj_Falmer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_LoadingObj_Skeever"),
+		CLoadingObj_Skeever::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* Logo UI */
@@ -178,13 +191,69 @@ HRESULT CLevel_Loading::Ready_LoadingClone(const wstring& _strLayerTag)
 		if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOADING, _strLayerTag, TEXT("ProtoType_GameObject_Camera_Loading"), &LoadingCameraDesc)))
 			return E_FAIL;
 
-		CTransform::TRANSFORM_DESC transformDesc;
-		transformDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
-		if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOADING, _strLayerTag, TEXT("ProtoType_GameObject_LoadingObj_Falmer"), &transformDesc)))
-			return E_FAIL;
+
+		if (g_curStage == STAGE_WHITERUN)
+		{
+			CTransform::TRANSFORM_DESC transformDesc;
+			transformDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
+			if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOADING, _strLayerTag, TEXT("ProtoType_GameObject_LoadingObj_Falmer"), &transformDesc)))
+				return E_FAIL;
+		}
+		else if (g_curStage == STAGE_DUNGEON)
+		{
+			CTransform::TRANSFORM_DESC transformDesc;
+			transformDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
+			if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOADING, _strLayerTag, TEXT("ProtoType_GameObject_LoadingObj_Skeever"), &transformDesc)))
+				return E_FAIL;
+		}
+		else
+		{
+			CTransform::TRANSFORM_DESC transformDesc;
+			transformDesc.fRotationRadianPerSec = XMConvertToRadians(90.f);
+			if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOADING, _strLayerTag, TEXT("ProtoType_GameObject_LoadingObj_Falmer"), &transformDesc)))
+				return E_FAIL;
+		}
 
 		Safe_Release(pGameInstance);
 	}
+
+	return S_OK;
+}
+
+HRESULT CLevel_Loading::Ready_Light(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	pGameInstance->Light_Clear();
+
+	LIGHT_DESC LightDesc;
+
+	/* 방향성 광원을 추가. */
+	//ZeroMemory(&LightDesc, sizeof LightDesc);
+	//LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
+	//LightDesc.vLightDir = _float4(0.f, 0.1f, 1.f, 0.f);
+	//
+	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
+	//
+	//if (FAILED(pGameInstance->Add_Light(LightDesc)))
+	//	return E_FAIL;
+
+	/* 점 광원 추가 */
+	ZeroMemory(&LightDesc, sizeof(LightDesc));
+	LightDesc.eLightType = LIGHT_DESC::LIGHT_POINT;
+	LightDesc.vLightPos = { -0.3f, -0.1f, -1.5f, 1.f };
+	LightDesc.fLightRange = 100.f;
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vSpecular = _float4(0.773f, 0.973f, 0.965f, 1.f);
+
+	if (FAILED(pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }

@@ -9,6 +9,7 @@ class CModel;
 class CTransform;
 class CShader;
 class CRenderer;
+class CTexture;
 class CNavigation;
 
 END
@@ -47,13 +48,16 @@ public:
 protected:
 	_matrix*		pMatPivot;
 
-	CModel* m_pModelCom = nullptr;
-	CShader* m_pShaderCom = nullptr;
-	CRenderer* m_pRendererCom = nullptr;
-	CTransform* m_pTransformCom = nullptr;
+	CModel*      m_pModelCom = nullptr;
+	CShader*     m_pShaderCom = nullptr;
+	CRenderer*   m_pRendererCom = nullptr;
+	CTransform*  m_pTransformCom = nullptr;
+	CTexture*	 m_pTextureCom = nullptr;
 	CNavigation* m_pNavigationCom = nullptr;
 
 	_vector			m_vOriginPos = {};
+
+	class CPlayer* m_pPlayer = nullptr;
 
 public:
 	virtual CGameObject* Clone(void* _pArg) = 0;

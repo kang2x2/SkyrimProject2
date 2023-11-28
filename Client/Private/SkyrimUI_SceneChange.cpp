@@ -88,7 +88,7 @@ void CSkyrimUI_SceneChange::Tick(_float _fTimeDelta)
 
 void CSkyrimUI_SceneChange::LateTick(_float _fTimeDelta)
 {
-	m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI, this);
+	m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI_0, this);
 
 	if (m_bIsChangeScene)
 	{

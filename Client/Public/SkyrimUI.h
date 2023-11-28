@@ -31,6 +31,9 @@ public:
 	virtual void	LateTick(_float _fTimeDelta);
 	virtual HRESULT Render();
 
+protected:
+	void UI_InitPos(_float _fX, _float _fY);
+
 protected: /* 사용할 컴포넌트들 */
 	CRenderer*		m_pRendererCom = nullptr;
 	CShader*		m_pShaderCom = nullptr;

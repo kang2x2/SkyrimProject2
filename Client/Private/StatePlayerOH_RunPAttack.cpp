@@ -18,18 +18,33 @@ HRESULT CStatePlayerOH_RunPAttack::Initialize(CGameObject* _pPlayer, CTransform*
 
 void CStatePlayerOH_RunPAttack::Update(_float _fTimeDelta)
 {
+	m_pPlayer->Set_ReadyRecoverySp(false);
+
 	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
+	
+	m_pPlayerTransform->Go_Foward(_fTimeDelta, m_pPlayerNavigation);
 
-	m_pPlayerTransform->Go_Foward(_fTimeDelta);
+	if (m_pPlayer->Get_CurFrameIndex() >= 15 && m_pPlayer->Get_CurFrameIndex() <= 22 &&
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_attackpowerforwardsprint.001"))
+	{
+		m_pPlayer->Set_IsAttack(true);
+	}
+	else
+		m_pPlayer->Set_IsAttack(false);
 
 	__super::Key_Input(_fTimeDelta);
 }
 
 void CStatePlayerOH_RunPAttack::Late_Update()
 {
-	if (m_pPlayer->Get_IsAnimationFin())
+	if (m_pPlayer->Get_IsAnimationFin() && 
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_attackpowerforwardsprint"))
 	{
+		m_pPlayer->Set_IsAttack(false);
+
+		m_pPlayerTransform->Set_Speed(m_pPlayer->GetRunSpeed());
+
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
 		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 	}

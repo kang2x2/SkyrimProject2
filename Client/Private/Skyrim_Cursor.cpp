@@ -44,7 +44,7 @@ void CSkyrim_Cursor::Tick(_float _fTimeDelta)
 
 void CSkyrim_Cursor::LateTick(_float _fTimeDelta)
 {
-	m_pRendererCom->Add_RenderGroup(CRenderer::RG_PRIORITY, this);
+	m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI_2, this);
 }
 
 HRESULT CSkyrim_Cursor::Render()
@@ -102,8 +102,7 @@ HRESULT CSkyrim_Cursor::Bind_ShaderResources()
 	
 	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom->Bind_ShaderResources(m_pShaderCom, "g_Textures")))
-		return E_FAIL;
+
 
 	return S_OK;
 }

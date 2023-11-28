@@ -136,8 +136,6 @@ HRESULT CInventory_PartBase::Bind_ShaderResources()
 		return E_FAIL;
 	if (FAILED(m_pTextureBlack->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
-	if (FAILED(m_pTextureBlack->Bind_ShaderResources(m_pShaderCom, "g_Textures")))
-		return E_FAIL;
 
 	m_pShaderCom->Begin(1);
 	m_pVIBufferBlack->Render();
@@ -150,8 +148,6 @@ HRESULT CInventory_PartBase::Bind_ShaderResources()
 		return E_FAIL;
 	if (FAILED(m_pTextureLine1->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
-	if (FAILED(m_pTextureLine1->Bind_ShaderResources(m_pShaderCom, "g_Textures")))
-		return E_FAIL;
 
 	m_pShaderCom->Begin(1);
 	m_pVIBufferLine1->Render();
@@ -163,8 +159,6 @@ HRESULT CInventory_PartBase::Bind_ShaderResources()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pTextureLine2->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
-		return E_FAIL;
-	if (FAILED(m_pTextureLine2->Bind_ShaderResources(m_pShaderCom, "g_Textures")))
 		return E_FAIL;
 
 	m_pShaderCom->Begin(1);

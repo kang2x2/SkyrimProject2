@@ -36,6 +36,8 @@ HRESULT CSkeever::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag
 
 	m_strModelComTag = _strModelComTag;
 
+	__super::Initialize_Clone(pArg);
+
 	if (FAILED(Ready_Component(_iLevel)))
 		return E_FAIL;
 

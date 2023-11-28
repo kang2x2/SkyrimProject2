@@ -14,6 +14,8 @@
 #include "ParticleRect.h"
 #include "Camera_Player.h"
 
+#include "SceneChangeCol.h"
+
 // Tool Level
 #include "Tool_Camera.h"
 #include "Terrain_Grid.h"
@@ -102,6 +104,8 @@
 
 #pragma region UI
 #include "SkyrimUI_SceneChange.h"
+#include "SkyrimUI_HpBar.h"
+#include "SkyrimUI_SpBar.h"
 
 #include "Inventory.h"
 #include "Inventory_ItemCategory.h"

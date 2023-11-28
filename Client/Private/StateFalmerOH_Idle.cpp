@@ -19,6 +19,8 @@ HRESULT CStateFalmerOH_Idle::Initialize(CGameObject* _pMonster, CGameObject* _pP
 
 void CStateFalmerOH_Idle::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 

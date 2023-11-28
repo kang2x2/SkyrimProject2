@@ -75,6 +75,9 @@ HRESULT CNavigation_Client::Ready_Component()
 		TEXT("Com_Navigation_Dungeon"), (CComponent**)&m_pNavigationCom[STAGE_DUNGEON])))
 		return E_FAIL;
 
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Navigation_Dungeon"),
+		TEXT("Com_Navigation_Castle"), (CComponent**)&m_pNavigationCom[STAGE_CASTLE])))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -113,6 +116,7 @@ void CNavigation_Client::Free()
 
 	for (_int i = 0; i < STAGE_END; ++i)
 	{
-		Safe_Release(m_pNavigationCom[i]);
+		if(m_pNavigationCom[i] != nullptr)
+			Safe_Release(m_pNavigationCom[i]);
 	}
 }

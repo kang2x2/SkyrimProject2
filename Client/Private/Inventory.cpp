@@ -7,6 +7,8 @@
 #include "Inventory_ItemList.h"
 #include "Inventory_UnderBar.h"
 
+#include "Player.h"
+
 CInventory::CInventory(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CSkyrimUI(_pDevice, _pContext)
 {
@@ -37,6 +39,8 @@ HRESULT CInventory::Initialize_Clone(void* pArg)
 		return E_FAIL;
 
 	m_strName = TEXT("UI_Inventory");
+
+	m_bIsMaintain = true;
 
 	return S_OK;
 }
@@ -76,6 +80,42 @@ HRESULT CInventory::Render()
 	return S_OK;
 }
 
+void CInventory::Set_IsInvenShow(_bool _bIsShow)
+{
+	if (!_bIsShow)
+	{
+		m_bIsShowInven = false;
+		dynamic_cast<CInventory_ItemList*>(m_vecInvenPart[PART_LIST])->Set_IsShow(false);
+	}
+	else
+	{
+		m_bIsShowInven = true;
+	}
+}
+
+void CInventory::Inven_AddItem(class CGameObject* _pItem)
+{
+	if (_pItem != nullptr)
+	{
+		switch (dynamic_cast<CSkyrimItem*>(_pItem)->Get_ItemType())
+		{
+		case CSkyrimItem::ITEM_WEAPON:
+			m_vecItemAry[CSkyrimItem::ITEM_WEAPON].push_back(_pItem);
+			break;
+		case CSkyrimItem::ITEM_ARMOR:
+			m_vecItemAry[CSkyrimItem::ITEM_ARMOR].push_back(_pItem);
+			break;
+		case CSkyrimItem::ITEM_POTION:
+			m_vecItemAry[CSkyrimItem::ITEM_POTION].push_back(_pItem);
+			break;
+		default:
+			break;
+		}
+
+		dynamic_cast<CSkyrimItem*>(_pItem)->Set_PocketITem(true);
+	}
+}
+
 HRESULT CInventory::Ready_Part()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -100,6 +140,22 @@ HRESULT CInventory::Ready_Part()
 	m_vecInvenPart.push_back(pPart);
 
 	/* For. List */
+	CInventory_ItemList::INVEN_ITEMLIST_DESC itemListDesc;
+	itemListDesc.m_pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
+	itemListDesc.pInven = this;
+	itemListDesc.pCategory = dynamic_cast<CInventory_ItemCategory*>(m_vecInvenPart[PART_CATEGORY]);
+	itemListDesc.vBlackPos = { 400.f, g_iWinSizeY * 0.5f };
+	itemListDesc.vBlackSize = { 200.f, g_iWinSizeY };
+	itemListDesc.vLine1Pos = { 300.f, g_iWinSizeY * 0.5f };
+	itemListDesc.vLine1Size = { 2.f, g_iWinSizeY };
+	itemListDesc.vLine2Pos = { 500.f, g_iWinSizeY * 0.5f };
+	itemListDesc.vLine2Size = { 2.f, g_iWinSizeY };
+
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Inventory_ItemListPart"), &itemListDesc);
+	if (pPart == nullptr)
+		return E_FAIL;
+
+	m_vecInvenPart.push_back(pPart);
 
 	/* For. UnderBar */
 
@@ -194,5 +250,16 @@ void CInventory::Free()
 	{
 		if (m_vecInvenPart[i] != nullptr)
 			Safe_Release(m_vecInvenPart[i]);
+	}
+
+	for (_uint i = 0; i < CSkyrimItem::ITEM_END; ++i)
+	{
+		for (_uint j = 0; j < m_vecItemAry[i].size(); ++j)
+		{
+			if (m_vecItemAry[i][j] != nullptr)
+			{
+				Safe_Release(m_vecItemAry[i][j]);
+			}
+		}
 	}
 }

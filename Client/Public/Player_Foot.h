@@ -37,9 +37,14 @@ public:
 	void		Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex);
 	_uint		Get_CurFrameIndex();
 	_bool		Get_CurAnimationIsLoop();
+
+	void		Change_Equip(CGameObject* _pItem);
 private:
 	HRESULT Ready_Component();
 	HRESULT Bind_ShaderResource();
+
+private:
+	CModel* m_pBasicModel = nullptr;
 
 public:
 	static CPlayer_Foot* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

@@ -21,6 +21,8 @@ HRESULT CArmor_Glass::Initialize_ProtoType()
 
 HRESULT CArmor_Glass::Initialize_Clone(void* _pArg)
 {
+	__super::Initialize_Clone(_pArg);
+
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 

@@ -19,6 +19,8 @@ HRESULT CStateFalmerUE_Warning::Initialize(CGameObject* _pMonster, CGameObject* 
 
 void CStateFalmerUE_Warning::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 

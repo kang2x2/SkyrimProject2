@@ -1,11 +1,14 @@
 #pragma once
 
-#include "Client_Defines.h"
-#include "GameObject.h"
+#include "SkyrimItem.h"
+
+BEGIN(Engine)
+class CBone;
+END
 
 BEGIN(Client)
 
-class CSkyrimWeapon abstract : public CGameObject
+class CSkyrimWeapon abstract : public CSkyrimItem
 {
 public:
 	enum WEAPON_VIEWTYPE { VIEW_3ST, VIEW_1ST, VIEW_END };

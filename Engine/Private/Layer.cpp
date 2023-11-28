@@ -86,6 +86,21 @@ void CLayer::ClearTick()
 		if (iter != nullptr)
 		{
 			if (iter->Get_IsDead())
+			{
+				Safe_Release(iter);
+				iter = nullptr;
+			}
+		}
+	}
+}
+
+void CLayer::Clear()
+{
+	for (auto& iter : m_ltCloneObj)
+	{
+		if (iter != nullptr)
+		{
+			if (!iter->Get_IsMaintain())
 				Safe_Release(iter);
 		}
 	}

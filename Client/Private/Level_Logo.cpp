@@ -39,7 +39,12 @@ HRESULT CLevel_Logo::Initialize()
 
 HRESULT CLevel_Logo::Tick(_float _fTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
+	pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -139,7 +144,6 @@ HRESULT CLevel_Logo::Ready_Light()
 	
 	if (FAILED(pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
-	
 	
 	Safe_Release(pGameInstance);
 
