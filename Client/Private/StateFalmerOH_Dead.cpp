@@ -23,10 +23,11 @@ void CStateFalmerOH_Dead::Update(_float _fTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	/* 동작이 끝났을 때 */
-	if (m_pMonster->Get_IsAnimationFin() &&
+	if (m_pMonster->Get_CurFrameIndex() >= 50 &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "bleedoutintro"))
 	{
-		m_pMonster->Set_IsReadyDead(true);
+		m_pMonster->Set_AnimationStop(true);
+		m_pMonster->Set_IsDissloving(true);
 	}
 
 	Safe_Release(pGameInstance);

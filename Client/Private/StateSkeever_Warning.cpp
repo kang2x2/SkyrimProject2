@@ -19,15 +19,9 @@ HRESULT CStateSkeever_Warning::Initialize(CGameObject* _pMonster, CGameObject* _
 
 void CStateSkeever_Warning::Update(_float _fTimeDelta)
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
+	__super::Update(_fTimeDelta);
 
-	CTransform* pTragetTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")));
-
-	m_pMonsterTransform->LookAt(pTragetTransform->Get_State(CTransform::STATE_POSITION));
-
-	Safe_Release(pGameInstance);
-
+	m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
 }
 
 void CStateSkeever_Warning::Late_Update()

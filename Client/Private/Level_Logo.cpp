@@ -34,6 +34,15 @@ HRESULT CLevel_Logo::Initialize()
 	if (FAILED(Ready_Layer_LogoText(TEXT("Layer_LogoText"))))
 		return E_FAIL;
 
+	// Gara
+	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//Safe_AddRef(pGameInstance);
+	//
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOGO, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_BloodSpot"))))
+	//	return E_FAIL;
+	//
+	//Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -43,6 +52,13 @@ HRESULT CLevel_Logo::Tick(_float _fTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
+
+	// Gara
+	//if (pGameInstance->Get_DIKeyDown('L'))
+	//{
+	//	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOGO, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_BloodSpot"))))
+	//		return E_FAIL;
+	//}
 
 	Safe_Release(pGameInstance);
 

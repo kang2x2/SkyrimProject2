@@ -112,6 +112,11 @@ _uint CMonster::Get_CurFrameIndex()
 	return m_pModelCom->Get_CurFrameIndex();
 }
 
+void CMonster::Set_AnimationStop(_bool _bIsStop)
+{
+	m_pModelCom->Set_AnimationStop(_bIsStop);
+}
+
 HRESULT CMonster::Ready_Component()
 {
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Shader_VtxAnimMesh"),
@@ -151,6 +156,11 @@ HRESULT CMonster::Ready_Component()
 
 
 	return S_OK;
+}
+
+CGameObject* CMonster::Clone(void* _pArg)
+{
+	return nullptr;
 }
 
 void CMonster::Free()

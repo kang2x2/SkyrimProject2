@@ -40,6 +40,7 @@ protected:
 	_float*			m_pSpeedAry = nullptr;
 	_float*			m_pLifeTimeAry = nullptr;
 	_float*			m_pTimeAccAry = nullptr;
+	_bool*			m_bIsDrop = nullptr;
 
 public:
 	virtual CComponent* Clone(void* _pArg) = 0;

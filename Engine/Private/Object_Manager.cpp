@@ -226,6 +226,50 @@ void CObject_Manager::Clear(_uint _iLevelIndex)
 	// m_mapProtoTypeObj.clear();
 }
 
+HRESULT CObject_Manager::Add_LightObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strProtoTypeTag, const wstring& _strModelComTag, void* _pArg, LIGHT_DESC* _pLightDesc)
+{
+	// 복제하려는 원본을 찾는다.
+	CGameObject* pProtoTypeObject = Find_ProtoObject(_strProtoTypeTag);
+	if (pProtoTypeObject == nullptr) // 복제하려는 원본이 없으면 실패.
+	{
+		MSG_BOX("복제하려는 원본이 존재하지 않음.");
+		return E_FAIL;
+	}
+
+	// 찾은 원본을 복제하여 사본 생성.
+	CGameObject* pCloneObject = pProtoTypeObject->LightClone(_iLevelIndex, _strModelComTag, _pArg, _pLightDesc);
+	if (pCloneObject == nullptr) // 복사에 실패 했을 시
+	{
+		MSG_BOX("오브젝트 복사 실패.");
+		return E_FAIL;
+	}
+
+	CLayer* pLayer = Find_Layer(_iLevelIndex, _strLayerTag);
+
+	// 사본을 추가하려는 레이어가 존재하지 않음.(새로 추가)
+	if (pLayer == nullptr)
+	{
+		// 레이어 새로 생성
+		pLayer = CLayer::Create();
+
+		// 레이어에 오브젝트 추가
+		pCloneObject->Set_LightFileDesc(*(LIGHT_DESC*)_pLightDesc);
+		pCloneObject->Set_ObjFileDesc(_strLayerTag, _strProtoTypeTag, _strModelComTag);
+		pLayer->Add_CloneObject(pCloneObject);
+
+		// 레이어를 새로운 레이어로 해당 레벨의 map에 추가.
+		m_mapLayer[_iLevelIndex].emplace(_strLayerTag, pLayer);
+	}
+	else
+	{
+		pCloneObject->Set_LightFileDesc(*(LIGHT_DESC*)_pLightDesc);
+		pCloneObject->Set_ObjFileDesc(_strLayerTag, _strProtoTypeTag, _strModelComTag);
+		pLayer->Add_CloneObject(pCloneObject);
+	}
+
+	return S_OK;
+}
+
 CGameObject* CObject_Manager::Find_CloneObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strName)
 {
 	// 매개로 받은 레벨의 레이어만 검사

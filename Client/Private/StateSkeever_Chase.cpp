@@ -19,25 +19,23 @@ HRESULT CStateSkeever_Chase::Initialize(CGameObject* _pMonster, CGameObject* _pP
 
 void CStateSkeever_Chase::Update(_float _fTimeDelta)
 {
+	m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
+	m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	CTransform* pTragetTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")));
-
-	m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
-	m_pMonsterTransform->LookAt(pTragetTransform->Get_State(CTransform::STATE_POSITION));
-
 	/* 추격 범위를 벗어났을 때 */
-	if (!pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_MISSDETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+	if (!pGameInstance->Collision_Stay(m_pVecCollider[CSkeever::SKEEVER_COL_MISSDETECTION], m_pPlayerBodyCollider))
 	{
 		m_pMonster->Set_State(CSkeever::SKEEVER_DETECTION);
 		m_pMonster->Play_Animation(false, "idlecombat1");
 	}
 
 	/* RunPowerAtk 범위에 들어왔을 때 */
-	if (pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_ATKROUND], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+	if (pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_ATKROUND], m_pPlayerBodyCollider))
 	{
-		m_pMonsterTransform->Set_Speed(m_pMonster->Get_FalmerUESpeedDesc().fChargeSpeed);
+		m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
 
 		m_pMonster->Set_State(CSkeever::SKEEVER_CHARGE);
 		m_pMonster->Play_Animation(false, "attackpowerforward");

@@ -26,6 +26,7 @@ public:
 		SKEEVER_CHASE,
 		SKEEVER_ATK, SKEEVER_CHARGE,
 		SKEEVER_STAGGER,
+		SKEEVER_DEAD,
 		SKEEVER_END };
 
 	typedef struct SkeeverSpeedDesc

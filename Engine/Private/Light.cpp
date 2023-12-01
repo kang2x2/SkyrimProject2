@@ -51,6 +51,31 @@ HRESULT CLight::Render(CShader* _pShader, CVIBuffer_Rect* _pBuffer)
 	return S_OK;
 }
 
+void CLight::Set_Diffuse(_float4 _vDiffuse)
+{
+	m_LightDesc.vDiffuse = _vDiffuse;
+}
+
+void CLight::Set_Ambient(_float4 _vAmbient)
+{
+	m_LightDesc.vAmbient = _vAmbient;
+}
+
+void CLight::Set_Specular(_float4 _vSpecular)
+{
+	m_LightDesc.vSpecular = _vSpecular;
+}
+
+void CLight::Set_Direction(_float4 _vDir)
+{
+	m_LightDesc.vLightDir = _vDir;
+}
+
+void CLight::Set_Range(_float _fRange)
+{
+	m_LightDesc.fLightRange = _fRange;
+}
+
 CLight* CLight::Create(const LIGHT_DESC& _LightDesc)
 {
 	CLight* pInstance = new CLight();

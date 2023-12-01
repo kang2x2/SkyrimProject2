@@ -25,7 +25,8 @@ void CStateFalmerOH_Attack2::Update(_float _fTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	/* 공격 중 서로의 콜라이더가 충돌하였으면. (피격) */
-	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK)
+	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK ||
+		m_pPlayer->Get_CurState() == CPlayer::ONEHAND_ANTICIPATE)
 	{
 		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerWeaponCollider))
 		{
@@ -38,9 +39,14 @@ void CStateFalmerOH_Attack2::Update(_float _fTimeDelta)
 
 	else
 	{
-		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
+		if (!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "1hm_attack3") &&
+			m_pMonster->Get_CurFrameIndex() >= 12 && m_pMonster->Get_CurFrameIndex() <= 20)
 		{
-			// 데미지 처리.
+			if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
+			{
+				m_pPlayer->SetHp(-10.f);
+				m_pPlayer->Set_IsHit(true);
+			}
 		}
 	}
 

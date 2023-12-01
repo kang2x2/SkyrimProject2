@@ -61,48 +61,57 @@ HRESULT CSpider::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag,
 
 void CSpider::PriorityTick(_float _fTimeDelta)
 {
-	for (auto& iter : m_vecMonsterPart)
+	if (!g_bIsPause)
 	{
-		if (iter != nullptr)
-			iter->PriorityTick(_fTimeDelta);
+		for (auto& iter : m_vecMonsterPart)
+		{
+			if (iter != nullptr)
+				iter->PriorityTick(_fTimeDelta);
+		}
 	}
 }
 
 void CSpider::Tick(_float _fTimeDelta)
 {
-	m_pModelCom->Play_Animation(_fTimeDelta);
-
-	for (auto& iter : m_vecMonsterPart)
+	if (!g_bIsPause)
 	{
-		if (iter != nullptr)
-			iter->Tick(_fTimeDelta);
-	}
+		m_pModelCom->Play_Animation(_fTimeDelta);
 
-	if (g_curLevel == LEVEL_GAMEPLAY)
-		m_pStateManager->Update(_fTimeDelta);
-
-	__super::Tick(_fTimeDelta);
-
-	_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
-
-	for (size_t i = 0; i < SPIDER_COL_END; ++i)
-	{
-		if (m_pVecCollider[i] != nullptr)
+		for (auto& iter : m_vecMonsterPart)
 		{
-			m_pVecCollider[i]->Update(matWorld);
+			if (iter != nullptr)
+				iter->Tick(_fTimeDelta);
+		}
+
+		if (g_curLevel == LEVEL_GAMEPLAY)
+			m_pStateManager->Update(_fTimeDelta);
+
+		__super::Tick(_fTimeDelta);
+
+		_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
+
+		for (size_t i = 0; i < SPIDER_COL_END; ++i)
+		{
+			if (m_pVecCollider[i] != nullptr)
+			{
+				m_pVecCollider[i]->Update(matWorld);
+			}
 		}
 	}
 }
 
 void CSpider::LateTick(_float _fTimeDelta)
 {
-	if (g_curLevel == LEVEL_GAMEPLAY)
-		m_pStateManager->Late_Update();
-
-	for (auto& iter : m_vecMonsterPart)
+	if (!g_bIsPause)
 	{
-		if (iter != nullptr)
-			iter->LateTick(_fTimeDelta);
+		if (g_curLevel == LEVEL_GAMEPLAY)
+			m_pStateManager->Late_Update();
+
+		for (auto& iter : m_vecMonsterPart)
+		{
+			if (iter != nullptr)
+				iter->LateTick(_fTimeDelta);
+		}
 	}
 
 #ifdef _DEBUG
@@ -266,7 +275,7 @@ HRESULT CSpider::Ready_State()
 {
 	m_fRunSpeed = 2.5f;
 	m_fWalkSpeed = 1.5f;
-	m_iHp = 100;
+	m_fHp = 100;
 	m_iAtk = 10;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

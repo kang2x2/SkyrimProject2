@@ -20,6 +20,7 @@ public:
 	CGameObject* Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext,
 		const POINT& _WinMousePos, _uint _iLevel);
 
+	CGameObject* Picking_Light(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, _uint _iLevel);
 
 
 private:

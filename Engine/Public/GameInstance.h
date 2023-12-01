@@ -40,6 +40,7 @@ public : /* For.Timer_Manager */
 public: /* For.Calculator */
 	_float3 Picking_Position(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, class CGameObject* _pTerrain, const _float3 * _vec, _uint _iLevel);
 	CGameObject* Picking_Object(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, _uint _iLevel);
+	CGameObject* Picking_Light(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext, const POINT & _WinMousePos, _uint _iLevel);
 
 public: /* For.Level_Manager */
 	HRESULT Open_Level(_uint _iLevelIndex, class CLevel* _pLevel);
@@ -55,6 +56,9 @@ public: /* For.Object_Manager */
 	class CGameObject* Find_CloneObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strName);
 	map<const wstring, class CLayer*>* Get_CloneObjectMapAry(_uint _iLevel);
 	map<const wstring, class CGameObject*> Get_ProtoObjectMapAry();
+	HRESULT Add_LightObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strProtoTypeTag, const wstring & _strModelComTag, void* _pArg, LIGHT_DESC * _pLightDesc);
+
+
 
 public: /* For.Component_Manager */
 	HRESULT Add_ProtoType_Component(_uint _iLevelIndex, const wstring & _strProtoTypeTag, class CComponent* _pProtoTypeComponent);
@@ -62,8 +66,14 @@ public: /* For.Component_Manager */
 	class CComponent* Find_ProtoType(_uint _iLevelIndex, const wstring & _strProtoTypeTag);
 
 public: /* For.Light_Manager */
-	const LIGHT_DESC* Get_LightDesc(_uint _iLightIndex);
+	LIGHT_DESC* Get_LightDesc(_uint _iLightIndex);
 	HRESULT Add_Light(const LIGHT_DESC & _LightDesc);
+	void    Delete_Light(_uint _iLightIndex);
+	void Set_Diffuse(_float4 _vDiffuse, _uint _iLightIndex);
+	void Set_Ambient(_float4 _vAmbient, _uint _iLightIndex);
+	void Set_Specular(_float4 _vSpecular, _uint _iLightIndex);
+	void Set_Direction(_float4 _vDir, _uint _iLightIndex);
+	void Set_Range(_float _fRange, _uint _iLightIndex);
 	void Light_Clear();
 
 public: /* For. PipeLine */

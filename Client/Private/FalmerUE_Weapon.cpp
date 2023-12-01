@@ -69,6 +69,20 @@ void CFalmerUE_Weapon::Tick(_float _fTimeDelta)
 
 	m_pColliderCom->Update(XMLoadFloat4x4(&m_matWorld));
 
+	if (g_curLevel != LEVEL_TOOL)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		CGameObject* m_pPlayer = pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player"));
+		CGameObject* m_pPlayerWeapon = dynamic_cast<CPlayer*>(m_pPlayer)->Get_Part(CPlayer::PART_WEAPON);
+
+		pGameInstance->Collision_Out(m_pColliderCom, dynamic_cast<CCollider*>(m_pPlayerWeapon->Get_Component(TEXT("Com_Collider_OBB"))));
+		pGameInstance->Collision_Out(m_pColliderCom, dynamic_cast<CCollider*>(dynamic_cast<CPlayer*>(m_pPlayer)->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+
+		Safe_Release(pGameInstance);
+	}
+
 }
 
 void CFalmerUE_Weapon::LateTick(_float _fTimeDelta)

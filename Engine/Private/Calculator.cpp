@@ -373,6 +373,93 @@ CGameObject* CCalculator::Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceCon
 		return nullptr;
 }
 
+CGameObject* CCalculator::Picking_Light(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, _uint _iLevel)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_uint iVpNum = 1;
+	CD3D11_VIEWPORT vp;
+
+	_pContext->RSGetViewports(&iVpNum, &vp);
+
+	_float4 vCamPosition = pGameInstance->Get_CamPosition_Float4();
+	_float4x4 matProjInverse = pGameInstance->Get_Transform_float4x4_Inverse(CPipeLine::D3DTS_PROJ);
+	_float4x4 matViewInverse = pGameInstance->Get_Transform_float4x4_Inverse(CPipeLine::D3DTS_VIEW);
+
+	_float3 vMousePos = { 0.f, 0.f, 0.f };
+
+	// 뷰포트 -> 투영
+	vMousePos.x = _WinMousePos.x / (vp.Width * 0.5f) - 1.f;
+	vMousePos.y = _WinMousePos.y / -(vp.Height * 0.5f) + 1.f;
+	vMousePos.z = 0.f;
+
+	// 투영 -> 뷰 스페이스
+	XMStoreFloat3(&vMousePos, XMVector3TransformCoord(XMLoadFloat3(&vMousePos), XMLoadFloat4x4(&matProjInverse)));
+
+	// 광선 구하기
+	_float3 vRayPos = { 0.f, 0.f, 0.f };
+	_float3 vRayDir;
+	XMStoreFloat3(&vRayDir, XMLoadFloat3(&vMousePos) - XMLoadFloat3(&vRayPos));
+
+	// 뷰 -> 월드
+	XMStoreFloat3(&vRayPos, XMVector3TransformCoord(XMLoadFloat3(&vRayPos), XMLoadFloat4x4(&matViewInverse)));
+	XMStoreFloat3(&vRayDir, XMVector3TransformNormal(XMLoadFloat3(&vRayDir), XMLoadFloat4x4(&matViewInverse)));
+	XMStoreFloat3(&vRayDir, XMVector3Normalize(XMLoadFloat3(&vRayDir)));
+
+	// 해당 레벨에 해당하는 레이어 배열 얻어오기
+	map<const wstring, CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(_iLevel);
+
+	_float		 fDist = 0.f;
+	_float       fMinDist = 100000.f; // 카메라에서 가장 가까운 거리.
+	CGameObject* pProximateObj = nullptr; // 카메라에서 가장 가까운 오브젝트.
+
+	_float3 vIntersectionPos;
+
+	for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
+	{
+		// Layer 내부의 ObjList를 가져옴.
+		list<CGameObject*> objList = Layer->second->Get_ObjList();
+		// LightObject만 검사.
+		if (Layer->first == TEXT("Layer_LightObject"))
+		{
+			for (auto obj : objList)
+			{
+				// 해당 객체의 월드 행렬을 얻어오기 위함.
+				CTransform* pObjTransform = dynamic_cast<CTransform*>(obj->Get_Component(TEXT("Com_Transform")));
+				_float4x4 matObjWorld = pObjTransform->Get_WorldMatrix_Float4x4();
+
+				// 해당 객체의 콜라이더를 얻어옴.
+				CCollider* pCollider = dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB")));
+
+				const BoundingBox* pBounding = dynamic_cast<CBounding_AABB*>(pCollider->Get_Bounding())->Get_Bounding();
+				_float fDist = 0.f;
+
+				if (pBounding->Intersects(XMLoadFloat3(&vRayPos), XMLoadFloat3(&vRayDir), fDist))
+				{
+					// 방향 벡터에 거리를 곱하고 시작 지점을 더하여 교차 지점 구한다.
+					vIntersectionPos.x = vRayPos.x + vRayDir.x * fDist;
+					vIntersectionPos.y = vRayPos.y + vRayDir.y * fDist;
+					vIntersectionPos.z = vRayPos.z + vRayDir.z * fDist;
+
+					if (fDist <= fMinDist)
+					{
+						fMinDist = fDist;
+						pProximateObj = obj;
+					}
+				}
+			}
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
+	if (pProximateObj != nullptr)
+		return pProximateObj;
+	else
+		return nullptr;
+}
+
 
 
 void CCalculator::Free()

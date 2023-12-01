@@ -5,6 +5,7 @@
 BEGIN(Engine)
 
 class CCollider;
+class CTexture;
 
 END
 

@@ -16,6 +16,12 @@ protected:
 		wstring		m_strProtoModelComTag;
 	}FILE_OBJDESC;
 
+	// 급한대로 라이트 정보 여기에
+	typedef struct tagLightFileDesc
+	{
+		LIGHT_DESC lightDesc;
+	}LIGHT_OBJDESC;
+
 protected:
 	CGameObject(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext); // 원본
 	CGameObject(const CGameObject& rhs); // 사본
@@ -47,6 +53,13 @@ public:
 	void			Set_ObjFileDesc(const wstring& _strLayerTag, const wstring& _strProtoObjTag, const wstring& _strProtoModelComTag = TEXT(""));
 	FILE_OBJDESC    Get_ObjFileDesc() { return m_tObjFileDesc; }
 
+	void			 Set_LightFileDesc(LIGHT_DESC _lightDesc)
+	{
+		m_tLightFileDesc.lightDesc = _lightDesc;
+	}
+	LIGHT_OBJDESC    Get_LightFileDesc() { return m_tLightFileDesc; }
+
+
 	_bool  Get_IsMaintain() { return m_bIsMaintain; }
 
 protected:
@@ -71,7 +84,8 @@ protected:
 	_float4x4		 m_ViewMatrix, m_ProjMatrix;
 
 	// 파일 입출력을 위해 사용할 정보
-	FILE_OBJDESC     m_tObjFileDesc;
+	FILE_OBJDESC      m_tObjFileDesc;
+	LIGHT_OBJDESC     m_tLightFileDesc;
 protected:
 	/* 컴포넌트의 검색을 용이하게 하기 위해 map으로 보관. 
 	   다른 객체가 현 객체의 컴포넌트(Transform 등)을 참조하는 경우가 빈번해서 */
@@ -89,6 +103,7 @@ protected:
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual CGameObject* Clone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg);
+	virtual CGameObject* LightClone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg, LIGHT_DESC* _LightDesc);
 	virtual void Free() override;
 };
 

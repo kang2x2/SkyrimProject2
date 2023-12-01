@@ -22,13 +22,6 @@ CPlayer_Body::CPlayer_Body(const CPlayer_Body& rhs)
 
 HRESULT CPlayer_Body::Initialize_ProtoType()
 {
-	for (_int i = 0; i < CPlayer::CAM_END; ++i)
-		m_pModelComAry[i] = nullptr;
-
-	for (_int i = 0; i < CPlayer::CAM_END; ++i)
-		m_pBasicModelAry[i] = nullptr;
-
-
 	return S_OK;
 }
 
@@ -118,6 +111,15 @@ void CPlayer_Body::Set_MeshType(CPlayer::PLAYERCAMERA _eCamType)
 {
 	m_ePlayerCamMode = _eCamType;
 	m_pModelCom = m_pModelComAry[m_ePlayerCamMode];
+
+	if (m_ePlayerCamMode == CPlayer::CAM_1ST)
+	{
+		m_pColliderCom->Set_ColliderDesc(1.f);
+	}
+	else if (m_ePlayerCamMode == CPlayer::CAM_3ST)
+	{
+		m_pColliderCom->Set_ColliderDesc(0.5f);
+	}
 }
 
 void CPlayer_Body::Change_Equip(CGameObject* _pItem)
@@ -186,7 +188,7 @@ HRESULT CPlayer_Body::Ready_Component()
 
 	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
 
-	AABBDesc.vExtents = _float3(0.3f, 0.7f, 0.3f );
+	AABBDesc.vExtents = _float3(1.f, 0.7f, 1.f);
 	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),

@@ -1,14 +1,15 @@
+#include "framework.h"
 #include "Light_Town.h"
 
 #include "GameInstance.h"
 
 CLight_Town::CLight_Town(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
-	: CGameObject(_pDevice, _pContext)
+	: CSkyrim_Light(_pDevice, _pContext)
 {
 }
 
 CLight_Town::CLight_Town(const CLight_Town& rhs)
-	: CGameObject(rhs)
+	: CSkyrim_Light(rhs)
 {
 }
 
@@ -17,15 +18,9 @@ HRESULT CLight_Town::Initialize_ProtoType()
 	return S_OK;
 }
 
-HRESULT CLight_Town::Initialize_Clone(void* pArg)
+HRESULT CLight_Town::Initialize_Clone(void* _pArg)
 {
-	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
-		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom), &TransformDesc))
-		return E_FAIL;
-
-	_matrix* pMatPivot = (_matrix*)pArg;
-
-	m_pTransformCom->Set_WorldMatrix(*pMatPivot);
+	__super::Initialize_Clone(_pArg);
 
 	m_strName = TEXT("Light_Fire");
 
@@ -34,15 +29,9 @@ HRESULT CLight_Town::Initialize_Clone(void* pArg)
 	return S_OK;
 }
 
-HRESULT CLight_Town::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag, void* pArg)
+HRESULT CLight_Town::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg)
 {
-	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
-		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom), &TransformDesc))
-		return E_FAIL;
-
-	_matrix* pMatPivot = (_matrix*)pArg;
-
-	m_pTransformCom->Set_WorldMatrix(*pMatPivot);
+	__super::Initialize_Clone(_iLevel, _strModelComTag, _pArg);
 
 	m_strName = TEXT("Light_Fire");
 
@@ -57,10 +46,12 @@ void CLight_Town::PriorityTick(_float _fTimeDelta)
 
 void CLight_Town::Tick(_float _fTimeDelta)
 {
+	__super::Tick(_fTimeDelta);
 }
 
 void CLight_Town::LateTick(_float _fTimeDelta)
 {
+	__super::LateTick(_fTimeDelta);
 }
 
 HRESULT CLight_Town::Render()
@@ -122,6 +113,4 @@ CGameObject* CLight_Town::Clone(void* _pArg)
 void CLight_Town::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pTransformCom);
 }

@@ -57,11 +57,22 @@
 #include "Spider_Weapon.h"
 #include "Projectile_Web.h"
 
+/* Boss Spider */
+#include "BossSpider.h"
+#include "BossSpider_Mouth.h"
+#include "BossSpider_Left.h"
+#include "BossSpider_Right.h"
+
 #pragma endregion
 
 #pragma region Light
-#include "Light_Town.h"
-#include "Light_Fire.h"
+#include "Light_Point.h"
+#pragma endregion
+
+#pragma region Effect
+#include "Effect_BloodFlare.h"
+#include "Effect_BloodSpot.h"
+#include "Effect_CombatSpark.h"
 #pragma endregion
 
 #pragma region Placeable Object

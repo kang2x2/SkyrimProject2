@@ -55,43 +55,49 @@ HRESULT CAnimation::Initailze(const class CModel* _pModel, const CBin_AIScene::D
 
 void CAnimation::Update_TransformationMatrix(vector<class CBone*>& _vecBone, _float _fTimeDelta)
 {
-	if (m_bIsFinish)
-		return;
-
-	/* 누적 */
-	m_fTrackPosition += m_fTickPerSecond * _fTimeDelta;
-
-	/* 현재 재생 위치가 총 재생 시간을 넘어가면 */
-	if (m_fTrackPosition >= m_fDuration)
+	if (!m_bIsStop)
 	{
-		/* 루프 애니메이션이라면 다시 처음으로, 아니라면 애니메이션을 종료시킨다. */
-		if (m_bIsLoop)
-			m_fTrackPosition = 0.f;
-		else
-			m_bIsFinish = true;
-	}
+		if (m_bIsFinish)
+			return;
 
-	/* 경과 시간에 따른 뼈 업데이트(선형 보간 등등). */
-	for (size_t i = 0; i < m_vecChannel.size(); ++i)
-	{
-		m_vecChannel[i]->Update_TransformationMatrix(&m_vecCurKeyFrame[i], _vecBone, m_fTrackPosition);
+		/* 누적 */
+		m_fTrackPosition += m_fTickPerSecond * _fTimeDelta;
+
+		/* 현재 재생 위치가 총 재생 시간을 넘어가면 */
+		if (m_fTrackPosition >= m_fDuration)
+		{
+			/* 루프 애니메이션이라면 다시 처음으로, 아니라면 애니메이션을 종료시킨다. */
+			if (m_bIsLoop)
+				m_fTrackPosition = 0.f;
+			else
+				m_bIsFinish = true;
+		}
+
+		/* 경과 시간에 따른 뼈 업데이트(선형 보간 등등). */
+		for (size_t i = 0; i < m_vecChannel.size(); ++i)
+		{
+			m_vecChannel[i]->Update_TransformationMatrix(&m_vecCurKeyFrame[i], _vecBone, m_fTrackPosition);
+		}
 	}
 }
 
 _bool CAnimation::Change_TransformationMatrix(vector<class CBone*>& _vecBone, const vector<CChannel*>& _destVecChannel, _float _fTimeDelta)
 {
-	m_fCnageTrackPosition += 0.02f;
-
-	if (m_fCnageTrackPosition >= 0.2f)
+	if (!m_bIsStop)
 	{
-		return true;
-	}
+		m_fCnageTrackPosition += 0.02f;
 
-	for (size_t i = 0; i < m_vecChannel.size(); ++i)
-	{
-		if (m_vecChannel[i]->Get_BoneIndex() == _destVecChannel[i]->Get_BoneIndex())
+		if (m_fCnageTrackPosition >= 0.2f)
 		{
-			m_vecChannel[i]->Change_TransformationMatrix(_vecBone, _destVecChannel[i]->Get_FisrtKeyFrame(), m_fCnageTrackPosition);
+			return true;
+		}
+
+		for (size_t i = 0; i < m_vecChannel.size(); ++i)
+		{
+			if (m_vecChannel[i]->Get_BoneIndex() == _destVecChannel[i]->Get_BoneIndex())
+			{
+				m_vecChannel[i]->Change_TransformationMatrix(_vecBone, _destVecChannel[i]->Get_FisrtKeyFrame(), m_fCnageTrackPosition);
+			}
 		}
 	}
 

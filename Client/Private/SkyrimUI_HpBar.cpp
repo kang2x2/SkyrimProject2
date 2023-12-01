@@ -34,7 +34,7 @@ HRESULT CSkyrimUI_HpBar::Initialize_Clone(void* _pArg)
 
 	// 부모의 init 윈도우 상의 0,0 으로 잡아놓는 코드 추가해놓자.
 
-	m_pTransformEmpty->Set_Scaling(_float3(m_fSizeX + 50.f, m_fSizeY + 10.f, 1.f));
+	m_pTransformEmpty->Set_Scaling(_float3(m_fSizeX + 80.f, m_fSizeY + 10.f, 1.f));
 	m_pTransformEmpty->Set_State(CTransform::STATE_POSITION,
 		XMVectorSet(m_fX, m_fY, 0.f, 1.f));
 

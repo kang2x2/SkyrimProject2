@@ -24,7 +24,7 @@ HRESULT CState_FalmerUE::Initialize(CGameObject* _pMonster, CGameObject* _pPlaye
 
 void CState_FalmerUE::Update(_float _fTimeDelta)
 {
-	if (m_pMonster->GetHp() <= 0)
+	if (m_pMonster->GetHp() <= 0.f)
 	{
 		m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_DEAD);
 		m_pMonster->Play_Animation(false, "bleedoutintro");

@@ -50,7 +50,7 @@ void CSkyrim_NPC::Tick(_float _fTimeDelta)
 
 void CSkyrim_NPC::LateTick(_float _fTimeDelta)
 {
-	if (m_iHp <= 0)
+	if (m_fHp <= 0)
 		m_bDead = true;
 }
 

@@ -11,7 +11,7 @@ private:
 	virtual ~CLight() = default;
 
 public:
-	const LIGHT_DESC* Get_LightDesc() const
+	LIGHT_DESC* Get_LightDesc()
 	{
 		return &m_LightDesc;
 	}
@@ -20,6 +20,11 @@ public:
 	HRESULT Initialize(const LIGHT_DESC& _LightDesc);
 	HRESULT	Render(class CShader* _pShader, class CVIBuffer_Rect* _pBuffer);
 
+	void Set_Diffuse(_float4 _vDiffuse);
+	void Set_Ambient(_float4 _vAmbient);
+	void Set_Specular(_float4 _vSpecular);
+	void Set_Direction(_float4 _vDir);
+	void Set_Range(_float _fRange);
 private:
 	LIGHT_DESC		m_LightDesc;
 

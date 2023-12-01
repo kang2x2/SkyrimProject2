@@ -6,6 +6,8 @@
 #include "Transform.h"
 #include "Player.h"
 
+#include "Player_Weapon.h"
+
 CState_Player::CState_Player()
 {
 }
@@ -35,6 +37,11 @@ void CState_Player::Key_Input(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_DIKeyDown('L'))
+	{
+		dynamic_cast<CPlayer_Weapon*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON))->Create_Spark();
+	}
 
 	if (pGameInstance->Get_DIKeyDown('F'))
 	{

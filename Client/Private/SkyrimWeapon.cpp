@@ -15,9 +15,6 @@ CSkyrimWeapon::CSkyrimWeapon(const CSkyrimWeapon& rhs)
 
 HRESULT CSkyrimWeapon::Initialize_ProtoType()
 {
-	for (_int i = 0; i < VIEW_END; ++i)
-		m_pModelComAry[i] = nullptr;
-
 	return S_OK;
 }
 
@@ -104,8 +101,7 @@ void CSkyrimWeapon::Free()
 
 	for (_int i = 0; i < VIEW_END; ++i)
 	{
-		if (m_pModelComAry[i] != nullptr)
-			Safe_Release(m_pModelComAry[i]);
+		Safe_Release(m_pModelComAry[i]);
 	}
 
 	Safe_Release(m_pRendererCom);

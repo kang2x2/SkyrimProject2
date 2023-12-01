@@ -147,6 +147,38 @@ HRESULT CVIBuffer_Rect_Instance::Update(_float _fTimeDelta)
 	return S_OK;
 }
 
+HRESULT CVIBuffer_Rect_Instance::Update_Spark(_float _fTimeDelta)
+{
+	D3D11_MAPPED_SUBRESOURCE		SubResource = {};
+
+	/* 파티클의 움직임을 부여한다. */
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	for (size_t i = 0; i < m_iNumInstance; ++i)
+	{
+		// 랜덤한 각도로 방향 업데이트
+		// _float randomAngle = static_cast<_float>(std::rand()) / RAND_MAX * 2.0f * 3.14159f;
+		// _float directionZ = std::cos(randomAngle);
+		// _float directionY = std::sin(randomAngle);
+
+		m_pTimeAccAry[i] += _fTimeDelta;
+
+		// 방향 벡터에 속도를 곱하고 현재 위치에 더하기
+		// _float speed = m_pSpeedAry[i];
+		// ((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += speed * directionZ * _fTimeDelta;
+
+		if (m_pTimeAccAry[i] >= m_pLifeTimeAry[i])
+		{
+			// 수명이 다한 경우 해당 입자를 생략 (입자를 그냥 없애기)
+			continue;
+		}
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+
+	return S_OK;
+}
+
 CVIBuffer_Rect_Instance* CVIBuffer_Rect_Instance::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const INSTANCE_DESC& _InstanceDesc)
 {
 	CVIBuffer_Rect_Instance* pInstance = new CVIBuffer_Rect_Instance(_pDevice, _pContext);

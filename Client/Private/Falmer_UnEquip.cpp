@@ -47,6 +47,8 @@ HRESULT CFalmer_UnEquip::Initialize_Clone(_uint _iLevel, const wstring& _strMode
 	m_bHasMesh = true;
 	m_bCreature = true;
 	m_strName = TEXT("Falmer_UnEquip");
+	m_fDissloveTime = 2.5f;
+
 	m_vOriginPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	m_pTransformCom->Set_Speed(3.f);
@@ -61,65 +63,96 @@ HRESULT CFalmer_UnEquip::Initialize_Clone(_uint _iLevel, const wstring& _strMode
 
 void CFalmer_UnEquip::PriorityTick(_float _fTimeDelta)
 {
-	for (auto& iter : m_vecMonsterPart)
+	if (!g_bIsPause)
 	{
-		if (iter != nullptr)
-			iter->PriorityTick(_fTimeDelta);
+		for (auto& iter : m_vecMonsterPart)
+		{
+			if (iter != nullptr)
+				iter->PriorityTick(_fTimeDelta);
+		}
 	}
 }
 
 void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 {
-	m_pModelCom->Play_Animation(_fTimeDelta);
-
-	for (auto& iter : m_vecMonsterPart)
+	if (!g_bIsPause)
 	{
-		if (iter != nullptr)
-			iter->Tick(_fTimeDelta);
-	}
+		m_pModelCom->Play_Animation(_fTimeDelta);
 
-	if (g_curLevel == LEVEL_GAMEPLAY)
-		m_pStateManager->Update(_fTimeDelta);
-
-	__super::Tick(_fTimeDelta);
-
-	_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
-
-	for (size_t i = 0; i < FALMERUE_COL_END; ++i)
-	{
-		if (m_pVecCollider[i] != nullptr)
+		for (auto& iter : m_vecMonsterPart)
 		{
-			m_pVecCollider[i]->Update(matWorld);
+			if (iter != nullptr)
+				iter->Tick(_fTimeDelta);
+		}
+
+		if (g_curLevel == LEVEL_GAMEPLAY)
+			m_pStateManager->Update(_fTimeDelta);
+
+		__super::Tick(_fTimeDelta);
+
+		_matrix matWorld = m_pTransformCom->Get_WorldMatrix();
+
+		for (size_t i = 0; i < FALMERUE_COL_END; ++i)
+		{
+			if (m_pVecCollider[i] != nullptr)
+			{
+				m_pVecCollider[i]->Update(matWorld);
+			}
+		}
+
+		if (g_curLevel != LEVEL_TOOL)
+		{
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			if (m_pPlayer->Get_IsAttack())
+			{
+				if (pGameInstance->Collision_Enter(m_pVecCollider[FALMERUE_COL_AABB],
+					dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
+				{
+					pGameInstance->Add_CloneObject(g_curLevel, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_BloodSpot"));
+					m_fHp -= m_pPlayer->GetAtk();
+				}
+			}
+
+			pGameInstance->Collision_Out(m_pVecCollider[FALMERUE_COL_AABB],
+				dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))));
+
+
+			for (_int i = 0; i < m_pVecCollider.size(); ++i)
+			{
+				pGameInstance->Collision_Out(m_pVecCollider[i],
+					dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+			}
+
+			Safe_Release(pGameInstance);
+		}
+
+		if (m_bIsDissloving)
+		{
+			m_fCurDissloveTime += _fTimeDelta;
+
+			if (m_fCurDissloveTime > m_fDissloveTime)
+				m_bReadyDead = true;
 		}
 	}
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	if (m_pPlayer->Get_IsAttack())
-	{
-		if (pGameInstance->Collision_Enter(m_pVecCollider[FALMERUE_COL_AABB],
-			dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
-		{
-			m_iHp -= 40;
-			cout << m_iHp << endl;
-		}
-	}
-
-	Safe_Release(pGameInstance);
 }
 
 void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 {
-	__super::LateTick(_fTimeDelta);
-
-	if (g_curLevel == LEVEL_GAMEPLAY)
-		m_pStateManager->Late_Update();
-
-	for (auto& iter : m_vecMonsterPart)
+	if (!g_bIsPause)
 	{
-		if (iter != nullptr)
-			iter->LateTick(_fTimeDelta);
+		__super::LateTick(_fTimeDelta);
+
+		if (g_curLevel == LEVEL_GAMEPLAY)
+			m_pStateManager->Late_Update();
+
+		for (auto& iter : m_vecMonsterPart)
+		{
+			if (iter != nullptr)
+				iter->LateTick(_fTimeDelta);
+		}
 	}
 
 #ifdef _DEBUG
@@ -162,6 +195,18 @@ HRESULT CFalmer_UnEquip::Render()
 
 	__super::Bind_ShaderResource();
 
+	if (m_bIsDissloving)
+	{
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_DissolveTexture", 0)))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_Time", &m_fCurDissloveTime, sizeof(_float))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_DissolveTime", &m_fDissloveTime, sizeof(_float))))
+			return E_FAIL;
+	}
+
 	// 메시 몇개
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
@@ -175,11 +220,20 @@ HRESULT CFalmer_UnEquip::Render()
 		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_NormalTexture", i, aiTextureType_NORMALS)))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
+		if (!m_bIsDissloving)
+		{
+			if (FAILED(m_pShaderCom->Begin(0)))
+				return E_FAIL;
+		}
+		else if (m_bIsDissloving)
+		{
+			if (FAILED(m_pShaderCom->Begin(1)))
+				return E_FAIL;
+		}
 
 		if (FAILED(m_pModelCom->Render(i)))
 			return E_FAIL;
+
 	}
 
 	__super::Render();
@@ -233,8 +287,8 @@ HRESULT CFalmer_UnEquip::Ready_Component(_uint _iLevel)
 
 	/* AABB */
 	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
-	AABBDesc.vExtents = _float3(0.5f, 0.7f, 0.8f);
-	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, -AABBDesc.vExtents.z / 2.f);
+	AABBDesc.vExtents = _float3(0.8f, 0.7f, 0.8f);
+	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),
 		TEXT("Com_Collider_AABB"), (CComponent**)&m_pVecCollider[FALMERUE_COL_AABB], &AABBDesc)))
@@ -283,7 +337,7 @@ HRESULT CFalmer_UnEquip::Ready_State()
 {
 	m_fRunSpeed = 2.5f;
 	m_fWalkSpeed = 1.5f;
-	m_iHp = 100;
+	m_fHp = 100;
 	m_iAtk = 10;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

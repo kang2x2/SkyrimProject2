@@ -29,7 +29,8 @@ public:
 
 	/* 충돌 체크 */
 	_bool IsCollision(CCollider* _pTragetCollider);
-
+	/* 정보 변경 */
+	void Set_ColliderDesc(_float _fExtents);
 #ifdef _DEBUG
 public:
 	HRESULT Render();

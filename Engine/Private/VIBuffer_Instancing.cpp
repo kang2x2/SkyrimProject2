@@ -14,6 +14,7 @@ CVIBuffer_Instancing::CVIBuffer_Instancing(const CVIBuffer_Instancing& rhs)
 	, m_pSpeedAry(rhs.m_pSpeedAry)
 	, m_pLifeTimeAry(rhs.m_pLifeTimeAry)
 	, m_pTimeAccAry(rhs.m_pTimeAccAry)
+	, m_bIsDrop(rhs.m_bIsDrop)
 {
 }
 
@@ -53,12 +54,14 @@ HRESULT CVIBuffer_Instancing::Initialize_ProtoType(const INSTANCE_DESC& _Instanc
 	m_pSpeedAry = new _float[_InstanceDesc.iNumInstance];
 	m_pLifeTimeAry = new _float[_InstanceDesc.iNumInstance];
 	m_pTimeAccAry = new _float[_InstanceDesc.iNumInstance];
+	m_bIsDrop = new _bool[_InstanceDesc.iNumInstance];
 
 	for (size_t i = 0; i < _InstanceDesc.iNumInstance; ++i)
 	{
 		m_pSpeedAry[i] = SpeedRandom(RandomDevice);
 		m_pLifeTimeAry[i] = LifeTimeRandom(RandomDevice);
 		m_pTimeAccAry[i] = 0.f;
+		m_bIsDrop[i] = false;
 	}
 
 	/* 난수 생성 초기화.  */
@@ -82,6 +85,10 @@ HRESULT CVIBuffer_Instancing::Initialize_ProtoType(const INSTANCE_DESC& _Instanc
 			, _InstanceDesc.vCenter.y + RandomY(RandomNumber)
 			, _InstanceDesc.vCenter.z + RandomZ(RandomNumber)
 			, 1.f);
+		// 랜덤한 각도로 방향 업데이트
+		_float directionZ = std::cos(RandomZ(RandomNumber));
+		_float directionY = std::sin(RandomY(RandomNumber));
+
 	}
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);
@@ -149,6 +156,7 @@ void CVIBuffer_Instancing::Free()
 		Safe_Delete_Array(m_pSpeedAry);
 		Safe_Delete_Array(m_pLifeTimeAry);
 		Safe_Delete_Array(m_pTimeAccAry);
+		Safe_Delete_Array(m_bIsDrop);
 	}
 
 	Safe_Release(m_pVBInstance);

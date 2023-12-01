@@ -45,6 +45,8 @@ public:
 
 	void		CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);
 
+	void		Create_Spark();
+
 public:
 	HRESULT Ready_Component();
 
@@ -55,7 +57,6 @@ private:
 	_float4x4		m_matSocketPivot;
 
 	CGameObject*	m_pWeapon = nullptr;
-
 
 public:
 	static CPlayer_Weapon* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

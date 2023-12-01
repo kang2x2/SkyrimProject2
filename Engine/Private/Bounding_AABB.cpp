@@ -59,6 +59,15 @@ _bool CBounding_AABB::IsCollision(CCollider::COLLIDER_TYPE _eType, CBounding* _p
 	return m_bIsCol;
 }
 
+void CBounding_AABB::Set_ColliderDesc(_float _fExtents)
+{
+	m_pAABB->Extents.z = _fExtents;
+	m_pAABB->Extents.x = _fExtents;
+	m_pAABB_Original->Extents.z = _fExtents;
+	m_pAABB_Original->Extents.x = _fExtents;
+
+}
+
 #ifdef _DEBUG
 
 HRESULT CBounding_AABB::Render(PrimitiveBatch<VertexPositionColor>* _pBatch)

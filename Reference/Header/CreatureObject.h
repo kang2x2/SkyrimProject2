@@ -20,8 +20,8 @@ public:
 	virtual void	LateTick(_float _fTimeDelta);
 	virtual HRESULT Render();
 
-	_int	GetHp() { return m_iHp; }
-	void	SetHp(_int _iAmount) { m_iHp += _iAmount; }
+	_float	GetHp() { return m_fHp; }
+	void	SetHp(_float _iAmount) { m_fHp += _iAmount; }
 
 	_int	GetAtk() { return m_iAtk; }
 	void	SetAtk(_int _iAmount) { m_iAtk += _iAmount; }
@@ -33,7 +33,7 @@ public:
 	void    SetIsReadyHit(_bool _bIsHit) { m_bIsReadyHit = _bIsHit; }
 
 protected:
-	_int		m_iHp = 0;
+	_float		m_fHp = 0;
 	_int		m_iAtk = 0;
 	_float		m_fRunSpeed = 0.f;
 	_float		m_fWalkSpeed = 0.f;

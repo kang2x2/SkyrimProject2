@@ -18,6 +18,7 @@ HRESULT CStateSkeever_Detection::Initialize(CGameObject* _pMonster, CGameObject*
 
 void CStateSkeever_Detection::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
 }
 
 void CStateSkeever_Detection::Late_Update()

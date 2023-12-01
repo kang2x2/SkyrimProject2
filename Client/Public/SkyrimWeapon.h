@@ -33,7 +33,7 @@ protected:
 	HRESULT Bind_ShaderResources();
 
 protected:
-	CModel* m_pModelComAry[VIEW_END];
+	CModel* m_pModelComAry[VIEW_END] = { nullptr, nullptr };
 	CRenderer* m_pRendererCom = nullptr;
 	CShader* m_pShaderCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;

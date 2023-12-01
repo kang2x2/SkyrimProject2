@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Client_Defines.h"
-#include "GameObject.h"
+#include "Skyrim_Light.h"
 
 BEGIN(Engine)
 
@@ -12,7 +11,7 @@ END
 BEGIN(Client)
 
 /* hpp에 인덱스 추가해야 함. */
-class CLight_Town final : public CGameObject
+class CLight_Town final : public CSkyrim_Light
 {
 private:
 	CLight_Town(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
@@ -30,9 +29,6 @@ public:
 
 private:
 	HRESULT Ready_Light();
-
-private:
-	CTransform* m_pTransformCom = nullptr;
 
 public:
 	static CLight_Town* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

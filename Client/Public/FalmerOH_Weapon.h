@@ -49,7 +49,8 @@ private:
 	CBone* m_pSocketBone = nullptr;
 	_float4x4		m_matSocketPivot;
 
-	CGameObject* m_pWeapon = nullptr;
+	_float		m_fCurDissloveTime = 0.f;
+	_float		m_fDissloveTime = 0.f;
 
 public:
 	static CFalmerOH_Weapon* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);

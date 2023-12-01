@@ -11,6 +11,7 @@
 
 #include "VIBuffer_Grid.h"
 #include "Terrain_Grid.h"
+#include "Light_Point.h"
 
 // 현재 선택된 Light Name 저장하기 위한 전역 변수
 string selectedLightName;
@@ -34,8 +35,6 @@ HRESULT CImGui_Tool::Initialize(ID3D11Device* _pDevice, ID3D11DeviceContext* _pC
 	ImGui_ImplDX11_Init(m_pDevice, m_pContext);
 
 	m_pNavigationCom = CNavigation::Create(m_pDevice, m_pContext);
-
-	selectedLightName = m_lightNameAry[TLIGHT_FIRE].c_str();
 
 	return S_OK;
 }
@@ -66,6 +65,22 @@ void CImGui_Tool::Frame()
 			Safe_Release(pGameInstance);
 
 			m_bDead = false;
+		}
+
+		if (m_bLightDead)
+		{
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			pGameInstance->Delete_Light(dynamic_cast<CLight_Point*>(m_pSelectLight)->Get_LightIndex());
+
+			m_pSelectLight->Set_IsReadyDead(true);
+			//pGameInstance->Delete_CloneObject(LEVEL_TOOL, m_pSelectLight->Get_ObjFileDesc().m_strLayerTag, m_pSelectLight->Get_Name());
+			//m_pSelectLight = nullptr;
+
+			Safe_Release(pGameInstance);
+
+			m_bLightDead = false;
 		}
 	
 		m_pNavigationCom->Update();
@@ -133,7 +148,20 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 		if (m_bLightCreateMode)
 			Create_Light();
 		if (m_bLightDeleteMode)
-			Delete_Light();
+		{
+			if (!m_bLightDead)
+			{
+				m_pSelectLight = pGameInstance->Picking_Light(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
+
+				if (m_pSelectLight != nullptr)
+				{
+					m_pSelectLight->Set_IsDead(true);
+					m_bLightDead = true;
+				}
+			}
+		}
+		if (m_bLightSelectMode)
+			m_pSelectLight = pGameInstance->Picking_Light(m_pDevice, m_pContext, MousePos, LEVEL_TOOL);
 
 #pragma endregion
 
@@ -167,8 +195,10 @@ HRESULT CImGui_Tool::LayOut_Mouse()
 
 			m_bLightCreateMode = false;
 			m_bLightDeleteMode = false;
+			m_bLightSelectMode = false;
 
 			m_pSelectObject = nullptr;
+			m_pSelectLight = nullptr;
 
 			m_bCellCreateMode = false;
 
@@ -257,6 +287,7 @@ void CImGui_Tool::LayOut_Object_PickMode()
 
 			m_bLightCreateMode = false;
 			m_bLightDeleteMode = false;
+			m_bLightSelectMode = false;
 
 			m_pSelectObject = nullptr;
 
@@ -271,6 +302,7 @@ void CImGui_Tool::LayOut_Object_PickMode()
 
 		m_bLightCreateMode = false;
 		m_bLightDeleteMode = false;
+		m_bLightSelectMode = false;
 
 		m_pSelectObject = nullptr;
 
@@ -284,6 +316,7 @@ void CImGui_Tool::LayOut_Object_PickMode()
 
 		m_bLightCreateMode = false;
 		m_bLightDeleteMode = false;
+		m_bLightSelectMode = false;
 
 		m_bCellCreateMode = false;
 	}
@@ -320,6 +353,7 @@ void CImGui_Tool::LayOut_Navigation()
 
 		m_bLightCreateMode = false;
 		m_bLightDeleteMode = false;
+		m_bLightSelectMode = false;
 
 		m_iCellClickIdx = 0;
 	}
@@ -562,27 +596,26 @@ void CImGui_Tool::LayOut_Light()
 {
 	const char* strLayOutName = "Light Object LayOut";
 
+	ImGui::Begin("Light Object LayOut");
+
 	// 범위 밖에서만 수행하기 위한 레이아웃 범위 저장.
 	Add_LayOut_Array(strLayOutName, ImGui::GetWindowPos(), ImGui::GetWindowSize());
 
-
-	ImGui::Begin("Light Object LayOut");
-
-	if (ImGui::BeginCombo(" ", selectedLightName.c_str()))
-	{
-		for (size_t i = 0; i < TLIGHT_END; ++i)
-		{
-			_bool isSelected = m_lightNameAry[i] == selectedLightName;
-			if (ImGui::Selectable(m_lightNameAry[i].c_str(), isSelected))
-			{
-				selectedLightName = m_lightNameAry[i].c_str();
-				// 클론 시 사용할 레이어 태그
-				m_strCurLayerTag = TEXT("Layer_LightObject");
-			}
-		}
-
-		ImGui::EndCombo();
-	}
+	//if (ImGui::BeginCombo(" ", selectedLightName.c_str()))
+	//{
+	//	for (size_t i = 0; i < TLIGHT_END; ++i)
+	//	{
+	//		_bool isSelected = m_lightNameAry[i] == selectedLightName;
+	//		if (ImGui::Selectable(m_lightNameAry[i].c_str(), isSelected))
+	//		{
+	//			selectedLightName = m_lightNameAry[i].c_str();
+	//			// 클론 시 사용할 레이어 태그
+	//			m_strCurLayerTag = TEXT("Layer_LightObject");
+	//		}
+	//	}
+	//
+	//	ImGui::EndCombo();
+	//}
 
 	if (ImGui::Button("Create"))
 	{
@@ -595,6 +628,7 @@ void CImGui_Tool::LayOut_Light()
 
 		m_bLightCreateMode = true;
 		m_bLightDeleteMode = false;
+		m_bLightSelectMode = false;
 
 		m_iCellClickIdx = 0;
 	}
@@ -603,12 +637,39 @@ void CImGui_Tool::LayOut_Light()
 
 	if (ImGui::Button("Delete"))
 	{
-		/* 추후 라이트 가져오는 조건 만들어서 가장 나중 라이트 제거하자. */
-		//if (m_pNavigationCom->Get_VecCell().size() > 0)
-		//{
-		//	m_pNavigationCom->Cell_PopBack();
-		//}
+		m_bCellCreateMode = false;
+		m_pSelectObject = nullptr;
+
+		m_bObjCreateMode = false;
+		m_bObjDeleteMode = false;
+		m_bObjSelectMode = false;
+
+		m_bLightCreateMode = false;
+		m_bLightDeleteMode = true;
+		m_bLightSelectMode = false;
+
+		m_iCellClickIdx = 0;
+
 	}
+
+	if (ImGui::Button("Select"))
+	{
+		m_bCellCreateMode = false;
+		m_pSelectObject = nullptr;
+
+		m_bObjCreateMode = false;
+		m_bObjDeleteMode = false;
+		m_bObjSelectMode = false;
+
+		m_bLightCreateMode = false;
+		m_bLightDeleteMode = false;
+		m_bLightSelectMode = true;
+
+		m_iCellClickIdx = 0;
+	}
+
+	if(m_pSelectLight != nullptr)
+		Select_Light();
 
 	if (ImGui::Button("Save"))
 	{
@@ -1248,12 +1309,12 @@ HRESULT CImGui_Tool::Create_Light()
 		_matrix matInitialize = XMMatrixIdentity();
 		matInitialize = XMMatrixTranslation(ResultPickPos.x, ResultPickPos.y, ResultPickPos.z);
 
-		wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-		wstring changTypeName = converter.from_bytes(selectedLightName);
+		//wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+		//wstring changTypeName = converter.from_bytes(selectedLightName);
 
 		// clone light
-		if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, m_strCurLayerTag,
-			(TEXT("ProtoType_GameObject_Light_") + changTypeName), &matInitialize)))
+		if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, TEXT("Layer_LightObject"),
+			TEXT("ProtoType_GameObject_Light_Point"), &matInitialize)))
 			return E_FAIL;
 
 		Safe_Release(pGameInstance);
@@ -1261,9 +1322,52 @@ HRESULT CImGui_Tool::Create_Light()
 
 	return S_OK;
 }
-HRESULT CImGui_Tool::Delete_Light()
+
+void CImGui_Tool::Select_Light()
 {
-	return S_OK;
+	char buffer[256];
+	_bool bIsChangeValue = false;
+
+	CTransform* pTransform = dynamic_cast<CTransform*>(m_pSelectLight->Get_Component(TEXT("Com_Transform")));
+	CLight_Point* pLight = dynamic_cast<CLight_Point*>(m_pSelectLight);
+	LIGHT_DESC* pLightDesc = pLight->Get_LightDesc();
+	_float4 vLightPos;
+
+	XMStoreFloat4(&vLightPos, pTransform->Get_State(CTransform::STATE_POSITION));
+
+	string strLightName = "";
+	strLightName.assign(m_pSelectLight->Get_Name().begin(), m_pSelectLight->Get_Name().end());
+
+	ImGui::Text(strLightName.c_str());
+
+	ImGui::Text("Position   ");
+	ImGui::SameLine();
+	if (ImGui::DragFloat3("##PosX", &pLightDesc->vLightPos.x, 0.1f))
+	{
+		pLight->Set_LightDesc(*pLightDesc);
+		pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&pLightDesc->vLightPos));
+	}
+
+	ImGui::Text("Diffuse   ");
+	ImGui::SameLine();
+	if (ImGui::ColorEdit3("##DiffuseX", &pLightDesc->vDiffuse.x, ImGuiColorEditFlags_Float))
+		pLight->Set_LightDesc(*pLightDesc);
+
+	ImGui::Text("Ambient  ");
+	ImGui::SameLine();
+	if (ImGui::ColorEdit3("##AmbientX", &pLightDesc->vAmbient.x, ImGuiColorEditFlags_Float))
+		pLight->Set_LightDesc(*pLightDesc);
+
+	ImGui::Text("Specular  ");
+	ImGui::SameLine();
+	if (ImGui::ColorEdit3("##SpecularX", &pLightDesc->vSpecular.x, ImGuiColorEditFlags_Float))
+		pLight->Set_LightDesc(*pLightDesc);
+
+	ImGui::Text("Range  ");
+	ImGui::SameLine();
+	if (ImGui::DragFloat("##Range", &pLightDesc->fLightRange, 0.1f, 0.1f, 100.f))
+		pLight->Set_LightDesc(*pLightDesc);
+
 }
 
 void CImGui_Tool::Key_Input(class CTransform* _pTransform)

@@ -25,6 +25,7 @@ public:
 
 public:
 	virtual _bool IsCollision(CCollider::COLLIDER_TYPE _eType, CBounding* _pBounding) override;
+	virtual void Set_ColliderDesc(_float _fExtents);
 
 #ifdef _DEBUG
 public:

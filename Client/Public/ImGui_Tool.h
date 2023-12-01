@@ -62,7 +62,7 @@ public:
 
 public:
 	enum SAVE_OBJTYPE { SAVETYPE_STATIC, SAVETYPE_DYNAMIC, SAVETYPE_END };
-	enum TOOL_LIGHT_TYPE { TLIGHT_TOWN, TLIGHT_FIRE, TLIGHT_END };
+	//enum TOOL_LIGHT_TYPE { TLIGHT_TOWN, TLIGHT_FIRE, TLIGHT_END };
 private:
 	CImGui_Tool();
 	virtual ~CImGui_Tool() = default;
@@ -111,7 +111,7 @@ private:
 
 	// Custom Light
 	HRESULT Create_Light();
-	HRESULT Delete_Light();
+	void	Select_Light();
 
 	void	Key_Input(class CTransform* _pTransform);
 
@@ -168,16 +168,19 @@ private:
 	wstring				 m_strCurLayerTag = TEXT(""); // 현재 선택된 폴더명을 레이어 태그로.
 	// 선택된 오브젝트
 	class CGameObject*   m_pSelectObject = nullptr;
+	class CGameObject*   m_pSelectLight = nullptr;
 
 	// Light 생성, 삭제 선택 모드
 	_bool				 m_bLightCreateMode = false;
 	_bool				 m_bLightDeleteMode = false;
+	_bool				 m_bLightSelectMode = false;
 
 	// Object 생성, 삭제, 선택 모드
 	_bool				 m_bObjCreateMode = false;
 	_bool				 m_bObjDeleteMode = false;
 	_bool				 m_bObjSelectMode = false;	
 	_bool				 m_bDead = false; // gui의 모든 작업이 끝나고 객체를 삭제하기 위함.
+	_bool				 m_bLightDead = false; // gui의 모든 작업이 끝나고 객체를 삭제하기 위함.
 
 	_float			     m_fRotValue = 0.f; // 오브젝트 회전을 위한 변수.
 
@@ -190,7 +193,7 @@ private:
 
 
 	// Light
-	string m_lightNameAry[TLIGHT_END] = { "Town", "Fire" };
+	//string m_lightNameAry[TLIGHT_END] = { "Town", "Fire" };
 
 	// 레이아웃 범위 밖에서만 클라이언트 작업을 수행하기 위함.
 	vector<TOOL_LAYOUTDESC> m_vecLayOut;

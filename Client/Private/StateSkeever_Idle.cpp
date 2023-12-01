@@ -25,6 +25,8 @@ void CStateSkeever_Idle::Update(_float _fTimeDelta)
 
 	if (pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_DETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 	{
+		pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_MISSDETECTION], m_pPlayerBodyCollider);
+
 		m_pMonster->Play_Animation(false, "aggrowarning1");
 		m_pMonster->Set_State(CSkeever::SKEEVER_WARNING);
 	}

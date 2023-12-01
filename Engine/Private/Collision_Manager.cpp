@@ -80,9 +80,7 @@ _bool CCollision_Manager::Collision_Enter(CCollider* _pCollider, CCollider* _pTa
 {
 	if (Is_Collsion(_pCollider, _pTargetCollider))
 	{
-		map<_uint, CCollider*>* mapHadCol = _pCollider->Get_MapHadCol();
-		
-		for (auto iter = mapHadCol->begin(); iter != mapHadCol->end(); ++iter)
+		for (auto iter = _pCollider->Get_MapHadCol()->begin(); iter != _pCollider->Get_MapHadCol()->end(); ++iter)
 		{
 			if (iter->first == _pTargetCollider->Get_ColliderID())
 			{
@@ -91,7 +89,7 @@ _bool CCollision_Manager::Collision_Enter(CCollider* _pCollider, CCollider* _pTa
 		}
 
 		_pCollider->Add_MapHadCol(_pTargetCollider->Get_ColliderID(), _pTargetCollider);
-		
+
 		return true;
 	}
 
@@ -101,9 +99,7 @@ _bool CCollision_Manager::Collision_Stay(CCollider* _pCollider, CCollider* _pTar
 {
 	if (Is_Collsion(_pCollider, _pTargetCollider))
 	{
-		map<_uint, CCollider*>* mapHadCol = _pCollider->Get_MapHadCol();
-
-		for (auto iter = mapHadCol->begin(); iter != mapHadCol->end(); ++iter)
+		for (auto iter = _pCollider->Get_MapHadCol()->begin(); iter != _pCollider->Get_MapHadCol()->end(); ++iter)
 		{
 			if (iter->first == _pTargetCollider->Get_ColliderID())
 			{
@@ -116,16 +112,18 @@ _bool CCollision_Manager::Collision_Stay(CCollider* _pCollider, CCollider* _pTar
 }
 _bool CCollision_Manager::Collision_Out(CCollider* _pCollider, CCollider* _pTargetCollider)
 {
-	map<_uint, CCollider*>* mapHadCol = _pCollider->Get_MapHadCol();
 	_uint i = 0;
 
-	for (auto iter = mapHadCol->begin(); iter != mapHadCol->end(); ++iter)
+	for (auto iter = _pCollider->Get_MapHadCol()->begin(); iter != _pCollider->Get_MapHadCol()->end(); ++iter)
 	{
 		if (iter->first == _pTargetCollider->Get_ColliderID())
 		{
 			if (!Is_Collsion(_pCollider, _pTargetCollider))
 			{
-				mapHadCol->erase(iter);
+				_pCollider->Get_MapHadCol()->erase(iter);
+				_pCollider->Set_bISCol(false);
+				_pTargetCollider->Set_bISCol(false);
+
 				return true;
 			}
 		}

@@ -25,10 +25,10 @@ void CStateFalmerUE_Detection::Late_Update()
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "idledetection"))
 	{
-		m_pMonsterTransform->Set_Speed(m_pMonster->GetWalkSpeed());
+		m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
 
 		m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_RETURN);
-		m_pMonster->Play_Animation(true, "mtwalkforward");
+		m_pMonster->Play_Animation(true, "mtrunforward");
 	}
 }
 

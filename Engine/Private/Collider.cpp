@@ -98,18 +98,18 @@ void CCollider::Update(_fmatrix _TransformMat)
 {
 	m_pBounding->Update(_TransformMat);
 
-	if (m_mapHadCol.size() > 0)
-	{
-		auto iter = m_mapHadCol.begin();
-	
-		while (iter != m_mapHadCol.end())
-		{
-			if (!IsCollision(iter->second))
-				iter = m_mapHadCol.erase(iter);
-			else
-				++iter;
-		}
-	}
+	//if (m_mapHadCol.size() > 0)
+	//{
+	//	auto iter = m_mapHadCol.begin();
+	//
+	//	while (iter != m_mapHadCol.end())
+	//	{
+	//		if (!IsCollision(iter->second))
+	//			iter = m_mapHadCol.erase(iter);
+	//		else
+	//			++iter;
+	//	}
+	//}
 }
 
 void CCollider::Late_Update()
@@ -124,6 +124,11 @@ _bool CCollider::IsCollision(CCollider* _pTargetCollider)
 	}
 
 	return false;
+}
+
+void CCollider::Set_ColliderDesc(_float _fExtents)
+{
+	m_pBounding->Set_ColliderDesc(_fExtents);
 }
 
 #ifdef _DEBUG

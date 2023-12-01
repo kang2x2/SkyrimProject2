@@ -19,24 +19,23 @@ HRESULT CStateSkeever_Return::Initialize(CGameObject* _pMonster, CGameObject* _p
 
 void CStateSkeever_Return::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
+	m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
+	m_pMonsterTransform->LookAt(m_pMonster->Get_OriginPos());
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	CTransform* pTragetTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")));
-
-	m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
-
-	// m_pMonsterTransform->Chase(dynamic_cast<CMonster*>(m_pMonster)->Get_OriginPos(), _fTimeDelta, 1.5f);
-	m_pMonsterTransform->LookAt(m_pMonster->Get_OriginPos());
-
 	if (pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_DETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
 	{
-		m_pMonster->Set_State(CSkeever::SKEEVER_WARNING);
-		m_pMonster->Play_Animation(false, "aggrowarning1");
+		m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+
+		m_pMonster->Set_State(CSkeever::SKEEVER_CHASE);
+		m_pMonster->Play_Animation(false, "runforward");
 	}
 
 	Safe_Release(pGameInstance);
-
 }
 
 void CStateSkeever_Return::Late_Update()
@@ -53,7 +52,6 @@ void CStateSkeever_Return::Late_Update()
 		m_pMonster->Set_State(CSkeever::SKEEVER_IDLE);
 		m_pMonster->Play_Animation(true, "combatidle");
 	}
-
 }
 
 CStateSkeever_Return* CStateSkeever_Return::Create(CGameObject* _pMonster, CGameObject* _pPlayer, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom)

@@ -31,7 +31,8 @@ void CStateFalmerOH_Charge::Update(_float _fTimeDelta)
 
 
 	/* 공격 중 서로의 aabb 박스가 충돌하였으면. (피격) */
-	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK)
+	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK ||
+		m_pPlayer->Get_CurState() == CPlayer::ONEHAND_ANTICIPATE)
 	{
 		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerWeaponCollider))
 		{
@@ -45,9 +46,14 @@ void CStateFalmerOH_Charge::Update(_float _fTimeDelta)
 	}
 	else
 	{
-		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
+		if (!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "1hm_forwardpowerattack1") &&
+			m_pMonster->Get_CurFrameIndex() >= 26 && m_pMonster->Get_CurFrameIndex() <= 30)
 		{
-			// 데미지 처리.
+			if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
+			{
+				m_pPlayer->SetHp(-30.f);
+				m_pPlayer->Set_IsHit(true);
+			}
 		}
 	}
 

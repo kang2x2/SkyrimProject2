@@ -74,6 +74,11 @@ public:
 	void			  Set_PlayerEquipState(PLAYER_EQUIPSTATE _eState) { m_eEquipState = _eState; }
 
 	PLAYER_DESC		  Get_PlayerDesc() { return m_tPlayerDesc; }
+	
+	/* Hp 관련 */
+	_bool			  Get_ReadyRecoveryHp() { return m_bIsReadyRecoveryHp; }
+	void			  Set_ReadyRecoveryHp(_bool _isRecovery) { m_bIsReadyRecoveryHp = _isRecovery; }
+
 	/* Sp 관련 */
 	_float			  Get_PlayerSp() { return m_fSp; }
 	void			  Set_PlayerSp(_float _fSp) { m_fSp += _fSp; }
@@ -109,6 +114,9 @@ public:
 	_bool			  Get_IsInvenShow();
 	void			  Use_Item(class CSkyrimItem* _pItem);
 
+	/* 전투 유무 판별 */
+	void			  Set_CurBattleObj(_uint _iObj) { m_iCurBattleObj += _iObj; }
+	void			  Set_IsHit(_bool _bIsHit) { m_bisHit = _bIsHit; }
 
 private:
 	vector<class CGameObject*>		m_vecPlayerPart;
@@ -125,14 +133,18 @@ private:
 	PLAYER_EQUIPSTATE				m_eEquipState = EQUIP_END;
 	PLAYER_DESC						m_tPlayerDesc;
 	PLAYERSTATE						m_eCurState;
+
+	/* 전투 유무 판별 */
+	_uint							m_iCurBattleObj = 0;
 	/* Hp 관련 */
-	_float							m_fHp = 0.f;
+	_bool							m_bisHit = false;
 	_bool							m_bIsReadyRecoveryHp = false;
+	_float							m_fRecoveryHpCoolTime = 0;
 
 	/* Sp 관련 */
 	_float							m_fSp = 0.f;
 	_bool							m_bIsReadyRecoverySp = false;
-	_float							m_bfRecoveryCoolTime = 0;
+	_float							m_fRecoverySpCoolTime = 0;
 
 	class CInventory*				m_pInven = nullptr;
 	class CSkyrimUI_HpBar*			m_pHpBar = nullptr;
@@ -145,6 +157,7 @@ private:
 	HRESULT Ready_Component();
 	HRESULT Ready_State();
 	HRESULT Ready_PlayerUI();
+	void    Player_Recovery(_float _fTimeDelta);
 
 	HRESULT Bind_ShaderResource();
 

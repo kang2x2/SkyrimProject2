@@ -98,7 +98,6 @@ HRESULT CBackGround::Ready_Component()
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 

@@ -190,6 +190,9 @@
     <Filter Include="01. Utiltiy\10. Font\00. Manager">
       <UniqueIdentifier>{11208408-89f6-4115-9827-e44efd0dca76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\02. Spark">
+      <UniqueIdentifier>{87854d15-67fe-4878-a4e4-0bf511b3e97e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">

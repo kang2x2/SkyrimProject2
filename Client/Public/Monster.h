@@ -45,6 +45,10 @@ public:
 
 	_vector			Get_OriginPos() { return m_vOriginPos; }
 
+	_bool			Get_IsDissloving() { return m_bIsDissloving; }
+	void			Set_IsDissloving(_bool _isDissloving) { m_bIsDissloving = _isDissloving; }
+	void			Set_AnimationStop(_bool _bIsStop);
+
 protected:
 	_matrix*		pMatPivot;
 
@@ -59,8 +63,12 @@ protected:
 
 	class CPlayer* m_pPlayer = nullptr;
 
+	_bool		m_bIsDissloving = false;
+	_float		m_fCurDissloveTime = 0.f;
+	_float		m_fDissloveTime = 0.f;
+
 public:
-	virtual CGameObject* Clone(void* _pArg) = 0;
+	virtual CGameObject* Clone(void* _pArg) override;
 	virtual void Free() override;
 };
 

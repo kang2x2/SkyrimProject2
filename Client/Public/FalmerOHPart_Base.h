@@ -10,6 +10,7 @@ class CModel;
 class CRenderer;
 class CShader;
 class CTransform;
+class CTexture;
 
 END
 
@@ -51,6 +52,7 @@ protected:
 	CRenderer* m_pRendererCom = nullptr;
 	CShader* m_pShaderCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
+	CTexture* m_pTextureCom = nullptr;
 
 	CGameObject* m_pParent = nullptr;
 	CTransform* m_pParentTransform = nullptr;

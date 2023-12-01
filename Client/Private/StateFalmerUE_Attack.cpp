@@ -27,7 +27,8 @@ void CStateFalmerUE_Attack::Update(_float _fTimeDelta)
 	CTransform* pTragetTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")));
 
 	/* 공격 중 서로의 콜라이더가 충돌하였으면. (피격) */
-	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK)
+	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK ||
+		m_pPlayer->Get_CurState() == CPlayer::ONEHAND_ANTICIPATE)
 	{
 		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerWeaponCollider))
 		{
@@ -39,13 +40,14 @@ void CStateFalmerUE_Attack::Update(_float _fTimeDelta)
 	}
 	else
 	{
-		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
+		if (!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "1hm_attack1") &&
+			m_pMonster->Get_CurFrameIndex() >= 12 && m_pMonster->Get_CurFrameIndex() <= 20)
 		{
-			//if (m_pMonster->Get_CurFrameIndex() >= 12 &&
-			//	m_pMonster->Get_CurFrameIndex() <= 20)
-			//{
-				// 데미지 처리.
-			//}
+			if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
+			{
+				m_pPlayer->SetHp(-10.f);
+				m_pPlayer->Set_IsHit(true);
+			}
 		}
 	}
 

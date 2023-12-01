@@ -46,6 +46,9 @@ HRESULT CLevel_Dungeon::Initialize()
 	if (FAILED(Ready_Layer_Particle(TEXT("Layer_Particle"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -209,8 +212,8 @@ HRESULT CLevel_Dungeon::Ready_Layer_Equip(const wstring& _strLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Weapon_FalmerAxe"))))
-		return E_FAIL;
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_Weapon_FalmerAxe"))))
+	//	return E_FAIL;
 
 	Safe_Release(pGameInstance);
 
@@ -293,6 +296,19 @@ HRESULT CLevel_Dungeon::Ready_Layer_Particle(const wstring& _strLayerTag)
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+
+HRESULT CLevel_Dungeon::Ready_Layer_Effect(const wstring& _strLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_BloodFlare"))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_BloodSpot"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
 }
 
 CLevel_Dungeon* CLevel_Dungeon::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)

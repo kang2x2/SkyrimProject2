@@ -122,6 +122,11 @@ CGameObject* CGameObject::Clone(_uint _iLevel, const wstring& _strModelComTag, v
 	return nullptr;
 }
 
+CGameObject* CGameObject::LightClone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg, LIGHT_DESC* _LightDesc)
+{
+	return nullptr;
+}
+
 void CGameObject::Free()
 {
 	__super::Free();

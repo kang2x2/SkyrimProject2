@@ -36,7 +36,6 @@ HRESULT CStateManager_Spider::Initialize(CGameObject* _pMonster, CGameObject* _p
 	m_pCurState = m_vecMonsterState.front();
 
 	return S_OK;
-
 }
 
 CState_Spider* CStateManager_Spider::Get_State(CSpider::SPIDER_STATE _eState)

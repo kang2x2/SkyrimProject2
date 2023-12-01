@@ -205,6 +205,8 @@ HRESULT CMyFile_Manager::Light_FileSave(ofstream& _outFile, _uint _iLevelIndex)
 				tOutFileDesc.m_strLayerTag = obj->Get_ObjFileDesc().m_strLayerTag;
 				tOutFileDesc.m_strProtoObjTag = obj->Get_ObjFileDesc().m_strProtoObjTag;
 				tOutFileDesc.m_matWorld = pTransform->Get_WorldMatrix();
+				
+				LIGHT_DESC lightDesc = obj->Get_LightFileDesc().lightDesc;
 
 				size_t iStrLength = tOutFileDesc.m_strLayerTag.length();
 				_outFile.write(reinterpret_cast<const char*>(&iStrLength), sizeof(size_t));
@@ -215,6 +217,7 @@ HRESULT CMyFile_Manager::Light_FileSave(ofstream& _outFile, _uint _iLevelIndex)
 				_outFile.write(reinterpret_cast<const char*>(tOutFileDesc.m_strProtoObjTag.c_str()), iStrLength * sizeof(wchar_t));
 
 				_outFile.write(reinterpret_cast<const char*>(&tOutFileDesc.m_matWorld), sizeof(_matrix));
+				_outFile.write(reinterpret_cast<const char*>(&lightDesc), sizeof(LIGHT_DESC));
 			}
 		}
 	}
@@ -244,11 +247,16 @@ HRESULT CMyFile_Manager::Light_FileLoad(ifstream& _inFile, _uint _iLevelIndex)
 		tInFileDesc.m_strProtoObjTag.resize(iStrLength);
 		_inFile.read(reinterpret_cast<char*>(&tInFileDesc.m_strProtoObjTag[0]), iStrLength * sizeof(wchar_t));
 
+
 		_inFile.read(reinterpret_cast<char*>(&tInFileDesc.m_matWorld), sizeof(_matrix));
+		
+		LIGHT_DESC lightDesc;
+		_inFile.read(reinterpret_cast<char*>(&lightDesc), sizeof(LIGHT_DESC));
+
 
 		// clone light
-		if (FAILED(pGameInstance->Add_CloneObject(_iLevelIndex, tInFileDesc.m_strLayerTag,
-			tInFileDesc.m_strProtoObjTag, &tInFileDesc.m_matWorld)))
+		if (FAILED(pGameInstance->Add_LightObject(_iLevelIndex, tInFileDesc.m_strLayerTag,
+			tInFileDesc.m_strProtoObjTag, TEXT(""), & tInFileDesc.m_matWorld, &lightDesc)))
 			return E_FAIL;
 	}
 

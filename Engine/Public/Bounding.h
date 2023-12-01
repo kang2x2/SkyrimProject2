@@ -27,9 +27,12 @@ public:
 	
 public:
 	virtual void Set_bISCol(_bool _bIsCol) { m_bIsCol = _bIsCol; }
+	virtual void Set_ColliderDesc(_float _fExtents);
+	virtual _float3 Get_Center() { return m_vCenter; }
 
 protected:
 	_bool				m_bIsCol = false;
+	_float3				m_vCenter = {};
 
 #ifdef _DEBUG
 public:

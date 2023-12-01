@@ -16,16 +16,22 @@ HRESULT CState_Skeever::Initialize(CGameObject* _pMonster, CGameObject* _pPlayer
 		return E_FAIL;
 
 	m_pMonster = dynamic_cast<CSkeever*>(_pMonster);
-	m_pPlayer = dynamic_cast<CPlayer*>(_pPlayer);
-	m_pMonsterTransform = _pMonsterTransform;
-	m_pMonsterNavigation = _pMonsterNavigation;
-	m_pVecCollider = _pVecColCom;
+	m_pWeaponCollider = dynamic_cast<CCollider*>(m_pMonster->Get_Part(CSkeever::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")));
+
+	if (FAILED(__super::Initialize(_pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom)))
+		return E_FAIL;
 
 	return S_OK;
 }
 
 void CState_Skeever::Update(_float _fTimeDelta)
 {
+	if (m_pMonster->GetHp() <= 0.f)
+	{
+		m_pMonster->Set_State(CSkeever::SKEEVER_DEAD);
+		m_pMonster->Play_Animation(false, "bleedoutintro");
+	}
+
 }
 
 void CState_Skeever::Late_Update()

@@ -103,39 +103,6 @@ void CPlayer_Weapon::LateTick(_float _fTimeDelta)
 
 	_bool bIsCol = false;
 
-	//if (dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_UNEQUIP &&
-	//	dynamic_cast<CPlayer*>(m_pParent)->Get_PlayerEquipState() != CPlayer::EQUIP_MAGIC)
-	//{
-	//	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	//	Safe_AddRef(pGameInstance);
-	//
-	//	map<const wstring, class CLayer*>* pLayerMapAry = pGameInstance->Get_CloneObjectMapAry(LEVEL_GAMEPLAY);
-	//
-	//	for (auto Layer = pLayerMapAry->begin(); Layer != pLayerMapAry->end(); ++Layer)
-	//	{
-	//		list<CGameObject*> ltbjList = Layer->second->Get_ObjList();
-	//
-	//		for (auto obj : ltbjList)
-	//		{
-	//			if (obj->Get_IsCreature())
-	//			{
-	//				if (!bIsCol)
-	//				{
-	//					if (m_pColliderCom->IsCollision(dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB")))))
-	//					{
-	//						bIsCol = true;
-	//					}
-	//				}
-	//
-	//				pGameInstance->Collision_Enter(m_pColliderCom,
-	//					dynamic_cast<CCollider*>(obj->Get_Component(TEXT("Com_Collider_AABB"))));
-	//			}
-	//		}
-	//	}
-	//
-	//	Safe_Release(pGameInstance);
-	//}
-
 	m_pColliderCom->Late_Update();
 }
 
@@ -167,6 +134,18 @@ void CPlayer_Weapon::Set_ViewType(CSkyrimWeapon::WEAPON_VIEWTYPE _eType)
 void CPlayer_Weapon::CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame)
 {
 
+}
+
+void CPlayer_Weapon::Create_Spark()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_matrix matThrow = XMLoadFloat4x4(&m_matWorld);
+
+	pGameInstance->Add_CloneObject(g_curLevel, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_CombatSpark"), &matThrow.r[3]);
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CPlayer_Weapon::Ready_Component()

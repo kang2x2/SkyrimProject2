@@ -20,6 +20,8 @@
 #include "SkyrimUI_HpBar.h"
 #include "SkyrimUI_SpBar.h"
 
+#include "Effect_BloodFlare.h"
+
 
 CPlayer::CPlayer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CCreatureObject(_pDevice, _pContext)
@@ -114,33 +116,7 @@ void CPlayer::Tick(_float _fTimeDelta)
 
 	if (!g_bIsPause)
 	{
-#pragma region SP
-		if (!m_bIsReadyRecoverySp)
-		{
-			m_bfRecoveryCoolTime += _fTimeDelta;
-			if (m_bfRecoveryCoolTime > 2.f)
-			{
-				m_bfRecoveryCoolTime = 2.f - m_bfRecoveryCoolTime;
-				m_bIsReadyRecoverySp = true;
-			}
-		}
-
-		if (m_bIsReadyRecoverySp && m_fSp < 100)
-		{
-			m_fSp += 0.05f;
-			if (m_fSp >= 100.f)
-			{
-				m_fSp = 100.f;
-				m_bIsReadyRecoverySp = false;
-			}
-		} 
-
-		if (m_fSp < 0.f) 
-			m_fSp = 0.f;
-#pragma endregion
-
-		m_pHpBar->Tick(m_iHp, _fTimeDelta);
-		m_pSpBar->Tick(m_fSp, _fTimeDelta);
+		Player_Recovery(_fTimeDelta);
 
 		m_pStateManager->Update(_fTimeDelta);
 
@@ -480,7 +456,7 @@ HRESULT CPlayer::Ready_State()
 {
 	m_fRunSpeed = 2.5f;
 	m_fWalkSpeed = 1.5f;
-	m_iHp = 100;
+	m_fHp = 100.f;
 	m_fSp = 100.f;
 	m_iAtk = 25;
 
@@ -509,6 +485,97 @@ HRESULT CPlayer::Ready_PlayerUI()
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+
+void CPlayer::Player_Recovery(_float _fTimeDelta)
+{
+#pragma region Hp
+	if (m_fHp < 100.f)
+	{
+		if (!m_bIsReadyRecoveryHp)
+		{
+			m_fRecoveryHpCoolTime += _fTimeDelta;
+			if (m_bisHit)
+			{
+				CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				Safe_AddRef(pGameInstance);
+
+				CGameObject* pBloodFlare = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Layer_Effect"), TEXT("Effect_BloodFlare"));
+
+				dynamic_cast<CEffect_BloodFlare*>(pBloodFlare)->Set_Alpha();
+
+				Safe_Release(pGameInstance);
+
+				m_fRecoveryHpCoolTime = 0.f;
+				m_bisHit = false;
+			}
+
+			if (m_fRecoveryHpCoolTime > 4.f)
+			{
+				m_fRecoveryHpCoolTime = 4.f - m_fRecoveryHpCoolTime;
+				m_bIsReadyRecoveryHp = true;
+			}
+		}
+
+		if (m_bIsReadyRecoveryHp && m_fHp < 100)
+		{
+			if (m_bisHit)
+			{
+				CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				Safe_AddRef(pGameInstance);
+
+				CGameObject* pBloodFlare = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Layer_Effect"), TEXT("Effect_BloodFlare"));
+
+				dynamic_cast<CEffect_BloodFlare*>(pBloodFlare)->Set_Alpha();
+
+				Safe_Release(pGameInstance);
+
+				m_bIsReadyRecoveryHp = false;
+				m_bisHit = false;
+				m_fRecoveryHpCoolTime = 0.f;
+			}
+
+			m_fHp += 3.f * _fTimeDelta;
+			if (m_fHp >= 100.f)
+			{
+				m_fHp = 100.f;
+				m_bIsReadyRecoveryHp = false;
+			}
+		}
+	}
+
+	if (m_fHp < 0.f)
+		m_fHp = 0.f;
+
+#pragma endregion
+
+#pragma region SP
+	if (!m_bIsReadyRecoverySp)
+	{
+		m_fRecoverySpCoolTime += _fTimeDelta;
+		if (m_fRecoverySpCoolTime > 2.f)
+		{
+			m_fRecoverySpCoolTime = 2.f - m_fRecoverySpCoolTime;
+			m_bIsReadyRecoverySp = true;
+		}
+	}
+
+	if (m_bIsReadyRecoverySp && m_fSp < 100)
+	{
+		m_fSp += 3.f * _fTimeDelta;
+		if (m_fSp >= 100.f)
+		{
+			m_fSp = 100.f;
+			m_bIsReadyRecoverySp = false;
+		}
+	}
+
+	if (m_fSp < 0.f)
+		m_fSp = 0.f;
+#pragma endregion
+
+	m_pHpBar->Tick(m_fHp, _fTimeDelta);
+	m_pSpBar->Tick(m_fSp, _fTimeDelta);
 }
 
 HRESULT CPlayer::Bind_ShaderResource()

@@ -26,11 +26,13 @@ public:
 	
 	_char* Get_AnimationName() { return m_szName; }
 	_bool  Get_CurAnimationIsLoop() { return m_bIsLoop; }
-	
+
 	void  Reset_TrackPosition(_float _fInitIndex) { m_fTrackPosition = _fInitIndex; }
 	_bool Get_Finish() { return m_bIsFinish; }
 	const vector<CChannel*>& Get_Channel() { return m_vecChannel; }
 	const vector<_uint>& Get_CurKeyFrame() { return m_vecCurKeyFrame; }
+
+	void   Set_AnimationStop(_bool _bIsStop) { m_bIsStop = _bIsStop; }
 
  private:
 	_float			m_fDuration = 0.f; // 총 길이라고 생각하자.
@@ -39,6 +41,7 @@ public:
 	_float			m_fCnageTrackPosition = 0.f; // 애니메이션 간 변환 시 재생 위치.
 	_bool			m_bIsLoop = false; // 루프 변수(무한히 재생 할 애니메이션 판별)
 	_bool			m_bIsFinish = false; // 애니메이션이 끝났는지 확인.
+	_bool			m_bIsStop = false; // 애니메이션 스탑.
 
 	/* 애니메이션이 구동해야 하는 뼈의 정보들 */
 	_char					m_szName[MAX_PATH] = "";

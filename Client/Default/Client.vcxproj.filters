@@ -187,15 +187,6 @@
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\02. Falmer_UnEquip">
       <UniqueIdentifier>{fabeb582-8e47-4b5c-876b-525c5c38864d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\05. LightObject">
-      <UniqueIdentifier>{1e737ea3-ccc8-414e-abaf-3d45aa75bfda}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\05. LightObject\00. Town">
-      <UniqueIdentifier>{6104ddaa-8373-4d48-ad46-dbe2e1812b6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\05. LightObject\01. Fire">
-      <UniqueIdentifier>{a4ce310a-ddde-4056-878d-4e4a53b3a5be}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\99. Camera">
       <UniqueIdentifier>{a694b268-eaae-4cf8-8772-38a2462cbc13}</UniqueIdentifier>
     </Filter>
@@ -282,15 +273,6 @@
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\00. Skeever\00. Parts\00.Weapon">
       <UniqueIdentifier>{d22212b4-5f69-42b0-b0ce-25c846696b64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\01. Monster\00. Skeever\01. State\01. Chase">
-      <UniqueIdentifier>{125cc748-28cb-4a6e-a60c-4f1220760681}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\01. Monster\00. Skeever\01. State\02. Detection">
-      <UniqueIdentifier>{31d0355b-e6de-4014-b3a0-cd9fdf0c4bdb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\01. Monster\00. Skeever\01. State\03. Warning">
-      <UniqueIdentifier>{d294e792-2f2a-45c9-9e99-48640cdce291}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. State\01. Monster\00. Skeever\01. State\04. Return">
       <UniqueIdentifier>{00fef913-37c4-48c1-b4ba-1ba195dfc0e5}</UniqueIdentifier>
@@ -643,6 +625,105 @@
     <Filter Include="03. State\01. Monster\02. Falmer_OneHand\01. State\08. Dead">
       <UniqueIdentifier>{8f9ae4e2-75b2-417f-8bc8-d9f12e968161}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Effect">
+      <UniqueIdentifier>{0969cd25-802e-4566-93e2-6413e44e8894}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Effect\00. Screen">
+      <UniqueIdentifier>{6dbb07b1-585a-48da-9e26-e7075b4718af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Effect\00. Screen\00. BloodFlare">
+      <UniqueIdentifier>{2c6ae3f6-07ec-4c49-aa2d-96ea91de2ee5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Effect\00. Screen\01. BloodSpot">
+      <UniqueIdentifier>{b52bc703-6b6a-454e-a5a5-143989f913cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss">
+      <UniqueIdentifier>{74db8bf7-44ff-4e3a-9e43-7390bad1b961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts">
+      <UniqueIdentifier>{fe95e4dd-2ecf-40e0-97cb-9a52992b3cb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider">
+      <UniqueIdentifier>{c8ebbfab-eb37-4e6a-a117-111d92351b5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\00. Manager">
+      <UniqueIdentifier>{e009b0ec-207f-4b0d-bd1f-96a988842d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State">
+      <UniqueIdentifier>{b8ec5a34-d344-4eb6-95d0-145ec24e6291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts\00. Weapon">
+      <UniqueIdentifier>{06574fdd-8cb1-423c-90e6-8d83099c381c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts\00. Weapon\00. Mouth">
+      <UniqueIdentifier>{d632af19-8ba0-4c92-831e-82fed1ea229b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts\00. Weapon\01. Left">
+      <UniqueIdentifier>{99088799-6802-4d7d-b458-8a5baf350627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts\00. Weapon\02. Right">
+      <UniqueIdentifier>{0bd7f873-e537-45ec-a576-e04a128d861e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\00. Intro">
+      <UniqueIdentifier>{3e765955-dee5-4b5f-91b2-a00cd3ffeae1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\00. Intro\00. Idle">
+      <UniqueIdentifier>{8ae2b0c3-b799-4083-bef0-55cab707b741}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\00. Intro\01. Fall">
+      <UniqueIdentifier>{1afe8544-46bb-48ce-8df4-1fd4593717fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\00. Intro\02. Planding">
+      <UniqueIdentifier>{ae8952fc-eb1c-4186-9021-42c4c7a461b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\00. Intro\03. Warning">
+      <UniqueIdentifier>{479ced82-699e-4c51-a35e-1b134acd7ade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\01. Chase">
+      <UniqueIdentifier>{62efb255-1966-461b-9ba3-7e2e272b5b72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\02. Attack">
+      <UniqueIdentifier>{7fcd10e8-4e16-410a-8849-244f9baffc99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\02. Attack\00. OneChop">
+      <UniqueIdentifier>{f7734211-15c0-403f-94c7-70f5ad49156c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\02. Attack\01. DoubleChop">
+      <UniqueIdentifier>{6e4eec6a-0b67-4cf4-98d2-ee80bab827a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\02. Attack\02. Bite">
+      <UniqueIdentifier>{840596aa-c5ae-4d51-8215-e3e84339f9a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\03. Stagger">
+      <UniqueIdentifier>{abb65770-359a-4107-95c4-c8f759d27255}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\03. Stagger\00. Stagger_OneChop">
+      <UniqueIdentifier>{ed346aed-19ee-4343-a2fe-7f7c1e3c2e8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\03. Stagger\01. Stagger_DoubleChop">
+      <UniqueIdentifier>{743c0e71-b02f-48b9-add8-762efdffdbc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\03. Stagger\02. Stagger_Bite">
+      <UniqueIdentifier>{66bf21b8-c6c5-4eb9-9aba-a545f15c4f91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Effect\01. Combat">
+      <UniqueIdentifier>{edd165c3-746a-42cd-8fe4-002f13fe932a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Effect\01. Combat\00. Spark">
+      <UniqueIdentifier>{d7da6f07-830a-4b8b-9dc9-eb204ba54cbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Light">
+      <UniqueIdentifier>{1e737ea3-ccc8-414e-abaf-3d45aa75bfda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\00. Skeever\01. State\01. Warning">
+      <UniqueIdentifier>{d294e792-2f2a-45c9-9e99-48640cdce291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\00. Skeever\01. State\02. Chase">
+      <UniqueIdentifier>{125cc748-28cb-4a6e-a60c-4f1220760681}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\00. Skeever\01. State\03. Detection">
+      <UniqueIdentifier>{31d0355b-e6de-4014-b3a0-cd9fdf0c4bdb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -891,12 +972,6 @@
     <ClInclude Include="..\Public\StateFalmerUE_Attack.h">
       <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\00. Attack1</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Light_Fire.h">
-      <Filter>02. GameObject\01. GamePlay\05. LightObject\01. Fire</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Light_Town.h">
-      <Filter>02. GameObject\01. GamePlay\05. LightObject\00. Town</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Player_CameraPart.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\99. Camera</Filter>
     </ClInclude>
@@ -955,13 +1030,13 @@
       <Filter>03. State\01. Monster\00. Skeever\01. State\00. Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StateSkeever_Chase.h">
-      <Filter>03. State\01. Monster\00. Skeever\01. State\01. Chase</Filter>
+      <Filter>03. State\01. Monster\00. Skeever\01. State\02. Chase</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StateSkeever_Detection.h">
-      <Filter>03. State\01. Monster\00. Skeever\01. State\02. Detection</Filter>
+      <Filter>03. State\01. Monster\00. Skeever\01. State\03. Detection</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StateSkeever_Warning.h">
-      <Filter>03. State\01. Monster\00. Skeever\01. State\03. Warning</Filter>
+      <Filter>03. State\01. Monster\00. Skeever\01. State\01. Warning</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StateSkeever_Return.h">
       <Filter>03. State\01. Monster\00. Skeever\01. State\04. Return</Filter>
@@ -1205,6 +1280,72 @@
     </ClInclude>
     <ClInclude Include="..\Public\StateFalmerOH_Dead.h">
       <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\08. Dead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_BloodFlare.h">
+      <Filter>05. Effect\00. Screen\00. BloodFlare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_BloodSpot.h">
+      <Filter>05. Effect\00. Screen\01. BloodSpot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BossSpider.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_BossSpider.h">
+      <Filter>03. State\01. Monster\05. BossSpider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateManager_BossSpider.h">
+      <Filter>03. State\01. Monster\05. BossSpider\00. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BossSpider_Mouth.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts\00. Weapon\00. Mouth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BossSpider_Left.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts\00. Weapon\01. Left</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BossSpider_Right.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts\00. Weapon\02. Right</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BossSpiderPart_Base.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Idle.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\00. Intro\00. Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Fall.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\00. Intro\01. Fall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Planding.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\00. Intro\02. Planding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Warning.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\00. Intro\03. Warning</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Chase.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\01. Chase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_OneChop.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\02. Attack\00. OneChop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_DoubleChop.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\02. Attack\01. DoubleChop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Bite.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\02. Attack\02. Bite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_StaggerOC.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\03. Stagger\00. Stagger_OneChop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_StaggerDC.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\03. Stagger\01. Stagger_DoubleChop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_StaggerB.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\03. Stagger\02. Stagger_Bite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_CombatSpark.h">
+      <Filter>05. Effect\01. Combat\00. Spark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Light_Point.h">
+      <Filter>06. Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1450,12 +1591,6 @@
     <ClCompile Include="..\Private\StateFalmerUE_Attack.cpp">
       <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\05. Attack\00. Attack1</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Light_Fire.cpp">
-      <Filter>02. GameObject\01. GamePlay\05. LightObject\01. Fire</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Light_Town.cpp">
-      <Filter>02. GameObject\01. GamePlay\05. LightObject\00. Town</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Player_CameraPart.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\99. Camera</Filter>
     </ClCompile>
@@ -1514,13 +1649,13 @@
       <Filter>03. State\01. Monster\00. Skeever\01. State\00. Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StateSkeever_Chase.cpp">
-      <Filter>03. State\01. Monster\00. Skeever\01. State\01. Chase</Filter>
+      <Filter>03. State\01. Monster\00. Skeever\01. State\02. Chase</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StateSkeever_Detection.cpp">
-      <Filter>03. State\01. Monster\00. Skeever\01. State\02. Detection</Filter>
+      <Filter>03. State\01. Monster\00. Skeever\01. State\03. Detection</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StateSkeever_Warning.cpp">
-      <Filter>03. State\01. Monster\00. Skeever\01. State\03. Warning</Filter>
+      <Filter>03. State\01. Monster\00. Skeever\01. State\01. Warning</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StateSkeever_Return.cpp">
       <Filter>03. State\01. Monster\00. Skeever\01. State\04. Return</Filter>
@@ -1758,6 +1893,72 @@
     </ClCompile>
     <ClCompile Include="..\Private\StateFalmerOH_Dead.cpp">
       <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\08. Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_BloodFlare.cpp">
+      <Filter>05. Effect\00. Screen\00. BloodFlare</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_BloodSpot.cpp">
+      <Filter>05. Effect\00. Screen\01. BloodSpot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BossSpider.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_BossSpider.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateManager_BossSpider.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\00. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BossSpider_Mouth.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts\00. Weapon\00. Mouth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BossSpider_Left.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts\00. Weapon\01. Left</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BossSpider_Right.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts\00. Weapon\02. Right</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BossSpiderPart_Base.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\05. Spider_Boss\00. Parts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Idle.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\00. Intro\00. Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Fall.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\00. Intro\01. Fall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Planding.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\00. Intro\02. Planding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Warning.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\00. Intro\03. Warning</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Chase.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\01. Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_OneChop.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\02. Attack\00. OneChop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_DoubleChop.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\02. Attack\01. DoubleChop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Bite.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\02. Attack\02. Bite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_StaggerOC.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\03. Stagger\00. Stagger_OneChop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_StaggerDC.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\03. Stagger\01. Stagger_DoubleChop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_StaggerB.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\03. Stagger\02. Stagger_Bite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_CombatSpark.cpp">
+      <Filter>05. Effect\01. Combat\00. Spark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Light_Point.cpp">
+      <Filter>06. Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

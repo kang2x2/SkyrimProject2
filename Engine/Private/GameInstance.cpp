@@ -214,6 +214,14 @@ CGameObject* CGameInstance::Picking_Object(ID3D11Device* _pDevice, ID3D11DeviceC
 	return m_pCalculator->Picking_Object(_pDevice, _pContext, _WinMousePos, _iLevel);
 }
 
+CGameObject* CGameInstance::Picking_Light(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext, const POINT& _WinMousePos, _uint _iLevel)
+{
+	if (m_pCalculator == nullptr)
+		return nullptr;
+
+	return m_pCalculator->Picking_Light(_pDevice, _pContext, _WinMousePos, _iLevel);
+}
+
 /* Level Manager */
 HRESULT CGameInstance::Open_Level(_uint _iLevelIndex, CLevel* _pLevel)
 {
@@ -298,6 +306,14 @@ map<const wstring, class CGameObject*> CGameInstance::Get_ProtoObjectMapAry()
 	return m_pObject_Manager->Get_ProtoObjectMapAry();
 }
 
+HRESULT CGameInstance::Add_LightObject(_uint _iLevelIndex, const wstring& _strLayerTag, const wstring& _strProtoTypeTag, const wstring& _strModelComTag, void* _pArg, LIGHT_DESC* _pLightDesc)
+{
+	if (m_pObject_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pObject_Manager->Add_LightObject(_iLevelIndex, _strLayerTag, _strProtoTypeTag, _strModelComTag, _pArg, _pLightDesc);
+}
+
 /* Component Manager */
 HRESULT CGameInstance::Add_ProtoType_Component(_uint _iLevelIndex, const wstring& _strProtoTypeTag, CComponent* _pProtoTypeComponent)
 {
@@ -324,7 +340,7 @@ CComponent* CGameInstance::Find_ProtoType(_uint _iLevelIndex, const wstring& _st
 }
 
 /* Light Manager */
-const LIGHT_DESC* CGameInstance::Get_LightDesc(_uint _iLightIndex)
+LIGHT_DESC* CGameInstance::Get_LightDesc(_uint _iLightIndex)
 {
 	if (m_pLight_Manager == nullptr)
 		return nullptr;
@@ -338,6 +354,36 @@ HRESULT CGameInstance::Add_Light(const LIGHT_DESC& _LightDesc)
 		return E_FAIL;
 
 	return m_pLight_Manager->Add_Light(_LightDesc);
+}
+
+void CGameInstance::Delete_Light(_uint _iLightIndex)
+{
+	m_pLight_Manager->Delete_Light(_iLightIndex);
+}
+
+void CGameInstance::Set_Diffuse(_float4 _vDiffuse, _uint _iLightIndex)
+{
+	m_pLight_Manager->Set_Diffuse(_vDiffuse, _iLightIndex);
+}
+
+void CGameInstance::Set_Ambient(_float4 _vAmbient, _uint _iLightIndex)
+{
+	m_pLight_Manager->Set_Ambient(_vAmbient, _iLightIndex);
+}
+
+void CGameInstance::Set_Specular(_float4 _vSpecular, _uint _iLightIndex)
+{
+	m_pLight_Manager->Set_Specular(_vSpecular, _iLightIndex);
+}
+
+void CGameInstance::Set_Direction(_float4 _vDir, _uint _iLightIndex)
+{
+	m_pLight_Manager->Set_Direction(_vDir, _iLightIndex);
+}
+
+void CGameInstance::Set_Range(_float _fRange, _uint _iLightIndex)
+{
+	m_pLight_Manager->Set_Range(_fRange, _iLightIndex);
 }
 
 void CGameInstance::Light_Clear()

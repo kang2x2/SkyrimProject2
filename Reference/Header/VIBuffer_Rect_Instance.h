@@ -15,6 +15,7 @@ public:
 	virtual HRESULT Initialize_ProtoType(const INSTANCE_DESC & _InstanceDesc);
 	virtual HRESULT Initialize_Clone(void* pArg) override;
 	virtual HRESULT Update(_float _fTimeDelta) override;
+	virtual HRESULT Update_Spark(_float _fTimeDelta);
 
 public:
 

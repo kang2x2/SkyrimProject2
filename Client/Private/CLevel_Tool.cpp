@@ -62,6 +62,8 @@ HRESULT CLevel_Tool::Ready_Light()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	pGameInstance->Light_Clear();
+
 	LIGHT_DESC LightDesc;
 
 	/* 방향성 광원을 추가. */
@@ -70,28 +72,15 @@ HRESULT CLevel_Tool::Ready_Light()
 	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
 	
 	// LightDesc.vDiffuse = _float4(0.5f, 0.5f, 0.5f, 1.f);
-	// LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	// LightDesc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
-	
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-
-	if (FAILED(pGameInstance->Add_Light(LightDesc)))
-		return E_FAIL;
-
-	/* 점 광원 추가 */
-	//ZeroMemory(&LightDesc, sizeof(LightDesc));
-	//LightDesc.eLightType = LIGHT_DESC::LIGHT_POINT;
-	//LightDesc.vLightPos = _float4(50.f, 1.f, 50.f, 1.f);
-	//LightDesc.fLightRange = 25.f;
-	//
+	LightDesc.vDiffuse = _float4(0.1f, 0.1f, 0.1f, 1.f);
+	LightDesc.vAmbient = _float4(0.1f, 0.1f, 0.1f, 1.f);
+	LightDesc.vSpecular = _float4(0.1f, 0.1f, 0.1f, 1.f);
 	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	//LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-	//
-	//if (FAILED(pGameInstance->Add_Light(LightDesc)))
-	//	return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 
@@ -106,7 +95,9 @@ HRESULT CLevel_Tool::Ready_Layer_Equip(const wstring& _strLayerTag)
 
 	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, TEXT("Temp"), TEXT("ProtoType_GameObject_Npc_Carlotta"))))
 	//	return E_FAIL;
-
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_TOOL, _strLayerTag, TEXT("ProtoType_GameObject_Weapon_FalmerAxe"))))
+	//	return E_FAIL;
+	
 	Safe_Release(pGameInstance);
 
 	return S_OK;

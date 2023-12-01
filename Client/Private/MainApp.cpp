@@ -18,6 +18,8 @@ CMainApp::CMainApp()
 
 HRESULT CMainApp::Initialize()
 {
+	srand(static_cast<unsigned int>(time(nullptr)));
+
 	ShowCursor(false);
 
 	g_bIsWhiteRunInit = false;
@@ -43,6 +45,7 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Ready_ProtoType_Components()))
 		return E_FAIL;
 
+	// 폰트 초기화
 	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Bold"), TEXT("../Bin/Resource/Fonts/Bold.spriteFont"))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_ExtraBold"), TEXT("../Bin/Resource/Fonts/ExtraBold.spriteFont"))))
@@ -58,6 +61,10 @@ HRESULT CMainApp::Initialize()
 void CMainApp::Tick(_float _fTimeDelta)
 {
 	m_pGameInstance->Tick(_fTimeDelta);
+
+#ifdef _DEBUG
+	m_fTimeAcc += _fTimeDelta;
+#endif
 }
 
 HRESULT CMainApp::Render()
@@ -65,7 +72,7 @@ HRESULT CMainApp::Render()
 	//if(g_curLevel == LEVEL_LOADING || g_curLevel == LEVEL_LOGO)
 	//	m_pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
 	if (g_curLevel == LEVEL_TOOL)
-		m_pGameInstance->Clear_BackBuffer_View(_float4(0.1f, 0.1f, 0.6f, 1.f));
+		m_pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
 	//else
 	//	m_pGameInstance->Clear_BackBuffer_View(_float4(0.01f, 0.02f, 0.1f, 1.f));
 
@@ -75,6 +82,20 @@ HRESULT CMainApp::Render()
 	m_pRenderer->Draw_RenderObjects();
 
 	m_pGameInstance->AfterRender();
+
+#ifdef _DEBUG
+	++m_iRenderCount;
+
+	if (1.f <= m_fTimeAcc)
+	{
+		m_fTimeAcc = 0;
+		wsprintf(m_szFPS, TEXT("FPS : %d"), m_iRenderCount);
+
+		m_iRenderCount = 0;
+	}
+	m_pGameInstance->Render_Font(TEXT("Font_ExtraBold"), m_szFPS, _float2(0.f, 0.f), XMVectorSet(1.f, 0.f, 0.f, 1.f));
+
+#endif
 
 	m_pGameInstance->Present();
 

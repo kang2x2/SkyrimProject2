@@ -333,6 +333,11 @@ CBone* CModel::Get_BonePtr(const char* _strBoneName) const
 	return nullptr;
 }
 
+void CModel::Set_AnimationStop(_bool _bIsStop)
+{
+	m_vecAnimation[m_iCurAnimationIndex]->Set_AnimationStop(_bIsStop);
+}
+
 HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
 {
 	m_bIsFindAnimation = false;

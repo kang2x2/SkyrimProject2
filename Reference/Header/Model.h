@@ -26,6 +26,8 @@ public:
 	class CBone* Get_BonePtr(const char* _strBoneName) const;
 	_float4x4 Get_PivotMatrix() const { return m_matPivot; }
 
+	void   Set_AnimationStop(_bool _bIsStop);
+
 public:
 	vector<class CMesh*> Get_VecMesh() { return m_vecMesh; }
 	string				 Get_CurAnimationName();

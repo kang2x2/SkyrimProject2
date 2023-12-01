@@ -331,7 +331,7 @@ HRESULT CNPC_Carlotta::Ready_State()
 {
 	m_fRunSpeed = 2.5f;
 	m_fWalkSpeed = 1.5f;
-	m_iHp = 100;
+	m_fHp = 100;
 	m_iAtk = 10;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Client_Defines.h"
-#include "Base.h"
+#include "State_Monster.h"
 
 BEGIN(Engine)
 
@@ -14,7 +13,7 @@ END
 
 BEGIN(Client)
 
-class CState_Skeever abstract : public CBase
+class CState_Skeever abstract : public CState_Monster
 {
 protected:
 	CState_Skeever();

@@ -20,20 +20,11 @@ CPlayer_Hand::CPlayer_Hand(const CPlayer_Hand& rhs)
 
 HRESULT CPlayer_Hand::Initialize_ProtoType()
 {
-	for (_int i = 0; i < CPlayer::CAM_END; ++i)
-		m_pModelComAry[i] = nullptr;
-
-	for (_int i = 0; i < CPlayer::CAM_END; ++i)
-		m_pBasicModelAry[i] = nullptr;
-
 	return S_OK;
 }
 
 HRESULT CPlayer_Hand::Initialize_Clone(void* _pArg)
 {
-	for (_int i = 0; i < CPlayer::CAM_END; ++i)
-		m_pModelComAry[i] = nullptr;
-
 	if (FAILED(__super::Initialize_Clone(_pArg)))
 		return E_FAIL;
 

@@ -45,8 +45,8 @@ private:
 	HRESULT Bind_ShaderResource();
 
 private:
-	CModel* m_pModelComAry[CPlayer::CAM_END];
-	CModel* m_pBasicModelAry[CPlayer::CAM_END];
+	CModel* m_pModelComAry[CPlayer::CAM_END] = { nullptr, nullptr };
+	CModel* m_pBasicModelAry[CPlayer::CAM_END] = { nullptr, nullptr };
 
 	CPlayer::PLAYERCAMERA m_ePlayerCamMode = CPlayer::CAM_END;
 

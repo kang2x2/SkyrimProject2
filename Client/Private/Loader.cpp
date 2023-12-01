@@ -89,6 +89,8 @@ HRESULT CLoader::Loading_For_Level_Zero()
 
 HRESULT CLoader::Loading_For_Level_Tool()
 {
+	g_curLevel = LEVEL_TOOL;
+
  	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -97,6 +99,10 @@ HRESULT CLoader::Loading_For_Level_Tool()
 
 	/* Shader */
 	m_strLoadingText = TEXT("Loading Shader.");
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Shader_Effect"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Effect.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
+		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Shader_VtxPosCol"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxPosCol.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
@@ -151,9 +157,13 @@ HRESULT CLoader::Loading_For_Level_Tool()
 		CTerrain_Grid::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	m_strLoadingText = TEXT("Loading Public Object.");
 	Set_ProtoType_PublicObject();
+	m_strLoadingText = TEXT("Loading WhiteRun Object.");
 	Set_ProtoType_WhiteObject();
+	m_strLoadingText = TEXT("Loading Dungeon Object.");
 	Set_ProtoType_DungeonObject();
+	m_strLoadingText = TEXT("Loading Castle Object.");
 	Set_ProtoType_CastleObject();
 
 #pragma endregion
@@ -163,8 +173,6 @@ HRESULT CLoader::Loading_For_Level_Tool()
 
 	m_strLoadingText = TEXT("Loading Complete");
 	m_bIsFinish = true;
-
-	g_curLevel = LEVEL_TOOL;
 
 	return S_OK;
 
@@ -239,6 +247,52 @@ HRESULT CLoader::Loading_For_Level_Logo()
 		CSkyrimUI_SpBar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
+
+
+
+
+	/* Gara */
+	//CVIBuffer_Rect_Instance::INSTANCE_DESC InstanceDesc = {};
+	//
+	//InstanceDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	//InstanceDesc.vRange = _float3(0.f, 0.f, 0.f);
+	//InstanceDesc.fScaleMin = 0.01f;
+	//InstanceDesc.fScaleMax = 0.04f;
+	//InstanceDesc.iNumInstance = 20;
+	//InstanceDesc.fLifeTimeMin = 0.5f;
+	//InstanceDesc.fLifeTimeMax = 2.0f;
+	//InstanceDesc.fSpeedMin = 0.1f;
+	//InstanceDesc.fSpeedMax = 0.5f;
+	//
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("ProtoType_Component_VIBuffer_Rect_Instance"),
+	//	CVIBuffer_Rect_Instance::Create(m_pDevice, m_pContext, InstanceDesc))))
+	//	return E_FAIL;
+	//
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("ProtoType_Component_Shader_Rect_Instance"),
+	//	CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Rect_Instance.hlsl"), VTX_RECT_INSTANCE::Elements, VTX_RECT_INSTANCE::iNumElements))))
+	//	return E_FAIL;
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("ProtoType_Component_Shader_Effect"),
+	//	CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Effect.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+	//	return E_FAIL;
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("Prototype_Component_Texture_SparkEffect"),
+	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/fxspark.dds"), 1))))
+	//	return E_FAIL;
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CombatSpark"),
+	//	CEffect_CombatSpark::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("Prototype_Component_Texture_BloodSpot1"),
+	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/BloodSpot0.png"), 1))))
+	//	return E_FAIL;
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("Prototype_Component_Texture_BloodSpot2"),
+	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/BloodSpot1.png"), 1))))
+	//	return E_FAIL;
+	//
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BloodSpot"),
+	//	CEffect_BloodSpot::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+
+
 
 	/* 로딩 끝 */
 	Safe_Release(pGameInstance);
@@ -429,6 +483,25 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/e.dds"), 1))))
 			return E_FAIL;
 
+		/* Effect */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Texture_BloodFlare"),
+			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/fxbloodflare.dds"), 1))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Texture_BloodSpot"),
+			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/screenbloodalpha01opt.dds"), 1))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Texture_BloodSpotColor"),
+			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/screenbloodcolor01opt.dds"), 1))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Texture_BloodSpot1"),
+			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/BloodSpot0.png"), 1))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Texture_BloodSpot2"),
+			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/BloodSpot1.png"), 1))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Texture_SparkEffect"),
+			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/fxspark.dds"), 1))))
+			return E_FAIL;
 #pragma endregion
 
 #pragma region Collider
@@ -462,14 +535,14 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 		CVIBuffer_Rect_Instance::INSTANCE_DESC InstanceDesc = {};
 
 		InstanceDesc.vCenter = _float3(0.f, 0.f, 0.f);
-		InstanceDesc.vRange = _float3(0.1f, 0.f, 0.1f);
-		InstanceDesc.fScaleMin = 0.01f;
-		InstanceDesc.fScaleMax = 0.04f;
-		InstanceDesc.iNumInstance = 20;
-		InstanceDesc.fLifeTimeMin = 0.5f;
-		InstanceDesc.fLifeTimeMax = 2.0f;
-		InstanceDesc.fSpeedMin = 0.1f;
-		InstanceDesc.fSpeedMax = 0.5f;
+		InstanceDesc.vRange = _float3(0.f, 0.f, 0.f);
+		InstanceDesc.fScaleMin = 1.03f;
+		InstanceDesc.fScaleMax = 2.06f;
+		InstanceDesc.iNumInstance = 50;
+		InstanceDesc.fLifeTimeMin = 0.8f;
+		InstanceDesc.fLifeTimeMax = 0.8f;
+		InstanceDesc.fSpeedMin = 1.f;
+		InstanceDesc.fSpeedMax = 2.f;
 
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_VIBuffer_Rect_Instance"),
 			CVIBuffer_Rect_Instance::Create(m_pDevice, m_pContext, InstanceDesc))))
@@ -479,6 +552,10 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 
 #pragma region Shader
 		/* Shader */
+		// Shader_Effect
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_Effect"),
+			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Effect.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+			return E_FAIL;
 		// Shader_VtxPosTex
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Shader_VtxPosTex"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
@@ -508,13 +585,14 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 #pragma region Navigation
 		/* 화이트런 */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Navigation_WhiteRun"),
-			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/testCell")))))
-			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/WhiteRun_Cell2")))))
+			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/testCell")))))
+			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/WhiteRun_Cell2")))))
 			return E_FAIL;
 
 		/* 던전 */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Navigation_Dungeon"),
-			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Dungeon_Cell")))))
+			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Dungeon_Cell2")))))
+			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/testCell")))))
 			return E_FAIL;
 #pragma endregion
 
@@ -1408,6 +1486,13 @@ HRESULT CLoader::Set_ProtoType_DungeonMesh(LEVELID _eLevel)
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_SpiderBullet"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Effect/SpiderBullet/SpiderBullet.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	/* BossSpider */
+	matInitialize = XMMatrixIdentity();
+	matInitialize = XMMatrixScaling(0.003f, 0.003f, 0.003f);
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_BossSpider"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_BossSpider/BossSpider.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
 #pragma endregion
@@ -2784,11 +2869,19 @@ HRESULT CLoader::Set_ProtoType_PublicObject()
 		return E_FAIL;
 
 	// Light
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Light_Town"),
-		CLight_Town::Create(m_pDevice, m_pContext))))
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Light_Point"),
+		CLight_Point::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Light_Fire"),
-		CLight_Fire::Create(m_pDevice, m_pContext))))
+
+	// Effect
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BloodFlare"),
+		CEffect_BloodFlare::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BloodSpot"),
+		CEffect_BloodSpot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CombatSpark"),
+		CEffect_CombatSpark::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Navigation
@@ -2891,8 +2984,8 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 
 	_matrix matInitialize = XMMatrixIdentity();
 	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
-	/* Test */
-	// Spider
+#pragma region Test Monster 
+	/* Spider */
 	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Spider"),
 	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Spider/Spider.bin", matInitialize, CModel::TYPE_ANIM))))
 	//	return E_FAIL;
@@ -2910,7 +3003,65 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 	//	CProjectile_Web::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
 
+	if (g_curLevel != LEVEL_TOOL)
+	{
+		/* Skeever */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Skeever"),
+			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Skeever/Skeever.bin", matInitialize, CModel::TYPE_ANIM))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Skeever"),
+			CSkeever::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Skeever_Weapon"),
+			CSkeever_Weapon::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+		/* Falemer UnEquip*/
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Falmer_Unequip"),
+			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Falmer_UnEquip/Falmer_Unequip.bin", matInitialize, CModel::TYPE_ANIM))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Falmer_Unequip"),
+			CFalmer_UnEquip::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FalmerUE_Weapon"),
+			CFalmerUE_Weapon::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+		/* Falmer OneHand*/
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Falmer_OneHand"),
+			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Falmer_OneHand/Falmer_OneHand.bin", matInitialize, CModel::TYPE_ANIM))))
+			return E_FAIL;
+		
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Falmer_OneHand"),
+			CFalmer_OneHand::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FalmerOH_Weapon"),
+			CFalmerOH_Weapon::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+		
+		/* BossSpider */
+		matInitialize = XMMatrixIdentity();
+		matInitialize = XMMatrixScaling(0.003f, 0.003f, 0.003f);
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_BossSpider"),
+			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_BossSpider/BossSpider.bin", matInitialize, CModel::TYPE_ANIM))))
+			return E_FAIL;
+		
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider"),
+			CBossSpider::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider_Mouth"),
+			CBossSpider_Mouth::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider_Left"),
+			CBossSpider_Left::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider_Right"),
+			CBossSpider_Right::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+	}
+#pragma endregion
+
 #pragma region NPC
+	matInitialize = XMMatrixIdentity();
+	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
 
 	/* Carlotta */
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Npc_Carlotta"),
@@ -3706,6 +3857,19 @@ HRESULT CLoader::Set_ProtoType_DungeonObject()
 		CProjectile_Web::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* BossSpider */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider"),
+		CBossSpider::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider_Mouth"),
+		CBossSpider_Mouth::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider_Left"),
+		CBossSpider_Left::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider_Right"),
+		CBossSpider_Right::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Dungeon_SewerBarrel
