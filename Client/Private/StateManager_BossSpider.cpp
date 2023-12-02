@@ -7,14 +7,20 @@
 #include "StateBossSpider_Warning.h"
 
 #include "StateBossSpider_Chase.h"
+#include "StateBossSpider_Sprint.h"
 
 #include "StateBossSpider_OneChop.h"
 #include "StateBossSpider_DoubleChop.h"
 #include "StateBossSpider_Bite.h"
+#include "StateBossSpider_Charge.h"
 
 #include "StateBossSpider_StaggerOC.h"
 #include "StateBossSpider_StaggerDC.h"
 #include "StateBossSpider_StaggerB.h"
+#include "StateBossSpider_StaggerC.h"
+
+#include "StateBossSpider_Dead.h"
+#include "StateBossSpider_Release.h"
 
 CStateManager_BossSpider::CStateManager_BossSpider()
 {
@@ -41,6 +47,9 @@ HRESULT CStateManager_BossSpider::Initialize(CGameObject* _pMonster, CGameObject
 	/* Chase */
 	pState = CStateBossSpider_Chase::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
+	/* Sprint */
+	pState = CStateBossSpider_Sprint::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
 
 	/* OneChop */
 	pState = CStateBossSpider_OneChop::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
@@ -50,6 +59,9 @@ HRESULT CStateManager_BossSpider::Initialize(CGameObject* _pMonster, CGameObject
 	m_vecMonsterState.push_back(pState);
 	/* Bite */
 	pState = CStateBossSpider_Bite::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+	/* Charge */
+	pState = CStateBossSpider_Charge::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
 
 	/* Stagger_OneChop */
@@ -61,7 +73,16 @@ HRESULT CStateManager_BossSpider::Initialize(CGameObject* _pMonster, CGameObject
 	/* Stagger_Bite */
 	pState = CStateBossSpider_StaggerB::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
+	/* Stagger_Charge */
+	pState = CStateBossSpider_StaggerC::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
 
+	/* Dead */
+	pState = CStateBossSpider_Dead::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+	/* Release */
+	pState = CStateBossSpider_Release::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
 
 	m_pCurState = m_vecMonsterState.front();
 
@@ -86,9 +107,9 @@ void CStateManager_BossSpider::Update(_float _fTimeDelta)
 	m_pCurState->Update(_fTimeDelta);
 }
 
-void CStateManager_BossSpider::Late_Update()
+void CStateManager_BossSpider::Late_Update(_float _fTimeDelta)
 {
-	m_pCurState->Late_Update();
+	m_pCurState->Late_Update(_fTimeDelta);
 }
 
 CStateManager_BossSpider* CStateManager_BossSpider::Create(CGameObject* _pMonster, CGameObject* _pPlayer, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom)

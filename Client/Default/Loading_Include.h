@@ -54,7 +54,7 @@
 
 /* Spider */
 #include "Spider.h"
-#include "Spider_Weapon.h"
+#include "Spider_Mouth.h"
 #include "Projectile_Web.h"
 
 /* Boss Spider */

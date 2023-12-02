@@ -26,7 +26,10 @@ bool g_bIsDungeonInit;
 bool g_bIsCastleInit;
 bool g_bIsStaticInit;
 bool g_bIsPublicInit;
+bool g_bIsSlow;
 bool g_bIsPause;
+
+float g_fGameSpeed;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -104,7 +107,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         // 타이머
         fTimeAcc += pGameInstance->Compute_TimeDelta(TEXT("Timer_Default"));
 
-        if (fTimeAcc >= 1.f / 60.0f)
+        if (fTimeAcc >= 1.f / (60.f * g_fGameSpeed))
         {
             pMainApp->Tick(pGameInstance->Compute_TimeDelta(TEXT("Timer_60")));
             pMainApp->Render();

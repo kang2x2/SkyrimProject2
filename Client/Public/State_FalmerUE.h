@@ -24,7 +24,7 @@ public:
 
 public:
 	virtual void Update(_float _fTimeDelta);
-	virtual void Late_Update();
+	virtual void Late_Update(_float _fTimeDelta);
 
 protected:
 	class CFalmer_UnEquip*  m_pMonster = nullptr;

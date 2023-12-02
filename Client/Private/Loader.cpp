@@ -2985,26 +2985,26 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 	_matrix matInitialize = XMMatrixIdentity();
 	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
 #pragma region Test Monster 
-	/* Spider */
-	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Spider"),
-	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Spider/Spider.bin", matInitialize, CModel::TYPE_ANIM))))
-	//	return E_FAIL;
-	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_SpiderBullet"),
-	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Effect/SpiderBullet/SpiderBullet.bin", matInitialize, CModel::TYPE_NONANIM))))
-	//	return E_FAIL;
-	//
-	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider"),
-	//	CSpider::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider_Weapon"),
-	//	CSpider_Weapon::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CProjectile_Web"),
-	//	CProjectile_Web::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-
 	if (g_curLevel != LEVEL_TOOL)
 	{
+		/* Spider */
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Spider"),
+			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Spider/Spider.bin", matInitialize, CModel::TYPE_ANIM))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_SpiderBullet"),
+			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Effect/SpiderBullet/SpiderBullet.bin", matInitialize, CModel::TYPE_NONANIM))))
+			return E_FAIL;
+		
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider"),
+			CSpider::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider_Mouth"),
+			CSpider_Mouth::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CProjectile_Web"),
+			CProjectile_Web::Create(m_pDevice, m_pContext))))
+			return E_FAIL;
+
 		/* Skeever */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Skeever"),
 			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Skeever/Skeever.bin", matInitialize, CModel::TYPE_ANIM))))
@@ -3850,8 +3850,8 @@ HRESULT CLoader::Set_ProtoType_DungeonObject()
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider"),
 		CSpider::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider_Weapon"),
-		CSpider_Weapon::Create(m_pDevice, m_pContext))))
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider_Mouth"),
+		CSpider_Mouth::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CProjectile_Web"),
 		CProjectile_Web::Create(m_pDevice, m_pContext))))

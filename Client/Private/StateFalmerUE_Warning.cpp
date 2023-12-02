@@ -29,7 +29,7 @@ void CStateFalmerUE_Warning::Update(_float _fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CStateFalmerUE_Warning::Late_Update()
+void CStateFalmerUE_Warning::Late_Update(_float _fTimeDelta)
 {
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "1hm_aggrowarning1"))

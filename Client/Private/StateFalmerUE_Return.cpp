@@ -41,7 +41,7 @@ void CStateFalmerUE_Return::Update(_float _fTimeDelta)
 
 }
 
-void CStateFalmerUE_Return::Late_Update()
+void CStateFalmerUE_Return::Late_Update(_float _fTimeDelta)
 {
 	_float4 vPos = {};
 	_float4 vOriginPos = {};

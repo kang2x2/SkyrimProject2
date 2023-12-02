@@ -8,7 +8,7 @@
 #include "Bone.h"
 #include "Player.h"
 
-#include "Spider_Weapon.h"
+#include "Spider_Mouth.h"
 
 CSpider::CSpider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CMonster(_pDevice, _pContext)
@@ -48,6 +48,7 @@ HRESULT CSpider::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag,
 	m_bCreature = true;
 	m_strName = TEXT("Spider");
 	m_vOriginPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	m_fDissloveTime = 2.5f;
 
 	m_pTransformCom->Set_Speed(3.f);
 
@@ -97,6 +98,43 @@ void CSpider::Tick(_float _fTimeDelta)
 				m_pVecCollider[i]->Update(matWorld);
 			}
 		}
+
+		if (g_curLevel != LEVEL_TOOL)
+		{
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			if (m_pPlayer->Get_IsAttack())
+			{
+				if (pGameInstance->Collision_Enter(m_pVecCollider[SPIDER_COL_AABB],
+					dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
+				{
+					pGameInstance->Add_CloneObject(g_curLevel, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_BloodSpot"));
+					m_fHp -= m_pPlayer->GetAtk();
+				}
+			}
+
+			pGameInstance->Collision_Out(m_pVecCollider[SPIDER_COL_AABB],
+				dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))));
+
+
+			for (_int i = 0; i < m_pVecCollider.size(); ++i)
+			{
+				pGameInstance->Collision_Out(m_pVecCollider[i],
+					dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+			}
+
+			Safe_Release(pGameInstance);
+		}
+
+		if (m_bIsDissloving)
+		{
+			m_fCurDissloveTime += _fTimeDelta;
+
+			if (m_fCurDissloveTime > m_fDissloveTime)
+				m_bReadyDead = true;
+		}
+
 	}
 }
 
@@ -105,7 +143,7 @@ void CSpider::LateTick(_float _fTimeDelta)
 	if (!g_bIsPause)
 	{
 		if (g_curLevel == LEVEL_GAMEPLAY)
-			m_pStateManager->Late_Update();
+			m_pStateManager->Late_Update(_fTimeDelta);
 
 		for (auto& iter : m_vecMonsterPart)
 		{
@@ -154,6 +192,19 @@ HRESULT CSpider::Render()
 
 	__super::Bind_ShaderResource();
 
+	if (m_bIsDissloving)
+	{
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_DissolveTexture", 0)))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_Time", &m_fCurDissloveTime, sizeof(_float))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_DissolveTime", &m_fDissloveTime, sizeof(_float))))
+			return E_FAIL;
+	}
+
+
 	// 메시 몇개
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
@@ -167,8 +218,16 @@ HRESULT CSpider::Render()
 		if (FAILED(m_pModelCom->Bind_MaterialTexture(m_pShaderCom, "g_NormalTexture", i, aiTextureType_NORMALS)))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
+		if (!m_bIsDissloving)
+		{
+			if (FAILED(m_pShaderCom->Begin(0)))
+				return E_FAIL;
+		}
+		else if (m_bIsDissloving)
+		{
+			if (FAILED(m_pShaderCom->Begin(1)))
+				return E_FAIL;
+		}
 
 		if (FAILED(m_pModelCom->Render(i)))
 			return E_FAIL;
@@ -195,13 +254,13 @@ HRESULT CSpider::Ready_Part()
 	CGameObject* pPart = nullptr;
 
 	/* For. Spider_Weapon */
-	CSpider_Weapon::WEAPON_DESC WeaponPartDesc;
-	WeaponPartDesc.pParent = this;
-	WeaponPartDesc.pParentTransform = m_pTransformCom;
-	WeaponPartDesc.pSocketBone = m_pModelCom->Get_BonePtr("FangL[02]");
-	WeaponPartDesc.matSocketPivot = m_pModelCom->Get_PivotMatrix();
+	CSpider_Mouth::MOUTH_DESC MouthPartDesc;
+	MouthPartDesc.pParent = this;
+	MouthPartDesc.pParentTransform = m_pTransformCom;
+	MouthPartDesc.pSocketBone = m_pModelCom->Get_BonePtr("FangL[02]");
+	MouthPartDesc.matSocketPivot = m_pModelCom->Get_PivotMatrix();
 
-	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Spider_Weapon"), &WeaponPartDesc);
+	pPart = pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_Spider_Mouth"), &MouthPartDesc);
 	if (pPart == nullptr)
 		return E_FAIL;
 	m_vecMonsterPart.push_back(pPart);
@@ -225,7 +284,7 @@ HRESULT CSpider::Ready_Component(_uint _iLevel)
 
 	/* AABB */
 	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
-	AABBDesc.vExtents = _float3(0.5f, 0.4f, 0.5f);
+	AABBDesc.vExtents = _float3(0.5f, 0.5f, 0.5f);
 	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),
@@ -256,7 +315,7 @@ HRESULT CSpider::Ready_Component(_uint _iLevel)
 	m_pVecCollider[SPIDER_COL_MISSDETECTION]->Set_OwnerObj(this);
 
 	/* RUN ATTACK */
-	SphereDesc.fRadius = 2.5f;
+	SphereDesc.fRadius = 1.5f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_Sphere"),
@@ -264,7 +323,6 @@ HRESULT CSpider::Ready_Component(_uint _iLevel)
 		return E_FAIL;
 
 	m_pVecCollider[SPIDER_COL_ATKROUND]->Set_OwnerObj(this);
-
 
 #pragma endregion
 

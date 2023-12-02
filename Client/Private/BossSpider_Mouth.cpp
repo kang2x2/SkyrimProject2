@@ -41,6 +41,7 @@ HRESULT CBossSpider_Mouth::Initialize_Clone(void* _pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaling(_float3(0.036f, 0.036f, 0.036f));
+	m_pTransformCom->Fix_Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(45.0f));
 	_float4 vInitPos;
 	XMStoreFloat4(&vInitPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	vInitPos.x += 0.1f;

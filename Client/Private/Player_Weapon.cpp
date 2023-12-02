@@ -103,7 +103,7 @@ void CPlayer_Weapon::LateTick(_float _fTimeDelta)
 
 	_bool bIsCol = false;
 
-	m_pColliderCom->Late_Update();
+	m_pColliderCom->Late_Update(_fTimeDelta);
 }
 
 HRESULT CPlayer_Weapon::Render()

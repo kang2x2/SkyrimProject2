@@ -29,7 +29,7 @@ void CState_Monster::Update(_float _fTimeDelta)
 {
 }
 
-void CState_Monster::Late_Update()
+void CState_Monster::Late_Update(_float _fTimeDelta)
 {
 }
 

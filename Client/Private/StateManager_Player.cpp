@@ -37,9 +37,14 @@
 
 #include "StatePlayerOH_RunPAttack.h"
 
+#include "StatePlayerOH_Bash.h"
+
 #include "StatePlayerOH_Block.h"
 #include "StatePlayerOH_Anticipate.h"
 #include "StatePlayerOH_BlockHit.h"
+
+#include "StatePlayer_1stStagger.h"
+#include "StatePlayer_3stStagger.h"
 
 CStateManager_Player::CStateManager_Player()
 {
@@ -142,6 +147,10 @@ HRESULT CStateManager_Player::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 	pState = CStatePlayerOH_RunPAttack::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
+	// Bash
+	pState = CStatePlayerOH_Bash::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
+
 	/* Block */
 	pState = CStatePlayerOH_Block::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
@@ -150,6 +159,13 @@ HRESULT CStateManager_Player::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 	pState = CStatePlayerOH_BlockHit::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
 	m_vecPlayerState.push_back(pState);
 
+#pragma endregion
+
+#pragma region Stagger
+	pState = CStatePlayer_1stStagger::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
+	pState = CStatePlayer_3stStagger::Create(_pPlayer, _pPlayerTransform, _pPlayerNavigation);
+	m_vecPlayerState.push_back(pState);
 #pragma endregion
 
 	
@@ -175,9 +191,9 @@ void CStateManager_Player::Update(_float _fTimeDelta)
 	m_pCurState->Update(_fTimeDelta);
 }
 
-void CStateManager_Player::Late_Update()
+void CStateManager_Player::Late_Update(_float _fTimeDelta)
 {
-	m_pCurState->Late_Update();
+	m_pCurState->Late_Update(_fTimeDelta);
 }
 
 CStateManager_Player* CStateManager_Player::Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, class CNavigation* _pPlayerNavigation)

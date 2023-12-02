@@ -49,7 +49,7 @@ HRESULT CBossSpider::Initialize_Clone(_uint _iLevel, const wstring& _strModelCom
 	m_bHasMesh = true;
 	m_bCreature = true;
 	m_strName = TEXT("Boss_Spider");
-	m_fDissloveTime = 4.f;
+	m_fDissloveTime = 5.f;
 
 	m_vOriginPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	m_pTransformCom->Set_Speed(6.f);
@@ -128,6 +128,7 @@ void CBossSpider::Tick(_float _fTimeDelta)
 					dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
 				{
 					pGameInstance->Add_CloneObject(g_curLevel, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_BloodSpot"));
+					// m_fHp -= m_pPlayer->GetAtk();
 					m_fHp -= m_pPlayer->GetAtk();
 				}
 			}
@@ -162,7 +163,7 @@ void CBossSpider::LateTick(_float _fTimeDelta)
 	if (!g_bIsPause)
 	{
 		if (g_curLevel == LEVEL_GAMEPLAY)
-			m_pStateManager->Late_Update();
+			m_pStateManager->Late_Update(_fTimeDelta);
 
 		for (auto& iter : m_vecMonsterPart)
 		{
@@ -337,7 +338,7 @@ HRESULT CBossSpider::Ready_Component(_uint _iLevel)
 
 	/* Detection */
 	CBounding_Sphere::BOUNDING_SPHERE_DESC SphereDesc = {};
-	SphereDesc.fRadius = 10.f;
+	SphereDesc.fRadius = 13.f;
 	SphereDesc.vCenter = _float3(0.f, -10.f, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_Sphere"),
@@ -346,7 +347,17 @@ HRESULT CBossSpider::Ready_Component(_uint _iLevel)
 
 	m_pVecCollider[BOSSSPIDER_COL_DETECTION]->Set_OwnerObj(this);
 
-	/* Charge Attack */
+	/* Charge Round */
+	SphereDesc.fRadius = 10.f;
+	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
+
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_Sphere"),
+		TEXT("Com_Collider_ChargeRound"), (CComponent**)&m_pVecCollider[BOSSSPIDER_COL_CHARGEROUND], &SphereDesc)))
+		return E_FAIL;
+
+	m_pVecCollider[BOSSSPIDER_COL_CHARGEROUND]->Set_OwnerObj(this);
+
+	/* Attack */
 	SphereDesc.fRadius = 4.5f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
@@ -368,6 +379,13 @@ HRESULT CBossSpider::Ready_State()
 	m_fWalkSpeed = 1.5f;
 	m_fHp = 1000;
 	m_iAtk = 20;
+
+	m_tBossDesc.fSprintSpeed = 10.f;
+	m_tBossDesc.fChargeSpeed = 7.f;
+	m_tBossDesc.fChargeDamage = 30.f;
+	m_tBossDesc.fBiteDamage = 20.f;
+	m_tBossDesc.fChopDamage = 10.f;
+	m_tBossDesc.fNidleDamage = 15.f;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

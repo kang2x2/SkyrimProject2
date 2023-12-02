@@ -47,6 +47,16 @@ void CLoadingObj_Falmer::Tick(_float _fTimeDelta)
 		if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_X)) // (y축을 회전하면 x축이 움직이기에.)
 			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -(mouseMove * 0.01f * _fTimeDelta));
 	}
+	else if (pGameInstance->Get_DIKeyPress(VK_RBUTTON))
+	{
+		if (mouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_Y)) // (x축을 회전하면 y축이 움직이기에.)
+		{
+			if (mouseMove > 0)
+				m_pTransformCom->Go_Foward(_fTimeDelta);
+			else
+				m_pTransformCom->Go_Backward(_fTimeDelta);
+		}
+	}
 
 	Safe_Release(pGameInstance);
 }
@@ -106,8 +116,15 @@ HRESULT CLoadingObj_Falmer::Ready_Component(void* pArg)
 		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
+	// Transform
+	CTransform::TRANSFORM_DESC		TransformDesc;
+	ZeroMemory(&TransformDesc, sizeof TransformDesc);
+
+	TransformDesc.fSpeedPerSec = 0.1f;
+	TransformDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
+
 	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Transform"),
-		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, pArg)))
+		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
 	return S_OK;

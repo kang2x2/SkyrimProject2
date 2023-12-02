@@ -22,7 +22,7 @@ void CStateSpider_GetUp::Update(_float _fTimeDelta)
 
 }
 
-void CStateSpider_GetUp::Late_Update()
+void CStateSpider_GetUp::Late_Update(_float _fTimeDelta)
 {
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "getup"))
@@ -30,7 +30,7 @@ void CStateSpider_GetUp::Late_Update()
 		m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
 
 		m_pMonster->Set_State(CSpider::SPIDER_SPIT);
-		m_pMonster->Play_Animation(true, "attack_castinga");
+		m_pMonster->Play_Animation(false, "attack_castinga");
 	}
 }
 

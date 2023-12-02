@@ -34,7 +34,7 @@ public:
 	virtual HRESULT Render();
 
 public:
-	void		Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex);
+	void		SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange);
 	_uint		Get_CurFrameIndex();
 	_bool		Get_CurAnimationIsLoop();
 private:

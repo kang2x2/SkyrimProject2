@@ -95,9 +95,9 @@ HRESULT CPlayer_Hand::Render()
 	return S_OK;
 }
 
-void CPlayer_Hand::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CPlayer_Hand::SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange)
 {
-	m_pModelComAry[m_ePlayerCamMode]->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
+	m_pModelComAry[m_ePlayerCamMode]->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
 }
 
 _uint CPlayer_Hand::Get_CurFrameIndex()

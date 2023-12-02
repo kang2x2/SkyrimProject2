@@ -76,9 +76,9 @@ HRESULT CCarlotta_Head::Render()
 	return S_OK;
 }
 
-void CCarlotta_Head::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CCarlotta_Head::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange)
 {
-	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
+	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
 }
 
 _uint CCarlotta_Head::Get_CurFrameIndex()

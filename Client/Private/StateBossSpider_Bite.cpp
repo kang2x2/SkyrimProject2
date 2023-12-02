@@ -30,8 +30,14 @@ void CStateBossSpider_Bite::Update(_float _fTimeDelta)
 	{
 		if (pGameInstance->Collision_Enter(m_pMouthCollider, m_pPlayerWeaponCollider))
 		{
-			m_pMonster->Play_Animation(false, "recoil_bite");
-			m_pMonster->Set_State(CBossSpider::BOSSSPIDER_STAGGER_BITE);
+
+			if (m_pPlayer->Get_IsReadyCounter())
+			{
+				m_pPlayer->Set_IsCounter(true);
+				m_pMonster->Play_Animation(false, "recoil_bite");
+				m_pMonster->Set_State(CBossSpider::BOSSSPIDER_STAGGER_BITE);
+			}
+
 			m_pPlayer->Set_State(CPlayer::ONEHAND_ANTICIPATE);
 			m_pPlayer->Play_Animation_All(false, "1hm_blockanticipate");
 		}
@@ -44,7 +50,7 @@ void CStateBossSpider_Bite::Update(_float _fTimeDelta)
 		{
 			if (pGameInstance->Collision_Enter(m_pMouthCollider, m_pPlayerBodyCollider))
 			{
-				m_pPlayer->SetHp(-10.f);
+				m_pPlayer->SetHp(-m_pMonster->Get_BossDesc().fBiteDamage);
 				m_pPlayer->Set_IsHit(true);
 			}
 		}
@@ -53,7 +59,7 @@ void CStateBossSpider_Bite::Update(_float _fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CStateBossSpider_Bite::Late_Update()
+void CStateBossSpider_Bite::Late_Update(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

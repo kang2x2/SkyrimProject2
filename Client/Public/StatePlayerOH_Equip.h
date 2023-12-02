@@ -22,7 +22,7 @@ private:
 public:
 	virtual		 HRESULT Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
 	virtual void Update(_float _fTimeDelta);
-	virtual void Late_Update();
+	virtual void Late_Update(_float _fTimeDelta);
 
 public:
 	static CStatePlayerOH_Equip* Create(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);

@@ -37,13 +37,13 @@ public:
 		ONEHAND_FWATTACKL, ONEHAND_FWATTACKR,
 		ONEHAND_BWATTACKL, ONEHAND_BWATTACKR,
 		
-		// fwattackr
-
-		ONEHAND_RUNPOWERATTACK,
+		ONEHAND_RUNPOWERATTACK, ONEHAND_BASH,
 
 		ONEHAND_BLOCK, ONEHAND_ANTICIPATE, ONEHAND_BLOCKHIT,
 
-		ONEHAND_END
+		PLAYER_1STSTAGGER, PLAYER_3STSTAGGER,
+
+		PLAYERSTATE_END
 	};
 
 public:
@@ -89,10 +89,11 @@ public:
 	_bool			Get_IsAnimationFin();
 	_bool			Get_CurAnimationIsLoop();
 	string			Get_CurAnimationName();
+	string			Get_NextAnimationName();
 	_uint			Get_CurFrameIndex();
 	const char*		Get_CurSocketBonName();
-	void			Play_Animation_All(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
-	void			Play_Animation(PLAYER_PARTS _ePart, _bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
+	void			Play_Animation_All(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0, _bool _bIsReset = false, _bool _bIsQuickChange = false);
+	void			Play_Animation(PLAYER_PARTS _ePart, _bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0, _bool _bIsReset = false, _bool _bIsQuickChange = false);
 	void			Set_SoketBone(const char* _pBoneName);
 
 	/* 플레이어 카메라 관련*/
@@ -105,10 +106,21 @@ public:
 
 	/* 셀 관련 */
 	void			  Set_CurCell();
+	
 	/* 충돌 관련*/
 	void			  CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);
+	
+	/* 공격하는 상태인지? */
 	void			  Set_IsAttack(_bool _bIsAttack) { m_bIsAttack = _bIsAttack; }
 	_bool			  Get_IsAttack() { return m_bIsAttack; }
+	
+	/* 카운터 관련 */
+	void			  Set_IsReadyCounter(_bool _bIsReadyCounter) { m_bIsReadyCounter = _bIsReadyCounter; }
+	_bool			  Get_IsReadyCounter() { return m_bIsReadyCounter; }
+	void			  Set_IsCounter(_bool _bIsCounter) { m_bIsCounter = _bIsCounter; }
+	_bool			  Get_IsCounter() { return m_bIsCounter; }
+	_float			  Get_AnimationSpeed() { return m_fAnimationSpeed; }
+
 	/* 인벤토리 */
 	void			  Set_IsInvenShow(_bool _bIsShow);
 	_bool			  Get_IsInvenShow();
@@ -151,6 +163,10 @@ private:
 	class CSkyrimUI_SpBar*			m_pSpBar = nullptr;
 
 	_bool							m_bIsAttack = false;
+	_bool							m_bIsReadyCounter = false;
+	_bool							m_bIsCounter = false;
+	_float							m_fCounterTime = 0.f;
+	_float							m_fAnimationSpeed = 1.f;
 
 private:
 	HRESULT Ready_Part();

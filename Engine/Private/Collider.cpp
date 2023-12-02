@@ -112,7 +112,7 @@ void CCollider::Update(_fmatrix _TransformMat)
 	//}
 }
 
-void CCollider::Late_Update()
+void CCollider::Late_Update(_float _fTimeDelta)
 {
 }
 

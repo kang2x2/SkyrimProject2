@@ -28,7 +28,7 @@ void CState_Player::Update(_float _fTimeDelta)
 {
 }
 
-void CState_Player::Late_Update()
+void CState_Player::Late_Update(_float _fTimeDelta)
 {
 
 }

@@ -5,8 +5,18 @@
 
 #include "StateSpider_Idle.h"
 #include "StateSpider_GetUp.h"
+
 #include "StateSpider_Chase.h"
+#include "StateSpider_Backward.h"
+
+#include "StateSpider_Bite.h"
+#include "StateSpider_Charge.h"
 #include "StateSpider_Spit.h"
+
+#include "StateSpider_StaggerB.h"
+#include "StateSpider_StaggerC.h"
+
+#include "StateSpider_Dead.h"
 
 CStateManager_Spider::CStateManager_Spider()
 {
@@ -20,7 +30,6 @@ HRESULT CStateManager_Spider::Initialize(CGameObject* _pMonster, CGameObject* _p
 	/* Idle */
 	CState_Spider* pState = CStateSpider_Idle::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
-
 	/* GetUp */
 	pState = CStateSpider_GetUp::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
@@ -28,9 +37,29 @@ HRESULT CStateManager_Spider::Initialize(CGameObject* _pMonster, CGameObject* _p
 	/* Chase */
 	pState = CStateSpider_Chase::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
+	/* Backward */
+	pState = CStateSpider_Backward::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
 
+	/* Bite */
+	pState = CStateSpider_Bite::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+	/* Charge*/
+	pState = CStateSpider_Charge::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
 	/* Spit */
 	pState = CStateSpider_Spit::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+
+	/* StaggerB */
+	pState = CStateSpider_StaggerB::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+	/* StaggerC */
+	pState = CStateSpider_StaggerC::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+
+	/* Dead */
+	pState = CStateSpider_Dead::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
 
 	m_pCurState = m_vecMonsterState.front();
@@ -56,9 +85,9 @@ void CStateManager_Spider::Update(_float _fTimeDelta)
 	m_pCurState->Update(_fTimeDelta);
 }
 
-void CStateManager_Spider::Late_Update()
+void CStateManager_Spider::Late_Update(_float _fTimeDelta)
 {
-	m_pCurState->Late_Update();
+	m_pCurState->Late_Update(_fTimeDelta);
 }
 
 CStateManager_Spider* CStateManager_Spider::Create(CGameObject* _pMonster, CGameObject* _pPlayer, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom)

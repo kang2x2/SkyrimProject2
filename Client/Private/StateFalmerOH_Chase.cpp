@@ -46,7 +46,7 @@ void CStateFalmerOH_Chase::Update(_float _fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CStateFalmerOH_Chase::Late_Update()
+void CStateFalmerOH_Chase::Late_Update(_float _fTimeDelta)
 {
 
 }

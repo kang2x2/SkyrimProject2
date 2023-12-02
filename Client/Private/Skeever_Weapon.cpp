@@ -40,7 +40,7 @@ HRESULT CSkeever_Weapon::Initialize_Clone(void* _pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaling(_float3(0.0128f, 0.0128f, 0.0128f));
-	m_pTransformCom->Fix_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-105.0f));
+	m_pTransformCom->Fix_Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-105.0f));
 	_float4 vInitPos;
 	XMStoreFloat4(&vInitPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	vInitPos.x -= 0.05f;
@@ -68,6 +68,19 @@ void CSkeever_Weapon::Tick(_float _fTimeDelta)
 
 	m_pColliderCom->Update(XMLoadFloat4x4(&m_matWorld));
 
+	if (g_curLevel != LEVEL_TOOL)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		CGameObject* m_pPlayer = pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player"));
+		CGameObject* m_pPlayerWeapon = dynamic_cast<CPlayer*>(m_pPlayer)->Get_Part(CPlayer::PART_WEAPON);
+
+		pGameInstance->Collision_Out(m_pColliderCom, dynamic_cast<CCollider*>(m_pPlayerWeapon->Get_Component(TEXT("Com_Collider_OBB"))));
+		pGameInstance->Collision_Out(m_pColliderCom, dynamic_cast<CCollider*>(dynamic_cast<CPlayer*>(m_pPlayer)->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+
+		Safe_Release(pGameInstance);
+	}
 }
 
 void CSkeever_Weapon::LateTick(_float _fTimeDelta)
@@ -110,9 +123,9 @@ HRESULT CSkeever_Weapon::Ready_Component()
 
 	CBounding_OBB::BOUNDING_OBB_DESC OBBDesc = {};
 
-	OBBDesc.vExtents = _float3(10.3f, 10.7f, 10.3f);
+	OBBDesc.vExtents = _float3(10.3f, 10.7f, 15.3f);
 	OBBDesc.vDegree = _float3(0.f, 0.f, 0.f);
-	OBBDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	OBBDesc.vCenter = _float3(0.f, 0.f, OBBDesc.vExtents.z);
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_OBB"),
 		TEXT("Com_Collider_OBB"), (CComponent**)&m_pColliderCom, &OBBDesc)))

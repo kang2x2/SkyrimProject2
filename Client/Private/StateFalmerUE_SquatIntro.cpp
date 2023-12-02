@@ -20,7 +20,7 @@ void CStateFalmerUE_SquatIntro::Update(_float _fTimeDelta)
 {
 }
 
-void CStateFalmerUE_SquatIntro::Late_Update()
+void CStateFalmerUE_SquatIntro::Late_Update(_float _fTimeDelta)
 {
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "idlesquatintro"))

@@ -26,10 +26,31 @@ HRESULT CState_BossSpider::Initialize(CGameObject* _pMonster, CGameObject* _pPla
 
 void CState_BossSpider::Update(_float _fTimeDelta)
 {
+	if (m_pMonster->GetHp() <= 0.f)
+	{
+		m_pMonster->Set_State(CBossSpider::BOSSSPIDER_DEAD);
+		m_pMonster->Play_Animation(false, "death");
+	}
+
 }
 
-void CState_BossSpider::Late_Update()
+void CState_BossSpider::Late_Update(_float _fTimeDelta)
 {
+}
+
+_bool CState_BossSpider::State_Waiting(_float _fWaitingTime, _bool _bIsLookAt, _float _fTimeDelta)
+{
+	if (_bIsLookAt)
+		m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+
+	m_fWaitingTime += _fTimeDelta;
+	if (m_fWaitingTime >= _fWaitingTime)
+	{
+		m_fWaitingTime = _fWaitingTime - m_fWaitingTime;
+		return true;
+	}
+
+	return false;
 }
 
 void CState_BossSpider::Free()

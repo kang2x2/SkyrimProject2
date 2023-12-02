@@ -32,7 +32,7 @@ void CStatePlayerOH_PAttack::Update(_float _fTimeDelta)
 	Key_Input(_fTimeDelta);
 }
 
-void CStatePlayerOH_PAttack::Late_Update()
+void CStatePlayerOH_PAttack::Late_Update(_float _fTimeDelta)
 {
 	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());

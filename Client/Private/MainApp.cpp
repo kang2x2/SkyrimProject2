@@ -26,6 +26,9 @@ HRESULT CMainApp::Initialize()
 	g_bIsDungeonInit = false;
 	g_bIsCastleInit = false;
 	g_bIsPublicInit = false;
+	
+	g_bIsSlow = false;
+	g_fGameSpeed = 1.f;
 
 	/* 게임 초기화 */
 	// 1. 장치
@@ -60,6 +63,21 @@ HRESULT CMainApp::Initialize()
 
 void CMainApp::Tick(_float _fTimeDelta)
 {
+	if (g_bIsSlow)
+	{
+		g_fGameSpeed = lerp(1.f, 0.01f, 10.f * _fTimeDelta);
+
+		// 목표 속도에 도달하면 상태 전환
+		if (g_fGameSpeed <= 0.01f) // 허용 오차를 고려하여 설정
+			g_bIsSlow = false;
+	}
+	else if(!g_bIsSlow && g_fGameSpeed < 1.f)
+	{
+		g_fGameSpeed = lerp(0.01f, 1.0f, 10.f * _fTimeDelta);
+		if (g_fGameSpeed > 1.f)
+			g_fGameSpeed = 1.f;
+	}
+
 	m_pGameInstance->Tick(_fTimeDelta);
 
 #ifdef _DEBUG

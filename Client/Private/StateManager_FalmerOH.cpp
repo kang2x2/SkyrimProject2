@@ -111,9 +111,9 @@ void CStateManager_FalmerOH::Update(_float _fTimeDelta)
 	m_pCurState->Update(_fTimeDelta);
 }
 
-void CStateManager_FalmerOH::Late_Update()
+void CStateManager_FalmerOH::Late_Update(_float _fTimeDelta)
 {
-	m_pCurState->Late_Update();
+	m_pCurState->Late_Update(_fTimeDelta);
 }
 
 CStateManager_FalmerOH* CStateManager_FalmerOH::Create(CGameObject* _pMonster, CGameObject* _pPlayer, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom)

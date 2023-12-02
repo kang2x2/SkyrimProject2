@@ -19,19 +19,52 @@ HRESULT CStateSkeever_Stagger::Initialize(CGameObject* _pMonster, CGameObject* _
 
 void CStateSkeever_Stagger::Update(_float _fTimeDelta)
 {
-}
+	__super::Update(_fTimeDelta);
 
-void CStateSkeever_Stagger::Late_Update()
-{
-	if (m_pMonster->Get_IsAnimationFin() &&
-		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "recoil"))
+	if (!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "recoil") &&
+		m_pMonster->Get_CurFrameIndex() <= 10)
 	{
-		m_isReadyAtk = true;
-
-		m_pMonster->Set_State(CSkeever::SKEEVER_CHASE);
-		m_pMonster->Play_Animation(true, "runforward");
+		m_pMonsterTransform->Go_Backward(_fTimeDelta, m_pMonsterNavigation);
 	}
 
+}
+
+void CStateSkeever_Stagger::Late_Update(_float _fTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_pMonster->Get_IsAnimationFin() && !m_bIsWating &&
+		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "recoil"))
+	{
+		m_bIsWating = true;
+		m_pMonster->Play_Animation(true, "combatidle");
+	}
+
+	if (m_bIsWating)
+	{
+		if (State_Waiting(2.f, true, _fTimeDelta))
+		{
+			if (pGameInstance->Collision_Stay(m_pVecCollider[CSkeever::SKEEVER_COL_ATKROUND], m_pPlayerBodyCollider))
+			{
+				m_pMonsterTransform->Set_Speed(m_pMonster->GetWalkSpeed());
+
+				m_pMonster->Set_State(CSkeever::SKEEVER_ATK);
+				m_pMonster->Play_Animation(false, "attack2");
+			}
+			else
+			{
+				m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+
+				m_pMonster->Set_State(CSkeever::SKEEVER_CHASE);
+				m_pMonster->Play_Animation(true, "runforward");
+			}
+
+			m_bIsWating = false;
+		}
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 CStateSkeever_Stagger* CStateSkeever_Stagger::Create(CGameObject* _pMonster, CGameObject* _pPlayer, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom)

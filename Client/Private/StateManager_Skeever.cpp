@@ -14,6 +14,8 @@
 
 #include "StateSkeever_Stagger.h"
 
+#include "StateSkeever_Dead.h"
+
 CStateManager_Skeever::CStateManager_Skeever()
 {
 }
@@ -55,6 +57,10 @@ HRESULT CStateManager_Skeever::Initialize(CGameObject* _pMonster, CGameObject* _
 	pState = CStateSkeever_Stagger::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
 
+	/* Dead */
+	pState = CStateSkeever_Dead::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+
 	m_pCurState = m_vecMonsterState.front();
 
 	return S_OK;
@@ -68,6 +74,7 @@ CState_Skeever* CStateManager_Skeever::Get_State(CSkeever::SKEEVER_STATE _eState
 
 HRESULT CStateManager_Skeever::Set_State(CSkeever::SKEEVER_STATE _eState)
 {
+	// m_pCurState = nullptr;
 	m_pCurState = m_vecMonsterState[_eState];
 
 	return S_OK;
@@ -78,9 +85,9 @@ void CStateManager_Skeever::Update(_float _fTimeDelta)
 	m_pCurState->Update(_fTimeDelta);
 }
 
-void CStateManager_Skeever::Late_Update()
+void CStateManager_Skeever::Late_Update(_float _fTimeDelta)
 {
-	m_pCurState->Late_Update();
+	m_pCurState->Late_Update(_fTimeDelta);
 }
 
 CStateManager_Skeever* CStateManager_Skeever::Create(CGameObject* _pMonster, CGameObject* _pPlayer, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom)

@@ -146,7 +146,7 @@ void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 		__super::LateTick(_fTimeDelta);
 
 		if (g_curLevel == LEVEL_GAMEPLAY)
-			m_pStateManager->Late_Update();
+			m_pStateManager->Late_Update(_fTimeDelta);
 
 		for (auto& iter : m_vecMonsterPart)
 		{
@@ -244,6 +244,8 @@ HRESULT CFalmer_UnEquip::Render()
 
 HRESULT CFalmer_UnEquip::Set_State(CFalmer_UnEquip::FALMERUE_STATE _eState)
 {
+
+
 	m_pStateManager->Set_State(_eState);
 
 	return S_OK;

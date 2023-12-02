@@ -96,7 +96,6 @@ void CFalmerOH_Weapon::Tick(_float _fTimeDelta)
 			m_bReadyDead = true;
 		}
 	}
-
 }
 
 void CFalmerOH_Weapon::LateTick(_float _fTimeDelta)

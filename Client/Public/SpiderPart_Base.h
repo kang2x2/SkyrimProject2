@@ -18,7 +18,7 @@ BEGIN(Client)
 class CSpiderPart_Base abstract : public CGameObject
 {
 public:
-	typedef struct tagPartDesc
+	typedef struct tagSpiderPartDesc
 	{
 		CGameObject* pParent;
 		CTransform* pParentTransform;

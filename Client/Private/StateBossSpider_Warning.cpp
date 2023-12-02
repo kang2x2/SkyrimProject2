@@ -24,14 +24,14 @@ void CStateBossSpider_Warning::Update(_float _fTimeDelta)
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "attack_bitehigh"))
 	{
-		m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+		m_pMonsterTransform->Set_Speed(m_pMonster->Get_BossDesc().fSprintSpeed);
 
-		m_pMonster->Set_State(CBossSpider::BOSSSPIDER_CHASE);
+		m_pMonster->Set_State(CBossSpider::BOSSSPIDER_SPRINT);
 		m_pMonster->Play_Animation(true, "forward_run");
 	}
 }
 
-void CStateBossSpider_Warning::Late_Update()
+void CStateBossSpider_Warning::Late_Update(_float _fTimeDelta)
 {
 }
 

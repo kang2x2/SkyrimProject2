@@ -33,7 +33,7 @@ void CStateFalmerUE_Squat::Update(_float _fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CStateFalmerUE_Squat::Late_Update()
+void CStateFalmerUE_Squat::Late_Update(_float _fTimeDelta)
 {
 
 }

@@ -25,7 +25,7 @@ void CStatePlayerOH_Idle::Update(_float _fTimeDelta)
 	Key_Input(_fTimeDelta);
 }
 
-void CStatePlayerOH_Idle::Late_Update()
+void CStatePlayerOH_Idle::Late_Update(_float _fTimeDelta)
 {
 }
 
@@ -67,7 +67,8 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 
 	}
 
-	if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
+	if (pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON) &&
+		strcmp(m_pPlayer->Get_NextAnimationName().c_str(), "1hm_attackleft"))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_LATTACK);
 		m_pPlayer->Play_Animation_All(false, "1hm_attackleft");
@@ -83,6 +84,7 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyPress(VK_RBUTTON))
 	{
+		m_pPlayer->Set_IsReadyCounter(true);
 		m_pPlayer->Set_State(CPlayer::ONEHAND_BLOCK);
 		m_pPlayer->Play_Animation_All(true, "1hm_blockidle");
 	}

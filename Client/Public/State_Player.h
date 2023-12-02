@@ -23,7 +23,7 @@ public:
 
 public:
 	virtual void Update(_float _fTimeDelta);
-	virtual void Late_Update();
+	virtual void Late_Update(_float _fTimeDelta);
 
 	virtual void Key_Input(_float _fTimeDelta);
 

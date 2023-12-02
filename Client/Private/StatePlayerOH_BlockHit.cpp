@@ -26,7 +26,7 @@ void CStatePlayerOH_BlockHit::Update(_float _fTimeDelta)
 	Key_Input(_fTimeDelta);
 }
 
-void CStatePlayerOH_BlockHit::Late_Update()
+void CStatePlayerOH_BlockHit::Late_Update(_float _fTimeDelta)
 {
 	if (m_pPlayer->Get_IsAnimationFin() &&
 		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_blockhit"))

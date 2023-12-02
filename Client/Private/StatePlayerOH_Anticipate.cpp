@@ -21,7 +21,7 @@ void CStatePlayerOH_Anticipate::Update(_float _fTimeDelta)
 	Key_Input(_fTimeDelta);
 }
 
-void CStatePlayerOH_Anticipate::Late_Update()
+void CStatePlayerOH_Anticipate::Late_Update(_float _fTimeDelta)
 {
 	if (m_pPlayer->Get_IsAnimationFin() &&
 		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_blockanticipate"))
@@ -33,6 +33,20 @@ void CStatePlayerOH_Anticipate::Late_Update()
 
 void CStatePlayerOH_Anticipate::Key_Input(_float _fTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_pPlayer->Get_IsCounter())
+	{
+		if (pGameInstance->Get_DIKeyDown(VK_LBUTTON))
+		{
+			m_pPlayer->Set_State(CPlayer::ONEHAND_BASH);
+			m_pPlayer->Play_Animation_All(false, "1hm_runfwdattackleft");
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
 	__super::Key_Input(_fTimeDelta);
 }
 

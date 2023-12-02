@@ -146,7 +146,7 @@ void CFalmer_OneHand::LateTick(_float _fTimeDelta)
 	if (!g_bIsPause)
 	{
 		if (g_curLevel == LEVEL_GAMEPLAY)
-			m_pStateManager->Late_Update();
+			m_pStateManager->Late_Update(_fTimeDelta);
 
 		for (auto& iter : m_vecMonsterPart)
 		{
@@ -291,8 +291,8 @@ HRESULT CFalmer_OneHand::Ready_Component(_uint _iLevel)
 
 	/* AABB */
 	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
-	AABBDesc.vExtents = _float3(0.5f, 0.7f, 0.8f);
-	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, -AABBDesc.vExtents.z / 2.f);
+	AABBDesc.vExtents = _float3(0.8f, 0.7f, 0.8f);
+	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),
 		TEXT("Com_Collider_AABB"), (CComponent**)&m_pVecCollider[FALMEROH_COL_AABB], &AABBDesc)))

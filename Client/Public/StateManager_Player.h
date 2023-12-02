@@ -22,7 +22,7 @@ public:
 
 public:
 	void Update(_float _fTimeDelta);
-	void Late_Update();
+	void Late_Update(_float _fTimeDelta);
 
 private:
 	CState_Player* m_pCurState = nullptr;

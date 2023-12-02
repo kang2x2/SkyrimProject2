@@ -338,7 +338,7 @@ void CModel::Set_AnimationStop(_bool _bIsStop)
 	m_vecAnimation[m_iCurAnimationIndex]->Set_AnimationStop(_bIsStop);
 }
 
-HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange)
 {
 	m_bIsFindAnimation = false;
 	_int iAnimationIndex = -1;
@@ -374,22 +374,34 @@ HRESULT CModel::SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint 
 	// 리셋 하기 전 보간
 	if (m_iCurAnimationIndex != iAnimationIndex)
 	{
-		m_iNextAnimationIndex = iAnimationIndex;
-		m_vecAnimation[m_iNextAnimationIndex]->Set_Loop(_bIsLoop);
-		m_iChangeIndex = _iChangeIndex;
-		m_vecAnimation[m_iCurAnimationIndex]->Ready_ChangeAnimation(m_iChangeIndex);
-		m_bIsChanging = true;
+		if (!_bIsQuickChange)
+		{
+			m_iNextAnimationIndex = iAnimationIndex;
+			m_vecAnimation[m_iNextAnimationIndex]->Set_Loop(_bIsLoop);
+			m_iChangeIndex = _iChangeIndex;
+			m_vecAnimation[m_iCurAnimationIndex]->Ready_ChangeAnimation(m_iChangeIndex);
+			m_bIsChanging = true;
+		}
+		else
+		{
+			m_iCurAnimationIndex = iAnimationIndex;
+			m_vecAnimation[m_iCurAnimationIndex]->ReSet();
+			m_vecAnimation[m_iCurAnimationIndex]->Set_Loop(_bIsLoop);
+		}
+
 	}
-	//else
-	//{
-	//	m_vecAnimation[m_iCurAnimationIndex]->ReSet();
-	//	//m_iCurAnimationIndex = iAnimationIndex;
-	//	m_vecAnimation[m_iCurAnimationIndex]->Set_Loop(_bIsLoop);
-	//}
+	else
+	{
+		if (_bIsReset)
+		{
+			m_vecAnimation[m_iCurAnimationIndex]->ReSet();
+			m_vecAnimation[m_iCurAnimationIndex]->Set_Loop(_bIsLoop);
+		}
+	}
 
 	return S_OK;
 }
-HRESULT CModel::Play_Animation(_float _fTimeDelta)
+HRESULT CModel::Play_Animation(_float _fTimeDelta, _float _fPlaySpeed)
 {
 	/* Non Anim 모델이면 바로 return */
 	if (0 == m_iNumAnimation)
@@ -401,11 +413,11 @@ HRESULT CModel::Play_Animation(_float _fTimeDelta)
 	   /* 이 애니메이션에 사용되는 부모에 상대적인 자기 자신의 뼈를 갱신하고 */
 	if (!m_bIsChanging)
 	{
-		m_vecAnimation[m_iCurAnimationIndex]->Update_TransformationMatrix(m_vecBone, _fTimeDelta);
+		m_vecAnimation[m_iCurAnimationIndex]->Update_TransformationMatrix(m_vecBone, _fTimeDelta * _fPlaySpeed);
 	}
 	else if (m_bIsChanging)
 	{
-		if (m_vecAnimation[m_iCurAnimationIndex]->Change_TransformationMatrix(m_vecBone, m_vecAnimation[m_iNextAnimationIndex]->Get_Channel(), _fTimeDelta))
+		if (m_vecAnimation[m_iCurAnimationIndex]->Change_TransformationMatrix(m_vecBone, m_vecAnimation[m_iNextAnimationIndex]->Get_Channel(), _fTimeDelta * _fPlaySpeed))
 		{
 			m_bIsChanging = false;
 			m_vecAnimation[m_iCurAnimationIndex]->ReSet();
@@ -425,6 +437,10 @@ HRESULT CModel::Play_Animation(_float _fTimeDelta)
 string CModel::Get_CurAnimationName()
 {
 	return m_vecAnimation[m_iCurAnimationIndex]->Get_AnimationName();
+}
+string CModel::Get_NextAnimationName()
+{
+	return m_vecAnimation[m_iNextAnimationIndex]->Get_AnimationName();
 }
 _bool CModel::Get_IsAnimationFin()
 {

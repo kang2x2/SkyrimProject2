@@ -38,7 +38,7 @@ void CStateSkeever_Return::Update(_float _fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CStateSkeever_Return::Late_Update()
+void CStateSkeever_Return::Late_Update(_float _fTimeDelta)
 {
 	_float4 vPos = {};
 	_float4 vOriginPos = {};

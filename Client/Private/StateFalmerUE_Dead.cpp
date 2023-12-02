@@ -34,7 +34,7 @@ void CStateFalmerUE_Dead::Update(_float _fTimeDelta)
 
 }
 
-void CStateFalmerUE_Dead::Late_Update()
+void CStateFalmerUE_Dead::Late_Update(_float _fTimeDelta)
 {
 }
 

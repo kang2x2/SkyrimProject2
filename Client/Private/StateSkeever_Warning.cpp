@@ -24,7 +24,7 @@ void CStateSkeever_Warning::Update(_float _fTimeDelta)
 	m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
 }
 
-void CStateSkeever_Warning::Late_Update()
+void CStateSkeever_Warning::Late_Update(_float _fTimeDelta)
 {
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "aggrowarning1"))

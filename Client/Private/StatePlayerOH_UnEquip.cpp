@@ -28,7 +28,7 @@ void CStatePlayerOH_UnEquip::Update(_float _fTimeDelta)
 	__super::Key_Input(_fTimeDelta);
 }
 
-void CStatePlayerOH_UnEquip::Late_Update()
+void CStatePlayerOH_UnEquip::Late_Update(_float _fTimeDelta)
 {
 	if (m_pPlayer->Get_IsAnimationFin() &&
 		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_unequip"))

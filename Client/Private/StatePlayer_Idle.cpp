@@ -22,7 +22,7 @@ void CStatePlayer_Idle::Update(_float _fTimeDelta)
 	Key_Input(_fTimeDelta);
 }
 
-void CStatePlayer_Idle::Late_Update()
+void CStatePlayer_Idle::Late_Update(_float _fTimeDelta)
 {
 }
 

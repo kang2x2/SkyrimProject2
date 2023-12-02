@@ -31,7 +31,7 @@ void CState_FalmerOH::Update(_float _fTimeDelta)
 	}
 }
 
-void CState_FalmerOH::Late_Update()
+void CState_FalmerOH::Late_Update(_float _fTimeDelta)
 {
 }
 

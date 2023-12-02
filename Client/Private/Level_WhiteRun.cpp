@@ -192,8 +192,8 @@ HRESULT CLevel_WhiteRun::Ready_Light()
 	LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
 	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
 	
-	//LightDesc.vDiffuse = _float4(0.01f, 0.01f, 0.01f, 1.f);
-	LightDesc.vDiffuse = _float4(0.5f, 0.5f, 0.5f, 1.f);
+	LightDesc.vDiffuse = _float4(0.01f, 0.01f, 0.01f, 1.f);
+	//LightDesc.vDiffuse = _float4(0.5f, 0.5f, 0.5f, 1.f);
 	LightDesc.vAmbient = _float4(0.1f, 0.1f, 0.1f, 1.f);
 	LightDesc.vSpecular = _float4(0.1f, 0.1f, 0.1f, 1.f);
 	
@@ -256,7 +256,7 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Player(const wstring& _strLayerTag)
 	//->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
 	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
 		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
-	->Set_State(CTransform::STATE_POSITION, XMVectorSet(-2.f, -1.f, 12.f, 1.f));
+	->Set_State(CTransform::STATE_POSITION, XMVectorSet(-4.f, -1.f, 24.f, 1.f));
 
 	dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
 		TEXT("Player")))->Set_CurCell();
@@ -341,8 +341,8 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Effect(const wstring& _strLayerTag)
 
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_BloodFlare"))))
 		return E_FAIL;
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_BloodSpot"))))
-		return E_FAIL;
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_BloodSpot"))))
+	//	return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

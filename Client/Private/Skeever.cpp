@@ -48,6 +48,7 @@ HRESULT CSkeever::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag
 	m_bCreature = true;
 	m_strName = TEXT("Skeever");
 	m_vOriginPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	m_fDissloveTime = 2.5f;
 
 	m_pTransformCom->Set_Speed(2.f);
 
@@ -142,7 +143,7 @@ void CSkeever::LateTick(_float _fTimeDelta)
 	if (!g_bIsPause)
 	{
 		if (g_curLevel == LEVEL_GAMEPLAY)
-			m_pStateManager->Late_Update();
+			m_pStateManager->Late_Update(_fTimeDelta);
 
 		for (auto& iter : m_vecMonsterPart)
 		{
@@ -254,7 +255,7 @@ HRESULT CSkeever::Ready_Part()
 
 	CGameObject* pPart = nullptr;
 
-	/* For. FalmerUE_Weapon */
+	/* For. Skeever_Weapon */
 	CSkeever_Weapon::WEAPON_DESC WeaponPartDesc;
 	WeaponPartDesc.pParent = this;
 	WeaponPartDesc.pParentTransform = m_pTransformCom;
@@ -318,7 +319,7 @@ HRESULT CSkeever::Ready_Component(_uint _iLevel)
 
 	/* RUN ATTACK */
 	SphereDesc.fRadius = 2.5f;
-	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
+	SphereDesc.vCenter = _float3(0.f, 0.1f, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_Sphere"),
 		TEXT("Com_Collider_AtkRound"), (CComponent**)&m_pVecCollider[SKEEVER_COL_ATKROUND], &SphereDesc)))
@@ -333,7 +334,7 @@ HRESULT CSkeever::Ready_Component(_uint _iLevel)
 
 HRESULT CSkeever::Ready_State()
 {
-	m_fRunSpeed = 2.5f;
+	m_fRunSpeed = 3.5f;
 	m_fWalkSpeed = 1.5f;
 	m_fHp = 50;
 	m_iAtk = 5;

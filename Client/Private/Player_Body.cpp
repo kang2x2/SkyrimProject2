@@ -61,7 +61,7 @@ void CPlayer_Body::LateTick(_float _fTimeDelta)
 #endif
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 
-	m_pColliderCom->Late_Update();
+	m_pColliderCom->Late_Update(_fTimeDelta);
 }
 
 HRESULT CPlayer_Body::Render()
@@ -92,9 +92,9 @@ HRESULT CPlayer_Body::Render()
 	return S_OK;
 }
 
-void CPlayer_Body::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CPlayer_Body::SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange)
 {
-	m_pModelComAry[m_ePlayerCamMode]->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
+	m_pModelComAry[m_ePlayerCamMode]->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
 }
 
 _uint CPlayer_Body::Get_CurFrameIndex()
@@ -149,6 +149,11 @@ _bool CPlayer_Body::Get_IsAnimationFin()
 string CPlayer_Body::Get_CurAnimationName()
 {
 	return m_pModelComAry[m_ePlayerCamMode]->Get_CurAnimationName().c_str();
+}
+
+string CPlayer_Body::Get_NextAnimationName()
+{
+	return m_pModelComAry[m_ePlayerCamMode]->Get_NextAnimationName().c_str();
 }
 
 

@@ -31,7 +31,7 @@ void CState_FalmerUE::Update(_float _fTimeDelta)
 	}
 }
 
-void CState_FalmerUE::Late_Update()
+void CState_FalmerUE::Late_Update(_float _fTimeDelta)
 {
 }
 

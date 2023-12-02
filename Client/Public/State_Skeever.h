@@ -24,17 +24,13 @@ public:
 
 public:
 	virtual void Update(_float _fTimeDelta);
-	virtual void Late_Update();
+	virtual void Late_Update(_float _fTimeDelta);
+
+	virtual _bool State_Waiting(_float _fWaitingTime, _bool _bIsLookAt, _float _fTimeDelta);
 
 protected:
-	class CSkeever* m_pMonster = nullptr;
-	class CPlayer* m_pPlayer = nullptr;
-	CTransform* m_pMonsterTransform = nullptr;
-	CNavigation* m_pMonsterNavigation = nullptr;
-
-	vector<CCollider*>  m_pVecCollider;
-
-	_bool			m_isReadyAtk = true;
+	class CSkeever* m_pMonster = nullptr;	
+	CCollider* m_pWeaponCollider = nullptr;
 
 public:
 	virtual void Free() override;

@@ -19,13 +19,25 @@ HRESULT CStateSpider_Chase::Initialize(CGameObject* _pMonster, CGameObject* _pPl
 
 void CStateSpider_Chase::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
+	m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
+	m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+	/* RunPowerAtk 범위에 들어왔을 때 */
+	if (pGameInstance->Collision_Enter(m_pVecCollider[CSpider::SPIDER_COL_ATKROUND], m_pPlayerBodyCollider))
+	{
+		m_pMonster->Set_State(CSpider::SPIDER_CHARGE);
+		m_pMonster->Play_Animation(false, "attack_forwardjump");
+	}
 
 	Safe_Release(pGameInstance);
 }
 
-void CStateSpider_Chase::Late_Update()
+void CStateSpider_Chase::Late_Update(_float _fTimeDelta)
 {
 
 }

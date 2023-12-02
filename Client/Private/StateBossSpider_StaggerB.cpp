@@ -22,7 +22,7 @@ void CStateBossSpider_StaggerB::Update(_float _fTimeDelta)
 	__super::Update(_fTimeDelta);
 }
 
-void CStateBossSpider_StaggerB::Late_Update()
+void CStateBossSpider_StaggerB::Late_Update(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

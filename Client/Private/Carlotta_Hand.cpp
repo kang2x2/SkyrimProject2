@@ -76,9 +76,9 @@ HRESULT CCarlotta_Hand::Render()
 	return S_OK;
 }
 
-void CCarlotta_Hand::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CCarlotta_Hand::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange)
 {
-	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
+	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
 }
 
 _uint CCarlotta_Hand::Get_CurFrameIndex()

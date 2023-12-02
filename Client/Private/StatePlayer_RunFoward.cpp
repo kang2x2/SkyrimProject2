@@ -21,7 +21,7 @@ void CStatePlayer_RunFoward::Update(_float _fTimeDelta)
 	Key_Input(_fTimeDelta);
 }
 
-void CStatePlayer_RunFoward::Late_Update()
+void CStatePlayer_RunFoward::Late_Update(_float _fTimeDelta)
 {
 }
 

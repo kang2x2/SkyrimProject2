@@ -262,8 +262,6 @@ CGameObject* CLight_Point::LightClone(_uint _iLevel, const wstring& _strModelCom
 	return pInstance;
 }
 
-
-
 void CLight_Point::Free()
 {
 	__super::Free();

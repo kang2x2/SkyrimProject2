@@ -33,7 +33,7 @@ void CStateSpider_Idle::Update(_float _fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CStateSpider_Idle::Late_Update()
+void CStateSpider_Idle::Late_Update(_float _fTimeDelta)
 {
 
 }

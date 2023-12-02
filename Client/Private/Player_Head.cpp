@@ -82,9 +82,9 @@ HRESULT CPlayer_Head::Render()
 	return S_OK;
 }
 
-void CPlayer_Head::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CPlayer_Head::SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange)
 {
-	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
+	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
 }
 
 _uint CPlayer_Head::Get_CurFrameIndex()

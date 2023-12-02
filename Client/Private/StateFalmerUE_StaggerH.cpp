@@ -25,7 +25,7 @@ void CStateFalmerUE_StaggerH::Update(_float _fTimeDelta)
 		m_pMonsterTransform->Go_Backward(_fTimeDelta, m_pMonsterNavigation);
 }
 
-void CStateFalmerUE_StaggerH::Late_Update()
+void CStateFalmerUE_StaggerH::Late_Update(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

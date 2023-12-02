@@ -21,7 +21,7 @@ void CStateSkeever_Detection::Update(_float _fTimeDelta)
 	__super::Update(_fTimeDelta);
 }
 
-void CStateSkeever_Detection::Late_Update()
+void CStateSkeever_Detection::Late_Update(_float _fTimeDelta)
 {
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "idlecombat1"))

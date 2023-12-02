@@ -40,7 +40,7 @@ void CStateFalmerOH_Return::Update(_float _fTimeDelta)
 
 }
 
-void CStateFalmerOH_Return::Late_Update()
+void CStateFalmerOH_Return::Late_Update(_float _fTimeDelta)
 {
 	_float4 vPos = {};
 	_float4 vOriginPos = {};

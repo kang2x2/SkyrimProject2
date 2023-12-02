@@ -24,13 +24,17 @@ public:
 
 public:
 	virtual void Update(_float _fTimeDelta);
-	virtual void Late_Update();
+	virtual void Late_Update(_float _fTimeDelta);
+
+	virtual _bool State_Waiting(_float _fWaitingTime, _bool _bIsLookAt, _float _fTimeDelta);
 
 protected:
 	class CBossSpider* m_pMonster = nullptr;
 	CCollider* m_pMouthCollider = nullptr;
 	CCollider* m_pLeftCollider = nullptr;
 	CCollider* m_pRightCollider = nullptr;
+
+	_float		m_fSpitCoolTime = 0.f;
 
 public:
 	virtual void Free() override;

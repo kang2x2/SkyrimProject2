@@ -20,7 +20,7 @@ void CStateFalmerUE_Detection::Update(_float _fTimeDelta)
 {
 }
 
-void CStateFalmerUE_Detection::Late_Update()
+void CStateFalmerUE_Detection::Late_Update(_float _fTimeDelta)
 {
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "idledetection"))

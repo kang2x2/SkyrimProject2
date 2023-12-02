@@ -31,10 +31,9 @@ void CStateFalmerOH_Dead::Update(_float _fTimeDelta)
 	}
 
 	Safe_Release(pGameInstance);
-
 }
 
-void CStateFalmerOH_Dead::Late_Update()
+void CStateFalmerOH_Dead::Late_Update(_float _fTimeDelta)
 {
 }
 

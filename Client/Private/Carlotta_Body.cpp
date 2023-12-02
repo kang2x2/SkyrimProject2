@@ -65,7 +65,7 @@ void CCarlotta_Body::LateTick(_float _fTimeDelta)
 #endif
 	m_pRendererCom->Add_RenderGroup(CRenderer::RG_NONBLEND, this);
 
-	m_pColliderCom->Late_Update();
+	m_pColliderCom->Late_Update(_fTimeDelta);
 }
 
 HRESULT CCarlotta_Body::Render()
@@ -97,9 +97,9 @@ HRESULT CCarlotta_Body::Render()
 	return S_OK;
 }
 
-void CCarlotta_Body::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CCarlotta_Body::Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange)
 {
-	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex);
+	m_pModelCom->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
 }
 
 _uint CCarlotta_Body::Get_CurFrameIndex()

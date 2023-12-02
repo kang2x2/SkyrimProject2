@@ -21,7 +21,7 @@ void CStateFalmerOH_Detection::Update(_float _fTimeDelta)
 	__super::Update(_fTimeDelta);
 }
 
-void CStateFalmerOH_Detection::Late_Update()
+void CStateFalmerOH_Detection::Late_Update(_float _fTimeDelta)
 {
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "idledetection"))

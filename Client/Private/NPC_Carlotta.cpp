@@ -138,7 +138,7 @@ void CNPC_Carlotta::Tick(_float _fTimeDelta)
 void CNPC_Carlotta::LateTick(_float _fTimeDelta)
 {
 	//if (g_curLevel == LEVEL_GAMEPLAY)
-	//	// m_pStateManager->Late_Update();
+	//	// m_pStateManager->Late_Update(_float _fTimeDelta);
 	//
 	//for (auto& iter : m_vecNpcPart)
 	//{
@@ -198,12 +198,12 @@ HRESULT CNPC_Carlotta::Set_State(CARLOTTA_STATE _eState)
 }
 
 /* 어차피 모든 파츠들의 프레임, 애니메이션 이름 등등은 모두 같다. */
-void CNPC_Carlotta::Play_Animation( _bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CNPC_Carlotta::Play_Animation( _bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange)
 {
-	dynamic_cast<CCarlotta_Body*>(m_vecNpcPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
-	dynamic_cast<CCarlotta_Head*>(m_vecNpcPart[PART_HEAD])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
-	dynamic_cast<CCarlotta_Hand*>(m_vecNpcPart[PART_HAND])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
-	dynamic_cast<CCarlotta_Foot*>(m_vecNpcPart[PART_FOOT])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+	dynamic_cast<CCarlotta_Body*>(m_vecNpcPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
+	dynamic_cast<CCarlotta_Head*>(m_vecNpcPart[PART_HEAD])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
+	dynamic_cast<CCarlotta_Hand*>(m_vecNpcPart[PART_HAND])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
+	dynamic_cast<CCarlotta_Foot*>(m_vecNpcPart[PART_FOOT])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
 }
 
 _bool CNPC_Carlotta::Get_IsAnimationFin()

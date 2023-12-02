@@ -26,6 +26,7 @@ private:
 public:
 	_bool Get_IsAnimationFin();
 	string Get_CurAnimationName();
+	string Get_NextAnimationName();
 
 public:
 	virtual HRESULT Initialize_ProtoType(); // ¿øº»
@@ -35,7 +36,7 @@ public:
 	virtual HRESULT Render();
 
 public:
-	void		Set_AnimationIndex(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex);
+	void		SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange);
 	_uint		Get_CurFrameIndex();
 	_bool		Get_CurAnimationIsLoop();
 

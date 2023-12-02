@@ -85,7 +85,7 @@ _bool CAnimation::Change_TransformationMatrix(vector<class CBone*>& _vecBone, co
 {
 	if (!m_bIsStop)
 	{
-		m_fCnageTrackPosition += 0.02f;
+		m_fCnageTrackPosition += _fTimeDelta;
 
 		if (m_fCnageTrackPosition >= 0.2f)
 		{

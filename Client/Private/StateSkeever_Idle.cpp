@@ -23,7 +23,7 @@ void CStateSkeever_Idle::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_DETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+	if (pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_DETECTION], m_pPlayerBodyCollider))
 	{
 		pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_MISSDETECTION], m_pPlayerBodyCollider);
 
@@ -34,7 +34,7 @@ void CStateSkeever_Idle::Update(_float _fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CStateSkeever_Idle::Late_Update()
+void CStateSkeever_Idle::Late_Update(_float _fTimeDelta)
 {
 }
 

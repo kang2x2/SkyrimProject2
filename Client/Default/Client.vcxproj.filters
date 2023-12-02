@@ -454,23 +454,11 @@
     <Filter Include="03. State\01. Monster\03. Spider\01. State">
       <UniqueIdentifier>{c1b70690-f04b-4560-a309-78eb53486e07}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. State\01. Monster\03. Spider\01. State\00. Idle">
-      <UniqueIdentifier>{697a9ec2-0af1-41a0-8c09-d401c975d139}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts">
       <UniqueIdentifier>{f1560012-52f3-40ae-8983-e5a4124c4d5c}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts\00. Weapon">
       <UniqueIdentifier>{e3ce9dc3-8605-4918-b107-848a62e936b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\01. Monster\03. Spider\01. State\02. Chase">
-      <UniqueIdentifier>{073003f8-2a59-40ac-a8f7-1a6bc621ce60}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\01. Monster\03. Spider\01. State\03. Spit">
-      <UniqueIdentifier>{2efa776c-e753-4923-a899-ecfb9e8c1e0d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\01. Monster\03. Spider\01. State\01. GetUp">
-      <UniqueIdentifier>{7318c076-5dd3-41b6-98cd-c035033e6100}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\01. Bullet">
       <UniqueIdentifier>{a4f48d39-edd6-446c-9807-4fa27fd454f8}</UniqueIdentifier>
@@ -723,6 +711,87 @@
     </Filter>
     <Filter Include="03. State\01. Monster\00. Skeever\01. State\03. Detection">
       <UniqueIdentifier>{31d0355b-e6de-4014-b3a0-cd9fdf0c4bdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\00. Skeever\01. State\07. Dead">
+      <UniqueIdentifier>{2e8a4a55-3409-43c6-ad32-9b4fb61a7b68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts\00. Weapon\00. Mouth">
+      <UniqueIdentifier>{154c5d87-e63d-4159-9c32-1f21902d557f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\00. Intro">
+      <UniqueIdentifier>{697a9ec2-0af1-41a0-8c09-d401c975d139}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\00. Intro\00. Idle">
+      <UniqueIdentifier>{b4bbf1e0-6a09-4187-b116-b7b0cdf74066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\00. Intro\01. GetUp">
+      <UniqueIdentifier>{13b16d4c-993e-4f2d-8272-336490f82d4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\01. Chase">
+      <UniqueIdentifier>{073003f8-2a59-40ac-a8f7-1a6bc621ce60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\02. Attack">
+      <UniqueIdentifier>{90359666-086e-4a12-8218-9e23400a50e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\02. Attack\01. Charge">
+      <UniqueIdentifier>{49fc7f17-8931-485a-b97e-99cd8c42ee64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\02. Attack\00. bite">
+      <UniqueIdentifier>{7603e790-7fcb-4a7e-8e95-8693a19bd28d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\03. Stagger">
+      <UniqueIdentifier>{19489630-c71c-44e7-8374-1dede1106260}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\03. Stagger\01. Stagger_Charge">
+      <UniqueIdentifier>{8a5cc3d3-8291-4831-afc3-df21a9f74408}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\03. Stagger\00. Stagger_Bite">
+      <UniqueIdentifier>{7949ad6a-ea81-46b6-a8a4-29aa3e49ac1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\02. Attack\02. Spit">
+      <UniqueIdentifier>{2efa776c-e753-4923-a899-ecfb9e8c1e0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\04. Dead">
+      <UniqueIdentifier>{2233fa2f-619b-4cc5-9f0f-6ccd53ea2c28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\01. Chase\00. Foward">
+      <UniqueIdentifier>{59823fa4-4f7e-4aa6-b6bf-4fcc5e096dba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\03. Spider\01. State\01. Chase\01. Backward">
+      <UniqueIdentifier>{00039d48-61cb-4339-94cc-4d84017406fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\01. Chase\00. Chase">
+      <UniqueIdentifier>{ea80ade4-84b6-4630-ad56-82e6e7c389ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\01. Chase\01. Sprint">
+      <UniqueIdentifier>{ab1a2b77-cc1e-438b-ab6f-4a1fac3e2261}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\02. Attack\03. Charge">
+      <UniqueIdentifier>{c1887c71-f5e5-40b6-8d0c-c03470838f82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\04. Dead">
+      <UniqueIdentifier>{08526b7a-b6d7-4d48-8056-3311c3ef654f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\03. Stagger\03. Stagger_Charge">
+      <UniqueIdentifier>{7a22da71-3c95-4824-99a5-aabf450957cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\02. Public">
+      <UniqueIdentifier>{78e3bce0-f59c-4bb2-a4aa-6bf63b7eedcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\02. Public\00. 1stStagger">
+      <UniqueIdentifier>{24742fc1-0d40-481c-b264-dded0d1e240b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\02. Public\01. 3stStagger">
+      <UniqueIdentifier>{01a15691-c333-49cd-9929-40f2058a1057}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\04. Dead\00. Dead">
+      <UniqueIdentifier>{a8a7c7bf-3cec-4770-ad6b-4d25abb9e7fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\04. Dead\01. Release">
+      <UniqueIdentifier>{ac41bf08-a28e-428a-82c2-70d84faafd45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Attack\07. Bash">
+      <UniqueIdentifier>{de4848d9-a07c-48eb-a731-fe9cf228757b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1224,26 +1293,14 @@
     <ClInclude Include="..\Public\StateManager_Spider.h">
       <Filter>03. State\01. Monster\03. Spider\00. Manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\StateSpider_Idle.h">
-      <Filter>03. State\01. Monster\03. Spider\01. State\00. Idle</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Spider.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SpiderPart_Base.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Spider_Weapon.h">
-      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts\00. Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\StateSpider_Spit.h">
-      <Filter>03. State\01. Monster\03. Spider\01. State\03. Spit</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\StateSpider_Chase.h">
-      <Filter>03. State\01. Monster\03. Spider\01. State\02. Chase</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\StateSpider_GetUp.h">
-      <Filter>03. State\01. Monster\03. Spider\01. State\01. GetUp</Filter>
+      <Filter>03. State\01. Monster\03. Spider\01. State\02. Attack\02. Spit</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Projectile_Web.h">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\01. Bullet</Filter>
@@ -1320,9 +1377,6 @@
     <ClInclude Include="..\Public\StateBossSpider_Warning.h">
       <Filter>03. State\01. Monster\05. BossSpider\01. State\00. Intro\03. Warning</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\StateBossSpider_Chase.h">
-      <Filter>03. State\01. Monster\05. BossSpider\01. State\01. Chase</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\StateBossSpider_OneChop.h">
       <Filter>03. State\01. Monster\05. BossSpider\01. State\02. Attack\00. OneChop</Filter>
     </ClInclude>
@@ -1346,6 +1400,66 @@
     </ClInclude>
     <ClInclude Include="..\Public\Light_Point.h">
       <Filter>06. Light</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSkeever_Dead.h">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\07. Dead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Spider_Mouth.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts\00. Weapon\00. Mouth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_GetUp.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\00. Intro\01. GetUp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_Idle.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\00. Intro\00. Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_Bite.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\02. Attack\00. bite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_Charge.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\02. Attack\01. Charge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_StaggerB.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\03. Stagger\00. Stagger_Bite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_StaggerC.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\03. Stagger\01. Stagger_Charge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_Dead.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\04. Dead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_Chase.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\01. Chase\00. Foward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateSpider_Backward.h">
+      <Filter>03. State\01. Monster\03. Spider\01. State\01. Chase\01. Backward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Chase.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\01. Chase\00. Chase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Sprint.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\01. Chase\01. Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Charge.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\02. Attack\03. Charge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_StaggerC.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\03. Stagger\03. Stagger_Charge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayer_1stStagger.h">
+      <Filter>03. State\00. Player\01. State\02. Public\00. 1stStagger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayer_3stStagger.h">
+      <Filter>03. State\00. Player\01. State\02. Public\01. 3stStagger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Dead.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Dead\00. Dead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Release.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Dead\01. Release</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StatePlayerOH_Bash.h">
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\07. Bash</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1837,26 +1951,14 @@
     <ClCompile Include="..\Private\StateManager_Spider.cpp">
       <Filter>03. State\01. Monster\03. Spider\00. Manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\StateSpider_Idle.cpp">
-      <Filter>03. State\01. Monster\03. Spider\01. State\00. Idle</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Spider.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SpiderPart_Base.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Spider_Weapon.cpp">
-      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts\00. Weapon</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\StateSpider_Spit.cpp">
-      <Filter>03. State\01. Monster\03. Spider\01. State\03. Spit</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\StateSpider_Chase.cpp">
-      <Filter>03. State\01. Monster\03. Spider\01. State\02. Chase</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\StateSpider_GetUp.cpp">
-      <Filter>03. State\01. Monster\03. Spider\01. State\01. GetUp</Filter>
+      <Filter>03. State\01. Monster\03. Spider\01. State\02. Attack\02. Spit</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Projectile_Web.cpp">
       <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\01. Bullet</Filter>
@@ -1933,9 +2035,6 @@
     <ClCompile Include="..\Private\StateBossSpider_Warning.cpp">
       <Filter>03. State\01. Monster\05. BossSpider\01. State\00. Intro\03. Warning</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\StateBossSpider_Chase.cpp">
-      <Filter>03. State\01. Monster\05. BossSpider\01. State\01. Chase</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\StateBossSpider_OneChop.cpp">
       <Filter>03. State\01. Monster\05. BossSpider\01. State\02. Attack\00. OneChop</Filter>
     </ClCompile>
@@ -1959,6 +2058,66 @@
     </ClCompile>
     <ClCompile Include="..\Private\Light_Point.cpp">
       <Filter>06. Light</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSkeever_Dead.cpp">
+      <Filter>03. State\01. Monster\00. Skeever\01. State\07. Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Spider_Mouth.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\01. Monster\01. Spider\00. Parts\00. Weapon\00. Mouth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_Idle.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\00. Intro\00. Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_GetUp.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\00. Intro\01. GetUp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_Bite.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\02. Attack\00. bite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_Charge.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\02. Attack\01. Charge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_StaggerB.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\03. Stagger\00. Stagger_Bite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_StaggerC.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\03. Stagger\01. Stagger_Charge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_Dead.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\04. Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_Chase.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\01. Chase\00. Foward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateSpider_Backward.cpp">
+      <Filter>03. State\01. Monster\03. Spider\01. State\01. Chase\01. Backward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Chase.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\01. Chase\00. Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Sprint.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\01. Chase\01. Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Charge.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\02. Attack\03. Charge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_StaggerC.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\03. Stagger\03. Stagger_Charge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayer_1stStagger.cpp">
+      <Filter>03. State\00. Player\01. State\02. Public\00. 1stStagger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayer_3stStagger.cpp">
+      <Filter>03. State\00. Player\01. State\02. Public\01. 3stStagger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Dead.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Dead\00. Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Release.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Dead\01. Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StatePlayerOH_Bash.cpp">
+      <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\07. Bash</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -30,7 +30,7 @@ void CStateFalmerOH_Equip::Update(_float _fTimeDelta)
 	}
 }
 
-void CStateFalmerOH_Equip::Late_Update()
+void CStateFalmerOH_Equip::Late_Update(_float _fTimeDelta)
 {
 	if (m_pMonster->Get_IsAnimationFin())
 	{

@@ -44,7 +44,7 @@ void CStateSkeever_Chase::Update(_float _fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CStateSkeever_Chase::Late_Update()
+void CStateSkeever_Chase::Late_Update(_float _fTimeDelta)
 {
 
 }

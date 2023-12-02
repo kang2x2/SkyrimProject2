@@ -37,7 +37,7 @@ void CStateBossSpider_Chase::Update(_float _fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CStateBossSpider_Chase::Late_Update()
+void CStateBossSpider_Chase::Late_Update(_float _fTimeDelta)
 {
 }
 

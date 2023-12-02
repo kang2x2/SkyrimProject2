@@ -18,13 +18,24 @@ HRESULT CStatePlayerOH_Block::Initialize(CGameObject* _pPlayer, CTransform* _pPl
 
 void CStatePlayerOH_Block::Update(_float _fTimeDelta)
 {
+	if (m_pPlayer->Get_IsReadyCounter())
+	{
+		m_fCounterTime += _fTimeDelta;
+	}
+
+	if (m_pPlayer->Get_IsReadyCounter() && m_fCounterTime > 0.5f)
+	{
+		m_pPlayer->Set_IsReadyCounter(false);
+		m_fCounterTime = 0.f;
+	}
+
 	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
 	Key_Input(_fTimeDelta);
 }
 
-void CStatePlayerOH_Block::Late_Update()
+void CStatePlayerOH_Block::Late_Update(_float _fTimeDelta)
 {
 }
 
@@ -35,6 +46,8 @@ void CStatePlayerOH_Block::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyUp(VK_RBUTTON))
 	{
+		m_pPlayer->Set_IsReadyCounter(false);
+
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
 		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 	}

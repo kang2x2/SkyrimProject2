@@ -23,7 +23,7 @@ private:
 public:
 	virtual		 HRESULT Initialize(CGameObject* _pPlayer, CTransform* _pPlayerTransform, CNavigation* _pPlayerNavigation);
 	virtual void Update(_float _fTimeDelta);
-	virtual void Late_Update();
+	virtual void Late_Update(_float _fTimeDelta);
 	virtual void Key_Input(_float _fTimeDelta);
 
 public:

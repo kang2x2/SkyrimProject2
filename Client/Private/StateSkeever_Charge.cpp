@@ -19,77 +19,89 @@ HRESULT CStateSkeever_Charge::Initialize(CGameObject* _pMonster, CGameObject* _p
 
 void CStateSkeever_Charge::Update(_float _fTimeDelta)
 {
+	__super::Update(_fTimeDelta);
+
+	m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+
+	if (m_pMonster->Get_CurFrameIndex() < 30 && !m_bIsWating)
+		m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (m_pMonster->Get_CurFrameIndex() < 30)
-		m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
-
-	// m_pMonsterTransform->LookAt((dynamic_cast<CMonster*>(m_pMonster)->Get_OriginPos()));
-
 	/* 공격 중 서로의 aabb 박스가 충돌하였으면. (피격) */
-	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK)
+	if (!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_blockidle") ||
+		m_pPlayer->Get_CurState() == CPlayer::ONEHAND_ANTICIPATE)
 	{
-		if (m_isReadyAtk && pGameInstance->Collision_Enter(dynamic_cast<CCollider*>(m_pMonster->Get_Part(CSkeever::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))), dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
+		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerWeaponCollider))
 		{
-			m_pMonsterTransform->Set_Speed(m_pMonster->GetWalkSpeed());
-			m_isReadyAtk = false;
+			if (m_pPlayer->Get_IsReadyCounter())
+			{
+				m_pPlayer->Set_IsCounter(true);
+				m_pPlayer->Set_State(CPlayer::ONEHAND_ANTICIPATE);
+				m_pPlayer->Play_Animation_All(false, "1hm_blockanticipate");
+			}
+			else
+			{
+				m_pPlayer->Set_State(CPlayer::ONEHAND_BLOCKHIT);
+				m_pPlayer->Play_Animation_All(false, "1hm_blockhit");
+				m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
+			}
+
 			m_pMonster->Play_Animation(false, "recoil");
 			m_pMonster->Set_State(CSkeever::SKEEVER_STAGGER);
-			m_pPlayer->Set_State(CPlayer::ONEHAND_BLOCKHIT);
-			m_pPlayer->Play_Animation_All(false, "1hm_blockhit");
-			dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")))->Set_Speed(m_pPlayer->GetWalkSpeed());
 		}
 	}
-	if (m_isReadyAtk && pGameInstance->Collision_Enter(dynamic_cast<CCollider*>(m_pMonster->Get_Part(CSkeever::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB"))), dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+	else
 	{
-		//if (m_pMonster->Get_CurFrameIndex() >= 27 &&
-		//	m_pMonster->Get_CurFrameIndex() <= 30)
-		//{
-		m_isReadyAtk = false;
-		// 데미지 처리.
-		int i = 0;
-		//}
+		if (!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "attackpowerforward") &&
+			m_pMonster->Get_CurFrameIndex() >= 19 && m_pMonster->Get_CurFrameIndex() <= 21)
+		{
+			if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
+			{
+				m_pPlayer->SetHp(-(m_pMonster->GetAtk() * 2));
+				m_pPlayer->Set_IsHit(true);
+			}
+		}
 	}
 
 	Safe_Release(pGameInstance);
-
 }
 
-void CStateSkeever_Charge::Late_Update()
+void CStateSkeever_Charge::Late_Update(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	CTransform* pTragetTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")));
-	m_pMonsterTransform->LookAt(pTragetTransform->Get_State(CTransform::STATE_POSITION));
-
 	/* 동작이 끝났을 때 */
-	if (m_pMonster->Get_IsAnimationFin() &&
+	if (m_pMonster->Get_IsAnimationFin() && !m_bIsWating && 
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "attackpowerforward"))
 	{
-		m_isReadyAtk = true;
-		/* 추격 범위를 벗어났을 때 */
-		if (!pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_MISSDETECTION], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
+		m_bIsWating = true;
+		m_pMonster->Play_Animation(true, "combatidle");
+	}
+
+	if (m_bIsWating)
+	{
+		if (State_Waiting(2.f, true, _fTimeDelta))
 		{
-			m_pMonster->Set_State(CSkeever::SKEEVER_DETECTION);
-			m_pMonster->Play_Animation(false, "idlecombat1");
-		}
+			if (pGameInstance->Collision_Stay(m_pVecCollider[CSkeever::SKEEVER_COL_ATKROUND], m_pPlayerBodyCollider))
+			{
+				m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+				m_pMonsterTransform->Set_Speed(m_pMonster->GetWalkSpeed());
 
-		else if (!pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_ATKROUND], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB")))))
-		{
-			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+				m_pMonster->Set_State(CSkeever::SKEEVER_ATK);
+				m_pMonster->Play_Animation(false, "attack2");
+			}
+			else
+			{
+				m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
 
-			m_pMonster->Set_State(CSkeever::SKEEVER_CHASE);
-			m_pMonster->Play_Animation(true, "runforward");
-		}
+				m_pMonster->Set_State(CSkeever::SKEEVER_CHASE);
+				m_pMonster->Play_Animation(true, "runforward");
+			}
 
-		else
-		{
-			m_pMonsterTransform->LookAt(pTragetTransform->Get_State(CTransform::STATE_POSITION));
-
-			m_pMonster->Set_State(CSkeever::SKEEVER_ATK);
-			m_pMonster->Play_Animation(false, "attack2");
+			m_bIsWating = false;
 		}
 	}
 

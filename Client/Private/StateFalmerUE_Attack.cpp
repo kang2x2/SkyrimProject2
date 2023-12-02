@@ -27,11 +27,14 @@ void CStateFalmerUE_Attack::Update(_float _fTimeDelta)
 	CTransform* pTragetTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(TEXT("Com_Transform")));
 
 	/* 공격 중 서로의 콜라이더가 충돌하였으면. (피격) */
-	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK ||
+	if (!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_blockidle") ||
 		m_pPlayer->Get_CurState() == CPlayer::ONEHAND_ANTICIPATE)
 	{
 		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerWeaponCollider))
 		{
+			if (m_pPlayer->Get_IsReadyCounter())
+				m_pPlayer->Set_IsCounter(true);
+
 			m_pMonster->Play_Animation(false, "1hmrecoil1");
 			m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_STAGGERL);
 			m_pPlayer->Set_State(CPlayer::ONEHAND_ANTICIPATE);
@@ -55,7 +58,7 @@ void CStateFalmerUE_Attack::Update(_float _fTimeDelta)
 
 }
 
-void CStateFalmerUE_Attack::Late_Update()
+void CStateFalmerUE_Attack::Late_Update(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

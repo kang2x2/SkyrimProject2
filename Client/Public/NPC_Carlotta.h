@@ -50,7 +50,7 @@ public:
 	void		 Set_WeaponSocket(const char* _strBoneName);
 
 	/* 애니메이션 관련 */
-	virtual void			Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0);
+	virtual void			Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0, _bool _bIsReset = false, _bool _bIsQuickChange = false);
 	virtual _bool			Get_IsAnimationFin();
 	virtual string			Get_CurAnimationName();
 	virtual _uint			Get_CurFrameIndex();

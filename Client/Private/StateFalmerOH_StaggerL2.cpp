@@ -23,7 +23,7 @@ void CStateFalmerOH_StaggerL2::Update(_float _fTimeDelta)
 
 }
 
-void CStateFalmerOH_StaggerL2::Late_Update()
+void CStateFalmerOH_StaggerL2::Late_Update(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

@@ -28,5 +28,7 @@ extern bool g_bIsStaticInit;
 extern bool g_bIsPublicInit;
 
 extern bool g_bIsPause;
+extern bool g_bIsSlow;
+extern float g_fGameSpeed;
 
 using namespace Client;

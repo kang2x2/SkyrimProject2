@@ -35,7 +35,21 @@ void CStatePlayerOH_BwAttackL::Update(_float _fTimeDelta)
 	__super::Key_Input(_fTimeDelta);
 }
 
-void CStatePlayerOH_BwAttackL::Late_Update()
+void CStatePlayerOH_BwAttackL::Late_Update(_float _fTimeDelta)
+{
+	if (m_pPlayer->Get_IsAnimationFin() && 
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_walkbwdattackleft"))
+	{
+		m_pPlayer->Set_IsAttack(false);
+
+		m_pPlayerTransform->Set_Speed(m_pPlayer->GetRunSpeed());
+
+		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
+		m_pPlayer->Play_Animation_All(true, "1hm_idle");
+	}
+}
+
+void CStatePlayerOH_BwAttackL::Key_Input(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -57,25 +71,6 @@ void CStatePlayerOH_BwAttackL::Late_Update()
 		m_pPlayer->Set_State(CPlayer::ONEHAND_PATTACK);
 		m_pPlayer->Play_Animation_All(false, "1hm_attackpower");
 	}
-
-
-	Safe_Release(pGameInstance);
-
-	if (m_pPlayer->Get_IsAnimationFin())
-	{
-		m_pPlayer->Set_IsAttack(false);
-
-		m_pPlayerTransform->Set_Speed(m_pPlayer->GetRunSpeed());
-
-		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
-		m_pPlayer->Play_Animation_All(true, "1hm_idle");
-	}
-}
-
-void CStatePlayerOH_BwAttackL::Key_Input(_float _fTimeDelta)
-{
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
 
 	if (pGameInstance->Get_DIKeyPress('S'))
 	{

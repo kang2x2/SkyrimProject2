@@ -25,7 +25,7 @@ public:
 
 public:
 	virtual void Update(_float _fTimeDelta);
-	virtual void Late_Update();
+	virtual void Late_Update(_float _fTimeDelta);
 
 protected:
 	CTransform* m_pMonsterTransform = nullptr;
@@ -36,9 +36,11 @@ protected:
 
 	class CPlayer* m_pPlayer = nullptr;
 	CTransform* m_pPlayerTransform = nullptr;
-	CCollider* m_pPlayerBodyCollider = nullptr;
-	CCollider* m_pPlayerWeaponCollider = nullptr;
+	CCollider*  m_pPlayerBodyCollider = nullptr;
+	CCollider*  m_pPlayerWeaponCollider = nullptr;
 
+	_bool		m_bIsWating = false;
+	_float		m_fWaitingTime = 0.f;
 public:
 	virtual void Free() override;
 

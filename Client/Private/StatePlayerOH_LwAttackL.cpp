@@ -35,7 +35,24 @@ void CStatePlayerOH_LwAttackL::Update(_float _fTimeDelta)
 	__super::Key_Input(_fTimeDelta);
 }
 
-void CStatePlayerOH_LwAttackL::Late_Update()
+void CStatePlayerOH_LwAttackL::Late_Update(_float _fTimeDelta)
+{
+	if (m_pPlayer->Get_IsAnimationFin() && 
+		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_walkleftattackleft"))
+	{
+		m_pPlayer->Set_IsAttack(false);
+
+		m_pPlayerTransform->Set_Speed(m_pPlayer->GetRunSpeed());
+
+		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+			Player_SetLook(-90.f);
+
+		m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_L);
+		m_pPlayer->Play_Animation_All(true, "1hm_runforward");
+	}
+}
+
+void CStatePlayerOH_LwAttackL::Key_Input(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -45,7 +62,7 @@ void CStatePlayerOH_LwAttackL::Late_Update()
 		pGameInstance->Get_DIMouseDown(CInput_Device::MKS_LBUTTON))
 	{
 		m_pPlayer->Set_State(CPlayer::ONEHAND_LWATTACKR);
-		m_pPlayer->Play_Animation_All(false, "1hm_attackleft");
+		m_pPlayer->Play_Animation_All(false, "1hm_walkleftattackright");
 	}
 	else if (m_pPlayer->Get_CurFrameIndex() >= 20 && m_pPlayer->Get_PlayerSp() > 0.f &&
 		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_walkleftattackleft") &&
@@ -57,23 +74,6 @@ void CStatePlayerOH_LwAttackL::Late_Update()
 		m_pPlayer->Play_Animation_All(false, "1hm_attackpower");
 	}
 
-	Safe_Release(pGameInstance);
-
-	if (m_pPlayer->Get_IsAnimationFin())
-	{
-		m_pPlayer->Set_IsAttack(false);
-
-		m_pPlayerTransform->Set_Speed(m_pPlayer->GetRunSpeed());
-
-		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
-		m_pPlayer->Play_Animation_All(true, "1hm_idle");
-	}
-}
-
-void CStatePlayerOH_LwAttackL::Key_Input(_float _fTimeDelta)
-{
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
 
 	if (pGameInstance->Get_DIKeyPress('A'))
 	{

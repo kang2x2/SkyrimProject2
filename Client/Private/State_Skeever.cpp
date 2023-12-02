@@ -29,13 +29,27 @@ void CState_Skeever::Update(_float _fTimeDelta)
 	if (m_pMonster->GetHp() <= 0.f)
 	{
 		m_pMonster->Set_State(CSkeever::SKEEVER_DEAD);
-		m_pMonster->Play_Animation(false, "bleedoutintro");
+		m_pMonster->Play_Animation(false, "aggrowarning1");
 	}
-
 }
 
-void CState_Skeever::Late_Update()
+void CState_Skeever::Late_Update(_float _fTimeDelta)
 {
+}
+
+_bool CState_Skeever::State_Waiting(_float _fWaitingTime, _bool _bIsLookAt, _float _fTimeDelta)
+{
+	if(_bIsLookAt)
+		m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+
+	m_fWaitingTime += _fTimeDelta;
+	if (m_fWaitingTime >= _fWaitingTime)
+	{
+		m_fWaitingTime = _fWaitingTime - m_fWaitingTime;
+		return true;
+	}
+
+	return false;
 }
 
 void CState_Skeever::Free()

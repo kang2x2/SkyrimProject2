@@ -39,7 +39,7 @@ void CStatePlayerOH_RAttack::Update(_float _fTimeDelta)
 	__super::Key_Input(_fTimeDelta);
 }
 
-void CStatePlayerOH_RAttack::Late_Update()
+void CStatePlayerOH_RAttack::Late_Update(_float _fTimeDelta)
 {
 	if (m_pPlayer->Get_IsAnimationFin())
 	{
@@ -86,7 +86,7 @@ void CStatePlayerOH_RAttack::Key_Input(_float _fTimeDelta)
 		m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 
 		m_pPlayer->Set_State(CPlayer::ONEHAND_RWATTACKR);
-		m_pPlayer->Play_Animation_All(false, "1hm_walkrightattackright", m_pPlayer->Get_CurFrameIndex());
+		m_pPlayer->Play_Animation_All(false, "1hm_walkrtattackright", m_pPlayer->Get_CurFrameIndex());
 	}
 	else if (pGameInstance->Get_DIKeyPress('W'))
 	{

@@ -48,7 +48,7 @@ void CStateBossSpider_Fall::Update(_float _fTimeDelta)
 	m_pMonsterTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vIdlePos));
 }
 
-void CStateBossSpider_Fall::Late_Update()
+void CStateBossSpider_Fall::Late_Update(_float _fTimeDelta)
 {
 }
 

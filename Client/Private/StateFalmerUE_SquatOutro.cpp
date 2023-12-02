@@ -20,7 +20,7 @@ void CStateFalmerUE_SquatOutro::Update(_float _fTimeDelta)
 {
 }
 
-void CStateFalmerUE_SquatOutro::Late_Update()
+void CStateFalmerUE_SquatOutro::Late_Update(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

@@ -116,14 +116,28 @@ void CPlayer::Tick(_float _fTimeDelta)
 
 	if (!g_bIsPause)
 	{
+		if (m_bIsCounter)
+		{
+			m_fAnimationSpeed = 1.5f;
+			m_fCounterTime += _fTimeDelta;
+			if (m_fCounterTime > 4.f)
+			{
+				m_fCounterTime = 4.f - m_fCounterTime;
+				m_bIsCounter = false;
+			}
+		}
+		else
+			m_fAnimationSpeed = 1.f;
+
 		Player_Recovery(_fTimeDelta);
 
 		m_pStateManager->Update(_fTimeDelta);
 
 		for (auto& iter : m_vecPlayerPart)
 		{
+			/* 파츠들이 _fTimeDelta를 마침 애니메이션 재생에만 사용하네? */
 			if (iter != nullptr)
-				iter->Tick(_fTimeDelta);
+				iter->Tick(_fTimeDelta * m_fAnimationSpeed);
 		}
 	}
 
@@ -135,7 +149,7 @@ void CPlayer::LateTick(_float _fTimeDelta)
 {
 	if (!g_bIsPause)
 	{
-		m_pStateManager->Late_Update();
+		m_pStateManager->Late_Update(_fTimeDelta);
 
 		for (auto& iter : m_vecPlayerPart)
 		{
@@ -204,6 +218,10 @@ string CPlayer::Get_CurAnimationName()
 {
 	return dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_CurAnimationName();
 }
+string CPlayer::Get_NextAnimationName()
+{
+	return dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_NextAnimationName();
+}
 _uint CPlayer::Get_CurFrameIndex()
 {
 	return dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Get_CurFrameIndex();
@@ -212,24 +230,24 @@ const char* CPlayer::Get_CurSocketBonName()
 {
 	return dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])->Get_SoketBoneName();
 }
-void CPlayer::Play_Animation_All(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CPlayer::Play_Animation_All(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange)
 {
-	dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
-	dynamic_cast<CPlayer_Head*>(m_vecPlayerPart[PART_HEAD])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
-	dynamic_cast<CPlayer_Hand*>(m_vecPlayerPart[PART_HAND])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
-	dynamic_cast<CPlayer_Foot*>(m_vecPlayerPart[PART_FOOT])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+	dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
+	dynamic_cast<CPlayer_Head*>(m_vecPlayerPart[PART_HEAD])->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
+	dynamic_cast<CPlayer_Hand*>(m_vecPlayerPart[PART_HAND])->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
+	dynamic_cast<CPlayer_Foot*>(m_vecPlayerPart[PART_FOOT])->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
 }
 
-void CPlayer::Play_Animation(PLAYER_PARTS _ePart, _bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex)
+void CPlayer::Play_Animation(PLAYER_PARTS _ePart, _bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange)
 {
 	if(_ePart == PART_BODY)
-		dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+		dynamic_cast<CPlayer_Body*>(m_vecPlayerPart[PART_BODY])->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
 	else if (_ePart == PART_HEAD)
-		dynamic_cast<CPlayer_Head*>(m_vecPlayerPart[PART_HEAD])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+		dynamic_cast<CPlayer_Head*>(m_vecPlayerPart[PART_HEAD])->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
 	else if (_ePart == PART_HAND)
-		dynamic_cast<CPlayer_Hand*>(m_vecPlayerPart[PART_HAND])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+		dynamic_cast<CPlayer_Hand*>(m_vecPlayerPart[PART_HAND])->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
 	else if (_ePart == PART_FOOT)
-		dynamic_cast<CPlayer_Foot*>(m_vecPlayerPart[PART_FOOT])->Set_AnimationIndex(_bIsLoop, _strAnimationName, _iChangeIndex);
+		dynamic_cast<CPlayer_Foot*>(m_vecPlayerPart[PART_FOOT])->SetUp_Animation(_bIsLoop, _strAnimationName, _iChangeIndex, _bIsReset, _bIsQuickChange);
 }
 
 void CPlayer::Set_SoketBone(const char* _pBoneName)

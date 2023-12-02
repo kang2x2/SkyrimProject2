@@ -31,16 +31,17 @@ public:
 public:
 	vector<class CMesh*> Get_VecMesh() { return m_vecMesh; }
 	string				 Get_CurAnimationName();
+	string				 Get_NextAnimationName();
 	_bool				 Get_IsAnimationFin();
 	_bool				 Get_CurAnimationIsLoop();
 	_uint				 Get_CurFrameIndex();
 	void				 Update_VI(const _fmatrix& _matPivot);
 
 public:
-	HRESULT SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex);
+	HRESULT SetUp_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex, _bool _bIsReset, _bool _bIsQuickChange);
 	HRESULT Bind_BondMatrices(class CShader* _pShader, _uint _iMeshIndex, const char* _strConstantName);
 	HRESULT Bind_MaterialTexture(class CShader* _pShader, const char* _pConstantName, _uint _iMeshIndex, aiTextureType _eType);
-	HRESULT Play_Animation(_float _fTimeDelta);
+	HRESULT Play_Animation(_float _fTimeDelta, _float _fPlaySpeed = 1.f);
 	HRESULT Render(_uint _iMeshIndex);
 
 public:

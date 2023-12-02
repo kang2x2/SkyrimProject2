@@ -30,8 +30,13 @@ void CStateBossSpider_OneChop::Update(_float _fTimeDelta)
 	{
 		if (pGameInstance->Collision_Enter(m_pRightCollider, m_pPlayerWeaponCollider))
 		{
-			m_pMonster->Play_Animation(false, "recoilrchop");
-			m_pMonster->Set_State(CBossSpider::BOSSSPIDER_STAGGER_ONECHOP);
+			if (m_pPlayer->Get_IsReadyCounter())
+			{
+				m_pPlayer->Set_IsCounter(true);
+				m_pMonster->Play_Animation(false, "recoilrchop");
+				m_pMonster->Set_State(CBossSpider::BOSSSPIDER_STAGGER_ONECHOP);
+			}
+
 			m_pPlayer->Set_State(CPlayer::ONEHAND_ANTICIPATE);
 			m_pPlayer->Play_Animation_All(false, "1hm_blockanticipate");
 		}
@@ -44,7 +49,7 @@ void CStateBossSpider_OneChop::Update(_float _fTimeDelta)
 		{
 			if (pGameInstance->Collision_Enter(m_pRightCollider, m_pPlayerBodyCollider))
 			{
-				m_pPlayer->SetHp(-10.f);
+				m_pPlayer->SetHp(-m_pMonster->Get_BossDesc().fChopDamage);
 				m_pPlayer->Set_IsHit(true);
 			}
 		}
@@ -53,7 +58,7 @@ void CStateBossSpider_OneChop::Update(_float _fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CStateBossSpider_OneChop::Late_Update()
+void CStateBossSpider_OneChop::Late_Update(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

@@ -25,7 +25,7 @@ public:
 
 public:
 	void Update(_fmatrix _TransformMat);
-	void Late_Update();
+	void Late_Update(_float _fTimeDelta);
 
 	/* 충돌 체크 */
 	_bool IsCollision(CCollider* _pTragetCollider);

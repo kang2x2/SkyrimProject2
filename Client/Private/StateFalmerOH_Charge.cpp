@@ -31,17 +31,27 @@ void CStateFalmerOH_Charge::Update(_float _fTimeDelta)
 
 
 	/* 공격 중 서로의 aabb 박스가 충돌하였으면. (피격) */
-	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK ||
+	if (!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_blockidle") ||
 		m_pPlayer->Get_CurState() == CPlayer::ONEHAND_ANTICIPATE)
 	{
 		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerWeaponCollider))
 		{
+			if (m_pPlayer->Get_IsReadyCounter())
+			{
+				m_pPlayer->Set_IsCounter(true);
+				m_pPlayer->Set_State(CPlayer::ONEHAND_ANTICIPATE);
+				m_pPlayer->Play_Animation_All(false, "1hm_blockanticipate");
+			}
+			else
+			{
+				m_pPlayer->Set_State(CPlayer::ONEHAND_BLOCKHIT);
+				m_pPlayer->Play_Animation_All(false, "1hm_blockhit");
+				m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
+			}
+
 			m_pMonsterTransform->Set_Speed(m_pMonster->GetWalkSpeed());
 			m_pMonster->Play_Animation(false, "1hmstaggerbackmid");
 			m_pMonster->Set_State(CFalmer_OneHand::FALMEROH_STAGGERH2);
-			m_pPlayer->Set_State(CPlayer::ONEHAND_BLOCKHIT);
-			m_pPlayer->Play_Animation_All(false, "1hm_blockhit");
-			m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
 		}
 	}
 	else
@@ -61,7 +71,7 @@ void CStateFalmerOH_Charge::Update(_float _fTimeDelta)
 
 }
 
-void CStateFalmerOH_Charge::Late_Update()
+void CStateFalmerOH_Charge::Late_Update(_float _fTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

@@ -30,7 +30,7 @@ void CStateBossSpider_Planding::Update(_float _fTimeDelta)
 	}
 }
 
-void CStateBossSpider_Planding::Late_Update()
+void CStateBossSpider_Planding::Late_Update(_float _fTimeDelta)
 {
 }
 
