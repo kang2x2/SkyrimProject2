@@ -27,6 +27,13 @@ void CStateFalmerOH_Detection::Late_Update(_float _fTimeDelta)
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "idledetection"))
 	{
 		m_pMonsterTransform->Set_Speed(m_pMonster->GetWalkSpeed());
+		
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->PlaySoundFile(TEXT("wpn_axe1hand_sheathe.wav"), CHANNEL_MONSTER2, 1.f);
+		
+		Safe_Release(pGameInstance);
 
 		m_pMonster->Set_State(CFalmer_OneHand::FALMEROH_UNEQUIP);
 		m_pMonster->Play_Animation(false, "1hmunequip");

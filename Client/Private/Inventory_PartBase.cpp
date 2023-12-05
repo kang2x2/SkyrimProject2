@@ -63,6 +63,8 @@ void CInventory_PartBase::PriorityTick(_float _fTimeDelta)
 
 void CInventory_PartBase::Tick(_float _fTimeDelta)
 {
+	if (m_fAlpha < 0.3f)
+		m_fAlpha += 1.f * _fTimeDelta;
 }
 
 void CInventory_PartBase::LateTick(_float _fTimeDelta)
@@ -137,6 +139,9 @@ HRESULT CInventory_PartBase::Bind_ShaderResources()
 	if (FAILED(m_pTextureBlack->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float))))
+		return E_FAIL;
+
 	m_pShaderCom->Begin(1);
 	m_pVIBufferBlack->Render();
 
@@ -149,6 +154,9 @@ HRESULT CInventory_PartBase::Bind_ShaderResources()
 	if (FAILED(m_pTextureLine1->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float))))
+		return E_FAIL;
+
 	m_pShaderCom->Begin(1);
 	m_pVIBufferLine1->Render();
 
@@ -159,6 +167,9 @@ HRESULT CInventory_PartBase::Bind_ShaderResources()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pTextureLine2->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float))))
 		return E_FAIL;
 
 	m_pShaderCom->Begin(1);

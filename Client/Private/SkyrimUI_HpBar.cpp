@@ -54,21 +54,33 @@ void CSkyrimUI_HpBar::PriorityTick(_float _fTimeDelta)
 {
 }
 
-void CSkyrimUI_HpBar::Tick(_float _fSp, _float _fTimeDelta)
+void CSkyrimUI_HpBar::Tick(_float _fHp, _float _fTimeDelta)
 {
+	if (_fHp < 100.f)
+	{
+		if(m_fAlpha < 1.f)
+			m_fAlpha += _fTimeDelta * 0.5f;
+
+		m_bIsShow = true;
+	}
+	else
+	{
+		if (m_fAlpha > 0.f)
+			m_fAlpha -= _fTimeDelta * 0.5f;
+
+		if(m_fAlpha <= 0.f)
+			m_bIsShow = false;
+	}
+
 	_float fTempSizeX = m_fSizeX;
-	m_fSizeX = _fSp * 3.f;
+	_float targetSizeX = _fHp * 3.f;
+
+	m_fSizeX = lerp(fTempSizeX, targetSizeX, 0.1f);
 
 	if (m_fSizeX != fTempSizeX)
 	{
 		if (m_fSizeX < 0.1f)
-		{
 			m_fSizeX = 0.1f;
-			UI_InitPos((_float)(g_iWinSizeX / 2.f), 680.f);
-			m_fX -= 150.f;
-		}
-
-		m_fX -= (fTempSizeX - m_fSizeX) / 2.f;
 
 		m_pTransformFill->Set_Scaling(_float3(m_fSizeX, m_fSizeY, 1.f));
 		m_pTransformFill->Set_State(CTransform::STATE_POSITION,
@@ -78,13 +90,17 @@ void CSkyrimUI_HpBar::Tick(_float _fSp, _float _fTimeDelta)
 
 void CSkyrimUI_HpBar::LateTick(_float _fTimeDelta)
 {
-	m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI_0, this);
+	if (m_bIsShow)
+		m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI_0, this);
 }
 
 HRESULT CSkyrimUI_HpBar::Render()
 {
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
+	if (m_bIsShow)
+	{
+		if (FAILED(Bind_ShaderResources()))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -141,7 +157,10 @@ HRESULT CSkyrimUI_HpBar::Bind_ShaderResources()
 	if (FAILED(m_pTextureEmpty->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(0);
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float))))
+		return E_FAIL;
+
+	m_pShaderCom->Begin(1);
 	m_pVIBufferEmpty->Render();
 
 	if (FAILED(m_pTransformFill->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
@@ -158,7 +177,10 @@ HRESULT CSkyrimUI_HpBar::Bind_ShaderResources()
 	if (FAILED(m_pTextureFill->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(0);
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float))))
+		return E_FAIL;
+
+	m_pShaderCom->Begin(1);
 	m_pVIBufferFill->Render();
 
 	return S_OK;

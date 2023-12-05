@@ -12,6 +12,8 @@
 #include "BossSpider_Left.h"
 #include "BossSpider_Right.h"
 
+#include "SkyrimUI_BossHpBar.h"
+
 CBossSpider::CBossSpider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CMonster(_pDevice, _pContext)
 {
@@ -48,7 +50,7 @@ HRESULT CBossSpider::Initialize_Clone(_uint _iLevel, const wstring& _strModelCom
 
 	m_bHasMesh = true;
 	m_bCreature = true;
-	m_strName = TEXT("Boss_Spider");
+	m_strName = TEXT("King Spider");
 	m_fDissloveTime = 5.f;
 
 	m_vOriginPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -78,7 +80,7 @@ void CBossSpider::Tick(_float _fTimeDelta)
 {
 	if (!g_bIsPause)
 	{
-		m_pModelCom->Play_Animation(_fTimeDelta);
+		m_pModelCom->Play_Animation(_fTimeDelta * m_fAnimationSpeed);
 
 		for (auto& iter : m_vecMonsterPart)
 		{
@@ -127,8 +129,9 @@ void CBossSpider::Tick(_float _fTimeDelta)
 				if (pGameInstance->Collision_Enter(m_pVecCollider[BOSSSPIDER_COL_AABB],
 					dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
 				{
+					pGameInstance->PlaySoundFile(TEXT("wpn_impact_blade_fleshdraugr_03.wav"), CHANNEL_ATK, 1.f);
+
 					pGameInstance->Add_CloneObject(g_curLevel, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_BloodSpot"));
-					// m_fHp -= m_pPlayer->GetAtk();
 					m_fHp -= m_pPlayer->GetAtk();
 				}
 			}
@@ -154,6 +157,8 @@ void CBossSpider::Tick(_float _fTimeDelta)
 					m_bReadyDead = true;
 				}
 			}
+
+			m_pHpBar->Tick(m_fHp, _fTimeDelta);
 		}
 	}
 }
@@ -188,19 +193,18 @@ void CBossSpider::LateTick(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	CPlayer* pPlayer = dynamic_cast<CPlayer*>
-		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
-
 	if (g_curLevel == LEVEL_GAMEPLAY)
 	{
 		for (auto& collider : m_pVecCollider)
-			collider->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+			collider->IsCollision(dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
 
-		pGameInstance->Collision_AABBTransition(m_pVecCollider[BOSSSPIDER_COL_AABB], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+		pGameInstance->Collision_AABBTransition(dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))), m_pVecCollider[BOSSSPIDER_COL_AABB]);
+		//pGameInstance->Collision_AABBTransition(m_pVecCollider[BOSSSPIDER_COL_AABB], dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
 	}
 
 	Safe_Release(pGameInstance);
 
+	m_pHpBar->LateTick(_fTimeDelta);
 }
 
 HRESULT CBossSpider::Render()
@@ -252,6 +256,8 @@ HRESULT CBossSpider::Render()
 		if (FAILED(m_pModelCom->Render(i)))
 			return E_FAIL;
 	}
+
+	m_pHpBar->Render();
 
 	__super::Render();
 
@@ -375,16 +381,17 @@ HRESULT CBossSpider::Ready_Component(_uint _iLevel)
 
 HRESULT CBossSpider::Ready_State()
 {
-	m_fRunSpeed = 2.5f;
+	m_fRunSpeed = 3.5f;
 	m_fWalkSpeed = 1.5f;
 	m_fHp = 1000;
-	m_iAtk = 20;
+	m_fMaxHp = 1000;
+	m_iAtk = 10;
 
 	m_tBossDesc.fSprintSpeed = 10.f;
 	m_tBossDesc.fChargeSpeed = 7.f;
 	m_tBossDesc.fChargeDamage = 30.f;
-	m_tBossDesc.fBiteDamage = 20.f;
-	m_tBossDesc.fChopDamage = 10.f;
+	m_tBossDesc.fBiteDamage = 10.f;
+	m_tBossDesc.fChopDamage = 5.f;
 	m_tBossDesc.fNidleDamage = 15.f;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -394,9 +401,21 @@ HRESULT CBossSpider::Ready_State()
 		pGameInstance->Find_CloneObject(g_curLevel, TEXT("Layer_Player"), TEXT("Player")),
 		m_pTransformCom, m_pNavigationCom, m_pVecCollider);
 
+	/* HpBar */
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Boss_HpBar"), TEXT("ProtoType_GameObject_UI_BossHpBar"))))
+		return E_FAIL;
+
+	m_pHpBar = dynamic_cast<CSkyrimUI_BossHpBar*>
+		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Boss_HpBar"), TEXT("UI_BossHpbar")));
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+
+void CBossSpider::Set_BarShow()
+{
+	m_pHpBar->Set_BarShow();
 }
 
 CBossSpider* CBossSpider::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)

@@ -35,6 +35,8 @@ public:
 	_bool				 Get_IsAnimationFin();
 	_bool				 Get_CurAnimationIsLoop();
 	_uint				 Get_CurFrameIndex();
+	void				 Set_KeyFrame(_uint _iFrame);
+
 	void				 Update_VI(const _fmatrix& _matPivot);
 
 public:

@@ -21,12 +21,7 @@ void CStateFalmerUE_Warning::Update(_float _fTimeDelta)
 {
 	__super::Update(_fTimeDelta);
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
 	m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
-
-	Safe_Release(pGameInstance);
 }
 
 void CStateFalmerUE_Warning::Late_Update(_float _fTimeDelta)

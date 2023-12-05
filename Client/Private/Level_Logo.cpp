@@ -9,6 +9,8 @@
 #include "SkyrimUI_SceneChange.h"
 #include "Skyrim_Cursor.h"
 
+#include "Effect_FadeBlack.h"
+
 CLevel_Logo::CLevel_Logo(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CLevel(_pDevice, _pContext)
 {
@@ -16,6 +18,13 @@ CLevel_Logo::CLevel_Logo(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 
 HRESULT CLevel_Logo::Initialize()
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	pGameInstance->PlayBGM(TEXT("DragonbornTheme.mp3"), 0.6f);
+
+	Safe_Release(pGameInstance);
+
 	//if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 	//	return E_FAIL;
 
@@ -38,7 +47,7 @@ HRESULT CLevel_Logo::Initialize()
 	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	//Safe_AddRef(pGameInstance);
 	//
-	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOGO, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_BloodSpot"))))
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOGO, TEXT("Layer_UI"), TEXT("ProtoType_GameObject_Talk"))))
 	//	return E_FAIL;
 	//
 	//Safe_Release(pGameInstance);
@@ -52,13 +61,7 @@ HRESULT CLevel_Logo::Tick(_float _fTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
-
-	// Gara
-	//if (pGameInstance->Get_DIKeyDown('L'))
-	//{
-	//	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_LOGO, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_BloodSpot"))))
-	//		return E_FAIL;
-	//}
+	//pGameInstance->Clear_BackBuffer_View(_float4(0.5f, 1.f, 1.f, 1.f));
 
 	Safe_Release(pGameInstance);
 

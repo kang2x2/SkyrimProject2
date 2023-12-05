@@ -37,6 +37,7 @@ void CStateFalmerUE_StaggerH::Late_Update(_float _fTimeDelta)
 			pGameInstance->Collision_Stay(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_ATKROUND], m_pPlayerBodyCollider))
 		{
 			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+			pGameInstance->PlaySoundFile(TEXT("npc_falmer_attack_01.wav"), CHANNEL_MONSTER1, 1.f);
 
 			m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_ATK);
 			m_pMonster->Play_Animation(false, "1hm_attack1");

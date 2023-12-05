@@ -27,8 +27,14 @@ void CStateBossSpider_Sprint::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	if(m_pMonster->Get_CurFrameIndex() == 10 || m_pMonster->Get_CurFrameIndex() == 20 ||
+		m_pMonster->Get_CurFrameIndex() == 30)
+	pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbitegiant_breathe_lp.wav"), CHANNEL_MONSTER1, 1.f);
+
 	if (pGameInstance->Collision_Enter(m_pVecCollider[CBossSpider::BOSSSPIDER_COL_CHARGEROUND], m_pPlayerBodyCollider))
 	{
+		m_pMonster->Set_AnimationSpeed(1.f);
+
 		m_pMonster->Set_State(CBossSpider::BOSSSPIDER_CHARGE);
 		m_pMonster->Play_Animation(false, "attack_forwardjump");
 	}

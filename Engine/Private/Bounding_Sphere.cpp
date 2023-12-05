@@ -8,6 +8,11 @@ CBounding_Sphere::CBounding_Sphere()
 {
 }
 
+_vector CBounding_Sphere::Get_WorldCenter()
+{
+	return 	{ m_pSphere->Center.x, m_pSphere->Center.y, m_pSphere->Center.z, 1.f };
+}
+
 HRESULT CBounding_Sphere::Initialize(const BOUNDING_DESC* _pDesc)
 {
 	if (FAILED(__super::Initialize(_pDesc)))

@@ -56,6 +56,22 @@ void CSkyrimUI_SpBar::PriorityTick(_float _fTimeDelta)
 
 void CSkyrimUI_SpBar::Tick(_float _fSp, _float _fTimeDelta)
 {
+	if (_fSp < 100.f)
+	{
+		if (m_fAlpha < 1.f)
+			m_fAlpha += _fTimeDelta * 0.5f;
+
+		m_bIsShow = true;
+	}
+	else
+	{
+		if (m_fAlpha > 0.f)
+			m_fAlpha -= _fTimeDelta * 0.5f;
+
+		if (m_fAlpha <= 0.f)
+			m_bIsShow = false;
+	}
+
 	_float fTempSizeX = m_fSizeX;
 	m_fSizeX = _fSp * 2.f;
 
@@ -78,13 +94,17 @@ void CSkyrimUI_SpBar::Tick(_float _fSp, _float _fTimeDelta)
 
 void CSkyrimUI_SpBar::LateTick(_float _fTimeDelta)
 {
-	m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI_0, this);
+	if (m_bIsShow)
+		m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI_0, this);
 }
 
 HRESULT CSkyrimUI_SpBar::Render()
 {
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
+	if (m_bIsShow)
+	{
+		if (FAILED(Bind_ShaderResources()))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -140,8 +160,11 @@ HRESULT CSkyrimUI_SpBar::Bind_ShaderResources()
 	
 	if (FAILED(m_pTextureEmpty->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
-	
-	m_pShaderCom->Begin(0);
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float))))
+		return E_FAIL;
+
+	m_pShaderCom->Begin(1);
 	m_pVIBufferEmpty->Render();
 
 	if (FAILED(m_pTransformFill->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
@@ -158,7 +181,10 @@ HRESULT CSkyrimUI_SpBar::Bind_ShaderResources()
 	if (FAILED(m_pTextureFill->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(0);
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float))))
+		return E_FAIL;
+
+	m_pShaderCom->Begin(1);
 	m_pVIBufferFill->Render();
 
 	return S_OK;

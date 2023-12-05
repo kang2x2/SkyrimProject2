@@ -145,7 +145,7 @@ HRESULT CPlayer_CameraPart::Ready_Camera(void* _pArg)
 	PlayerCameraDesc.fFovY = XMConvertToRadians(60.f);
 	PlayerCameraDesc.fAspect = g_iWinSizeX / (_float)g_iWinSizeY;
 	PlayerCameraDesc.fNear = 0.3f;
-	PlayerCameraDesc.fFar = 500.f;
+	PlayerCameraDesc.fFar = 1000.f;
 	PlayerCameraDesc.fSpeedPerSec = 0.001f;
 	PlayerCameraDesc.fRotationRadianPerSec = XMConvertToRadians(90.0f);
 

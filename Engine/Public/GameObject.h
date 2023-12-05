@@ -60,6 +60,10 @@ public:
 	LIGHT_OBJDESC    Get_LightFileDesc() { return m_tLightFileDesc; }
 
 
+	_float			  Get_AnimationSpeed() { return m_fAnimationSpeed; }
+	void			  Set_AnimationSpeed(_float _fSpeed) { m_fAnimationSpeed = _fSpeed; }
+
+
 	_bool  Get_IsMaintain() { return m_bIsMaintain; }
 
 protected:
@@ -86,6 +90,10 @@ protected:
 	// 파일 입출력을 위해 사용할 정보
 	FILE_OBJDESC      m_tObjFileDesc;
 	LIGHT_OBJDESC     m_tLightFileDesc;
+
+	// 애니메이션 재생 속도.
+	_float							m_fAnimationSpeed = 1.f;
+
 protected:
 	/* 컴포넌트의 검색을 용이하게 하기 위해 map으로 보관. 
 	   다른 객체가 현 객체의 컴포넌트(Transform 등)을 참조하는 경우가 빈번해서 */

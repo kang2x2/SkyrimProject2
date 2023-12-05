@@ -35,6 +35,8 @@ protected:
 	CTransform*  m_pPlayerTransform = nullptr;
 	CNavigation* m_pPlayerNavigation = nullptr;
 
+	_float	m_fSoundSpeed = 0.f;
+
 public:
 	virtual void Free() override;
 };

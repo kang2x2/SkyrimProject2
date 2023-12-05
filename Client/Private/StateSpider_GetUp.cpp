@@ -27,6 +27,13 @@ void CStateSpider_GetUp::Late_Update(_float _fTimeDelta)
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "getup"))
 	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbitegiant_breathe_lp.wav"), CHANNEL_MONSTER4, 1.f);
+
+		Safe_Release(pGameInstance);
+
 		m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
 
 		m_pMonster->Set_State(CSpider::SPIDER_SPIT);

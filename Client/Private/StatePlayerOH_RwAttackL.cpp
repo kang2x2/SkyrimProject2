@@ -21,6 +21,15 @@ void CStatePlayerOH_RwAttackL::Update(_float _fTimeDelta)
 	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_pPlayer->Get_CurFrameIndex() == 12)
+		pGameInstance->PlaySoundFile(TEXT("fx_swing_blade_medium_03.wav"), CHANNEL_PLAYER, 1.f);
+
+	Safe_Release(pGameInstance);
+
+
 	if (m_pPlayer->Get_CurFrameIndex() >= 14 && m_pPlayer->Get_CurFrameIndex() <= 18 &&
 		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_walkrightattackleft"))
 	{
@@ -43,11 +52,14 @@ void CStatePlayerOH_RwAttackL::Late_Update(_float _fTimeDelta)
 
 		m_pPlayerTransform->Set_Speed(m_pPlayer->GetRunSpeed());
 
-		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
-			Player_SetLook(90.f);
+		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
+		m_pPlayer->Play_Animation_All(true, "1hm_idle");
 
-		m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_R);
-		m_pPlayer->Play_Animation_All(true, "1hm_runforward");
+		//if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
+		//	Player_SetLook(90.f);
+		//
+		//m_pPlayer->Set_State(CPlayer::ONEHAND_RUN_R);
+		//m_pPlayer->Play_Animation_All(true, "1hm_runforward");
 	}
 }
 

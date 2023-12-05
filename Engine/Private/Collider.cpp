@@ -131,6 +131,11 @@ void CCollider::Set_ColliderDesc(_float _fExtents)
 	m_pBounding->Set_ColliderDesc(_fExtents);
 }
 
+_vector CCollider::Get_WorldCenter()
+{
+	return m_pBounding->Get_WorldCenter();
+}
+
 #ifdef _DEBUG
 
 HRESULT CCollider::Render()

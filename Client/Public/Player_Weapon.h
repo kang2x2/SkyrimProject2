@@ -57,7 +57,7 @@ private:
 	_float4x4		m_matSocketPivot;
 
 	CGameObject*	m_pWeapon = nullptr;
-
+	class CEffect_CombatSpark* m_pSpark;
 public:
 	static CPlayer_Weapon* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;

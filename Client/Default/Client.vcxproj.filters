@@ -793,6 +793,105 @@
     <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Attack\07. Bash">
       <UniqueIdentifier>{de4848d9-a07c-48eb-a731-fe9cf228757b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Effect\00. Screen\02. FadeBlack">
+      <UniqueIdentifier>{7b8f1207-4a29-4d4d-8fdd-6d2db5c4e3b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Effect\00. Screen\03. Blur">
+      <UniqueIdentifier>{36f7ff8e-0858-4b4f-a3e2-069ace66a530}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Effect\00. Screen\04. IntroFade">
+      <UniqueIdentifier>{58e4d22a-f2b8-4ca7-a3c1-cc4bdc2e7475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\04. Letter">
+      <UniqueIdentifier>{75e0a302-02ea-4bec-9a98-1d7798e98aa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\01. GuardCaptain">
+      <UniqueIdentifier>{13655f3e-c486-4789-b97d-fba36071148c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\01. GuardCaptain\00. Part">
+      <UniqueIdentifier>{8196f041-01b3-400a-b4f4-3bced57a952d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\01. GuardCaptain\00. Part\00. Weapon">
+      <UniqueIdentifier>{6a70036b-aba7-4cb1-b78f-280b6c8a2ec0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC">
+      <UniqueIdentifier>{132b6079-e871-4c29-8598-6636b8daa9da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC\00. GuardCaptain">
+      <UniqueIdentifier>{8959e334-e943-42cd-a6f5-5202c1b12f80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC\00. GuardCaptain\00. Manager">
+      <UniqueIdentifier>{5bcbd200-9c22-481b-bc1e-af1338c6e8ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC\00. GuardCaptain\01. State">
+      <UniqueIdentifier>{cdf11238-a97a-409a-a4a7-ea1b0b7b2dfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC\00. GuardCaptain\01. State\00. Idle">
+      <UniqueIdentifier>{2b39ff5f-34d7-4cca-9688-eb7ccc9844d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC\00. GuardCaptain\01. State\01. Equip">
+      <UniqueIdentifier>{f647d406-57ff-4bbb-a129-b31b0794f547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC\00. GuardCaptain\01. State\02. Walk">
+      <UniqueIdentifier>{70a8c202-00ba-4f13-b263-5c505391f03b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC\00. GuardCaptain\01. State\03. Talk">
+      <UniqueIdentifier>{f4987733-3b40-4899-8478-8ab2b460fd00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\06. TalkUI">
+      <UniqueIdentifier>{36d40f7a-7315-4357-8473-02e1baba9dfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\03. Guard">
+      <UniqueIdentifier>{40b86bfc-f112-423d-aec8-114fdbabb898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\03. Guard\00. Part">
+      <UniqueIdentifier>{e9f26c5e-4bbc-4a81-9256-abddaf4556f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\03. Guard\NewFilter1">
+      <UniqueIdentifier>{ff821d11-05b5-4faf-9382-9ab5350f0785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\02. SupplyGuard">
+      <UniqueIdentifier>{60c9e2f8-5083-4820-9e50-90ee2148dd3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC\01. GuardSupply">
+      <UniqueIdentifier>{51165d7d-ba03-4f05-ba6b-e6327775da55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC\01. GuardSupply\00. Manager">
+      <UniqueIdentifier>{85dbaa79-ab0d-4a97-a40e-d591a2b181dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC\01. GuardSupply\01. State">
+      <UniqueIdentifier>{84cb2a3c-45dd-4568-a1d3-3b91a4338038}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC\01. GuardSupply\01. State\00. Idle">
+      <UniqueIdentifier>{09a1e636-aa95-4888-a25a-45e310bd2fb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\02. NPC\01. GuardSupply\01. State\01. Talk">
+      <UniqueIdentifier>{a3c67aaa-5fb9-484a-abb0-90705dcdb1a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\06. TalkUI\00. Icon">
+      <UniqueIdentifier>{9d7761e6-89d4-4823-b215-0c33d1d70531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\06. TalkUI\01. Talking">
+      <UniqueIdentifier>{342bd3db-62d3-498a-9605-d9cc76b9d1cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\04. Weapon\00. Part">
+      <UniqueIdentifier>{6b1a324e-e2c0-42cf-beab-e9e1e173baee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\04. Weapon\00. Part\00. Spark">
+      <UniqueIdentifier>{eb526834-ecbf-4ca4-8530-02ba5a3434da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\01. Chase\02. Left">
+      <UniqueIdentifier>{f10fe304-802d-4da9-a6ff-b4c5cc8d4065}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\01. Chase\03. Right">
+      <UniqueIdentifier>{38e832f5-e0ed-4114-8b85-501dacddca43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\03. Bar\02. MonsterHpBar">
+      <UniqueIdentifier>{c2254723-b988-4c09-9abb-d5bdaa9209b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\03. Bar\03. BossHpBar">
+      <UniqueIdentifier>{57e11535-7e6a-47cc-947f-a0c7f259e4d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1395,9 +1494,6 @@
     <ClInclude Include="..\Public\StateBossSpider_StaggerB.h">
       <Filter>03. State\01. Monster\05. BossSpider\01. State\03. Stagger\02. Stagger_Bite</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Effect_CombatSpark.h">
-      <Filter>05. Effect\01. Combat\00. Spark</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Light_Point.h">
       <Filter>06. Light</Filter>
     </ClInclude>
@@ -1460,6 +1556,93 @@
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_Bash.h">
       <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\07. Bash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_FadeBlack.h">
+      <Filter>05. Effect\00. Screen\02. FadeBlack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_ScreenBlur.h">
+      <Filter>05. Effect\00. Screen\03. Blur</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_IntroFade.h">
+      <Filter>05. Effect\00. Screen\04. IntroFade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimUI_Letter.h">
+      <Filter>04. UI\04. Letter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GuardPart_Base.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\03. Guard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\NPC_Guard.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\03. Guard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\NPC_GuardCaptain.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\01. GuardCaptain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GuardCaptainPart_Base.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\01. GuardCaptain\00. Part</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GuardCaptain_Weapon.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\01. GuardCaptain\00. Part\00. Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateGuardCaptain_Idle.h">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\00. Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Npc.h">
+      <Filter>03. State\02. NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateManager_GuardCaptain.h">
+      <Filter>03. State\02. NPC\00. GuardCaptain\00. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_GuardCaptain.h">
+      <Filter>03. State\02. NPC\00. GuardCaptain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateGuardCaptain_Equip.h">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\01. Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateGuardCaptain_Walk.h">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\02. Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateGuardCaptain_Warning.h">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\03. Talk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateGuardCaptain_UnEquip.h">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\01. Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateGuardCaptain_Talk.h">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\03. Talk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\NPC_GuardSupply.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\02. SupplyGuard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_GuardSupply.h">
+      <Filter>03. State\02. NPC\01. GuardSupply</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateManager_GuardSupply.h">
+      <Filter>03. State\02. NPC\01. GuardSupply\00. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateGuardSupply_Idle.h">
+      <Filter>03. State\02. NPC\01. GuardSupply\01. State\00. Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateGuardSupply_Talk.h">
+      <Filter>03. State\02. NPC\01. GuardSupply\01. State\01. Talk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimUI_Talk.h">
+      <Filter>04. UI\06. TalkUI\01. Talking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimUI_TalkIcon.h">
+      <Filter>04. UI\06. TalkUI\00. Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_CombatSpark.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\04. Weapon\00. Part\00. Spark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Left.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\01. Chase\02. Left</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimUI_MonsterHpBar.h">
+      <Filter>04. UI\03. Bar\02. MonsterHpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimUI_BossHpBar.h">
+      <Filter>04. UI\03. Bar\03. BossHpBar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2053,9 +2236,6 @@
     <ClCompile Include="..\Private\StateBossSpider_StaggerB.cpp">
       <Filter>03. State\01. Monster\05. BossSpider\01. State\03. Stagger\02. Stagger_Bite</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Effect_CombatSpark.cpp">
-      <Filter>05. Effect\01. Combat\00. Spark</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Light_Point.cpp">
       <Filter>06. Light</Filter>
     </ClCompile>
@@ -2118,6 +2298,93 @@
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_Bash.cpp">
       <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\07. Bash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_FadeBlack.cpp">
+      <Filter>05. Effect\00. Screen\02. FadeBlack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_ScreenBlur.cpp">
+      <Filter>05. Effect\00. Screen\03. Blur</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_IntroFade.cpp">
+      <Filter>05. Effect\00. Screen\04. IntroFade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimUI_Letter.cpp">
+      <Filter>04. UI\04. Letter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GuardPart_Base.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\03. Guard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC_Guard.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\03. Guard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC_GuardCaptain.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\01. GuardCaptain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GuardCaptainPart_Base.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\01. GuardCaptain\00. Part</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GuardCaptain_Weapon.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\01. GuardCaptain\00. Part\00. Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateGuardCaptain_Idle.cpp">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\00. Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Npc.cpp">
+      <Filter>03. State\02. NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateManager_GuardCaptain.cpp">
+      <Filter>03. State\02. NPC\00. GuardCaptain\00. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_GuardCaptain.cpp">
+      <Filter>03. State\02. NPC\00. GuardCaptain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateGuardCaptain_Equip.cpp">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\01. Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateGuardCaptain_Walk.cpp">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\02. Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateGuardCaptain_Warning.cpp">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\03. Talk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateGuardCaptain_UnEquip.cpp">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\01. Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateGuardCaptain_Talk.cpp">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\03. Talk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC_GuardSupply.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\02. SupplyGuard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_GuardSupply.cpp">
+      <Filter>03. State\02. NPC\01. GuardSupply</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateManager_GuardSupply.cpp">
+      <Filter>03. State\02. NPC\01. GuardSupply\00. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateGuardSupply_Idle.cpp">
+      <Filter>03. State\02. NPC\01. GuardSupply\01. State\00. Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateGuardSupply_Talk.cpp">
+      <Filter>03. State\02. NPC\01. GuardSupply\01. State\01. Talk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimUI_Talk.cpp">
+      <Filter>04. UI\06. TalkUI\01. Talking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimUI_TalkIcon.cpp">
+      <Filter>04. UI\06. TalkUI\00. Icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_CombatSpark.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\00. Player\00. Parts\04. Weapon\00. Part\00. Spark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Left.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\01. Chase\02. Left</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimUI_MonsterHpBar.cpp">
+      <Filter>04. UI\03. Bar\02. MonsterHpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimUI_BossHpBar.cpp">
+      <Filter>04. UI\03. Bar\03. BossHpBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

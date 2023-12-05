@@ -62,6 +62,7 @@ void CStateSpider_Spit::Late_Update(_float _fTimeDelta)
 			{
 				m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
 				m_pMonsterTransform->Set_Speed(m_pMonster->GetWalkSpeed());
+				pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbite_attack_bite_01.wav"), CHANNEL_MONSTER4, 1.f);
 
 				m_pMonster->Set_State(CSpider::SPIDER_BITE);
 				m_pMonster->Play_Animation(false, "attack_bitelow");

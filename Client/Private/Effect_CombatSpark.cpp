@@ -22,21 +22,26 @@ HRESULT CEffect_CombatSpark::Initialize_ProtoType()
 
 HRESULT CEffect_CombatSpark::Initialize_Clone(void* pArg)
 {
+	m_pOwnerTransform = (CTransform*)pArg;
+
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	_vector vPos = *(_vector*)pArg;
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+	if (FAILED(Ready_Light()))
+		return E_FAIL;
 
 	return S_OK;
 }
 
 HRESULT CEffect_CombatSpark::Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag, void* pArg)
 {
+	m_pOwnerTransform = (CTransform*)pArg;
+
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Light()))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -45,14 +50,36 @@ void CEffect_CombatSpark::PriorityTick(_float _fTimeDelta)
 
 }
 
-void CEffect_CombatSpark::Tick(_float _fTimeDelta)
+void CEffect_CombatSpark::Tick(_vector _vWeaponPos, _float _fTimeDelta)
 {
-	m_fDeleteTime += _fTimeDelta;
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-	if (m_fDeleteTime >= 0.8f)
-		m_bReadyDead = true;
+	LIGHT_DESC* LightDesc = pGameInstance->Get_LightDesc(m_iSelfIndex);
+	XMStoreFloat4(&LightDesc->vLightPos, _vWeaponPos);
 
-	m_pVIBufferCom->Update_Spark(_fTimeDelta);
+	if (LightDesc->fLightRange < 0.f)
+		LightDesc->fLightRange = 0.f;
+
+	if (m_bIsSpark)
+	{
+		m_fRange += 30.f * _fTimeDelta;
+		LightDesc->fLightRange = m_fRange;
+
+		if (m_fRange > 1.f)
+			m_bIsSpark = false;
+	}
+	else
+	{
+		if (m_fRange > 0.f)
+		{
+			m_fRange -= 30.f * _fTimeDelta;
+			if(m_fRange > 0)
+				LightDesc->fLightRange = m_fRange;
+		}
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 void CEffect_CombatSpark::LateTick(_float _fTimeDelta)
@@ -65,7 +92,7 @@ HRESULT CEffect_CombatSpark::Render()
 	if (FAILED(Bind_ShaderResource()))
 		return E_FAIL;
 
-	m_pVIBufferCom->Render();
+	// m_pVIBufferCom->Render();
 
 	return S_OK;
 }
@@ -100,11 +127,38 @@ HRESULT CEffect_CombatSpark::Ready_Component()
 	return S_OK;
 }
 
+HRESULT CEffect_CombatSpark::Ready_Light()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	LIGHT_DESC LightDesc;
+
+	/* Á¡ ±¤¿ø Ãß°¡ */
+	ZeroMemory(&LightDesc, sizeof(LightDesc));
+	LightDesc.eLightType = LIGHT_DESC::LIGHT_POINT;
+	LightDesc.fLightRange = 0.f;
+	LightDesc.vDiffuse = _float4(1.f, 0.4f, 0.f, 1.f);
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vSpecular = _float4(0.1f, 0.1f, 0.1f, 1.f);
+
+	//XMStoreFloat4(&LightDesc.vLightPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	if (FAILED(pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
+
+	m_tLightFileDesc.lightDesc = LightDesc;
+	m_iSelfIndex = pGameInstance->Get_CurLightIndex() - 1;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
 HRESULT CEffect_CombatSpark::Bind_ShaderResource()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
-
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -122,6 +176,15 @@ HRESULT CEffect_CombatSpark::Bind_ShaderResource()
 	m_pShaderCom->Begin(0);
 
 	return S_OK;
+}
+
+LIGHT_DESC* CEffect_CombatSpark::Get_LightDesc()
+{
+	return nullptr;
+}
+
+void CEffect_CombatSpark::Set_LightDesc(LIGHT_DESC _lightDesc)
+{
 }
 
 CEffect_CombatSpark* CEffect_CombatSpark::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
@@ -155,6 +218,7 @@ void CEffect_CombatSpark::Free()
 	__super::Free();
 
 	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pVIBufferCom);

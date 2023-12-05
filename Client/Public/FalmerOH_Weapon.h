@@ -17,7 +17,7 @@ BEGIN(Client)
 class CFalmerOH_Weapon final : public CFalmerOHPart_Base
 {
 public:
-	typedef struct tagPartDesc : public CFalmerOH_Weapon::PART_DESC
+	typedef struct tagPartDesc : public CFalmerOHPart_Base::PART_DESC
 	{
 		CBone* pSocketBone = nullptr;
 		_float4x4	matSocketPivot;

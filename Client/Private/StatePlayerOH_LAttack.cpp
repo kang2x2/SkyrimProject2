@@ -24,6 +24,14 @@ void CStatePlayerOH_LAttack::Update(_float _fTimeDelta)
 	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 		m_pPlayer->CheckHit_Onehand(13, 15);
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if(m_pPlayer->Get_CurFrameIndex() == 12)
+		pGameInstance->PlaySoundFile(TEXT("fx_swing_blade_medium_03.wav"), CHANNEL_PLAYER, 1.f);
+
+	Safe_Release(pGameInstance);
+
 	if (m_pPlayer->Get_CurFrameIndex() >= 12 && m_pPlayer->Get_CurFrameIndex() <= 20 &&
 		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_attackleft"))
 	{

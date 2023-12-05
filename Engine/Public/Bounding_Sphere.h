@@ -18,6 +18,7 @@ private:
 
 public:
 	const BoundingSphere* Get_Bounding() const { return m_pSphere; }
+	virtual _vector Get_WorldCenter();
 
 public:
 	virtual HRESULT Initialize(const BOUNDING_DESC* _pDesc) override;

@@ -24,10 +24,12 @@ void CStateFalmerUE_Charge::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	if (m_pMonster->Get_CurFrameIndex() == 25)
+		pGameInstance->PlaySoundFile(TEXT("npc_falmer_attackpower_01.wav"), CHANNEL_MONSTER1, 1.f);
+
+
 	if (m_pMonster->Get_CurFrameIndex() < 30)
-	{
 		m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
-	}
 
 	// m_pMonsterTransform->LookAt((dynamic_cast<CMonster*>(m_pMonster)->Get_OriginPos()));
 
@@ -37,6 +39,8 @@ void CStateFalmerUE_Charge::Update(_float _fTimeDelta)
 	{
 		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerWeaponCollider))
 		{
+			pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 1.f);
+
 			if (m_pPlayer->Get_IsReadyCounter())
 			{
 				m_pPlayer->Set_IsCounter(true);
@@ -63,6 +67,8 @@ void CStateFalmerUE_Charge::Update(_float _fTimeDelta)
 		{
 			if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
 			{
+				pGameInstance->PlaySoundFile(TEXT("wpn_impact_blunt_dirt_01.wav"), CHANNEL_MONSTER1_ATK, 1.f);
+
 				m_pPlayer->SetHp(-20.f);
 				m_pPlayer->Set_IsHit(true);
 			}
@@ -88,6 +94,8 @@ void CStateFalmerUE_Charge::Late_Update(_float _fTimeDelta)
 		{
 			m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
 			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+
+			pGameInstance->PlaySoundFile(TEXT("npc_falmer_attack_01.wav"), CHANNEL_MONSTER1, 1.f);
 
 			m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_ATK);
 			m_pMonster->Play_Animation(false, "1hm_attack1");

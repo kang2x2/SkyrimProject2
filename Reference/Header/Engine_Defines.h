@@ -48,6 +48,10 @@ using namespace DirectX;
 #include "Engine_Struct.h"
 #include "Engine_Function.h"
 
+#include "fmod.h"
+#include "fmod.hpp"
+#include <io.h>
+
 #ifdef _DEBUG
 
 #define _CRTDBG_MAP_ALLOC
@@ -65,3 +69,15 @@ using namespace DirectX;
 
 using namespace Engine;
 using namespace std;
+
+enum CHANNELID {
+	CHANNEL_BGM, 
+	CHANNEL_PLAYER, CHANNEL_PLAYER_RUN,
+	CHANNEL_MONSTER1, CHANNEL_MONSTER1_RUN, CHANNEL_MONSTER1_ATK,
+	CHANNEL_MONSTER2, CHANNEL_MONSTER2_RUN, CHANNEL_MONSTER2_ATK,
+	CHANNEL_MONSTER3, CHANNEL_MONSTER3_RUN, CHANNEL_MONSTER3_ATK,
+	CHANNEL_MONSTER4, CHANNEL_MONSTER4_RUN, CHANNEL_MONSTER4_ATK,
+	CHANNEL_NATURAL,
+	CHANNEL_ATK, CHANNEL_HIT, CHANNEL_GUARD,
+	CHANNEL_END
+};

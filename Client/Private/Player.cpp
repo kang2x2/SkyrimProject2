@@ -114,6 +114,20 @@ void CPlayer::Tick(_float _fTimeDelta)
 	}
 	Safe_Release(pGameInstance);
 
+	if (m_bIsSuccesCounter)
+	{
+		g_bIsPause = true;
+		m_fPauseTime += _fTimeDelta;
+		if (m_fPauseTime > 0.1f)
+		{
+			m_fPauseTime = 0.1f - m_fPauseTime;
+			m_bIsSuccesCounter = false;
+			g_bIsPause = false;
+		}
+	}
+
+
+
 	if (!g_bIsPause)
 	{
 		if (m_bIsCounter)
@@ -131,7 +145,8 @@ void CPlayer::Tick(_float _fTimeDelta)
 
 		Player_Recovery(_fTimeDelta);
 
-		m_pStateManager->Update(_fTimeDelta);
+		if (!g_bIsTalk)
+			m_pStateManager->Update(_fTimeDelta);
 
 		for (auto& iter : m_vecPlayerPart)
 		{
@@ -625,6 +640,11 @@ CGameObject* CPlayer::Clone(void* _pArg)
 	}
 
 	return pInstance;
+}
+
+void CPlayer::Create_Spark()
+{
+	dynamic_cast<CPlayer_Weapon*>(m_vecPlayerPart[PART_WEAPON])->Create_Spark();
 }
 
 void CPlayer::Free()

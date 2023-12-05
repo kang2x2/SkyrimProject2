@@ -18,6 +18,16 @@ HRESULT CStatePlayerOH_Sprint::Initialize(CGameObject* _pPlayer, CTransform* _pP
 
 void CStatePlayerOH_Sprint::Update(_float _fTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_pPlayer->Get_CurFrameIndex() == 10 || m_pPlayer->Get_CurFrameIndex() == 20)
+	{
+		pGameInstance->PlaySoundFile(TEXT("fst_dirt_sprint_player_01.wav"), CHANNEL_PLAYER_RUN, 1.f);
+	}
+
+	Safe_Release(pGameInstance);
+
 	m_pPlayer->Set_ReadyRecoverySp(false);
 
 	if (m_pPlayer->Get_PlayerSp() > 0.f)

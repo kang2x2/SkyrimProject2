@@ -30,9 +30,12 @@ void CStateFalmerOH_PAttack::Update(_float _fTimeDelta)
 	{
 		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerWeaponCollider))
 		{
+			pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 1.f);
+
 			if (m_pPlayer->Get_IsReadyCounter())
 			{
 				m_pPlayer->Set_IsCounter(true);
+				m_pPlayer->Set_IsSuccesCounter(true);
 				m_pPlayer->Set_State(CPlayer::ONEHAND_ANTICIPATE);
 				m_pPlayer->Play_Animation_All(false, "1hm_blockanticipate");
 			}
@@ -57,7 +60,9 @@ void CStateFalmerOH_PAttack::Update(_float _fTimeDelta)
 		{
 			if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
 			{
-				m_pPlayer->SetHp(-20.f);
+				pGameInstance->PlaySoundFile(TEXT("wpn_impact_axe_flesh_02.wav"), CHANNEL_MONSTER1_ATK, 1.f);
+
+				m_pPlayer->SetHp(-m_pMonster->GetAtk() * 1.5f);
 				m_pPlayer->Set_IsHit(true);
 			}
 		}
@@ -81,6 +86,8 @@ void CStateFalmerOH_PAttack::Late_Update(_float _fTimeDelta)
 		{
 			m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
 			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+
+			pGameInstance->PlaySoundFile(TEXT("npc_falmer_attackpower_02.wav"), CHANNEL_MONSTER2, 1.f);
 
 			m_pMonster->Set_State(CFalmer_OneHand::FALMEROH_ATK);
 			m_pMonster->Play_Animation(false, "1hm_attack2");

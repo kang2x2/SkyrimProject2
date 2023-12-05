@@ -30,6 +30,11 @@ void CStatePlayer_RunRight::Key_Input(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	if (m_pPlayer->Get_CurFrameIndex() == 10 || m_pPlayer->Get_CurFrameIndex() == 20)
+	{
+		pGameInstance->PlaySoundFile(TEXT("fst_dirt_run_player_03.wav"), CHANNEL_PLAYER_RUN, 1.f);
+	}
+
 	if (pGameInstance->Get_DIKeyPress('D'))
 	{
 		if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)

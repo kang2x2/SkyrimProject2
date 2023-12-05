@@ -28,6 +28,7 @@ bool g_bIsStaticInit;
 bool g_bIsPublicInit;
 bool g_bIsSlow;
 bool g_bIsPause;
+bool g_bIsTalk;
 
 float g_fGameSpeed;
 

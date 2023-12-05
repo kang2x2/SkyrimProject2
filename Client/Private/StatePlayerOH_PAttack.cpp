@@ -20,6 +20,15 @@ void CStatePlayerOH_PAttack::Update(_float _fTimeDelta)
 {
 	m_pPlayer->Set_ReadyRecoverySp(false);
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_pPlayer->Get_CurFrameIndex() == 16)
+		pGameInstance->PlaySoundFile(TEXT("fx_swing_blade_medium_03.wav"), CHANNEL_PLAYER, 1.f);
+
+	Safe_Release(pGameInstance);
+
+
 	if (m_pPlayer->Get_CurFrameIndex() >= 18 && m_pPlayer->Get_CurFrameIndex() <= 24 &&
 		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_attackpower"))
 	{

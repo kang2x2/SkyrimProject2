@@ -122,7 +122,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;ENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Public/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Public/;../../Fmod/inc/</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -132,8 +132,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>d3d11.lib;dinput8.lib;dxguid.lib;Effects11d.lib;DirectXTKd.lib;assimp-vc140-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../ThirdPartyLib/</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dinput8.lib;dxguid.lib;fmod_vc.lib;fmodL_vc.lib;Effects11d.lib;DirectXTKd.lib;assimp-vc140-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../ThirdPartyLib/;../../Fmod/lib/</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderType>Effect</ShaderType>
@@ -150,7 +150,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;ENGINE_EXPORTS;_WINDOWS;_USRDLL;_AFXDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Public/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Public/;../../Fmod/inc/</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -162,8 +162,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>d3d11.lib;dinput8.lib;dxguid.lib;Effects11.lib;DirectXTK.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../ThirdPartyLib/</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dinput8.lib;dxguid.lib;fmod_vc.lib;fmodL_vc.lib;Effects11.lib;DirectXTK.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../ThirdPartyLib/;../../Fmod/lib/</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderType>Effect</ShaderType>
@@ -173,6 +173,14 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Fmod\inc\fmod.h" />
+    <ClInclude Include="..\..\Fmod\inc\fmod.hpp" />
+    <ClInclude Include="..\..\Fmod\inc\fmod_codec.h" />
+    <ClInclude Include="..\..\Fmod\inc\fmod_common.h" />
+    <ClInclude Include="..\..\Fmod\inc\fmod_dsp.h" />
+    <ClInclude Include="..\..\Fmod\inc\fmod_dsp_effects.h" />
+    <ClInclude Include="..\..\Fmod\inc\fmod_errors.h" />
+    <ClInclude Include="..\..\Fmod\inc\fmod_output.h" />
     <ClInclude Include="..\Bin\ShaderFile\Engine_Shader_Defines.hpp" />
     <ClInclude Include="..\Public\Animation.h" />
     <ClInclude Include="..\Public\Base.h" />
@@ -217,6 +225,7 @@
     <ClInclude Include="..\Public\Renderer.h" />
     <ClInclude Include="..\Public\RenderTarget.h" />
     <ClInclude Include="..\Public\Shader.h" />
+    <ClInclude Include="..\Public\Sound_Manager.h" />
     <ClInclude Include="..\Public\Target_Manager.h" />
     <ClInclude Include="..\Public\Texture.h" />
     <ClInclude Include="..\Public\Timer.h" />
@@ -272,6 +281,7 @@
     <ClCompile Include="..\Private\Renderer.cpp" />
     <ClCompile Include="..\Private\RenderTarget.cpp" />
     <ClCompile Include="..\Private\Shader.cpp" />
+    <ClCompile Include="..\Private\Sound_Manager.cpp" />
     <ClCompile Include="..\Private\Target_Manager.cpp" />
     <ClCompile Include="..\Private\Texture.cpp" />
     <ClCompile Include="..\Private\Timer.cpp" />
@@ -292,6 +302,11 @@
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFile\Shader_Cell.hlsl" />
     <FxCompile Include="..\Bin\ShaderFile\Shader_Deferred.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Fmod\inc\fmod.cs" />
+    <None Include="..\..\Fmod\inc\fmod_dsp.cs" />
+    <None Include="..\..\Fmod\inc\fmod_errors.cs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,6 +9,7 @@
 #include "Player.h"
 
 #include "FalmerUE_Weapon.h"
+#include "SkyrimUI_MonsterHpBar.h"
 
 CFalmer_UnEquip::CFalmer_UnEquip(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CMonster(_pDevice, _pContext)
@@ -46,7 +47,7 @@ HRESULT CFalmer_UnEquip::Initialize_Clone(_uint _iLevel, const wstring& _strMode
 
 	m_bHasMesh = true;
 	m_bCreature = true;
-	m_strName = TEXT("Falmer_UnEquip");
+	m_strName = TEXT("Falmer");
 	m_fDissloveTime = 2.5f;
 
 	m_vOriginPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -110,6 +111,10 @@ void CFalmer_UnEquip::Tick(_float _fTimeDelta)
 				if (pGameInstance->Collision_Enter(m_pVecCollider[FALMERUE_COL_AABB],
 					dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
 				{
+					m_pHpBar->Set_Monster(this);
+					
+					pGameInstance->PlaySoundFile(TEXT("wpn_impact_blade_fleshdraugr_03.wav"), CHANNEL_ATK, 1.f);
+
 					pGameInstance->Add_CloneObject(g_curLevel, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_BloodSpot"));
 					m_fHp -= m_pPlayer->GetAtk();
 				}
@@ -179,7 +184,8 @@ void CFalmer_UnEquip::LateTick(_float _fTimeDelta)
 		for (auto& collider : m_pVecCollider)
 			collider->IsCollision(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
 		
-		pGameInstance->Collision_AABBTransition(m_pVecCollider[FALMERUE_COL_AABB], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
+		pGameInstance->Collision_AABBTransition(dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))), m_pVecCollider[FALMERUE_COL_AABB]);
+		//pGameInstance->Collision_AABBTransition(m_pVecCollider[FALMERUE_COL_AABB], dynamic_cast<CCollider*>(pPlayer->Get_Part(CPlayer::PART_BODY)->Get_Component(TEXT("Com_Collider_AABB"))));
 	}
 
 	Safe_Release(pGameInstance);
@@ -340,7 +346,8 @@ HRESULT CFalmer_UnEquip::Ready_State()
 	m_fRunSpeed = 2.5f;
 	m_fWalkSpeed = 1.5f;
 	m_fHp = 100;
-	m_iAtk = 10;
+	m_fMaxHp = 100;
+	m_iAtk = 7;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

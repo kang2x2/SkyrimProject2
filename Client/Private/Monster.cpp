@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 
 #include "Player.h"
+#include "SkyrimUI_MonsterHpBar.h"
 
 CMonster::CMonster(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CCreatureObject(_pDevice, _pContext)
@@ -26,6 +27,7 @@ HRESULT CMonster::Initialize_Clone(void* pArg)
 	Safe_AddRef(pGameInstance);
 	
 	m_pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Player")));
+	m_pHpBar = dynamic_cast<CSkyrimUI_MonsterHpBar*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_UI"), TEXT("UI_MonsterHpbar")));
 
 	Safe_Release(pGameInstance);
 

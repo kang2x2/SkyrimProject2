@@ -28,6 +28,13 @@ void CState_Skeever::Update(_float _fTimeDelta)
 {
 	if (m_pMonster->GetHp() <= 0.f)
 	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->PlaySoundFile(TEXT("npc_skeever_death_02.wav"), CHANNEL_MONSTER3, 1.f);
+
+		Safe_Release(pGameInstance);
+
 		m_pMonster->Set_State(CSkeever::SKEEVER_DEAD);
 		m_pMonster->Play_Animation(false, "aggrowarning1");
 	}

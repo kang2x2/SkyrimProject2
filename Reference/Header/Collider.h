@@ -31,6 +31,9 @@ public:
 	_bool IsCollision(CCollider* _pTragetCollider);
 	/* 정보 변경 */
 	void Set_ColliderDesc(_float _fExtents);
+	/* 중점 반환 */
+	_vector Get_WorldCenter();
+
 #ifdef _DEBUG
 public:
 	HRESULT Render();

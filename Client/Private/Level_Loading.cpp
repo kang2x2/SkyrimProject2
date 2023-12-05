@@ -25,6 +25,13 @@ CLevel_Loading::CLevel_Loading(ID3D11Device* _pDevice, ID3D11DeviceContext* _pCo
 
 HRESULT CLevel_Loading::Initialize(LEVELID _eNextLevel)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	pGameInstance->StopSoundAll();
+
+	Safe_Release(pGameInstance);
+
 	m_eNextLevel = _eNextLevel;
 
 	if (!g_bIsStaticInit)

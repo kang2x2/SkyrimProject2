@@ -26,6 +26,7 @@ void CStateSkeever_Idle::Update(_float _fTimeDelta)
 	if (pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_DETECTION], m_pPlayerBodyCollider))
 	{
 		pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_MISSDETECTION], m_pPlayerBodyCollider);
+		pGameInstance->PlaySoundFile(TEXT("npc_skeever_breathe_02_lp.wav"),CHANNEL_MONSTER3, 1.f);
 
 		m_pMonster->Play_Animation(false, "aggrowarning1");
 		m_pMonster->Set_State(CSkeever::SKEEVER_WARNING);

@@ -35,6 +35,8 @@ void CStateSkeever_Charge::Update(_float _fTimeDelta)
 	{
 		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerWeaponCollider))
 		{
+			pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 1.f);
+
 			if (m_pPlayer->Get_IsReadyCounter())
 			{
 				m_pPlayer->Set_IsCounter(true);
@@ -59,6 +61,8 @@ void CStateSkeever_Charge::Update(_float _fTimeDelta)
 		{
 			if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
 			{
+				pGameInstance->PlaySoundFile(TEXT("wpn_impact_blunt_dirt_01.wav"), CHANNEL_MONSTER3_ATK, 1.f);
+
 				m_pPlayer->SetHp(-(m_pMonster->GetAtk() * 2));
 				m_pPlayer->Set_IsHit(true);
 			}

@@ -76,14 +76,18 @@ void CStatePlayerOH_Idle::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown('R'))
 	{
+		pGameInstance->PlaySoundFile(TEXT("wpn_blade1hand_sheathe.wav"), CHANNEL_PLAYER, 1.f);
+
 		m_pPlayer->Set_PlayerEquipState(CPlayer::EQUIP_UNEQUIP);
 
 		m_pPlayer->Set_State(CPlayer::ONEHAND_UNEQUIP);
 		m_pPlayer->Play_Animation_All(false, "1hm_unequip");
 	}
 
-	if (pGameInstance->Get_DIKeyPress(VK_RBUTTON))
+	if (pGameInstance->Get_DIKeyDown(VK_RBUTTON))
 	{
+		pGameInstance->PlaySoundFile(TEXT("npc_human_combat_shield_block_01.wav"), CHANNEL_PLAYER, 1.f);
+
 		m_pPlayer->Set_IsReadyCounter(true);
 		m_pPlayer->Set_State(CPlayer::ONEHAND_BLOCK);
 		m_pPlayer->Play_Animation_All(true, "1hm_blockidle");

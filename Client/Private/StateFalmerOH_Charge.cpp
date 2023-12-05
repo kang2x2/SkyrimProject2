@@ -29,6 +29,9 @@ void CStateFalmerOH_Charge::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	if (m_pMonster->Get_CurFrameIndex() == 25)
+		pGameInstance->PlaySoundFile(TEXT("npc_falmer_attackpower_01.wav"), CHANNEL_MONSTER2, 1.f);
+
 
 	/* 공격 중 서로의 aabb 박스가 충돌하였으면. (피격) */
 	if (!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_blockidle") ||
@@ -36,9 +39,12 @@ void CStateFalmerOH_Charge::Update(_float _fTimeDelta)
 	{
 		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerWeaponCollider))
 		{
+			pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 1.f);
+
 			if (m_pPlayer->Get_IsReadyCounter())
 			{
 				m_pPlayer->Set_IsCounter(true);
+				m_pPlayer->Set_IsSuccesCounter(true);
 				m_pPlayer->Set_State(CPlayer::ONEHAND_ANTICIPATE);
 				m_pPlayer->Play_Animation_All(false, "1hm_blockanticipate");
 			}
@@ -61,7 +67,9 @@ void CStateFalmerOH_Charge::Update(_float _fTimeDelta)
 		{
 			if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
 			{
-				m_pPlayer->SetHp(-30.f);
+				pGameInstance->PlaySoundFile(TEXT("wpn_impact_axe_flesh_02.wav"), CHANNEL_MONSTER1_ATK, 1.f);
+
+				m_pPlayer->SetHp(-m_pMonster->GetAtk() * 2.f);
 				m_pPlayer->Set_IsHit(true);
 			}
 		}

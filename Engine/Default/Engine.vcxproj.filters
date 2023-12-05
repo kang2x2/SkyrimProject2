@@ -193,6 +193,12 @@
     <Filter Include="01. Utiltiy\03. Component\01. VIBuffer\06. Instancing\02. Spark">
       <UniqueIdentifier>{87854d15-67fe-4878-a4e4-0bf511b3e97e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utiltiy\11. Fmod">
+      <UniqueIdentifier>{7280ad99-73ff-4951-a62f-4d5ca51e5a4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utiltiy\11. Fmod\Fmod">
+      <UniqueIdentifier>{8a16ab00-6d28-4978-9580-664f145b9f0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -372,6 +378,33 @@
     <ClInclude Include="..\Public\MyFont_Manager.h">
       <Filter>01. Utiltiy\10. Font\00. Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Sound_Manager.h">
+      <Filter>01. Utiltiy\11. Fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Fmod\inc\fmod.h">
+      <Filter>01. Utiltiy\11. Fmod\Fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Fmod\inc\fmod.hpp">
+      <Filter>01. Utiltiy\11. Fmod\Fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Fmod\inc\fmod_codec.h">
+      <Filter>01. Utiltiy\11. Fmod\Fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Fmod\inc\fmod_common.h">
+      <Filter>01. Utiltiy\11. Fmod\Fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Fmod\inc\fmod_dsp.h">
+      <Filter>01. Utiltiy\11. Fmod\Fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Fmod\inc\fmod_dsp_effects.h">
+      <Filter>01. Utiltiy\11. Fmod\Fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Fmod\inc\fmod_errors.h">
+      <Filter>01. Utiltiy\11. Fmod\Fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Fmod\inc\fmod_output.h">
+      <Filter>01. Utiltiy\11. Fmod\Fmod</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Graphic_Device.cpp">
@@ -536,6 +569,9 @@
     <ClCompile Include="..\Private\MyFont_Manager.cpp">
       <Filter>01. Utiltiy\10. Font\00. Manager</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Sound_Manager.cpp">
+      <Filter>01. Utiltiy\11. Fmod</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFile\Shader_Cell.hlsl">
@@ -544,5 +580,16 @@
     <FxCompile Include="..\Bin\ShaderFile\Shader_Deferred.hlsl">
       <Filter>98. ShaderFile</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Fmod\inc\fmod.cs">
+      <Filter>01. Utiltiy\11. Fmod\Fmod</Filter>
+    </None>
+    <None Include="..\..\Fmod\inc\fmod_dsp.cs">
+      <Filter>01. Utiltiy\11. Fmod\Fmod</Filter>
+    </None>
+    <None Include="..\..\Fmod\inc\fmod_errors.cs">
+      <Filter>01. Utiltiy\11. Fmod\Fmod</Filter>
+    </None>
   </ItemGroup>
 </Project>

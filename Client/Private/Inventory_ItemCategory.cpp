@@ -41,6 +41,8 @@ void CInventory_ItemCategory::PriorityTick(_float _fTimeDelta)
 
 void CInventory_ItemCategory::Tick(_float _fTimeDelta)
 {
+	__super::Tick(_fTimeDelta);
+
 	POINT MousePos = {};
 	GetCursorPos(&MousePos);
 	ScreenToClient(g_hWnd, &MousePos);

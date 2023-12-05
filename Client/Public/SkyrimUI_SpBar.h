@@ -47,6 +47,9 @@ private: /* 사용할 컴포넌트들 */
 	_float2			m_vFillPos = {};
 	_float2			m_vFillSize = {};
 
+	_float		m_fAlpha = 0.f;
+	_bool		m_bIsShow = false;
+
 public:
 	static CSkyrimUI_SpBar* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CSkyrimUI* Clone(void* _pArg) override;

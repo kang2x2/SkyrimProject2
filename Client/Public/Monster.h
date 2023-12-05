@@ -62,6 +62,7 @@ protected:
 	_vector			m_vOriginPos = {};
 
 	class CPlayer* m_pPlayer = nullptr;
+	class CSkyrimUI_MonsterHpBar* m_pHpBar = nullptr;
 
 	_bool		m_bIsDissloving = false;
 	_float		m_fCurDissloveTime = 0.f;

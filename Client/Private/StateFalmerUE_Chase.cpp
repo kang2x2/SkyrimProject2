@@ -24,12 +24,16 @@ void CStateFalmerUE_Chase::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	pGameInstance->CheckPlaySoundFile(TEXT("npc_falmer_foot_walk_01.wav"), CHANNEL_MONSTER1, 1.f);
+	
 	m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
 	m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
 
 	/* Ãß°Ý ¹üÀ§¸¦ ¹þ¾î³µÀ» ¶§ */
 	if (!pGameInstance->Collision_Stay(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_MISSDETECTION], m_pPlayerBodyCollider))
 	{
+		pGameInstance->PlaySoundFile(TEXT("npc_falmer_idle_detection_01.wav"), CHANNEL_MONSTER1, 1.f);
+
 		m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_DETECTION);
 		m_pMonster->Play_Animation(false, "idledetection");
 	}

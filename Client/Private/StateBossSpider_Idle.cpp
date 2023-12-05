@@ -31,6 +31,8 @@ void CStateBossSpider_Idle::Update(_float _fTimeDelta)
 
 	if (pGameInstance->Collision_Enter(m_pVecCollider[CBossSpider::BOSSSPIDER_COL_DETECTION], m_pPlayerBodyCollider))
 	{
+		pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbite_holeexit.wav"), CHANNEL_MONSTER1, 1.f);
+		
 		m_pMonster->Play_Animation(true, "fspidertrapfall");
 		m_pMonster->Set_State(CBossSpider::BOSSSPIDER_FALL);
 	}

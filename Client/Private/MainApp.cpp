@@ -26,7 +26,9 @@ HRESULT CMainApp::Initialize()
 	g_bIsDungeonInit = false;
 	g_bIsCastleInit = false;
 	g_bIsPublicInit = false;
-	
+
+	g_bIsTalk = false;
+
 	g_bIsSlow = false;
 	g_fGameSpeed = 1.f;
 
@@ -161,9 +163,21 @@ HRESULT CMainApp::Ready_ProtoType_Components()
 	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_HpBar"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/HpBar.png"), 1))))
 		return E_FAIL;
-
+	/* Fade Black */
+	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FadeBlack"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/FadeBlack.dds"), 1))))
+		return E_FAIL;
+	/* Title */
+	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Title"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/SkyrimTitle.png"), 1))))
+		return E_FAIL;
 #pragma endregion
 
+#pragma region Shader
+	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("ProtoType_Component_Shader_Effect"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Effect.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
+#pragma endregion
 
 	// Renderer
 	if (FAILED(m_pGameInstance->Add_ProtoType_Component(LEVEL_STATIC, TEXT("ProtoType_Component_Renderer"),

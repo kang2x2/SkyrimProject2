@@ -100,10 +100,6 @@ HRESULT CLoader::Loading_For_Level_Tool()
 	/* Shader */
 	m_strLoadingText = TEXT("Loading Shader.");
 
-	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Shader_Effect"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Effect.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
-		return E_FAIL;
-
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_TOOL, TEXT("ProtoType_Component_Shader_VtxPosCol"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxPosCol.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
 		return E_FAIL;
@@ -185,9 +181,6 @@ HRESULT CLoader::Loading_For_Level_Logo()
 
 	/* Texture */
 	m_strLoadingText = TEXT("Loading Texture.");
-	if(FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("Prototype_Component_Texture_BackGround"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/LogoBackGround.dds"), 1))))
-		return E_FAIL;
 
 	// ViBuffer_Rect
 	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("Prototype_Component_VIBuffer_Rect"),
@@ -246,8 +239,25 @@ HRESULT CLoader::Loading_For_Level_Logo()
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_UI_SpBar"),
 		CSkyrimUI_SpBar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_UI_MonsterHpBar"),
+		CSkyrimUI_MonsterHpBar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_UI_BossHpBar"),
+		CSkyrimUI_BossHpBar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
+#pragma region Public Effect
+	/* Fade */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FadeBlack"),
+		CEffect_FadeBlack::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Fade Intro */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_IntroFade"),
+		CEffect_IntroFade::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
 
 
 
@@ -281,18 +291,13 @@ HRESULT CLoader::Loading_For_Level_Logo()
 	//	CEffect_CombatSpark::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
 
-	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("Prototype_Component_Texture_BloodSpot1"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/BloodSpot0.png"), 1))))
+	// Talk
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Letter"),
+	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/Note.png"), 1))))
 	//	return E_FAIL;
-	//if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_LOGO, TEXT("Prototype_Component_Texture_BloodSpot2"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/BloodSpot1.png"), 1))))
+	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Talk"),
+	//	CSkyrimUI_Talk::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
-	//
-	//if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BloodSpot"),
-	//	CEffect_BloodSpot::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
-
-
 
 	/* 로딩 끝 */
 	Safe_Release(pGameInstance);
@@ -336,6 +341,10 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 #pragma endregion
 		m_strLoadingText = TEXT("Loading Public Data.");
 		Loading_For_Level_Public(LEVEL_GAMEPLAY);
+
+		/* 인트로 */
+		//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_IntroFade"))))
+		//	return E_FAIL;
 
 		Safe_Release(pGameInstance);
 
@@ -482,6 +491,9 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Texture_E"),
 			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/e.dds"), 1))))
 			return E_FAIL;
+		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Texture_Letter"),
+			CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resource/Textures/Skyrim/UI/Note.png"), 1))))
+			return E_FAIL;
 
 		/* Effect */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Texture_BloodFlare"),
@@ -552,10 +564,6 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 
 #pragma region Shader
 		/* Shader */
-		// Shader_Effect
-		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Shader_Effect"),
-			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_Effect.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
-			return E_FAIL;
 		// Shader_VtxPosTex
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("Prototype_Component_Shader_VtxPosTex"),
 			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFile/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
@@ -586,12 +594,12 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 		/* 화이트런 */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Navigation_WhiteRun"),
 			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/testCell")))))
-			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/WhiteRun_Cell2")))))
+			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/WhiteRun_Cell3")))))
 			return E_FAIL;
 
 		/* 던전 */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Navigation_Dungeon"),
-			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Dungeon_Cell2")))))
+			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Dungeon_Cell")))))
 			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/testCell")))))
 			return E_FAIL;
 #pragma endregion
@@ -641,6 +649,23 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 #pragma region NPC
 
 	/* Carlotta */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Carlotta"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_NPC/Carlotta/Carlotta.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	/* GuardCaptain */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_GuardCaptain"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_NPC/GuardCaptain/GuardCaptain.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	/* GuardSupply */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_GuardSupply"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_NPC/GuardSupply/GuardSupply.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
+	/* Guard */
+	//if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Guard"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_NPC/Guard/Guard.bin", matInitialize, CModel::TYPE_ANIM))))
+	//	return E_FAIL;
+
+	/* 더미 */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Carlotta_Body"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Armor/Nude/Carlotta/CarlottaNude_Body/Carlotta_Body.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
@@ -658,12 +683,16 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 
 	/* Item */
 	matInitialize = XMMatrixIdentity();
-	//matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
 
 #pragma region Weapon
 	/* Falmer Axe*/
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Weapon_FalmerAxe"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/FalmerAxe/FalmerAxe.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	/* Guard Sword */
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Weapon_GuardSword"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Weapon/1Hand/GuardSword/GuardSword.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 
 	/* Akaviri Sword */
@@ -1439,6 +1468,19 @@ HRESULT CLoader::Set_ProtoType_WhiteRunMesh(LEVELID _eLevel)
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_woodpickup"),
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_WhiteRun_Decoration2/woodpickup.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_DisplayGuardBoots"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Equip_Display/DisplayGuardBoots.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_DisplayGuardGloves"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Equip_Display/DisplayGuardGloves.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_DisplayGuardHelmet"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Equip_Display/DisplayGuardHelmet.bin", matInitialize, CModel::TYPE_NONANIM))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_DisplayGuardTorso"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Equip_Display/DisplayGuardTorso.bin", matInitialize, CModel::TYPE_NONANIM))))
 		return E_FAIL;
 #pragma endregion
 
@@ -3004,7 +3046,7 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CProjectile_Web"),
 			CProjectile_Web::Create(m_pDevice, m_pContext))))
 			return E_FAIL;
-
+	
 		/* Skeever */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Skeever"),
 			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Skeever/Skeever.bin", matInitialize, CModel::TYPE_ANIM))))
@@ -3059,15 +3101,41 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 	}
 #pragma endregion
 
+#pragma region UI
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Letter"),
+		CSkyrimUI_Letter::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Talk"),
+		CSkyrimUI_Talk::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_TalkIcon"),
+		CSkyrimUI_TalkIcon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region NPC
 	matInitialize = XMMatrixIdentity();
 	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
 
 	/* Carlotta */
-	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Npc_Carlotta"),
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Carlotta"),
 		CNPC_Carlotta::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	// Part
+
+	/* GuardCaptain */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_GuardCaptain"),
+		CNPC_GuardCaptain::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_GuardCaptain_Weapon"),
+		CGuardCaptain_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* GuardSupply */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_GuardSupply"),
+		CNPC_GuardSupply::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// Part(더미)
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Carlotta_BodyPart"),
 		CCarlotta_Body::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -3799,6 +3867,19 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_woodpickup"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_DisplayGuardBoots"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_DisplayGuardGloves"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_DisplayGuardHelmet"),
+		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_DisplayGuardTorso"),
 		CDGPlaceableObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion

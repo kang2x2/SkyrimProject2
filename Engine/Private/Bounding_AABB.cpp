@@ -8,6 +8,11 @@ CBounding_AABB::CBounding_AABB()
 {
 }
 
+_vector CBounding_AABB::Get_WorldCenter()
+{
+	return 	{ m_pAABB->Center.x, m_pAABB->Center.y, m_pAABB->Center.z, 1.f };
+}
+
 HRESULT CBounding_AABB::Initialize(const BOUNDING_DESC* _pDesc)
 {
 	if (FAILED(__super::Initialize(_pDesc)))

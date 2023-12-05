@@ -30,10 +30,12 @@ void CStateBossSpider_Bite::Update(_float _fTimeDelta)
 	{
 		if (pGameInstance->Collision_Enter(m_pMouthCollider, m_pPlayerWeaponCollider))
 		{
+			pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 1.f);
 
 			if (m_pPlayer->Get_IsReadyCounter())
 			{
 				m_pPlayer->Set_IsCounter(true);
+				m_pPlayer->Set_IsSuccesCounter(true);
 				m_pMonster->Play_Animation(false, "recoil_bite");
 				m_pMonster->Set_State(CBossSpider::BOSSSPIDER_STAGGER_BITE);
 			}

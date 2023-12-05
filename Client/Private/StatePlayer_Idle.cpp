@@ -86,6 +86,8 @@ void CStatePlayer_Idle::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(VK_LBUTTON))
 	{
+		pGameInstance->PlaySoundFile(TEXT("wpn_blade1hand_draw_01.wav"), CHANNEL_PLAYER, 1.f);
+
 		m_pPlayer->Set_PlayerEquipState(CPlayer::EQUIP_ONEHAND);
 		m_pPlayer->Set_State(CPlayer::ONEHAND_EQUIP);
 		m_pPlayer->Play_Animation_All(false, "1hm_equip");

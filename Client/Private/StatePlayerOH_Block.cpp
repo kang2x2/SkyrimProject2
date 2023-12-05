@@ -20,6 +20,7 @@ void CStatePlayerOH_Block::Update(_float _fTimeDelta)
 {
 	if (m_pPlayer->Get_IsReadyCounter())
 	{
+		// 이거 플레이어가 가지고 있게 바꾸어야 할 듯?
 		m_fCounterTime += _fTimeDelta;
 	}
 
@@ -46,10 +47,18 @@ void CStatePlayerOH_Block::Key_Input(_float _fTimeDelta)
 
 	if (pGameInstance->Get_DIKeyUp(VK_RBUTTON))
 	{
+		pGameInstance->PlaySoundFile(TEXT("npc_human_combat_shield_block_release_02.wav"), CHANNEL_PLAYER, 1.f);
+
 		m_pPlayer->Set_IsReadyCounter(false);
+		m_fCounterTime = 0.f;
 
 		m_pPlayer->Set_State(CPlayer::ONEHAND_IDLE);
 		m_pPlayer->Play_Animation_All(true, "1hm_idle");
+	}
+
+	if (pGameInstance->Get_DIKeyDown('Q'))
+	{
+		m_pPlayer->Create_Spark();
 	}
 
 	Safe_Release(pGameInstance);

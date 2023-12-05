@@ -30,6 +30,8 @@ void CStateSpider_Bite::Update(_float _fTimeDelta)
 	{
 		if (pGameInstance->Collision_Enter(m_pMouthCollider, m_pPlayerWeaponCollider))
 		{
+			pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 1.f);
+
 			if (m_pPlayer->Get_IsReadyCounter())
 				m_pPlayer->Set_IsCounter(true);
 
@@ -47,6 +49,8 @@ void CStateSpider_Bite::Update(_float _fTimeDelta)
 		{
 			if (pGameInstance->Collision_Enter(m_pMouthCollider, m_pPlayerBodyCollider))
 			{
+				pGameInstance->PlaySoundFile(TEXT("wpn_impact_blunt_dirt_01.wav"), CHANNEL_MONSTER4_ATK, 1.f);
+
 				m_pPlayer->SetHp(-5.f);
 				m_pPlayer->Set_IsHit(true);
 			}
@@ -77,6 +81,7 @@ void CStateSpider_Bite::Late_Update(_float _fTimeDelta)
 			{
 				m_pMonsterTransform->Set_Speed(m_pMonster->GetWalkSpeed());
 				m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+				pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbite_attack_bite_01.wav"), CHANNEL_MONSTER4, 1.f);
 
 				m_pMonster->Set_State(CSpider::SPIDER_BITE);
 				m_pMonster->Play_Animation(false, "attack_bitelow", 0, true);

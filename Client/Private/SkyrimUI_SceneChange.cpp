@@ -74,7 +74,10 @@ void CSkyrimUI_SceneChange::Tick(_float _fTimeDelta)
 			m_vColor = { 1.f, 1.f, 1.f };
 
 			if (pGameInstance->Get_DIKeyDown(MK_LBUTTON))
+			{
+				pGameInstance->PlaySoundFile(TEXT("ui_menu_ok.wav"), CHANNEL_NATURAL, 1.f);
 				m_bIsChangeScene = true;
+			}
 		}
 		else
 		{
@@ -92,14 +95,16 @@ void CSkyrimUI_SceneChange::LateTick(_float _fTimeDelta)
 
 	if (m_bIsChangeScene)
 	{
-		Change_Event();
+		m_fChangeWaitTime += _fTimeDelta;
+		if (m_fChangeWaitTime > 1.f)
+			Change_Event();
 	}
 }
 
 HRESULT CSkyrimUI_SceneChange::Render()
 {
-	if (!m_bIsChangeScene)
-	{
+	//if (!m_bIsChangeScene)
+	//{
 		if (FAILED(Bind_ShaderResources()))
 			return E_FAIL;
 
@@ -115,7 +120,7 @@ HRESULT CSkyrimUI_SceneChange::Render()
 			, 0.f, _float2(m_fSizeX, m_fSizeY), m_fFontSize);
 
 		Safe_Release(pGameInstance);
-	}
+	//}
 
 	return S_OK;
 }

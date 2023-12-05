@@ -35,7 +35,10 @@ void CStateBossSpider_Charge::Update(_float _fTimeDelta)
 		{
 			if (m_pPlayer->Get_IsReadyCounter())
 			{
+				pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 1.f);
+
 				m_pPlayer->Set_IsCounter(true);
+				m_pPlayer->Set_IsSuccesCounter(true);
 				m_pMonster->Play_Animation(false, "recoil_jump");
 				m_pMonster->Set_State(CBossSpider::BOSSSPIDER_STAGGER_CHARGE);
 				m_pPlayer->Set_State(CPlayer::ONEHAND_ANTICIPATE);

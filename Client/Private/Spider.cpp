@@ -9,6 +9,7 @@
 #include "Player.h"
 
 #include "Spider_Mouth.h"
+#include "SkyrimUI_MonsterHpBar.h"
 
 CSpider::CSpider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CMonster(_pDevice, _pContext)
@@ -109,6 +110,10 @@ void CSpider::Tick(_float _fTimeDelta)
 				if (pGameInstance->Collision_Enter(m_pVecCollider[SPIDER_COL_AABB],
 					dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
 				{
+					m_pHpBar->Set_Monster(this);
+
+					pGameInstance->PlaySoundFile(TEXT("wpn_impact_blade_fleshdraugr_03.wav"), CHANNEL_ATK, 1.f);
+
 					pGameInstance->Add_CloneObject(g_curLevel, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_BloodSpot"));
 					m_fHp -= m_pPlayer->GetAtk();
 				}
@@ -284,7 +289,7 @@ HRESULT CSpider::Ready_Component(_uint _iLevel)
 
 	/* AABB */
 	CBounding_AABB::BOUNDING_AABB_DESC AABBDesc = {};
-	AABBDesc.vExtents = _float3(0.5f, 0.5f, 0.5f);
+	AABBDesc.vExtents = _float3(0.5f, 1.f, 0.5f);
 	AABBDesc.vCenter = _float3(0.f, AABBDesc.vExtents.y, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_AABB"),
@@ -334,7 +339,8 @@ HRESULT CSpider::Ready_State()
 	m_fRunSpeed = 2.5f;
 	m_fWalkSpeed = 1.5f;
 	m_fHp = 100;
-	m_iAtk = 10;
+	m_fMaxHp = 100;
+	m_iAtk = 5;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

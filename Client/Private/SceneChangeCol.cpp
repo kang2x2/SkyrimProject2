@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "Player.h"
 
+#include "Effect_FadeBlack.h"
+
 CSceneChangeCol::CSceneChangeCol(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CGameObject(_pDevice, _pContext)
 {
@@ -64,8 +66,15 @@ void CSceneChangeCol::Tick(_float _fTimeDelta)
 	{
 		if (pGameInstance->Get_DIKeyDown('E'))
 		{
+			CEffect_FadeBlack::FADE_DESC FadeDesc;
+			// Gara
+			FadeDesc.bIsFadeIn = false;
+			FadeDesc.fFadeTime = 0.5f;
+			FadeDesc.eDestStage = m_eDestStage;
+
+			pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_FadeBlack"), &FadeDesc);
+
 			m_bIsReadyChange = true;
-			pGameInstance->Set_IsChange(true, LEVEL_GAMEPLAY, m_eDestStage);
 		}
 	}
 	

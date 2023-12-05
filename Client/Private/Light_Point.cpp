@@ -111,57 +111,6 @@ HRESULT CLight_Point::Render()
 	return S_OK;
 }
 
-void CLight_Point::Set_Diffuse(_float4 _vDiffuse)
-{
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	pGameInstance->Set_Diffuse(_vDiffuse, m_iLightIndex);
-
-	Safe_Release(pGameInstance);
-}
-
-void CLight_Point::Set_Ambient(_float4 _vAmbient)
-{
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	pGameInstance->Set_Ambient(_vAmbient, m_iLightIndex);
-
-	Safe_Release(pGameInstance);
-
-}
-
-void CLight_Point::Set_Specular(_float4 _vSpecular)
-{
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	pGameInstance->Set_Specular(_vSpecular, m_iLightIndex);
-
-	Safe_Release(pGameInstance);
-}
-
-void CLight_Point::Set_Direction(_float4 _vDir)
-{
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	pGameInstance->Set_Direction(_vDir, m_iLightIndex);
-
-	Safe_Release(pGameInstance);
-}
-
-void CLight_Point::Set_Range(_float _fRange)
-{
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	pGameInstance->Set_Range(_fRange, m_iLightIndex);
-
-	Safe_Release(pGameInstance);
-}
-
 LIGHT_DESC* CLight_Point::Get_LightDesc()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

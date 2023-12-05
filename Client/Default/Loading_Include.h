@@ -32,6 +32,15 @@
 #pragma region NPC
 /* Carlotta */
 #include "NPC_Carlotta.h"
+
+#include "NPC_GuardCaptain.h"
+#include "GuardCaptain_Weapon.h"
+
+#include "NPC_GuardSupply.h"
+
+#include "NPC_Guard.h"
+
+// ´õ¹Ì
 #include "Carlotta_Body.h"
 #include "Carlotta_Head.h"
 #include "Carlotta_Hand.h"
@@ -72,6 +81,9 @@
 #pragma region Effect
 #include "Effect_BloodFlare.h"
 #include "Effect_BloodSpot.h"
+#include "Effect_FadeBlack.h"
+#include "Effect_IntroFade.h"
+#include "Effect_ScreenBlur.h"
 #include "Effect_CombatSpark.h"
 #pragma endregion
 
@@ -117,6 +129,11 @@
 #include "SkyrimUI_SceneChange.h"
 #include "SkyrimUI_HpBar.h"
 #include "SkyrimUI_SpBar.h"
+#include "SkyrimUI_MonsterHpBar.h"
+#include "SkyrimUI_BossHpBar.h"
+#include "SkyrimUI_Letter.h"
+#include "SkyrimUI_Talk.h"
+#include "SkyrimUI_TalkIcon.h"
 
 #include "Inventory.h"
 #include "Inventory_ItemCategory.h"

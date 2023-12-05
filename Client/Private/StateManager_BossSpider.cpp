@@ -7,6 +7,8 @@
 #include "StateBossSpider_Warning.h"
 
 #include "StateBossSpider_Chase.h"
+#include "StateBossSpider_Left.h"
+//#include "StateBossSpider_Right.h"
 #include "StateBossSpider_Sprint.h"
 
 #include "StateBossSpider_OneChop.h"
@@ -47,6 +49,12 @@ HRESULT CStateManager_BossSpider::Initialize(CGameObject* _pMonster, CGameObject
 	/* Chase */
 	pState = CStateBossSpider_Chase::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
+	/* Left */
+	pState = CStateBossSpider_Left::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+	/* Right */
+	//pState = CStateBossSpider_Right::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	//m_vecMonsterState.push_back(pState);
 	/* Sprint */
 	pState = CStateBossSpider_Sprint::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);

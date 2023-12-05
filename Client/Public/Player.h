@@ -108,6 +108,7 @@ public:
 	void			  Set_CurCell();
 	
 	/* 충돌 관련*/
+	void			  Create_Spark();
 	void			  CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame);
 	
 	/* 공격하는 상태인지? */
@@ -117,9 +118,17 @@ public:
 	/* 카운터 관련 */
 	void			  Set_IsReadyCounter(_bool _bIsReadyCounter) { m_bIsReadyCounter = _bIsReadyCounter; }
 	_bool			  Get_IsReadyCounter() { return m_bIsReadyCounter; }
-	void			  Set_IsCounter(_bool _bIsCounter) { m_bIsCounter = _bIsCounter; }
+	void			  Set_IsCounter(_bool _bIsCounter) { 
+		m_bIsCounter = _bIsCounter; 
+		m_fCounterTime = 0.f;
+	}
 	_bool			  Get_IsCounter() { return m_bIsCounter; }
-	_float			  Get_AnimationSpeed() { return m_fAnimationSpeed; }
+	void			  Set_IsSuccesCounter(_bool _bIsSucces) { 
+		m_bIsSuccesCounter = _bIsSucces;
+		m_fPauseTime = 0.f;
+	}
+	_bool			  Get_IsSuccesCounter() { return m_bIsSuccesCounter; }
+
 
 	/* 인벤토리 */
 	void			  Set_IsInvenShow(_bool _bIsShow);
@@ -164,9 +173,11 @@ private:
 
 	_bool							m_bIsAttack = false;
 	_bool							m_bIsReadyCounter = false;
+	_bool							m_bIsSuccesCounter = false;
 	_bool							m_bIsCounter = false;
+	
+	_float							m_fPauseTime = 0.f;
 	_float							m_fCounterTime = 0.f;
-	_float							m_fAnimationSpeed = 1.f;
 
 private:
 	HRESULT Ready_Part();

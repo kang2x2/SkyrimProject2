@@ -50,6 +50,7 @@ void CSkyrim_Cursor::LateTick(_float _fTimeDelta)
 HRESULT CSkyrim_Cursor::Render()
 {
 	if ((g_curLevel != LEVEL_LOADING && g_bIsPause) ||
+		(g_curLevel != LEVEL_LOADING && g_bIsTalk) ||
 		g_curLevel == LEVEL_LOGO)
 	{
 		if (FAILED(Bind_ShaderResources()))

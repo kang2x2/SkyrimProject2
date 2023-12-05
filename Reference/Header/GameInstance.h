@@ -58,8 +58,6 @@ public: /* For.Object_Manager */
 	map<const wstring, class CGameObject*> Get_ProtoObjectMapAry();
 	HRESULT Add_LightObject(_uint _iLevelIndex, const wstring & _strLayerTag, const wstring & _strProtoTypeTag, const wstring & _strModelComTag, void* _pArg, LIGHT_DESC * _pLightDesc);
 
-
-
 public: /* For.Component_Manager */
 	HRESULT Add_ProtoType_Component(_uint _iLevelIndex, const wstring & _strProtoTypeTag, class CComponent* _pProtoTypeComponent);
 	class CComponent* Clone_Component(_uint _iLevelIndex, const wstring & _strProtoTypeTag, void* _pArg = nullptr);
@@ -67,6 +65,7 @@ public: /* For.Component_Manager */
 
 public: /* For.Light_Manager */
 	LIGHT_DESC* Get_LightDesc(_uint _iLightIndex);
+	_uint		Get_CurLightIndex();
 	HRESULT Add_Light(const LIGHT_DESC & _LightDesc);
 	void    Delete_Light(_uint _iLightIndex);
 	void Set_Diffuse(_float4 _vDiffuse, _uint _iLightIndex);
@@ -98,6 +97,15 @@ public: /* For. MyFont_Manager*/
 		FXMVECTOR _vColor = XMVectorZero(), float _fRotation = 0.f,
 		XMFLOAT2 const& _vOrigin = _float2(0.f, 0.f), float _fScale = 1.f);
 
+public: /* For. Sound Manager */
+	HRESULT PlaySoundFile(const wstring & strSoundKey, CHANNELID eCh, _float fVolume);
+	HRESULT CheckPlaySoundFile(const wstring & strSoundKey, CHANNELID eCh, _float fVolume);
+	HRESULT PlayBGM(const wstring & strSoundKey, _float fVolume);
+	HRESULT StopSound(CHANNELID eCh);
+	HRESULT StopSoundAll();
+	HRESULT SetChannelVolume(CHANNELID eCh, _float fVolume);
+
+
 public: /* For. File Manager */
 	HRESULT StaticObject_FileSave(ofstream & _outFile, _uint _iLevelIndex) const;
 	HRESULT DynamicObject_FileSave(ofstream & _outFile, _uint _iLevelIndex);
@@ -122,6 +130,7 @@ private:
 	class CMyFont_Manager*		m_pMyFont_Manager = nullptr;
 	class CTarget_Manager*		m_pTarget_Manager = nullptr;
 	class CPipeLine*			m_pPipeLine = nullptr;
+	class CSound_Manager*		m_pSound_Manager = nullptr;
 	class CMyFile_Manager*		m_pMyFile_Manager = nullptr;
 
 public:

@@ -34,6 +34,13 @@ void CStateFalmerOH_Equip::Late_Update(_float _fTimeDelta)
 {
 	if (m_pMonster->Get_IsAnimationFin())
 	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+		
+		pGameInstance->PlaySoundFile(TEXT("npc_falmer_aggrowarning_03.wav"), CHANNEL_MONSTER2, 1.f);
+
+		Safe_Release(pGameInstance);
+
 		m_pMonster->Set_State(CFalmer_OneHand::FALMEROH_WARNING);
 		m_pMonster->Play_Animation(false, "1hm_aggrowarning1");
 	}

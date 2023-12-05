@@ -22,6 +22,16 @@ void CStateBossSpider_Planding::Update(_float _fTimeDelta)
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "fspidertraplanding"))
 	{
+		m_pMonster->Set_BarShow();
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbitegiant_breathe_lp.wav"), CHANNEL_MONSTER1, 1.f);
+
+		Safe_Release(pGameInstance);
+
+		m_pMonster->Set_AnimationSpeed(0.6f);
 		m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
 
 		m_pMonster->Set_State(CBossSpider::BOSSSPIDER_WARNING);

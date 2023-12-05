@@ -465,6 +465,11 @@ _uint CModel::Get_CurFrameIndex()
 	return iIdx;
 }
 
+void CModel::Set_KeyFrame(_uint _iFrame)
+{
+	m_vecAnimation[m_iCurAnimationIndex]->Set_KeyFrame(_iFrame);
+}
+
 void CModel::Update_VI(const _fmatrix& _matPivot)
 {
 	for (size_t i = 0; i < m_vecMesh.size(); ++i)

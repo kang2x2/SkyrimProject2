@@ -51,6 +51,8 @@ private:
 
 	RECT				m_Rc = {};
 	_bool				m_bIsChangeScene = false;
+
+	_float				m_fChangeWaitTime = 0.f;
 public:
 	static CSkyrimUI_SceneChange* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
 	virtual CSkyrimUI* Clone(void* pArg) override;

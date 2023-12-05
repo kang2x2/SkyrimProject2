@@ -13,8 +13,7 @@ BEGIN(Client)
 class CNPC_Carlotta final : public CSkyrim_NPC
 {
 public:
-	// HEAD에서 이목구비들을 또 가지고 있게 하자.
-	enum CARLOTTA_PARTS { PART_BODY, PART_HEAD, PART_HAND, PART_FOOT, PART_END };
+	enum CARLOTTA_PARTS { PART_WEAPON, PART_END };
 
 	enum CARLOTTA_COLTYPE {
 		CARLOTTA_COL_AABB,
@@ -36,7 +35,7 @@ private:
 public:
 	virtual HRESULT Initialize_ProtoType(); // 원본
 	virtual HRESULT Initialize_Clone(void* pArg); // 사본
-	virtual HRESULT Initialize_Clone(_uint _iLevel, const wstring& _strModelComTag, void* pArg); // 사본
+	virtual HRESULT Initialize_Clone(_uint _iLevel, const wstring & _strModelComTag, void* pArg); // 사본
 	virtual void	PriorityTick(_float _fTimeDelta);
 	virtual void	Tick(_float _fTimeDelta);
 	virtual void	LateTick(_float _fTimeDelta);
@@ -49,19 +48,12 @@ public:
 	CGameObject* Get_Part(CARLOTTA_PARTS _ePart) { return m_vecNpcPart[_ePart]; }
 	void		 Set_WeaponSocket(const char* _strBoneName);
 
-	/* 애니메이션 관련 */
-	virtual void			Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0, _bool _bIsReset = false, _bool _bIsQuickChange = false);
-	virtual _bool			Get_IsAnimationFin();
-	virtual string			Get_CurAnimationName();
-	virtual _uint			Get_CurFrameIndex();
-
-	virtual _vector			Get_OriginPos() { return m_vOriginPos; }
-
 
 public:
 	HRESULT Ready_Part();
 	HRESULT Ready_Component(_uint _iLevel);
 	HRESULT Ready_State();
+	HRESULT Ready_Talk();
 
 private:
 	vector<class CGameObject*>		m_vecNpcPart;
@@ -71,10 +63,11 @@ private:
 	// class CStateManager_FalmerOH* m_pStateManager = nullptr;
 
 public:
-	static  CNPC_Carlotta* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext);
+	static  CNPC_Carlotta* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pContext);
 	virtual CGameObject* Clone(void* _pArg) override;
-	virtual CGameObject* Clone(_uint _iLevel, const wstring& _strModelComTag, void* _pArg) override;
+	virtual CGameObject* Clone(_uint _iLevel, const wstring & _strModelComTag, void* _pArg) override;
 	virtual void Free() override;
+
 };
 
 END

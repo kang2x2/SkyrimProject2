@@ -69,6 +69,8 @@ protected: /* 사용할 컴포넌트들 */
 	_float2			m_vLine2Pos = {};
 	_float2			m_vLine2Size = {};
 
+	_float			m_fAlpha = 0.f;
+
 public:
 	virtual CGameObject* Clone(void* _pArg) = 0;
 	virtual void Free()override;

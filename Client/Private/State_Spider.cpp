@@ -36,6 +36,13 @@ void CState_Spider::Update(_float _fTimeDelta)
 
 	if (m_pMonster->GetHp() <= 0.f)
 	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbite_death_02.wav"), CHANNEL_MONSTER4, 1.f);
+
+		Safe_Release(pGameInstance);
+
 		m_pMonster->Set_State(CSpider::SPIDER_DEAD);
 		m_pMonster->Play_Animation(false, "death");
 	}

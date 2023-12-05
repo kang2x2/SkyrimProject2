@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../Reference/Header;../Public;../Default;../IMGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Reference/Header;../Public;../Default;../IMGUI;../../Fmod/inc/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <UndefinePreprocessorDefinitions>%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
@@ -129,7 +129,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../Reference/Library/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../Reference/Library/;../../Fmod/lib/</AdditionalLibraryDirectories>
       <AdditionalDependencies>Engine.lib;d3d11.lib;DirectXTKd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference>
@@ -150,7 +150,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../Reference/Header;../Public;../Default;../IMGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Reference/Header;../Public;../Default;../IMGUI;../../Fmod/inc/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <UndefinePreprocessorDefinitions>
@@ -162,7 +162,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../Reference/Library/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../Reference/Library/;../../Fmod/lib/</AdditionalLibraryDirectories>
       <AdditionalDependencies>Engine.lib;d3d11.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference>
@@ -195,7 +195,13 @@
     <ClInclude Include="..\Public\Effect_BloodFlare.h" />
     <ClInclude Include="..\Public\Effect_BloodSpot.h" />
     <ClInclude Include="..\Public\Effect_CombatSpark.h" />
+    <ClInclude Include="..\Public\Effect_FadeBlack.h" />
+    <ClInclude Include="..\Public\Effect_IntroFade.h" />
+    <ClInclude Include="..\Public\Effect_ScreenBlur.h" />
     <ClInclude Include="..\Public\GlovesM_Blades.h" />
+    <ClInclude Include="..\Public\GuardCaptainPart_Base.h" />
+    <ClInclude Include="..\Public\GuardCaptain_Weapon.h" />
+    <ClInclude Include="..\Public\GuardPart_Base.h" />
     <ClInclude Include="..\Public\HelmetM_Blades.h" />
     <ClInclude Include="..\Public\Inventory_ItemCategory.h" />
     <ClInclude Include="..\Public\Inventory_ItemList.h" />
@@ -206,17 +212,25 @@
     <ClInclude Include="..\Public\LoadingObj_Skeever.h" />
     <ClInclude Include="..\Public\Loading_Camera.h" />
     <ClInclude Include="..\Public\Logo_Camera.h" />
+    <ClInclude Include="..\Public\NPC_Guard.h" />
+    <ClInclude Include="..\Public\NPC_GuardCaptain.h" />
+    <ClInclude Include="..\Public\NPC_GuardSupply.h" />
     <ClInclude Include="..\Public\Player_Foot.h" />
     <ClInclude Include="..\Public\Player_Hand.h" />
     <ClInclude Include="..\Public\Player_Head.h" />
     <ClInclude Include="..\Public\SceneChangeCol.h" />
     <ClInclude Include="..\Public\SkyrimItem.h" />
     <ClInclude Include="..\Public\SkyrimUI.h" />
+    <ClInclude Include="..\Public\SkyrimUI_BossHpBar.h" />
     <ClInclude Include="..\Public\SkyrimUI_HpBar.h" />
+    <ClInclude Include="..\Public\SkyrimUI_MonsterHpBar.h" />
     <ClInclude Include="..\Public\SkyrimUI_SceneChange.h" />
     <ClInclude Include="..\Public\SkyrimUI_SpBar.h" />
+    <ClInclude Include="..\Public\SkyrimUI_Talk.h" />
+    <ClInclude Include="..\Public\SkyrimUI_TalkIcon.h" />
     <ClInclude Include="..\Public\Skyrim_Cursor.h" />
     <ClInclude Include="..\Public\Light_Point.h" />
+    <ClInclude Include="..\Public\SkyrimUI_Letter.h" />
     <ClInclude Include="..\Public\Skyrim_LogoObj.h" />
     <ClInclude Include="..\Public\Spider.h" />
     <ClInclude Include="..\Public\SpiderPart_Base.h" />
@@ -224,9 +238,20 @@
     <ClInclude Include="..\Public\BossSpider.h" />
     <ClInclude Include="..\Public\StateBossSpider_Charge.h" />
     <ClInclude Include="..\Public\StateBossSpider_Dead.h" />
+    <ClInclude Include="..\Public\StateBossSpider_Left.h" />
     <ClInclude Include="..\Public\StateBossSpider_Release.h" />
     <ClInclude Include="..\Public\StateBossSpider_Sprint.h" />
     <ClInclude Include="..\Public\StateBossSpider_StaggerC.h" />
+    <ClInclude Include="..\Public\StateGuardCaptain_Talk.h" />
+    <ClInclude Include="..\Public\StateGuardCaptain_UnEquip.h" />
+    <ClInclude Include="..\Public\StateGuardCaptain_Equip.h" />
+    <ClInclude Include="..\Public\StateGuardCaptain_Idle.h" />
+    <ClInclude Include="..\Public\StateGuardCaptain_Walk.h" />
+    <ClInclude Include="..\Public\StateGuardCaptain_Warning.h" />
+    <ClInclude Include="..\Public\StateGuardSupply_Idle.h" />
+    <ClInclude Include="..\Public\StateGuardSupply_Talk.h" />
+    <ClInclude Include="..\Public\StateManager_GuardCaptain.h" />
+    <ClInclude Include="..\Public\StateManager_GuardSupply.h" />
     <ClInclude Include="..\Public\StatePlayerOH_Bash.h" />
     <ClInclude Include="..\Public\StatePlayer_1stStagger.h" />
     <ClInclude Include="..\Public\StatePlayer_3stStagger.h" />
@@ -260,6 +285,9 @@
     <ClInclude Include="..\Public\StateSpider_StaggerB.h" />
     <ClInclude Include="..\Public\StateSpider_StaggerC.h" />
     <ClInclude Include="..\Public\State_BossSpider.h" />
+    <ClInclude Include="..\Public\State_GuardCaptain.h" />
+    <ClInclude Include="..\Public\State_GuardSupply.h" />
+    <ClInclude Include="..\Public\State_Npc.h" />
     <ClInclude Include="..\Public\State_Spider.h" />
     <ClInclude Include="..\Public\TorsoF_Merchant01.h" />
     <ClInclude Include="..\Public\BackGround.h" />
@@ -418,7 +446,13 @@
     <ClCompile Include="..\Private\Effect_BloodFlare.cpp" />
     <ClCompile Include="..\Private\Effect_BloodSpot.cpp" />
     <ClCompile Include="..\Private\Effect_CombatSpark.cpp" />
+    <ClCompile Include="..\Private\Effect_FadeBlack.cpp" />
+    <ClCompile Include="..\Private\Effect_IntroFade.cpp" />
+    <ClCompile Include="..\Private\Effect_ScreenBlur.cpp" />
     <ClCompile Include="..\Private\GlovesM_Blades.cpp" />
+    <ClCompile Include="..\Private\GuardCaptainPart_Base.cpp" />
+    <ClCompile Include="..\Private\GuardCaptain_Weapon.cpp" />
+    <ClCompile Include="..\Private\GuardPart_Base.cpp" />
     <ClCompile Include="..\Private\HelmetM_Blades.cpp" />
     <ClCompile Include="..\Private\Inventory_ItemCategory.cpp" />
     <ClCompile Include="..\Private\Inventory_ItemList.cpp" />
@@ -429,17 +463,25 @@
     <ClCompile Include="..\Private\LoadingObj_Skeever.cpp" />
     <ClCompile Include="..\Private\Loading_Camera.cpp" />
     <ClCompile Include="..\Private\Logo_Camera.cpp" />
+    <ClCompile Include="..\Private\NPC_Guard.cpp" />
+    <ClCompile Include="..\Private\NPC_GuardCaptain.cpp" />
+    <ClCompile Include="..\Private\NPC_GuardSupply.cpp" />
     <ClCompile Include="..\Private\Player_Foot.cpp" />
     <ClCompile Include="..\Private\Player_Hand.cpp" />
     <ClCompile Include="..\Private\Player_Head.cpp" />
     <ClCompile Include="..\Private\SceneChangeCol.cpp" />
     <ClCompile Include="..\Private\SkyrimItem.cpp" />
     <ClCompile Include="..\Private\SkyrimUI.cpp" />
+    <ClCompile Include="..\Private\SkyrimUI_BossHpBar.cpp" />
     <ClCompile Include="..\Private\SkyrimUI_HpBar.cpp" />
+    <ClCompile Include="..\Private\SkyrimUI_MonsterHpBar.cpp" />
     <ClCompile Include="..\Private\SkyrimUI_SceneChange.cpp" />
     <ClCompile Include="..\Private\SkyrimUI_SpBar.cpp" />
+    <ClCompile Include="..\Private\SkyrimUI_Talk.cpp" />
+    <ClCompile Include="..\Private\SkyrimUI_TalkIcon.cpp" />
     <ClCompile Include="..\Private\Skyrim_Cursor.cpp" />
     <ClCompile Include="..\Private\Light_Point.cpp" />
+    <ClCompile Include="..\Private\SkyrimUI_Letter.cpp" />
     <ClCompile Include="..\Private\Skyrim_LogoObj.cpp" />
     <ClCompile Include="..\Private\Spider.cpp" />
     <ClCompile Include="..\Private\SpiderPart_Base.cpp" />
@@ -447,9 +489,20 @@
     <ClCompile Include="..\Private\BossSpider.cpp" />
     <ClCompile Include="..\Private\StateBossSpider_Charge.cpp" />
     <ClCompile Include="..\Private\StateBossSpider_Dead.cpp" />
+    <ClCompile Include="..\Private\StateBossSpider_Left.cpp" />
     <ClCompile Include="..\Private\StateBossSpider_Release.cpp" />
     <ClCompile Include="..\Private\StateBossSpider_Sprint.cpp" />
     <ClCompile Include="..\Private\StateBossSpider_StaggerC.cpp" />
+    <ClCompile Include="..\Private\StateGuardCaptain_Talk.cpp" />
+    <ClCompile Include="..\Private\StateGuardCaptain_UnEquip.cpp" />
+    <ClCompile Include="..\Private\StateGuardCaptain_Equip.cpp" />
+    <ClCompile Include="..\Private\StateGuardCaptain_Idle.cpp" />
+    <ClCompile Include="..\Private\StateGuardCaptain_Walk.cpp" />
+    <ClCompile Include="..\Private\StateGuardCaptain_Warning.cpp" />
+    <ClCompile Include="..\Private\StateGuardSupply_Idle.cpp" />
+    <ClCompile Include="..\Private\StateGuardSupply_Talk.cpp" />
+    <ClCompile Include="..\Private\StateManager_GuardCaptain.cpp" />
+    <ClCompile Include="..\Private\StateManager_GuardSupply.cpp" />
     <ClCompile Include="..\Private\StatePlayerOH_Bash.cpp" />
     <ClCompile Include="..\Private\StatePlayer_1stStagger.cpp" />
     <ClCompile Include="..\Private\StatePlayer_3stStagger.cpp" />
@@ -483,6 +536,9 @@
     <ClCompile Include="..\Private\StateSpider_StaggerB.cpp" />
     <ClCompile Include="..\Private\StateSpider_StaggerC.cpp" />
     <ClCompile Include="..\Private\State_BossSpider.cpp" />
+    <ClCompile Include="..\Private\State_GuardCaptain.cpp" />
+    <ClCompile Include="..\Private\State_GuardSupply.cpp" />
+    <ClCompile Include="..\Private\State_Npc.cpp" />
     <ClCompile Include="..\Private\State_Spider.cpp" />
     <ClCompile Include="..\Private\TorsoF_Merchant01.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />

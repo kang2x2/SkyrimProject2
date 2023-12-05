@@ -55,7 +55,9 @@ HRESULT CCamera_Player::Initialize_Clone(void* pArg)
 
 void CCamera_Player::Tick_3st(_float4 _vTargetPos, _float _fTimeDelta)
 {
-    Mouse_Fix();
+    if (!g_bIsTalk)
+        Mouse_Fix();
+
     Zoom(_fTimeDelta);
 
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -111,7 +113,8 @@ void CCamera_Player::Tick_3st(_float4 _vTargetPos, _float _fTimeDelta)
 
 void CCamera_Player::Tick_1st(CTransform* _pParentTransform, _float4x4 _matSocket, _float _fTimeDelta)
 {
-    Mouse_Fix();
+    if (!g_bIsTalk)
+        Mouse_Fix();
 
     m_pTransformCom->Set_WorldMatrix(_pParentTransform->Get_WorldMatrix());
     
@@ -125,7 +128,8 @@ void CCamera_Player::Tick_1st(CTransform* _pParentTransform, _float4x4 _matSocke
     if (MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::MMS_Y))
         m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), MouseMove * m_fMouseSensitive * _fTimeDelta);
 
-    _pParentTransform->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix());
+    if(!g_bIsTalk)
+        _pParentTransform->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix());
 
     Safe_Release(pGameInstance);
 

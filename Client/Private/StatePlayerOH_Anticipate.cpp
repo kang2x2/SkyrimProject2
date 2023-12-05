@@ -40,6 +40,8 @@ void CStatePlayerOH_Anticipate::Key_Input(_float _fTimeDelta)
 	{
 		if (pGameInstance->Get_DIKeyDown(VK_LBUTTON))
 		{
+			m_pPlayer->Set_AnimationSpeed(2.f);
+
 			m_pPlayer->Set_State(CPlayer::ONEHAND_BASH);
 			m_pPlayer->Play_Animation_All(false, "1hm_runfwdattackleft");
 		}

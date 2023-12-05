@@ -39,6 +39,7 @@ void CStateFalmerOH_StaggerH::Late_Update(_float _fTimeDelta)
 			pGameInstance->Collision_Stay(m_pVecCollider[CFalmer_OneHand::FALMEROH_COL_ATKROUND], m_pPlayerBodyCollider))
 		{
 			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+			pGameInstance->PlaySoundFile(TEXT("npc_falmer_attack_02.wav"), CHANNEL_MONSTER2, 1.f);
 
 			m_pMonster->Set_State(CFalmer_OneHand::FALMEROH_ATK);
 			m_pMonster->Play_Animation(false, "1hm_attack2");

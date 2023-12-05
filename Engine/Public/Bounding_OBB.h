@@ -19,6 +19,7 @@ private:
 
 public:
 	const BoundingOrientedBox* Get_Bounding() const { return m_pOBB; }
+	virtual _vector Get_WorldCenter();
 
 public:
 	virtual HRESULT Initialize(const BOUNDING_DESC * _pDesc) override;

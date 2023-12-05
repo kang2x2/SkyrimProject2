@@ -14,6 +14,9 @@
 #include "Player.h"
 #include "Inventory.h"
 
+#include "Effect_FadeBlack.h"
+
+_uint CLevel_WhiteRun::m_iVisitCount = 0;
 
 CLevel_WhiteRun::CLevel_WhiteRun(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CLevel(_pDevice, _pContext)
@@ -22,8 +25,17 @@ CLevel_WhiteRun::CLevel_WhiteRun(ID3D11Device* _pDevice, ID3D11DeviceContext* _p
 
 HRESULT CLevel_WhiteRun::Initialize()
 {
+	m_iVisitCount += 1;
+
 	// CIMGui_Manager 초기화
 	CIMGui_Manager::GetInstance()->Initialize(m_pDevice, m_pContext, LEVEL_GAMEPLAY);
+
+	/* Test */
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_UI"), TEXT("ProtoType_GameObject_UI_MonsterHpBar"))))
+		return E_FAIL;
+	Safe_Release(pGameInstance);
 
 	if (FAILED(Ready_Cursor(TEXT("Layer_Cursor"))))
 		return E_FAIL;
@@ -46,8 +58,8 @@ HRESULT CLevel_WhiteRun::Initialize()
 	if (FAILED(Ready_Layer_Navigation_WhiteRun(TEXT("Layer_Navigation_WhiteRun"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Sky(TEXT("Layer_Sky"))))
-		return E_FAIL;
+	//if (FAILED(Ready_Layer_Sky(TEXT("Layer_Sky"))))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Layer_Particle(TEXT("Layer_Particle"))))
 		return E_FAIL;
@@ -63,7 +75,7 @@ HRESULT CLevel_WhiteRun::Tick(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	pGameInstance->Clear_BackBuffer_View(_float4(0.01f, 0.02f, 0.1f, 1.f));
+	pGameInstance->Clear_BackBuffer_View(_float4(0.02f, 0.02f, 0.02f, 1.f));
 
 	Safe_Release(pGameInstance);
 
@@ -136,7 +148,7 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 
 #pragma region Static
 	/* 화이트런 */
-	// wstring filePath = TEXT("../Bin/SaveLoad/Skyrim3");
+	//wstring filePath = TEXT("../Bin/SaveLoad/Skyrim3");
 	wstring filePath = TEXT("../Bin/SaveLoad/testMap");
 
 	ifstream fileStream(filePath, ios::binary);
@@ -145,7 +157,7 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 		pGameInstance->Object_FileLoad(fileStream, LEVEL_GAMEPLAY);
 
 		fileStream.close();
-		MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
+		//MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
 	}
 	else {
 		MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
@@ -164,7 +176,7 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 		pGameInstance->Object_FileLoad(fileStream2, LEVEL_GAMEPLAY);
 	
 		fileStream2.close();
-		MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
+		//MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
 	}
 	else {
 		MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
@@ -192,17 +204,16 @@ HRESULT CLevel_WhiteRun::Ready_Light()
 	LightDesc.eLightType = LIGHT_DESC::LIGHT_DIRECTIONAL;
 	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
 	
-	LightDesc.vDiffuse = _float4(0.01f, 0.01f, 0.01f, 1.f);
-	//LightDesc.vDiffuse = _float4(0.5f, 0.5f, 0.5f, 1.f);
+	LightDesc.vDiffuse = _float4(0.1f, 0.1f, 0.1f, 1.f);
 	LightDesc.vAmbient = _float4(0.1f, 0.1f, 0.1f, 1.f);
 	LightDesc.vSpecular = _float4(0.1f, 0.1f, 0.1f, 1.f);
-	
+
 	if (FAILED(pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
 
 #pragma region Light
-
-	// wstring filePath = TEXT("../Bin/SaveLoad/Light_WhiteRun");
+	// 보스 사운드, 패턴 시작.
+	//wstring filePath = TEXT("../Bin/SaveLoad/Light_WhiteRun");
 	wstring filePath = TEXT("../Bin/SaveLoad/testLight");
 	// 파일을 열기 모드로 열기.
 	ifstream fileStream(filePath, ios::binary);
@@ -217,7 +228,7 @@ HRESULT CLevel_WhiteRun::Ready_Light()
 		Safe_Release(pGameInstance);
 	
 		fileStream.close();
-		MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
+		//MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
 	}
 	else {
 		MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
@@ -233,11 +244,6 @@ HRESULT CLevel_WhiteRun::Ready_Light()
 
 HRESULT CLevel_WhiteRun::Ready_Layer_Equip(const wstring& _strLayerTag)
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	Safe_Release(pGameInstance);
-
 	return S_OK;
 }
 
@@ -251,9 +257,18 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Player(const wstring& _strLayerTag)
 		return E_FAIL;
 
 	/* 화이트런 */
-	//dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
-	//	TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
-	//->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
+	//if (m_iVisitCount == 1)
+	//{
+	//	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
+	//		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
+	//		->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
+	//}
+	//else if (m_iVisitCount == 2)
+	//{
+	//	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
+	//		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
+	//		->Set_State(CTransform::STATE_POSITION, XMVectorSet(40.f, -1.3f, 10.f, 1.f));
+	//}
 	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
 		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
 	->Set_State(CTransform::STATE_POSITION, XMVectorSet(-4.f, -1.f, 24.f, 1.f));
@@ -338,6 +353,12 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Effect(const wstring& _strLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+	CEffect_FadeBlack::FADE_DESC FadeDesc;
+	FadeDesc.bIsFadeIn = true;
+	FadeDesc.fFadeTime = 0.25f;
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_FadeBlack"), &FadeDesc)))
+		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, _strLayerTag, TEXT("ProtoType_GameObject_BloodFlare"))))
 		return E_FAIL;

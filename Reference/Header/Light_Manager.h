@@ -13,6 +13,7 @@ private:
 
 public:
 	LIGHT_DESC* Get_LightDesc(_uint _iLightIndex);
+	_uint		Get_CurLightIndex() { return m_ltLight.size(); }
 
 	HRESULT Add_Light(const LIGHT_DESC& _LightDesc);
 	void    Delete_Light(_uint _iLightIndex);

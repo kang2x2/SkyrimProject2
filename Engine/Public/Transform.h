@@ -83,6 +83,7 @@ public:
 	void Fix_Rotation(FXMVECTOR _vAxis, _float _fRadian);
 	void Turn(FXMVECTOR _vAxis, _float _fTimeDelta, _float _fRotationRadianPerSec = 0.f);
 	void LookAt(_fvector _vPoint);
+	void LookAt_Fade(_fvector _vPoint, _float _fTimeDelta, _float _fRotationRadianPerSec);
 	void SetLook(_fvector _vPoint);
 	void Chase(_fvector _vPoint, _float _fTimeDelta, _float _fMargin = 0.1f);
 

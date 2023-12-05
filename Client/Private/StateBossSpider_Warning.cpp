@@ -24,6 +24,7 @@ void CStateBossSpider_Warning::Update(_float _fTimeDelta)
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "attack_bitehigh"))
 	{
+		m_pMonster->Set_AnimationSpeed(1.5f);
 		m_pMonsterTransform->Set_Speed(m_pMonster->Get_BossDesc().fSprintSpeed);
 
 		m_pMonster->Set_State(CBossSpider::BOSSSPIDER_SPRINT);

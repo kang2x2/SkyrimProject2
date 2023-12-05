@@ -9,6 +9,7 @@
 #include "Player.h"
 
 #include "Skeever_Weapon.h"
+#include "SkyrimUI_MonsterHpBar.h"
 
 CSkeever::CSkeever(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CMonster(_pDevice, _pContext)
@@ -110,6 +111,10 @@ void CSkeever::Tick(_float _fTimeDelta)
 				if (pGameInstance->Collision_Enter(m_pVecCollider[SKEEVER_COL_AABB],
 					dynamic_cast<CCollider*>(m_pPlayer->Get_Part(CPlayer::PART_WEAPON)->Get_Component(TEXT("Com_Collider_OBB")))))
 				{
+					m_pHpBar->Set_Monster(this);
+
+					pGameInstance->PlaySoundFile(TEXT("wpn_impact_blade_fleshdraugr_03.wav"), CHANNEL_ATK, 1.f);
+					
 					pGameInstance->Add_CloneObject(g_curLevel, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_BloodSpot"));
 					m_fHp -= m_pPlayer->GetAtk();
 				}
@@ -337,6 +342,7 @@ HRESULT CSkeever::Ready_State()
 	m_fRunSpeed = 3.5f;
 	m_fWalkSpeed = 1.5f;
 	m_fHp = 50;
+	m_fMaxHp = 50;
 	m_iAtk = 5;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

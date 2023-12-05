@@ -29,6 +29,8 @@ void CStateFalmerUE_SquatOutro::Late_Update(_float _fTimeDelta)
 	{
 		if (pGameInstance->Collision_Stay(m_pVecCollider[CFalmer_UnEquip::FALMERUE_COL_MISSDETECTION], m_pPlayerBodyCollider))
 		{
+			pGameInstance->PlaySoundFile(TEXT("npc_falmer_aggrowarning_03.wav"), CHANNEL_MONSTER1, 1.f);
+
 			m_pMonster->Set_State(CFalmer_UnEquip::FALMERUE_WARNING);
 			m_pMonster->Play_Animation(false, "1hm_aggrowarning1");
 		}

@@ -46,6 +46,8 @@ void CInventory_ItemList::PriorityTick(_float _fTimeDelta)
 
 void CInventory_ItemList::Tick(_float _fTimeDelta)
 {
+	__super::Tick(_fTimeDelta);
+
 	if (m_pCategory->Get_IsChangeCategory())
 		Init_ItemListFont(m_pCategory->Get_CurCategory());
 

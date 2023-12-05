@@ -21,6 +21,14 @@ void CStatePlayerOH_BwAttackL::Update(_float _fTimeDelta)
 	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_pPlayer->Get_CurFrameIndex() == 12)
+		pGameInstance->PlaySoundFile(TEXT("fx_swing_blade_medium_03.wav"), CHANNEL_PLAYER, 1.f);
+
+	Safe_Release(pGameInstance);
+
 	if (m_pPlayer->Get_CurFrameIndex() >= 14 && m_pPlayer->Get_CurFrameIndex() <= 18 &&
 		!strcmp(m_pPlayer->Get_CurAnimationName().c_str(), "1hm_walkbwdattackleft"))
 	{

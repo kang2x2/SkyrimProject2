@@ -31,12 +31,6 @@ public:
 	virtual HRESULT Render();
 
 public:
-	void Set_Diffuse(_float4 _vDiffuse);
-	void Set_Ambient(_float4 _vAmbient);
-	void Set_Specular(_float4 _vSpecular);
-	void Set_Direction(_float4 _vDir);
-	void Set_Range(_float _fRange);
-
 	LIGHT_DESC* Get_LightDesc();
 	void Set_LightDesc(LIGHT_DESC _lightDesc);
 

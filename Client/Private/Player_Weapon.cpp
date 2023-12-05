@@ -10,6 +10,8 @@
 #include "Player.h"
 #include "Monster.h"
 
+#include "Effect_CombatSpark.h"
+
 CPlayer_Weapon::CPlayer_Weapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CPlayerPart_Base(_pDevice, _pContext)
 {
@@ -56,6 +58,8 @@ HRESULT CPlayer_Weapon::Initialize_Clone(void* _pArg)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	m_pSpark = dynamic_cast<CEffect_CombatSpark*>(pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_CombatSpark"), this));
+
 	pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_Weapon_AkaviriSword"));
 
 	m_pWeapon = pGameInstance->Find_CloneObject(g_curLevel, TEXT("Temp"), TEXT("아카비르 블레이드"));
@@ -86,6 +90,8 @@ void CPlayer_Weapon::Tick(_float _fTimeDelta)
 	{
 		m_pColliderCom->Update(XMLoadFloat4x4(&m_matWorld));
 	}
+
+	m_pSpark->Tick(m_pColliderCom->Get_WorldCenter(), _fTimeDelta);
 }
 
 void CPlayer_Weapon::LateTick(_float _fTimeDelta)
@@ -104,12 +110,16 @@ void CPlayer_Weapon::LateTick(_float _fTimeDelta)
 	_bool bIsCol = false;
 
 	m_pColliderCom->Late_Update(_fTimeDelta);
+
+	m_pSpark->LateTick(_fTimeDelta);
 }
 
 HRESULT CPlayer_Weapon::Render()
 {
 	//if (m_pWeapon != nullptr)
 	//	m_pWeapon->Render();
+
+	m_pSpark->Render();
 
 	return S_OK;
 }
@@ -138,14 +148,7 @@ void CPlayer_Weapon::CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame)
 
 void CPlayer_Weapon::Create_Spark()
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	_matrix matThrow = XMLoadFloat4x4(&m_matWorld);
-
-	pGameInstance->Add_CloneObject(g_curLevel, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_CombatSpark"), &matThrow.r[3]);
-
-	Safe_Release(pGameInstance);
+	m_pSpark->Set_Spark();
 }
 
 HRESULT CPlayer_Weapon::Ready_Component()

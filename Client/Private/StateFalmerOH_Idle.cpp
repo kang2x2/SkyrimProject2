@@ -27,6 +27,7 @@ void CStateFalmerOH_Idle::Update(_float _fTimeDelta)
 	if (pGameInstance->Collision_Enter(m_pVecCollider[CFalmer_OneHand::FALMEROH_COL_DETECTION], m_pPlayerBodyCollider))
 	{
 		pGameInstance->Collision_Enter(m_pVecCollider[CFalmer_OneHand::FALMEROH_COL_MISSDETECTION], m_pPlayerBodyCollider);
+		pGameInstance->PlaySoundFile(TEXT("wpn_axe1hand_draw_02.wav"), CHANNEL_MONSTER2, 1.f);
 
 		m_pMonster->Play_Animation(false, "1hmequip");
 		m_pMonster->Set_State(CFalmer_OneHand::FALMEROH_EQUIP);

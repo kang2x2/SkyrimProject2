@@ -218,6 +218,43 @@ void CTransform::LookAt(_fvector _vPoint)
 	Set_State(STATE_LOOK, vLook);
 }
 
+void CTransform::LookAt_Fade(_fvector _vPoint, _float _fTimeDelta, _float _fRotationRadianPerSec)
+{	
+	_float3 vScaled = Get_Scaled();
+	_vector vPosition = Get_State(STATE_POSITION);
+	_vector vCurrentLook = Get_State(STATE_LOOK);
+
+	// 목표 방향과 현재 방향 간의 각도 계산
+	_vector vTargetLook = XMVector3Normalize(_vPoint - vPosition);
+	float angle = acos(XMVectorGetX(XMVector3Dot(vCurrentLook, vTargetLook)));
+
+	// 일정 비율로 회전 각도 계산
+	float rotationAmount = _fRotationRadianPerSec * _fTimeDelta; 
+	float rotationFactor = min(rotationAmount / angle, 1.0f);
+
+	if (angle > 0.1f) {
+		// 쿼터니언으로 회전 계산
+		_vector vRotationAxis = XMVector3Normalize(XMVector3Cross(vCurrentLook, vTargetLook));
+		_vector vRotation = XMQuaternionRotationAxis(vRotationAxis, rotationFactor * angle);
+
+		// 현재 방향을 회전한 결과를 얻음
+		_vector vNewLook = XMVector3Rotate(vCurrentLook, vRotation);
+		_vector vNewRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vNewLook));
+		_vector vNewUp = XMVector3Normalize(XMVector3Cross(vNewLook, vNewRight));
+
+		// 부드러운 회전 결과를 설정
+		Set_State(STATE_RIGHT, vNewRight);
+		Set_State(STATE_UP, vNewUp);
+		Set_State(STATE_LOOK, vNewLook);
+	}
+	else {
+		// 목표 방향에 거의 도달한 경우, 정확한 위치에서 바라보도록 설정
+		Set_State(STATE_LOOK, vTargetLook);
+		Set_State(STATE_RIGHT, XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vTargetLook)));
+		Set_State(STATE_UP, XMVector3Normalize(XMVector3Cross(vTargetLook, Get_State(STATE_RIGHT))));
+	}
+}
+
 void CTransform::SetLook(_fvector _vPoint)
 {
 	// 크기 받아옴. (길이를 1로 초기화 하고 연산하기 때문에 크기가 망가질 수 있어 보관.)

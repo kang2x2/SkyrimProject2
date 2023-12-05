@@ -36,6 +36,8 @@ void CStateSkeever_Attack::Update(_float _fTimeDelta)
 	{
 		if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerWeaponCollider))
 		{
+			pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 1.f);
+
 			if (m_pPlayer->Get_IsReadyCounter())
 				m_pPlayer->Set_IsCounter(true);
 
@@ -52,6 +54,8 @@ void CStateSkeever_Attack::Update(_float _fTimeDelta)
 		{
 			if (pGameInstance->Collision_Enter(m_pWeaponCollider, m_pPlayerBodyCollider))
 			{
+				pGameInstance->PlaySoundFile(TEXT("wpn_impact_blunt_dirt_01.wav"), CHANNEL_MONSTER3_ATK, 1.f);
+
 				m_pPlayer->SetHp(-m_pMonster->GetAtk());
 				m_pPlayer->Set_IsHit(true);
 			}
@@ -82,6 +86,7 @@ void CStateSkeever_Attack::Late_Update(_float _fTimeDelta)
 			{
 				m_pMonsterTransform->Set_Speed(m_pMonster->GetWalkSpeed());
 				m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+				pGameInstance->PlaySoundFile(TEXT("npc_skeever_attack_01.wav"), CHANNEL_MONSTER3, 1.f);
 
 				m_pMonster->Set_State(CSkeever::SKEEVER_ATK);
 				m_pMonster->Play_Animation(false, "attack2", 0, true);

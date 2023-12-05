@@ -20,6 +20,14 @@ void CStatePlayerOH_RunPAttack::Update(_float _fTimeDelta)
 {
 	m_pPlayer->Set_ReadyRecoverySp(false);
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_pPlayer->Get_CurFrameIndex() == 16)
+		pGameInstance->PlaySoundFile(TEXT("fx_swing_blade_medium_03.wav"), CHANNEL_PLAYER, 1.f);
+
+	Safe_Release(pGameInstance);
+
 	if (m_pPlayer->Get_CamMode() == CPlayer::CAM_3ST)
 		m_pPlayerTransform->SetLook(dynamic_cast<CPlayer*>(m_pPlayer)->Get_PlayerCamLook());
 	

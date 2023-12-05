@@ -26,6 +26,13 @@ void CState_FalmerOH::Update(_float _fTimeDelta)
 {
 	if (m_pMonster->GetHp() <= 0.f)
 	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->PlaySoundFile(TEXT("npc_falmer_death_03.wav"), CHANNEL_MONSTER2, 1.f);
+
+		Safe_Release(pGameInstance);
+
 		m_pMonster->Set_State(CFalmer_OneHand::FALMEROH_DEAD);
 		m_pMonster->Play_Animation(false, "bleedoutintro");
 	}

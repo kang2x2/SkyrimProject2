@@ -31,6 +31,7 @@ public:
 	_bool Get_Finish() { return m_bIsFinish; }
 	const vector<CChannel*>& Get_Channel() { return m_vecChannel; }
 	const vector<_uint>& Get_CurKeyFrame() { return m_vecCurKeyFrame; }
+	void  Set_KeyFrame(_uint _iFrame) { m_fTrackPosition = _iFrame; }
 
 	void   Set_AnimationStop(_bool _bIsStop) { m_bIsStop = _bIsStop; }
 

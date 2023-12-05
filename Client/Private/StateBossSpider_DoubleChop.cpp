@@ -24,15 +24,28 @@ void CStateBossSpider_DoubleChop::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	if (m_pMonster->Get_CurFrameIndex() == 15)
+	{
+		pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbitegiant_attack_b_01.wav"), CHANNEL_MONSTER2_ATK, 1.f);
+	}
+
+	if (m_pMonster->Get_CurFrameIndex() == 25)
+	{
+		pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbitegiant_attack_b_01.wav"), CHANNEL_MONSTER3_ATK, 1.f);
+	}
+
 	/* 공격 중 서로의 콜라이더가 충돌하였으면. (피격) */
 	if (m_pPlayer->Get_CurState() == CPlayer::ONEHAND_BLOCK ||
 		m_pPlayer->Get_CurState() == CPlayer::ONEHAND_ANTICIPATE)
 	{
 		if (pGameInstance->Collision_Enter(m_pRightCollider, m_pPlayerWeaponCollider))
 		{
+			pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 1.f);
+
 			if (m_pPlayer->Get_IsReadyCounter())
 			{
 				m_pPlayer->Set_IsCounter(true);
+				m_pPlayer->Set_IsSuccesCounter(true);
 				m_pMonster->Play_Animation(false, "recoilrchop");
 				m_pMonster->Set_State(CBossSpider::BOSSSPIDER_STAGGER_ONECHOP);
 			}
@@ -42,9 +55,12 @@ void CStateBossSpider_DoubleChop::Update(_float _fTimeDelta)
 		}
 		else if (pGameInstance->Collision_Enter(m_pLeftCollider, m_pPlayerWeaponCollider))
 		{
+			pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 1.f);
+
 			if (m_pPlayer->Get_IsReadyCounter())
 			{
 				m_pPlayer->Set_IsCounter(true);
+				m_pPlayer->Set_IsSuccesCounter(true);
 				m_pMonster->Play_Animation(false, "recoillchop");
 				m_pMonster->Set_State(CBossSpider::BOSSSPIDER_STAGGER_DOUBLECHOP);
 			}

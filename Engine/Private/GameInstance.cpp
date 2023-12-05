@@ -9,6 +9,7 @@
 #include "Collision_Manager.h"
 #include "Target_Manager.h"
 #include "MyFont_Manager.h"
+#include "Sound_Manager.h"
 #include "MyFile_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -26,6 +27,7 @@ CGameInstance::CGameInstance()
 	, m_pTarget_Manager(CTarget_Manager::GetInstance())
 	, m_pMyFont_Manager(CMyFont_Manager::GetInstance())
 	, m_pPipeLine(CPipeLine::GetInstance())
+	, m_pSound_Manager(CSound_Manager::GetInstance())
 	, m_pMyFile_Manager(CMyFile_Manager::GetInstance())
 {
 	Safe_AddRef(m_pGraphic_Device);
@@ -40,6 +42,7 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pTarget_Manager);
 	Safe_AddRef(m_pMyFont_Manager);
 	Safe_AddRef(m_pPipeLine);
+	Safe_AddRef(m_pSound_Manager);
 	Safe_AddRef(m_pMyFile_Manager);
 }
 
@@ -55,6 +58,8 @@ HRESULT CGameInstance::Initialize_Engine(_uint _iLevelIndex, HINSTANCE hInstance
 		return E_FAIL;
 
 	// 사운드 디바이스 초기화
+	if (FAILED(m_pSound_Manager->Ready_Sound()))
+		return E_FAIL;
 
 	// 오브젝트 매니저 Reserve
 	if (FAILED(m_pObject_Manager->Reserve_Manager(_iLevelIndex)))
@@ -348,6 +353,11 @@ LIGHT_DESC* CGameInstance::Get_LightDesc(_uint _iLightIndex)
 	return m_pLight_Manager->Get_LightDesc(_iLightIndex);
 }
 
+_uint CGameInstance::Get_CurLightIndex()
+{
+	return m_pLight_Manager->Get_CurLightIndex();
+}
+
 HRESULT CGameInstance::Add_Light(const LIGHT_DESC& _LightDesc)
 {
 	if (m_pLight_Manager == nullptr)
@@ -469,6 +479,55 @@ HRESULT CGameInstance::Render_Font(const wstring& _strFontTag, const wstring& _s
 		return E_FAIL;
 
 	return m_pMyFont_Manager->Render(_strFontTag, _strText, _vPos, _vColor, _fRotation, _vOrigin, _fScale);
+}
+
+/* Sound_Manager */
+HRESULT CGameInstance::PlaySoundFile(const wstring& strSoundKey, CHANNELID eCh, _float fVolume)
+{
+	if (m_pSound_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pSound_Manager->PlaySoundFile(strSoundKey, eCh, fVolume);
+}
+
+HRESULT CGameInstance::CheckPlaySoundFile(const wstring& strSoundKey, CHANNELID eCh, _float fVolume)
+{
+	if (m_pSound_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pSound_Manager->CheckPlaySoundFile(strSoundKey, eCh, fVolume);
+}
+
+HRESULT CGameInstance::PlayBGM(const wstring& strSoundKey, _float fVolume)
+{
+	if (m_pSound_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pSound_Manager->PlayBGM(strSoundKey, fVolume);
+}
+
+HRESULT CGameInstance::StopSound(CHANNELID eCh)
+{
+	if (m_pSound_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pSound_Manager->StopSound(eCh);
+}
+
+HRESULT CGameInstance::StopSoundAll()
+{
+	if (m_pSound_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pSound_Manager->StopSoundAll();
+}
+
+HRESULT CGameInstance::SetChannelVolume(CHANNELID eCh, _float fVolume)
+{
+	if (m_pSound_Manager == nullptr)
+		return E_FAIL;
+
+	return m_pSound_Manager->SetChannelVolume(eCh, fVolume);
 }
 
 /* File Manager */

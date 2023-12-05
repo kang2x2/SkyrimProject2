@@ -33,9 +33,28 @@ public:
 
 protected:
 	HRESULT Ready_Component();
+	HRESULT Bind_ShaderResource();
 
 public:
-	virtual _vector			Get_OriginPos() { return m_vOriginPos; }
+	void			Play_Animation(_bool _bIsLoop, string _strAnimationName, _uint _iChangeIndex = 0, _bool _bIsReset = false, _bool _bIsQuickChange = false);
+
+	_bool			Get_IsAnimationFin();
+	string			Get_CurAnimationName();
+	_uint			Get_CurFrameIndex();
+	void			Set_KeyFrame(_uint _iFrame);
+
+	_vector			Get_OriginPos() { return m_vOriginPos; }
+
+	void			Set_AnimationStop(_bool _bIsStop);
+
+	class CSkyrimUI_Talk* Get_TalkUI() { return m_pTalk; }
+	void			Start_Talk();
+	_uint			Get_CurTextID();
+	_uint			Get_CurTalkID();
+	
+	void			Set_VisibleTalkIcon(_bool _bIsVisible);
+
+	virtual void	Set_Idle() {};
 
 protected:
 	_matrix* pMatPivot;
@@ -48,8 +67,12 @@ protected:
 
 	_vector			m_vOriginPos = {};
 
+	class CPlayer* m_pPlayer = nullptr;
+	class CSkyrimUI_Talk* m_pTalk = nullptr;
+	class CSkyrimUI_TalkIcon* m_pTalkIcon = nullptr;
+
 public:
-	virtual CGameObject* Clone(void* _pArg) = 0;
+	virtual CGameObject* Clone(void* _pArg) override;
 	virtual void Free() override;
 };
 

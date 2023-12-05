@@ -116,7 +116,7 @@ string CCarlotta_Foot::Get_CurAnimationName()
 
 HRESULT CCarlotta_Foot::Ready_Component()
 {
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_Carlotta_Foot"),
+	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Model_BootsF_Merchant01"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 

@@ -25,6 +25,8 @@ void CStateSkeever_Chase::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	pGameInstance->CheckPlaySoundFile(TEXT("npc_skeever_foot_front_01.wav"), CHANNEL_MONSTER3, 1.f);
+
 	/* Ãß°Ý ¹üÀ§¸¦ ¹þ¾î³µÀ» ¶§ */
 	if (!pGameInstance->Collision_Stay(m_pVecCollider[CSkeever::SKEEVER_COL_MISSDETECTION], m_pPlayerBodyCollider))
 	{
@@ -36,6 +38,7 @@ void CStateSkeever_Chase::Update(_float _fTimeDelta)
 	if (pGameInstance->Collision_Enter(m_pVecCollider[CSkeever::SKEEVER_COL_ATKROUND], m_pPlayerBodyCollider))
 	{
 		m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+		pGameInstance->PlaySoundFile(TEXT("npc_skeever_attack_01.wav"), CHANNEL_MONSTER3, 1.f);
 
 		m_pMonster->Set_State(CSkeever::SKEEVER_CHARGE);
 		m_pMonster->Play_Animation(false, "attackpowerforward");

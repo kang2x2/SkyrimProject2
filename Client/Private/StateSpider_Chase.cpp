@@ -27,9 +27,13 @@ void CStateSpider_Chase::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	pGameInstance->CheckPlaySoundFile(TEXT("npc_spiderfrostbite_foot_01.wav"), CHANNEL_MONSTER4, 1.f);
+
 	/* RunPowerAtk 범위에 들어왔을 때 */
 	if (pGameInstance->Collision_Enter(m_pVecCollider[CSpider::SPIDER_COL_ATKROUND], m_pPlayerBodyCollider))
 	{
+		pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbite_attack_bite_01.wav"), CHANNEL_MONSTER4, 1.f);
+
 		m_pMonster->Set_State(CSpider::SPIDER_CHARGE);
 		m_pMonster->Play_Animation(false, "attack_forwardjump");
 	}

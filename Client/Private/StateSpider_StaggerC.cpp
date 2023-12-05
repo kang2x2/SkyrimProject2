@@ -47,6 +47,7 @@ void CStateSpider_StaggerC::Late_Update(_float _fTimeDelta)
 			if (pGameInstance->Collision_Stay(m_pVecCollider[CSpider::SPIDER_COL_ATKROUND], m_pPlayerBodyCollider))
 			{
 				m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+				pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbite_attack_bite_01.wav"), CHANNEL_MONSTER4, 1.f);
 
 				m_pMonster->Set_State(CSpider::SPIDER_BITE);
 				m_pMonster->Play_Animation(false, "attack_bitelow");

@@ -37,7 +37,7 @@ HRESULT CEffect_BloodFlare::Initialize_Clone(void* pArg)
 
 	m_bHasMesh = false;
 	m_strName = TEXT("Effect_BloodFlare");
-
+	m_strLayerTag = TEXT("Layer_Effect");
 	return S_OK;
 }
 
@@ -78,7 +78,7 @@ HRESULT CEffect_BloodFlare::Ready_Component()
 		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 	// Shader
-	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Shader_Effect"),
+	if (FAILED(__super::Add_CloneComponent(LEVEL_STATIC, TEXT("ProtoType_Component_Shader_Effect"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 	// VIBuffer
