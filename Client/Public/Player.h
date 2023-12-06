@@ -168,8 +168,8 @@ private:
 	_float							m_fRecoverySpCoolTime = 0;
 
 	class CInventory*				m_pInven = nullptr;
-	class CSkyrimUI_HpBar*			m_pHpBar = nullptr;
 	class CSkyrimUI_SpBar*			m_pSpBar = nullptr;
+	class CSkyrimUI_HpBar*			m_pHpBar = nullptr;
 
 	_bool							m_bIsAttack = false;
 	_bool							m_bIsReadyCounter = false;

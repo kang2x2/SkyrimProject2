@@ -55,7 +55,6 @@ public:
 		m_iCurPlayerTextIndex = 0;
 	}
 	_uint	Get_CurTextID() { return m_iCurTextIndex; }
-	_uint	Get_CurTalkID() { return m_iCurTalkID; }
 
 private:
 	HRESULT	Ready_Component();
@@ -78,7 +77,6 @@ private: /* 사용할 컴포넌트들 */
 	_bool			m_bIsTalk = false;
 
 	TALK_DESC		m_tTalkDesc = {};
-	static _uint	m_iCurTalkID;
 	_uint			m_iCurTextIndex = 0;
 	_uint			m_iCurPlayerTextIndex = 0;
 

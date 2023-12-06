@@ -343,8 +343,8 @@ HRESULT CLoader::Loading_For_Level_WhiteRun()
 		Loading_For_Level_Public(LEVEL_GAMEPLAY);
 
 		/* 인트로 */
-		//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_IntroFade"))))
-		//	return E_FAIL;
+		if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), TEXT("ProtoType_GameObject_IntroFade"))))
+			return E_FAIL;
 
 		Safe_Release(pGameInstance);
 
@@ -593,14 +593,14 @@ HRESULT CLoader::Loading_For_Level_Public(LEVELID _eLevel)
 #pragma region Navigation
 		/* 화이트런 */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Navigation_WhiteRun"),
-			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/testCell")))))
-			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/WhiteRun_Cell3")))))
+			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/testCell")))))
+			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/WhiteRun_Cell3")))))
 			return E_FAIL;
 
 		/* 던전 */
 		if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Navigation_Dungeon"),
-			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Dungeon_Cell")))))
-			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/testCell")))))
+			CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/Dungeon_Cell")))))
+			//CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/SaveLoad/testCell")))))
 			return E_FAIL;
 #pragma endregion
 
@@ -661,9 +661,9 @@ HRESULT CLoader::Set_ProtoType_PublicMesh(LEVELID _eLevel)
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_NPC/GuardSupply/GuardSupply.bin", matInitialize, CModel::TYPE_ANIM))))
 		return E_FAIL;
 	/* Guard */
-	//if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Guard"),
-	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_NPC/Guard/Guard.bin", matInitialize, CModel::TYPE_ANIM))))
-	//	return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Guard"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_NPC/Guard/Guard.bin", matInitialize, CModel::TYPE_ANIM))))
+		return E_FAIL;
 
 	/* 더미 */
 	if (FAILED(pGameInstance->Add_ProtoType_Component(_eLevel, TEXT("ProtoType_Component_Model_Carlotta_Body"),
@@ -3027,78 +3027,78 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 	_matrix matInitialize = XMMatrixIdentity();
 	matInitialize = XMMatrixScaling(0.0012f, 0.0012f, 0.0012f);
 #pragma region Test Monster 
-	if (g_curLevel != LEVEL_TOOL)
-	{
-		/* Spider */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Spider"),
-			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Spider/Spider.bin", matInitialize, CModel::TYPE_ANIM))))
-			return E_FAIL;
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_SpiderBullet"),
-			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Effect/SpiderBullet/SpiderBullet.bin", matInitialize, CModel::TYPE_NONANIM))))
-			return E_FAIL;
-		
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider"),
-			CSpider::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider_Mouth"),
-			CSpider_Mouth::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CProjectile_Web"),
-			CProjectile_Web::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-	
-		/* Skeever */
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Skeever"),
-			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Skeever/Skeever.bin", matInitialize, CModel::TYPE_ANIM))))
-			return E_FAIL;
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Skeever"),
-			CSkeever::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Skeever_Weapon"),
-			CSkeever_Weapon::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-		/* Falemer UnEquip*/
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Falmer_Unequip"),
-			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Falmer_UnEquip/Falmer_Unequip.bin", matInitialize, CModel::TYPE_ANIM))))
-			return E_FAIL;
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Falmer_Unequip"),
-			CFalmer_UnEquip::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FalmerUE_Weapon"),
-			CFalmerUE_Weapon::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-		/* Falmer OneHand*/
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Falmer_OneHand"),
-			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Falmer_OneHand/Falmer_OneHand.bin", matInitialize, CModel::TYPE_ANIM))))
-			return E_FAIL;
-		
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Falmer_OneHand"),
-			CFalmer_OneHand::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FalmerOH_Weapon"),
-			CFalmerOH_Weapon::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-		
-		/* BossSpider */
-		matInitialize = XMMatrixIdentity();
-		matInitialize = XMMatrixScaling(0.003f, 0.003f, 0.003f);
-		if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_BossSpider"),
-			CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_BossSpider/BossSpider.bin", matInitialize, CModel::TYPE_ANIM))))
-			return E_FAIL;
-		
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider"),
-			CBossSpider::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider_Mouth"),
-			CBossSpider_Mouth::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider_Left"),
-			CBossSpider_Left::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-		if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider_Right"),
-			CBossSpider_Right::Create(m_pDevice, m_pContext))))
-			return E_FAIL;
-	}
+	//if (g_curLevel != LEVEL_TOOL)
+	//{
+	//	/* Spider */
+	//	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Spider"),
+	//		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Spider/Spider.bin", matInitialize, CModel::TYPE_ANIM))))
+	//		return E_FAIL;
+	//	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_SpiderBullet"),
+	//		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/NonAnim/Skyrim_Effect/SpiderBullet/SpiderBullet.bin", matInitialize, CModel::TYPE_NONANIM))))
+	//		return E_FAIL;
+	//	
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider"),
+	//		CSpider::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Spider_Mouth"),
+	//		CSpider_Mouth::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_CProjectile_Web"),
+	//		CProjectile_Web::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//
+	//	/* Skeever */
+	//	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Skeever"),
+	//		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Skeever/Skeever.bin", matInitialize, CModel::TYPE_ANIM))))
+	//		return E_FAIL;
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Skeever"),
+	//		CSkeever::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Skeever_Weapon"),
+	//		CSkeever_Weapon::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//	/* Falemer UnEquip*/
+	//	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Falmer_Unequip"),
+	//		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Falmer_UnEquip/Falmer_Unequip.bin", matInitialize, CModel::TYPE_ANIM))))
+	//		return E_FAIL;
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Falmer_Unequip"),
+	//		CFalmer_UnEquip::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FalmerUE_Weapon"),
+	//		CFalmerUE_Weapon::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//	/* Falmer OneHand*/
+	//	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_Falmer_OneHand"),
+	//		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_Falmer_OneHand/Falmer_OneHand.bin", matInitialize, CModel::TYPE_ANIM))))
+	//		return E_FAIL;
+	//	
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Falmer_OneHand"),
+	//		CFalmer_OneHand::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_FalmerOH_Weapon"),
+	//		CFalmerOH_Weapon::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//	
+	//	/* BossSpider */
+	//	matInitialize = XMMatrixIdentity();
+	//	matInitialize = XMMatrixScaling(0.003f, 0.003f, 0.003f);
+	//	if (FAILED(pGameInstance->Add_ProtoType_Component(LEVEL_GAMEPLAY, TEXT("ProtoType_Component_Model_BossSpider"),
+	//		CModel::Create(m_pDevice, m_pContext, "../Bin/Resource/BinaryFBX/Anim/Skyrim_BossSpider/BossSpider.bin", matInitialize, CModel::TYPE_ANIM))))
+	//		return E_FAIL;
+	//	
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider"),
+	//		CBossSpider::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider_Mouth"),
+	//		CBossSpider_Mouth::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider_Left"),
+	//		CBossSpider_Left::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_BossSpider_Right"),
+	//		CBossSpider_Right::Create(m_pDevice, m_pContext))))
+	//		return E_FAIL;
+	//}
 #pragma endregion
 
 #pragma region UI
@@ -3133,6 +3133,14 @@ HRESULT CLoader::Set_ProtoType_WhiteObject()
 	/* GuardSupply */
 	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_GuardSupply"),
 		CNPC_GuardSupply::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Guard */
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Guard"),
+		CNPC_Guard::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_ProtoObject(TEXT("ProtoType_GameObject_Guard_Weapon"),
+		CGuard_Weapon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// Part(더미)

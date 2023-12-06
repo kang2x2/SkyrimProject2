@@ -30,7 +30,7 @@ void CStateBossSpider_OneChop::Update(_float _fTimeDelta)
 	{
 		if (pGameInstance->Collision_Enter(m_pRightCollider, m_pPlayerWeaponCollider))
 		{
-			pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 1.f);
+			pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 0.35f);
 
 			if (m_pPlayer->Get_IsReadyCounter())
 			{
@@ -38,6 +38,7 @@ void CStateBossSpider_OneChop::Update(_float _fTimeDelta)
 				m_pPlayer->Set_IsSuccesCounter(true);
 				m_pMonster->Play_Animation(false, "recoilrchop");
 				m_pMonster->Set_State(CBossSpider::BOSSSPIDER_STAGGER_ONECHOP);
+				m_pMonster->Add_ParryingCount();
 			}
 
 			m_pPlayer->Set_State(CPlayer::ONEHAND_ANTICIPATE);

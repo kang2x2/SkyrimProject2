@@ -17,8 +17,8 @@
 #include "SkyrimArmor.h"
 
 #include "Inventory.h"
-#include "SkyrimUI_HpBar.h"
 #include "SkyrimUI_SpBar.h"
+#include "SkyrimUI_HpBar.h"
 
 #include "Effect_BloodFlare.h"
 
@@ -76,8 +76,6 @@ HRESULT CPlayer::Initialize_Clone(void* pArg)
 	if (FAILED(Ready_PlayerUI()))
 		return E_FAIL;
 
-	m_bIsMaintain = true;
-
 	return S_OK;
 }
 
@@ -108,8 +106,8 @@ void CPlayer::Tick(_float _fTimeDelta)
 	
 		m_pInven->Inven_AddItem(pGameInstance->Add_InstanceCloneObject(LEVEL_GAMEPLAY, TEXT("SkyrimItem"), TEXT("ProtoType_GameObject_Weapon_AkaviriSword"), nullptr));
 		m_pInven->Inven_AddItem(pGameInstance->Add_InstanceCloneObject(LEVEL_GAMEPLAY, TEXT("SkyrimItem"), TEXT("ProtoType_GameObject_TorsoM_Blades"), nullptr));
-		m_pInven->Inven_AddItem(pGameInstance->Add_InstanceCloneObject(LEVEL_GAMEPLAY, TEXT("SkyrimItem"), TEXT("ProtoType_GameObject_HelmetM_Blades"), nullptr));
-		m_pInven->Inven_AddItem(pGameInstance->Add_InstanceCloneObject(LEVEL_GAMEPLAY, TEXT("SkyrimItem"), TEXT("ProtoType_GameObject_GlovesM_Blades"), nullptr));
+		//m_pInven->Inven_AddItem(pGameInstance->Add_InstanceCloneObject(LEVEL_GAMEPLAY, TEXT("SkyrimItem"), TEXT("ProtoType_GameObject_HelmetM_Blades"), nullptr));
+		//m_pInven->Inven_AddItem(pGameInstance->Add_InstanceCloneObject(LEVEL_GAMEPLAY, TEXT("SkyrimItem"), TEXT("ProtoType_GameObject_GlovesM_Blades"), nullptr));
 		m_pInven->Inven_AddItem(pGameInstance->Add_InstanceCloneObject(LEVEL_GAMEPLAY, TEXT("SkyrimItem"), TEXT("ProtoType_GameObject_BootsM_Blades"), nullptr));
 	}
 	Safe_Release(pGameInstance);
@@ -125,8 +123,6 @@ void CPlayer::Tick(_float _fTimeDelta)
 			g_bIsPause = false;
 		}
 	}
-
-
 
 	if (!g_bIsPause)
 	{
@@ -155,7 +151,6 @@ void CPlayer::Tick(_float _fTimeDelta)
 				iter->Tick(_fTimeDelta * m_fAnimationSpeed);
 		}
 	}
-
 
 	_vector	vPosition = m_pNavigationCom[g_curStage]->Set_OnCell(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
@@ -208,8 +203,8 @@ HRESULT CPlayer::Render()
 	m_pNavigationCom[g_curStage]->Render();
 #endif
 
-	m_pHpBar->Render();
 	m_pSpBar->Render();
+	m_pHpBar->Render();
 
 	return S_OK;
 }
@@ -489,7 +484,7 @@ HRESULT CPlayer::Ready_State()
 {
 	m_fRunSpeed = 2.5f;
 	m_fWalkSpeed = 1.5f;
-	m_fHp = 100.f;
+	m_fHp = 100.f; 
 	m_fSp = 100.f;
 	m_iAtk = 25;
 
@@ -503,17 +498,16 @@ HRESULT CPlayer::Ready_PlayerUI()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	/* HpBar */
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_HpBar"), TEXT("ProtoType_GameObject_UI_HpBar"))))
-		return E_FAIL;
-	m_pHpBar = dynamic_cast<CSkyrimUI_HpBar*>
-		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_HpBar"), TEXT("UI_Hpbar")));
-
 	/* SpBar */
 	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_SpBar"), TEXT("ProtoType_GameObject_UI_SpBar"))))
 		return E_FAIL;
 	m_pSpBar = dynamic_cast<CSkyrimUI_SpBar*>
 		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_SpBar"), TEXT("UI_Spbar")));
+	/* HpBar */
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_HpBar"), TEXT("ProtoType_GameObject_UI_HpBar"))))
+		return E_FAIL;
+	m_pHpBar = dynamic_cast<CSkyrimUI_HpBar*>
+		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Player_HpBar"), TEXT("UI_Hpbar")));
 
 	Safe_Release(pGameInstance);
 
@@ -607,8 +601,8 @@ void CPlayer::Player_Recovery(_float _fTimeDelta)
 		m_fSp = 0.f;
 #pragma endregion
 
-	m_pHpBar->Tick(m_fHp, _fTimeDelta);
 	m_pSpBar->Tick(m_fSp, _fTimeDelta);
+	m_pHpBar->Tick(m_fHp, _fTimeDelta);
 }
 
 HRESULT CPlayer::Bind_ShaderResource()
@@ -652,7 +646,7 @@ void CPlayer::Free()
 	__super::Free();
 
 #ifdef _DEBUG
-	// 이 새끼 주석 하냐 안하냐에 따라 릴리즈, 디버그에서 종료 시 에러남.
+	// 주석 하냐 안하냐에 따라 릴리즈, 디버그에서 종료 시 에러남.
 	for (_int i = 0; i < m_vecPlayerPart.size(); ++i)
 	{
 		if (m_vecPlayerPart[i] != nullptr)

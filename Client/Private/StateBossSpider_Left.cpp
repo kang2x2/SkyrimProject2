@@ -19,27 +19,38 @@ HRESULT CStateBossSpider_Left::Initialize(CGameObject* _pMonster, CGameObject* _
 
 void CStateBossSpider_Left::Update(_float _fTimeDelta)
 {
+	m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+
 	__super::Update(_fTimeDelta);
 	// m_fBackTime 상태 전환할 때 0으로 초기화
 	if (m_fBackTime < 0.5f)
 	{
 		m_pMonsterTransform->Go_Backward(_fTimeDelta, m_pMonsterNavigation);
-		m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
-
 		m_fBackTime += _fTimeDelta;
 	}
 	else if (m_fBackTime >= 0.5f)
 	{
-		m_pMonsterTransform->Go_Left(_fTimeDelta, m_pMonsterNavigation);
-		m_pMonsterTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+		m_fLeftTime += _fTimeDelta;
+
+		if (m_fLeftTime <= 1.5f)
+		{
+			m_pMonsterTransform->Go_Left(_fTimeDelta, m_pMonsterNavigation);
+		}
+		else
+		{
+			m_pMonsterTransform->Go_Foward(_fTimeDelta, m_pMonsterNavigation);
+		}
 
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
-		pGameInstance->CheckPlaySoundFile(TEXT("npc_spiderfrostbitegiant_breathe_lp.wav"), CHANNEL_MONSTER1_RUN, 1.f);
-
 		if (pGameInstance->Collision_Enter(m_pVecCollider[CBossSpider::BOSSSPIDER_COL_ATKROUND], m_pPlayerBodyCollider))
 		{
+			m_fLeftTime = 0.f;
+			m_fBackTime = 0.f;
+
+			pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbitegiant_attack_b_01.wav"), CHANNEL_MONSTER1, 0.35f);
+
 			m_pMonster->Set_State(CBossSpider::BOSSSPIDER_DOUBLECHOP);
 			m_pMonster->Play_Animation(false, "attack_combochop");
 		}

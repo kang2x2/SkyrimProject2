@@ -58,7 +58,7 @@ void CSkyrimUI_HpBar::Tick(_float _fHp, _float _fTimeDelta)
 {
 	if (_fHp < 100.f)
 	{
-		if(m_fAlpha < 1.f)
+		if (m_fAlpha < 1.f)
 			m_fAlpha += _fTimeDelta * 0.5f;
 
 		m_bIsShow = true;
@@ -68,7 +68,7 @@ void CSkyrimUI_HpBar::Tick(_float _fHp, _float _fTimeDelta)
 		if (m_fAlpha > 0.f)
 			m_fAlpha -= _fTimeDelta * 0.5f;
 
-		if(m_fAlpha <= 0.f)
+		if (m_fAlpha <= 0.f)
 			m_bIsShow = false;
 	}
 
@@ -90,13 +90,13 @@ void CSkyrimUI_HpBar::Tick(_float _fHp, _float _fTimeDelta)
 
 void CSkyrimUI_HpBar::LateTick(_float _fTimeDelta)
 {
-	if (m_bIsShow)
+	if (m_fAlpha > 0.1f)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI_0, this);
 }
 
 HRESULT CSkyrimUI_HpBar::Render()
 {
-	if (m_bIsShow)
+	if (m_fAlpha > 0.1f)
 	{
 		if (FAILED(Bind_ShaderResources()))
 			return E_FAIL;

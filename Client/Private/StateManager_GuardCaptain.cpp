@@ -9,6 +9,7 @@
 #include "StateGuardCaptain_UnEquip.h"
 
 #include "StateGuardCaptain_Walk.h"
+#include "StateGuardCaptain_UnEquipWalk.h"
 
 #include "StateGuardCaptain_Warning.h"
 #include "StateGuardCaptain_Talk.h"
@@ -35,6 +36,8 @@ HRESULT CStateManager_GuardCaptain::Initialize(CGameObject* _pMonster, CGameObje
 
 	/* Walk */
 	pState = CStateGuardCaptain_Walk::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecNpcState.push_back(pState);
+	pState = CStateGuardCaptain_UnEquipWalk::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecNpcState.push_back(pState);
 
 	/* Warning */

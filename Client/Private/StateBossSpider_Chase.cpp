@@ -27,12 +27,12 @@ void CStateBossSpider_Chase::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	pGameInstance->CheckPlaySoundFile(TEXT("npc_spiderfrostbitegiant_breathe_lp.wav"), CHANNEL_MONSTER1, 1.f);
+	// pGameInstance->CheckPlaySoundFile(TEXT("npc_spiderfrostbitegiant_breathe_lp.wav"), CHANNEL_MONSTER1, 1.f);
 
 	/* RunPowerAtk 범위에 들어왔을 때 */
 	if (pGameInstance->Collision_Enter(m_pVecCollider[CBossSpider::BOSSSPIDER_COL_ATKROUND], m_pPlayerBodyCollider))
 	{
-		pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbitegiant_attack_b_01.wav"), CHANNEL_MONSTER1, 1.f);
+		pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbitegiant_attack_b_01.wav"), CHANNEL_MONSTER1, 0.35f);
 		
 		m_pMonster->Set_State(CBossSpider::BOSSSPIDER_ONECHOP);
 		m_pMonster->Play_Animation(false, "attack_rightchop");

@@ -31,6 +31,7 @@ HRESULT CMainApp::Initialize()
 
 	g_bIsSlow = false;
 	g_fGameSpeed = 1.f;
+	g_iCurTalkID = 0;
 
 	/* 게임 초기화 */
 	// 1. 장치

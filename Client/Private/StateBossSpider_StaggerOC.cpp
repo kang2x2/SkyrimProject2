@@ -30,19 +30,33 @@ void CStateBossSpider_StaggerOC::Late_Update(_float _fTimeDelta)
 	if (m_pMonster->Get_IsAnimationFin() &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "recoilrchop"))
 	{
-		if (pGameInstance->Collision_Stay(m_pVecCollider[CBossSpider::BOSSSPIDER_COL_ATKROUND], m_pPlayerBodyCollider))
+		if (m_pMonster->Get_ParryingCount() == 3)
 		{
-			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+			pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbitegiant_breathe_lp.wav"), CHANNEL_MONSTER1_RUN, 0.5f);
+			m_pMonster->Init_ParryingCount();
 
-			m_pMonster->Set_State(CBossSpider::BOSSSPIDER_DOUBLECHOP);
-			m_pMonster->Play_Animation(false, "attack_combochop");
+			m_pMonster->Set_AnimationSpeed(2.f);
+
+			m_pMonsterTransform->Set_Speed(m_pMonster->Get_BossDesc().fSprintSpeed);
+			m_pMonster->Play_Animation(true, "backward_run");
+			m_pMonster->Set_State(CBossSpider::BOSSSPIDER_BACKWARD);
 		}
 		else
 		{
-			m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+			if (pGameInstance->Collision_Stay(m_pVecCollider[CBossSpider::BOSSSPIDER_COL_ATKROUND], m_pPlayerBodyCollider))
+			{
+				m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
 
-			m_pMonster->Set_State(CBossSpider::BOSSSPIDER_CHASE);
-			m_pMonster->Play_Animation(true, "forward_run");
+				m_pMonster->Set_State(CBossSpider::BOSSSPIDER_DOUBLECHOP);
+				m_pMonster->Play_Animation(false, "attack_combochop");
+			}
+			else
+			{
+				m_pMonsterTransform->Set_Speed(m_pMonster->GetRunSpeed());
+
+				m_pMonster->Set_State(CBossSpider::BOSSSPIDER_CHASE);
+				m_pMonster->Play_Animation(true, "forward_run");
+			}
 		}
 	}
 

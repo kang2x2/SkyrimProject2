@@ -26,7 +26,7 @@ public:
 	virtual HRESULT Initialize_ProtoType();
 	virtual HRESULT Initialize_Clone(void* _pArg);
 	virtual void    PriorityTick(_float _fTimeDelta);
-	virtual void	Tick(_float _fSp, _float _fTimeDelta);
+	virtual void	Tick(_float _fHp, _float _fTimeDelta);
 	virtual void	LateTick(_float _fTimeDelta);
 	virtual HRESULT Render();
 

@@ -37,8 +37,6 @@ protected:
 	_float		m_fSpitCoolTime = 0.f;
 
 	_uint		m_iRand = 0;
-	_float		m_fBackTime = 0.f;
-	_float		m_fLeftTime = 0.f;
 
 public:
 	virtual void Free() override;

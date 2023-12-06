@@ -769,9 +769,6 @@
     <Filter Include="03. State\01. Monster\05. BossSpider\01. State\02. Attack\03. Charge">
       <UniqueIdentifier>{c1887c71-f5e5-40b6-8d0c-c03470838f82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\04. Dead">
-      <UniqueIdentifier>{08526b7a-b6d7-4d48-8056-3311c3ef654f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. State\01. Monster\05. BossSpider\01. State\03. Stagger\03. Stagger_Charge">
       <UniqueIdentifier>{7a22da71-3c95-4824-99a5-aabf450957cf}</UniqueIdentifier>
     </Filter>
@@ -783,12 +780,6 @@
     </Filter>
     <Filter Include="03. State\00. Player\01. State\02. Public\01. 3stStagger">
       <UniqueIdentifier>{01a15691-c333-49cd-9929-40f2058a1057}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\04. Dead\00. Dead">
-      <UniqueIdentifier>{a8a7c7bf-3cec-4770-ad6b-4d25abb9e7fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\04. Dead\01. Release">
-      <UniqueIdentifier>{ac41bf08-a28e-428a-82c2-70d84faafd45}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. State\00. Player\01. State\01. OneHand\04. Attack\07. Bash">
       <UniqueIdentifier>{de4848d9-a07c-48eb-a731-fe9cf228757b}</UniqueIdentifier>
@@ -847,9 +838,6 @@
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\03. Guard\00. Part">
       <UniqueIdentifier>{e9f26c5e-4bbc-4a81-9256-abddaf4556f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\03. Guard\NewFilter1">
-      <UniqueIdentifier>{ff821d11-05b5-4faf-9382-9ab5350f0785}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\02. SupplyGuard">
       <UniqueIdentifier>{60c9e2f8-5083-4820-9e50-90ee2148dd3b}</UniqueIdentifier>
     </Filter>
@@ -883,14 +871,53 @@
     <Filter Include="03. State\01. Monster\05. BossSpider\01. State\01. Chase\02. Left">
       <UniqueIdentifier>{f10fe304-802d-4da9-a6ff-b4c5cc8d4065}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\01. Chase\03. Right">
-      <UniqueIdentifier>{38e832f5-e0ed-4114-8b85-501dacddca43}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04. UI\03. Bar\02. MonsterHpBar">
       <UniqueIdentifier>{c2254723-b988-4c09-9abb-d5bdaa9209b2}</UniqueIdentifier>
     </Filter>
     <Filter Include="04. UI\03. Bar\03. BossHpBar">
       <UniqueIdentifier>{57e11535-7e6a-47cc-947f-a0c7f259e4d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\04. Berserk">
+      <UniqueIdentifier>{e3ed5f9b-2ffe-4e5a-a2df-81b4f71d3c5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\04. Berserk\00. Backward">
+      <UniqueIdentifier>{38e832f5-e0ed-4114-8b85-501dacddca43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\04. Berserk\01. Turn">
+      <UniqueIdentifier>{aee95d7d-1ddf-4d20-b8c1-192726c537c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\04. Berserk\02. Sprint">
+      <UniqueIdentifier>{ce4462f7-04ab-421d-80d4-f60aacbcc667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\04. Berserk\03. Charge">
+      <UniqueIdentifier>{ed4158c7-bb96-4105-b2e0-7e769cf95fae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\06. Dead">
+      <UniqueIdentifier>{08526b7a-b6d7-4d48-8056-3311c3ef654f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\06. Dead\00. Dead">
+      <UniqueIdentifier>{a8a7c7bf-3cec-4770-ad6b-4d25abb9e7fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\06. Dead\01. Release">
+      <UniqueIdentifier>{ac41bf08-a28e-428a-82c2-70d84faafd45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\05. Groggy">
+      <UniqueIdentifier>{aea241d8-5e28-4778-8e28-b350905ed013}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\05. Groggy\00. Intro">
+      <UniqueIdentifier>{cae10ad6-d0aa-473c-ab14-16986912f56b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\05. Groggy\01. Groggy">
+      <UniqueIdentifier>{0ca6d45e-42a9-4407-9e42-2443aae3971c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\05. Groggy\02. Out">
+      <UniqueIdentifier>{3521d3cf-ed2c-4141-b241-03e834336309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. State\01. Monster\05. BossSpider\01. State\04. Berserk\04. BerserkChop">
+      <UniqueIdentifier>{cb7e9335-d331-44e6-8915-5d80b26ddade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. GamePlay\01. ActorObject\02. NPC\03. Guard\00. Part\00. Weapon">
+      <UniqueIdentifier>{de0d174f-d398-4d76-ad0c-827b9c8e9f06}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1431,9 +1458,6 @@
     <ClInclude Include="..\Public\StateFalmerUE_Dead.h">
       <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\07. Dead</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\SkyrimUI_HpBar.h">
-      <Filter>04. UI\03. Bar\00. HpBar</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\StateFalmerOH_Dead.h">
       <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\08. Dead</Filter>
     </ClInclude>
@@ -1549,10 +1573,10 @@
       <Filter>03. State\00. Player\01. State\02. Public\01. 3stStagger</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StateBossSpider_Dead.h">
-      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Dead\00. Dead</Filter>
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\06. Dead\00. Dead</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StateBossSpider_Release.h">
-      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Dead\01. Release</Filter>
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\06. Dead\01. Release</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StatePlayerOH_Bash.h">
       <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\07. Bash</Filter>
@@ -1643,6 +1667,39 @@
     </ClInclude>
     <ClInclude Include="..\Public\SkyrimUI_BossHpBar.h">
       <Filter>04. UI\03. Bar\03. BossHpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateGuardCaptain_UnequipWalk.h">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\02. Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SkyrimUI_HpBar.h">
+      <Filter>04. UI\03. Bar\00. HpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Backward.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Berserk\00. Backward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Turn.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Berserk\01. Turn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_BerserkSprint.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Berserk\02. Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_BerserkCharge.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Berserk\03. Charge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_GroggyIntro.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\05. Groggy\00. Intro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_Groggy.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\05. Groggy\01. Groggy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_GroggyOut.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\05. Groggy\02. Out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateBossSpider_BerserkChop.h">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Berserk\04. BerserkChop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Guard_Weapon.h">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\03. Guard\00. Part\00. Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2173,9 +2230,6 @@
     <ClCompile Include="..\Private\StateFalmerUE_Dead.cpp">
       <Filter>03. State\01. Monster\01. Falmer_UnEquip\01. State\07. Dead</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\SkyrimUI_HpBar.cpp">
-      <Filter>04. UI\03. Bar\00. HpBar</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\StateFalmerOH_Dead.cpp">
       <Filter>03. State\01. Monster\02. Falmer_OneHand\01. State\08. Dead</Filter>
     </ClCompile>
@@ -2291,10 +2345,10 @@
       <Filter>03. State\00. Player\01. State\02. Public\01. 3stStagger</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StateBossSpider_Dead.cpp">
-      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Dead\00. Dead</Filter>
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\06. Dead\00. Dead</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StateBossSpider_Release.cpp">
-      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Dead\01. Release</Filter>
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\06. Dead\01. Release</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StatePlayerOH_Bash.cpp">
       <Filter>03. State\00. Player\01. State\01. OneHand\04. Attack\07. Bash</Filter>
@@ -2385,6 +2439,39 @@
     </ClCompile>
     <ClCompile Include="..\Private\SkyrimUI_BossHpBar.cpp">
       <Filter>04. UI\03. Bar\03. BossHpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateGuardCaptain_UnequipWalk.cpp">
+      <Filter>03. State\02. NPC\00. GuardCaptain\01. State\02. Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SkyrimUI_HpBar.cpp">
+      <Filter>04. UI\03. Bar\00. HpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Backward.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Berserk\00. Backward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Turn.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Berserk\01. Turn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_BerserkSprint.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Berserk\02. Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_BerserkCharge.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Berserk\03. Charge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_GroggyIntro.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\05. Groggy\00. Intro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_Groggy.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\05. Groggy\01. Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_GroggyOut.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\05. Groggy\02. Out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateBossSpider_BerserkChop.cpp">
+      <Filter>03. State\01. Monster\05. BossSpider\01. State\04. Berserk\04. BerserkChop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Guard_Weapon.cpp">
+      <Filter>02. GameObject\01. GamePlay\01. ActorObject\02. NPC\03. Guard\00. Part\00. Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

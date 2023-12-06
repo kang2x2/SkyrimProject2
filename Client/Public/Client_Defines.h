@@ -31,5 +31,6 @@ extern bool g_bIsPause;
 extern bool g_bIsTalk;
 extern bool g_bIsSlow;
 extern float g_fGameSpeed;
+extern int g_iCurTalkID;
 
 using namespace Client;

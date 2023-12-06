@@ -23,7 +23,7 @@ void CStateBossSpider_Idle::Update(_float _fTimeDelta)
 
 	_float4 vIdlePos;
 	XMStoreFloat4(&vIdlePos, m_pMonsterTransform->Get_State(CTransform::STATE_POSITION));
-	vIdlePos.y = 8.f;
+	vIdlePos.y = -4.5f;
 	m_pMonsterTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vIdlePos));
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

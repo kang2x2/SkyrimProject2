@@ -24,6 +24,12 @@ public:
 	virtual void Update(_float _fTimeDelta);
 	virtual void Late_Update(_float _fTimeDelta);
 
+private:
+	_float		m_fBackTime = 0.f;
+	_float		m_fLeftTime = 0.f;
+	_bool		m_bIsBack = false;
+	_bool		m_bIsLeft = false;
+
 public:
 	static CStateBossSpider_Left* Create(CGameObject* _pMonster, CGameObject* _pPlayer, CTransform* _pMonsterTransform, CNavigation* _pMonsterNavigation, vector<CCollider*> _pVecColCom);
 	virtual void Free() override;

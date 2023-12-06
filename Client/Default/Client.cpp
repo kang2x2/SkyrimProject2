@@ -29,6 +29,7 @@ bool g_bIsPublicInit;
 bool g_bIsSlow;
 bool g_bIsPause;
 bool g_bIsTalk;
+int g_iCurTalkID;
 
 float g_fGameSpeed;
 

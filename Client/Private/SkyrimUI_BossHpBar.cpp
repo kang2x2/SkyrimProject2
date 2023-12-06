@@ -36,7 +36,7 @@ HRESULT CSkyrimUI_BossHpBar::Initialize_Clone(void* _pArg)
 
 	// 부모의 init 윈도우 상의 0,0 으로 잡아놓는 코드 추가해놓자.
 
-	m_pTransformEmpty->Set_Scaling(_float3(m_fSizeX + 80.f, m_fSizeY + 10.f, 1.f));
+	m_pTransformEmpty->Set_Scaling(_float3(m_fSizeX + 100.f, m_fSizeY + 10.f, 1.f));
 	m_pTransformEmpty->Set_State(CTransform::STATE_POSITION,
 		XMVectorSet(m_fX, m_fY, 0.f, 1.f));
 
@@ -59,43 +59,51 @@ void CSkyrimUI_BossHpBar::PriorityTick(_float _fTimeDelta)
 void CSkyrimUI_BossHpBar::Tick(_float _fHp, _float _fTimeDelta)
 {
 	if (m_bIsShow)
+		m_fAlpha = 1.f;
+	else
+		m_fAlpha = 0.f;
+
+	// 몬스터 HP에 대한 비율 계산
+	//_float hpRatio = _fHp / 1000.f;
+	_float hpRatio = _fHp / 450.f;
+
+	// 목표 크기를 비율에 따라 조정
+	_float m_fMonsterHpSize = hpRatio * 450.f;
+
+	_float fTempSizeX = m_fSizeX;
+
+	// 선형 보간을 사용하여 부드럽게 크기를 조절
+	m_fSizeX = lerp(fTempSizeX, m_fMonsterHpSize, 0.1f);
+
+	if (m_fSizeX != fTempSizeX)
 	{
-		// 몬스터 HP에 대한 비율 계산
-		_float hpRatio = _fHp / 1000.f;
+		if (m_fSizeX < 0.1f)
+			m_fSizeX = 0.1f;
 
-		// 목표 크기를 비율에 따라 조정
-		_float m_fMonsterHpSize = hpRatio * 450.f;
-
-		_float fTempSizeX = m_fSizeX;
-
-		// 선형 보간을 사용하여 부드럽게 크기를 조절
-		m_fSizeX = lerp(fTempSizeX, m_fMonsterHpSize, 0.1f);
-
-		if (m_fSizeX != fTempSizeX)
-		{
-			if (m_fSizeX < 0.1f)
-				m_fSizeX = 0.1f;
-
-			m_pTransformFill->Set_Scaling(_float3(m_fSizeX, m_fSizeY, 1.f));
-			m_pTransformFill->Set_State(CTransform::STATE_POSITION,
-				XMVectorSet(m_fX, m_fY, 0.f, 1.f));
-		}
+		m_pTransformFill->Set_Scaling(_float3(m_fSizeX, m_fSizeY, 1.f));
+		m_pTransformFill->Set_State(CTransform::STATE_POSITION,
+			XMVectorSet(m_fX, m_fY, 0.f, 1.f));
 	}
 }
 
 void CSkyrimUI_BossHpBar::LateTick(_float _fTimeDelta)
 {
-	if (m_bIsShow)
+	if (m_fAlpha > 0.1f)
+	{
 		m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI_0, this);
+	}
 }
 
 HRESULT CSkyrimUI_BossHpBar::Render()
 {
-	if (m_bIsShow)
+	if (m_fAlpha > 0.1f)
 	{
 		if (FAILED(Bind_ShaderResources()))
 			return E_FAIL;
+	}
 
+	if (m_bIsShow)
+	{
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
@@ -161,8 +169,9 @@ HRESULT CSkyrimUI_BossHpBar::Bind_ShaderResources()
 
 	if (FAILED(m_pTextureEmpty->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
-
-	m_pShaderCom->Begin(0);
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float))))
+		return E_FAIL;
+	m_pShaderCom->Begin(1);
 	m_pVIBufferEmpty->Render();
 
 	if (FAILED(m_pTransformFill->Bind_ShaderResources(m_pShaderCom, "g_WorldMatrix")))
@@ -178,8 +187,9 @@ HRESULT CSkyrimUI_BossHpBar::Bind_ShaderResources()
 
 	if (FAILED(m_pTextureFill->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
-
-	m_pShaderCom->Begin(0);
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float))))
+		return E_FAIL;
+	m_pShaderCom->Begin(1);
 	m_pVIBufferFill->Render();
 
 	return S_OK;

@@ -39,6 +39,7 @@
 #include "NPC_GuardSupply.h"
 
 #include "NPC_Guard.h"
+#include "Guard_Weapon.h"
 
 // ´õ¹Ì
 #include "Carlotta_Body.h"

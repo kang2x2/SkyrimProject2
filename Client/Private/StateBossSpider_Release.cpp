@@ -25,6 +25,7 @@ void CStateBossSpider_Release::Update(_float _fTimeDelta)
 	if (m_pMonster->Get_CurFrameIndex() > 10 &&
 		!strcmp(m_pMonster->Get_CurAnimationName().c_str(), "bleedout_idle"))
 	{
+		pGameInstance->StopSoundAll();
 		m_pMonster->Set_IsDissloving(true);
 	}
 

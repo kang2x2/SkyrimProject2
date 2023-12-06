@@ -23,6 +23,13 @@ void CStateGuardCaptain_Warning::Update(_float _fTimeDelta)
 
 	if (m_pNpc->Get_CurTalkID() == 0 && m_pNpc->Get_CurTextID() == 2)
 	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->PlaySoundFile(TEXT("wpn_blade1hand_sheathe.wav"), CHANNEL_PLAYER, 1.f);
+
+		Safe_Release(pGameInstance);
+
 		m_pNpc->Set_State(CNPC_GuardCaptain::GUARDCAPTAIN_UNEQUIP);
 		m_pNpc->Play_Animation(false, "1hm_unequip");
 	}

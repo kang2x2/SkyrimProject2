@@ -94,13 +94,13 @@ void CSkyrimUI_SpBar::Tick(_float _fSp, _float _fTimeDelta)
 
 void CSkyrimUI_SpBar::LateTick(_float _fTimeDelta)
 {
-	if (m_bIsShow)
+	if (m_fAlpha > 0.1f)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RG_UI_0, this);
 }
 
 HRESULT CSkyrimUI_SpBar::Render()
 {
-	if (m_bIsShow)
+	if (m_fAlpha > 0.1f)
 	{
 		if (FAILED(Bind_ShaderResources()))
 			return E_FAIL;

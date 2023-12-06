@@ -25,17 +25,24 @@ CLevel_WhiteRun::CLevel_WhiteRun(ID3D11Device* _pDevice, ID3D11DeviceContext* _p
 
 HRESULT CLevel_WhiteRun::Initialize()
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	pGameInstance->PlaySoundFile(TEXT("Whiterun.mp3"), CHANNEL_BGM, 0.35f);
+
+	Safe_Release(pGameInstance);
+
 	m_iVisitCount += 1;
 
 	// CIMGui_Manager 초기화
 	CIMGui_Manager::GetInstance()->Initialize(m_pDevice, m_pContext, LEVEL_GAMEPLAY);
 
 	/* Test */
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_UI"), TEXT("ProtoType_GameObject_UI_MonsterHpBar"))))
-		return E_FAIL;
-	Safe_Release(pGameInstance);
+	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//Safe_AddRef(pGameInstance);
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_UI"), TEXT("ProtoType_GameObject_UI_MonsterHpBar"))))
+	//	return E_FAIL;
+	//Safe_Release(pGameInstance);
 
 	if (FAILED(Ready_Cursor(TEXT("Layer_Cursor"))))
 		return E_FAIL;
@@ -148,8 +155,8 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 
 #pragma region Static
 	/* 화이트런 */
-	//wstring filePath = TEXT("../Bin/SaveLoad/Skyrim3");
-	wstring filePath = TEXT("../Bin/SaveLoad/testMap");
+	wstring filePath = TEXT("../Bin/SaveLoad/Skyrim3");
+	//wstring filePath = TEXT("../Bin/SaveLoad/testMap");
 
 	ifstream fileStream(filePath, ios::binary);
 	if (fileStream.is_open()) {
@@ -167,8 +174,8 @@ HRESULT CLevel_WhiteRun::Ready_Level()
 
 #pragma region Dynamic
 
-	//filePath = TEXT("../Bin/SaveLoad/Outfit_NPC");
-	filePath = TEXT("../Bin/SaveLoad/testMonster2");
+	filePath = TEXT("../Bin/SaveLoad/Outfit_NPC2");
+	//filePath = TEXT("../Bin/SaveLoad/testMonster2");
 	//
 	ifstream fileStream2(filePath, ios::binary);
 	if (fileStream2.is_open()) {
@@ -213,8 +220,8 @@ HRESULT CLevel_WhiteRun::Ready_Light()
 
 #pragma region Light
 	// 보스 사운드, 패턴 시작.
-	//wstring filePath = TEXT("../Bin/SaveLoad/Light_WhiteRun");
-	wstring filePath = TEXT("../Bin/SaveLoad/testLight");
+	wstring filePath = TEXT("../Bin/SaveLoad/Light_WhiteRun");
+	//wstring filePath = TEXT("../Bin/SaveLoad/testLight");
 	// 파일을 열기 모드로 열기.
 	ifstream fileStream(filePath, ios::binary);
 	if (fileStream.is_open()) {
@@ -257,22 +264,22 @@ HRESULT CLevel_WhiteRun::Ready_Layer_Player(const wstring& _strLayerTag)
 		return E_FAIL;
 
 	/* 화이트런 */
-	//if (m_iVisitCount == 1)
-	//{
-	//	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
-	//		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
-	//		->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
-	//}
-	//else if (m_iVisitCount == 2)
-	//{
-	//	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
-	//		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
-	//		->Set_State(CTransform::STATE_POSITION, XMVectorSet(40.f, -1.3f, 10.f, 1.f));
-	//}
-	dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
-		TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
-	->Set_State(CTransform::STATE_POSITION, XMVectorSet(-4.f, -1.f, 24.f, 1.f));
-
+	if (m_iVisitCount == 1)
+	{
+		dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
+			TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
+			->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.3f, 12.f, 1.f));
+	}
+	else if (m_iVisitCount == 2)
+	{
+		dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
+			TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
+			->Set_State(CTransform::STATE_POSITION, XMVectorSet(40.f, -1.3f, 10.f, 1.f));
+	}
+	//dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
+	//	TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
+	//->Set_State(CTransform::STATE_POSITION, XMVectorSet(-4.f, -1.f, 24.f, 1.f));
+	//
 	dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
 		TEXT("Player")))->Set_CurCell();
 

@@ -69,6 +69,7 @@ void CInventory_ItemList::Tick(_float _fTimeDelta)
 
 			if (pGameInstance->Get_DIKeyDown(MK_LBUTTON))
 			{
+				pGameInstance->PlaySoundFile(TEXT("itm_clothing_up_02.wav"), CHANNEL_NATURAL, 1.f);
 				if (dynamic_cast<CSkyrimItem*>(m_vecFontDesc[i].pItem)->Get_ItemType() == CSkyrimItem::ITEM_WEAPON)
 				{
 					m_pPlayer->Use_Item(dynamic_cast<CSkyrimItem*>(m_vecFontDesc[i].pItem));

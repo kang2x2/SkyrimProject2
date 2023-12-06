@@ -35,7 +35,7 @@ void CStateBossSpider_Charge::Update(_float _fTimeDelta)
 		{
 			if (m_pPlayer->Get_IsReadyCounter())
 			{
-				pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 1.f);
+				pGameInstance->PlaySoundFile(TEXT("fx_melee_sword_other_02.wav"), CHANNEL_GUARD, 0.5f);
 
 				m_pPlayer->Set_IsCounter(true);
 				m_pPlayer->Set_IsSuccesCounter(true);
@@ -47,6 +47,8 @@ void CStateBossSpider_Charge::Update(_float _fTimeDelta)
 			/* 플레이어 크게 비틀거리게 */
 			else
 			{
+				pGameInstance->PlaySoundFile(TEXT("wpn_impact_axelarge_flesh_01.wav"), CHANNEL_GUARD, 0.5f);
+
 				if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 				{
 					m_pPlayerTransform->Set_Speed(m_pPlayer->GetWalkSpeed());
@@ -69,6 +71,8 @@ void CStateBossSpider_Charge::Update(_float _fTimeDelta)
 		{
 			if (pGameInstance->Collision_Enter(m_pMouthCollider, m_pPlayerBodyCollider))
 			{
+				pGameInstance->PlaySoundFile(TEXT("wpn_impact_axelarge_flesh_01.wav"), CHANNEL_GUARD, 0.5f);
+
 				/* 플레이어 크게 비틀거리게 */
 				if (m_pPlayer->Get_CamMode() == CPlayer::CAM_1ST)
 				{

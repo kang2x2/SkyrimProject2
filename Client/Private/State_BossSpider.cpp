@@ -28,6 +28,14 @@ void CState_BossSpider::Update(_float _fTimeDelta)
 {
 	if (m_pMonster->GetHp() <= 0.f)
 	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbitegiant_death_01.wav"), CHANNEL_MONSTER4, 1.f);
+		pGameInstance->StopSound(CHANNEL_BGM);
+
+		Safe_Release(pGameInstance);
+
 		m_pMonster->Set_State(CBossSpider::BOSSSPIDER_DEAD);
 		m_pMonster->Play_Animation(false, "death");
 	}

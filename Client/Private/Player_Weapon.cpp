@@ -58,7 +58,7 @@ HRESULT CPlayer_Weapon::Initialize_Clone(void* _pArg)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	m_pSpark = dynamic_cast<CEffect_CombatSpark*>(pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_CombatSpark"), this));
+	// m_pSpark = dynamic_cast<CEffect_CombatSpark*>(pGameInstance->Add_ClonePartObject(TEXT("ProtoType_GameObject_CombatSpark"), this));
 
 	pGameInstance->Add_CloneObject(g_curLevel, TEXT("Temp"), TEXT("ProtoType_GameObject_Weapon_AkaviriSword"));
 
@@ -91,7 +91,7 @@ void CPlayer_Weapon::Tick(_float _fTimeDelta)
 		m_pColliderCom->Update(XMLoadFloat4x4(&m_matWorld));
 	}
 
-	m_pSpark->Tick(m_pColliderCom->Get_WorldCenter(), _fTimeDelta);
+	//m_pSpark->Tick(m_pColliderCom->Get_WorldCenter(), _fTimeDelta);
 }
 
 void CPlayer_Weapon::LateTick(_float _fTimeDelta)
@@ -111,7 +111,7 @@ void CPlayer_Weapon::LateTick(_float _fTimeDelta)
 
 	m_pColliderCom->Late_Update(_fTimeDelta);
 
-	m_pSpark->LateTick(_fTimeDelta);
+	//m_pSpark->LateTick(_fTimeDelta);
 }
 
 HRESULT CPlayer_Weapon::Render()
@@ -119,7 +119,7 @@ HRESULT CPlayer_Weapon::Render()
 	//if (m_pWeapon != nullptr)
 	//	m_pWeapon->Render();
 
-	m_pSpark->Render();
+	//m_pSpark->Render();
 
 	return S_OK;
 }
@@ -148,7 +148,7 @@ void CPlayer_Weapon::CheckHit_Onehand(_uint _iSourFrame, _uint _iDestFrame)
 
 void CPlayer_Weapon::Create_Spark()
 {
-	m_pSpark->Set_Spark();
+	//m_pSpark->Set_Spark();
 }
 
 HRESULT CPlayer_Weapon::Ready_Component()

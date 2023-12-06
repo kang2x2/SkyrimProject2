@@ -211,7 +211,7 @@ HRESULT CNPC_GuardSupply::Ready_Component(_uint _iLevel)
 
 	/* DIALOG */
 	CBounding_Sphere::BOUNDING_SPHERE_DESC SphereDesc = {};
-	SphereDesc.fRadius = 3.f;
+	SphereDesc.fRadius = 1.5f;
 	SphereDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
 	if (FAILED(__super::Add_CloneComponent(g_curLevel, TEXT("ProtoType_Component_Collider_Sphere"),
@@ -248,12 +248,11 @@ HRESULT CNPC_GuardSupply::Ready_Talk()
 {
 	CSkyrimUI_Talk::TALK_DESC talkDesc;
 	talkDesc.pOwner = this;
-	talkDesc.m_iShowDialogIndex = 1;
+	talkDesc.m_iShowDialogIndex = 0;
 	talkDesc.m_strOwnerName = TEXT("보급병");
 	talkDesc.m_mapNpcTalkData.insert(make_pair(0, vector<wstring>{
 		{ L"음?"},
 		{ L"장비를 받으러 온건가? 용케 그 꼴로 여기까지 왔군." },
-		{ L"차림새를 보아하니 너에게 딱 어울리는 장비가 있지." },
 		{ L"자 받으라고." },
 	}));
 

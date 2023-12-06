@@ -8,8 +8,12 @@
 
 #include "StateBossSpider_Chase.h"
 #include "StateBossSpider_Left.h"
-//#include "StateBossSpider_Right.h"
+#include "StateBossSpider_Backward.h"
 #include "StateBossSpider_Sprint.h"
+#include "StateBossSpider_Turn.h"
+#include "StateBossSpider_BerserkSprint.h"
+#include "StateBossSpider_BerserkCharge.h"
+#include "StateBossSpider_BerserkChop.h"
 
 #include "StateBossSpider_OneChop.h"
 #include "StateBossSpider_DoubleChop.h"
@@ -20,6 +24,10 @@
 #include "StateBossSpider_StaggerDC.h"
 #include "StateBossSpider_StaggerB.h"
 #include "StateBossSpider_StaggerC.h"
+
+#include "StateBossSpider_GroggyIntro.h"
+#include "StateBossSpider_Groggy.h"
+#include "StateBossSpider_GroggyOut.h"
 
 #include "StateBossSpider_Dead.h"
 #include "StateBossSpider_Release.h"
@@ -52,11 +60,23 @@ HRESULT CStateManager_BossSpider::Initialize(CGameObject* _pMonster, CGameObject
 	/* Left */
 	pState = CStateBossSpider_Left::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
-	/* Right */
-	//pState = CStateBossSpider_Right::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
-	//m_vecMonsterState.push_back(pState);
+	/* Backward */
+	pState = CStateBossSpider_Backward::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
 	/* Sprint */
 	pState = CStateBossSpider_Sprint::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+	/* Turn */
+	pState = CStateBossSpider_Turn::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+	/* Berserk Sprint */
+	pState = CStateBossSpider_BerserkSprint::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+	/* Berserk Charge */
+	pState = CStateBossSpider_BerserkCharge::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+	/* Berserk Chop */
+	pState = CStateBossSpider_BerserkChop::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
 
 	/* OneChop */
@@ -84,6 +104,17 @@ HRESULT CStateManager_BossSpider::Initialize(CGameObject* _pMonster, CGameObject
 	/* Stagger_Charge */
 	pState = CStateBossSpider_StaggerC::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
 	m_vecMonsterState.push_back(pState);
+
+	/* Groggy Intro */
+	pState = CStateBossSpider_GroggyIntro::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+	/* Groggy */
+	pState = CStateBossSpider_Groggy::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+	/* Groggy Out */
+	pState = CStateBossSpider_GroggyOut::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);
+	m_vecMonsterState.push_back(pState);
+
 
 	/* Dead */
 	pState = CStateBossSpider_Dead::Create(_pMonster, _pPlayer, _pMonsterTransform, _pMonsterNavigation, _pVecColCom);

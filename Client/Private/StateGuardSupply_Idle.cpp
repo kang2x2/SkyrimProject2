@@ -24,7 +24,8 @@ void CStateGuardSupply_Idle::Update(_float _fTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Collision_Stay(m_pVecCollider[CNPC_GuardSupply::GUARDSUPPLY_COL_DIALOG], m_pPlayerBodyCollider))
+	if (pGameInstance->Collision_Enter(m_pVecCollider[CNPC_GuardSupply::GUARDSUPPLY_COL_DIALOG], m_pPlayerBodyCollider) ||
+		pGameInstance->Collision_Stay(m_pVecCollider[CNPC_GuardSupply::GUARDSUPPLY_COL_DIALOG], m_pPlayerBodyCollider))
 	{
 		m_pNpc->Set_VisibleTalkIcon(true);
 

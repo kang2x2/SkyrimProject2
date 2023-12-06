@@ -22,6 +22,13 @@ CLevel_Dungeon::CLevel_Dungeon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pCo
 
 HRESULT CLevel_Dungeon::Initialize()
 {
+	// Test HPBar
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_UI"), TEXT("ProtoType_GameObject_UI_MonsterHpBar"))))
+		return E_FAIL;
+	Safe_Release(pGameInstance);
+
 	if (FAILED(Ready_Cursor(TEXT("Layer_Cursor"))))
 		return E_FAIL;
 
@@ -71,26 +78,26 @@ HRESULT CLevel_Dungeon::LateTick(_float _fTimeDelta)
 {
 	SetWindowText(g_hWnd, TEXT("Current Level : Dungeon"));
 
-	//if (GetKeyState(VK_F11) & 0x8000)
-	//{
-	//	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	//	Safe_AddRef(pGameInstance);
-	//
-	//	g_curStage = STAGE_WHITERUN;
-	//	if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
-	//		return E_FAIL;
-	//
-	//	Safe_Release(pGameInstance);
-	//}
+	if (GetKeyState(VK_F11) & 0x8000)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+	
+		g_curStage = STAGE_WHITERUN;
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
+			return E_FAIL;
+	
+		Safe_Release(pGameInstance);
+	}
 	if (m_bIsChangeScene)
 	{
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
-
+	
 		g_curStage = (STAGEID)m_iChangeStageIdx;
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, (LEVELID)m_iChangeLevelIdx))))
 			return E_FAIL;
-
+	
 		m_bIsChangeScene = false;
 		Safe_Release(pGameInstance);
 	}
@@ -119,9 +126,9 @@ HRESULT CLevel_Dungeon::Ready_Level()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
+	
 	pGameInstance->PlayBGM(TEXT("ambt_dungeon_cave_generic_2dlp.wav"), 0.7f);
-
+	
 	CSceneChangeCol::tagSceneChangeColDesc tempDesc;
 	tempDesc.eDestStage = STAGE_WHITERUN;
 	tempDesc.vPos = { 199.f, -12.f, 84.f, 1.f };
@@ -149,20 +156,20 @@ HRESULT CLevel_Dungeon::Ready_Level()
 
 #pragma region Dynamic
 
-	//filePath = TEXT("../Bin/SaveLoad/Dungeon_Monster");
-	//
-	//// 파일을 열기 모드로 열기.
-	//ifstream fileStream2(filePath, ios::binary);
-	//if (fileStream2.is_open()) {
-	//	pGameInstance->Object_FileLoad(fileStream2, LEVEL_GAMEPLAY);
-	//	
-	//	fileStream2.close();
-	//	//MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
-	//}
-	//else {
-	//	MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
-	//	return E_FAIL;
-	//}
+	filePath = TEXT("../Bin/SaveLoad/Dungeon_Monster");
+	
+	// 파일을 열기 모드로 열기.
+	ifstream fileStream2(filePath, ios::binary);
+	if (fileStream2.is_open()) {
+		pGameInstance->Object_FileLoad(fileStream2, LEVEL_GAMEPLAY);
+		
+		fileStream2.close();
+		//MessageBox(g_hWnd, L"파일을 성공적으로 불러왔습니다.", L"불러오기 완료", MB_OK);
+	}
+	else {
+		MessageBox(g_hWnd, L"파일을 불러오는 중 오류가 발생했습니다.", L"불러오기 오류", MB_OK | MB_ICONERROR);
+		return E_FAIL;
+	}
 #pragma endregion
 
 	Safe_Release(pGameInstance);
@@ -241,7 +248,7 @@ HRESULT CLevel_Dungeon::Ready_Layer_Player(const wstring& _strLayerTag)
 
 	//dynamic_cast<CTransform*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
 	//	TEXT("Player"))->Get_Component(TEXT("Com_Transform")))
-	//	->Set_State(CTransform::STATE_POSITION, XMVectorSet(51.f, -4.f, 42.f, 1.f));
+	//	->Set_State(CTransform::STATE_POSITION, XMVectorSet(149.f, -12.f, 85.f, 1.f));
 
 	dynamic_cast<CPlayer*>(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"),
 		TEXT("Player")))->Set_CurCell();
@@ -331,8 +338,8 @@ HRESULT CLevel_Dungeon::Ready_Layer_Effect(const wstring& _strLayerTag)
 
 
 	// UI
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_UI"), TEXT("ProtoType_GameObject_UI_MonsterHpBar"))))
-		return E_FAIL;
+	//if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Layer_UI"), TEXT("ProtoType_GameObject_UI_MonsterHpBar"))))
+	//	return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

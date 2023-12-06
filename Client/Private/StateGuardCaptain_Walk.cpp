@@ -30,6 +30,8 @@ void CStateGuardCaptain_Walk::Update(_float _fTimeDelta)
 	/* Talk 범위에 들어왔을 때 */
 	if (pGameInstance->Collision_Enter(m_pVecCollider[CNPC_GuardCaptain::GUARDCAPTAIN_COL_DIALOG], m_pPlayerBodyCollider))
 	{
+		pGameInstance->PlaySoundFile(TEXT("Stop Right there.mp3"), CHANNEL_MONSTER3, 1.f);
+
 		m_pNpc->Start_Talk();
 
 		m_pNpc->Set_State(CNPC_GuardCaptain::GUARDCAPTAIN_WARNING);

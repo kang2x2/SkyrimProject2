@@ -53,14 +53,18 @@ void CSkyrimUI_Letter::Tick(_float _fTimeDelta)
 {
 	m_fWaitTime += _fTimeDelta;
 
-	if (m_fWaitTime > 2.f)
-		g_bIsPause = true;
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	if (m_fWaitTime == 2.f)
+	{
+		pGameInstance->PlaySoundFile(TEXT("itm_book_open_01.wav"), CHANNEL_MONSTER3, 1.f);
+		g_bIsPause = true;
+	}
+
 	if (pGameInstance->Get_DIKeyDown(VK_SPACE))
 	{
+		pGameInstance->PlaySoundFile(TEXT("itm_book_close_01.wav"), CHANNEL_MONSTER3, 1.f);
 		m_bReadyDead = true;
 		g_bIsPause = false;
 	}

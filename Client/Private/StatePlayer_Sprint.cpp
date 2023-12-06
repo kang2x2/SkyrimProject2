@@ -23,7 +23,7 @@ void CStatePlayer_Sprint::Update(_float _fTimeDelta)
 
 	if (m_pPlayer->Get_CurFrameIndex() == 10 || m_pPlayer->Get_CurFrameIndex() == 20)
 	{
-		pGameInstance->PlaySoundFile(TEXT("fst_dirt_sprint_player_01.wav"), CHANNEL_PLAYER_RUN, 1.f);
+		pGameInstance->PlaySoundFile(TEXT("fst_dirt_sprint_player_01.wav"), CHANNEL_PLAYER_RUN, 0.5f);
 	}
 
 	Safe_Release(pGameInstance);

@@ -26,12 +26,21 @@ void CStateGuardCaptain_Idle::Update(_float _fTimeDelta)
 
 	if (pGameInstance->Collision_Enter(m_pVecCollider[CNPC_GuardCaptain::GUARDCAPTAIN_COL_DETECTION], m_pPlayerBodyCollider))
 	{
-		if (m_pNpc->Get_CurTalkID() == 0)
+		if (g_iCurTalkID == 0)
 		{
+			pGameInstance->PlaySoundFile(TEXT("wpn_blade1hand_draw_01.wav"), CHANNEL_MONSTER4, 1.f);
 			m_pNpcTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
 
 			m_pNpc->Play_Animation(false, "1hm_equip");
 			m_pNpc->Set_State(CNPC_GuardCaptain::GUARDCAPTAIN_EQUIP);
+		}
+		else if(g_iCurTalkID == 2)
+		{
+			m_pNpcTransform->Set_Speed(m_pNpc->GetWalkSpeed());
+			m_pNpcTransform->LookAt(m_pPlayerTransform->Get_State(CTransform::STATE_POSITION));
+
+			m_pNpc->Play_Animation(true, "mt_walkforward");
+			m_pNpc->Set_State(CNPC_GuardCaptain::GUARDCAPTAIN_UNEQUIPWALK);
 		}
 	}
 

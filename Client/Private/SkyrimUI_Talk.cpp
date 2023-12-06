@@ -5,8 +5,6 @@
 
 #include "Skyrim_NPC.h"
 
-_uint CSkyrimUI_Talk::m_iCurTalkID = 0;
-
 CSkyrimUI_Talk::CSkyrimUI_Talk(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)
 	: CSkyrimUI(_pDevice, _pContext)
 {
@@ -72,11 +70,12 @@ void CSkyrimUI_Talk::Tick(_float _fTimeDelta)
 				m_fAlpha += 0.3f * _fTimeDelta;
 		}
 
-		/* 플레이어 텍스트 띄우기 */
+		/* 플레이어 텍스트 띄우기 */	
 		if (m_iCurTextIndex == m_tTalkDesc.m_vecPlayerTalkDesc[m_iCurPlayerTextIndex].m_iShowTextID)
 		{
 			m_strPlayerTalk = m_tTalkDesc.m_vecPlayerTalkDesc[m_iCurPlayerTextIndex].m_strPlayerTalk;
 		}
+		
 
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
@@ -92,7 +91,10 @@ void CSkyrimUI_Talk::Tick(_float _fTimeDelta)
 
 				if (pGameInstance->Get_DIKeyDown(VK_LBUTTON))
 				{
-					m_iCurPlayerTextIndex += 1;
+					if (m_iCurPlayerTextIndex < m_tTalkDesc.m_vecPlayerTalkDesc.size() - 1)
+					{
+						m_iCurPlayerTextIndex += 1;
+					}
 					m_iCurTextIndex += 1;
 					m_vPlayerTextColor = { 0.4f, 0.4f, 0.4f, 1.f };
 				}
@@ -107,12 +109,12 @@ void CSkyrimUI_Talk::Tick(_float _fTimeDelta)
 				m_iCurTextIndex += 1;
 		}
 
-		// 현재 대사집.
-		auto iter = m_tTalkDesc.m_mapNpcTalkData.find(m_iCurTalkID);
+		auto iter = m_tTalkDesc.m_mapNpcTalkData.find(0);
+
 		// 만약 모든 대사가 끝났다면
 		if (m_iCurTextIndex >= iter->second.size())
 		{
-			m_iCurTalkID += 1;
+			g_iCurTalkID += 1;
 			dynamic_cast<CSkyrim_NPC*>(m_tTalkDesc.pOwner)->Set_Idle();
 			g_bIsTalk = false;
 			m_bIsTalk = false;
@@ -221,7 +223,9 @@ HRESULT CSkyrimUI_Talk::Bind_ShaderResources()
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
-		auto iter = m_tTalkDesc.m_mapNpcTalkData.find(m_iCurTalkID);
+		auto iter = m_tTalkDesc.m_mapNpcTalkData.find(0);
+		if(g_iCurTalkID == 2)
+			auto iter = m_tTalkDesc.m_mapNpcTalkData.find(1);
 
 		if (&iter)
 		{

@@ -158,7 +158,8 @@ void CBossSpider::Tick(_float _fTimeDelta)
 				}
 			}
 
-			m_pHpBar->Tick(m_fHp, _fTimeDelta);
+			if (g_curLevel != LEVEL_TOOL)
+				m_pHpBar->Tick(m_fHp, _fTimeDelta);
 		}
 	}
 }
@@ -204,7 +205,8 @@ void CBossSpider::LateTick(_float _fTimeDelta)
 
 	Safe_Release(pGameInstance);
 
-	m_pHpBar->LateTick(_fTimeDelta);
+	if (g_curLevel != LEVEL_TOOL)
+		m_pHpBar->LateTick(_fTimeDelta);
 }
 
 HRESULT CBossSpider::Render()
@@ -257,7 +259,8 @@ HRESULT CBossSpider::Render()
 			return E_FAIL;
 	}
 
-	m_pHpBar->Render();
+	if (g_curLevel != LEVEL_TOOL)
+		m_pHpBar->Render();
 
 	__super::Render();
 
@@ -383,8 +386,8 @@ HRESULT CBossSpider::Ready_State()
 {
 	m_fRunSpeed = 3.5f;
 	m_fWalkSpeed = 1.5f;
-	m_fHp = 1000;
-	m_fMaxHp = 1000;
+	m_fHp = 450;
+	m_fMaxHp = 450;
 	m_iAtk = 10;
 
 	m_tBossDesc.fSprintSpeed = 10.f;
@@ -401,12 +404,15 @@ HRESULT CBossSpider::Ready_State()
 		pGameInstance->Find_CloneObject(g_curLevel, TEXT("Layer_Player"), TEXT("Player")),
 		m_pTransformCom, m_pNavigationCom, m_pVecCollider);
 
-	/* HpBar */
-	if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Boss_HpBar"), TEXT("ProtoType_GameObject_UI_BossHpBar"))))
-		return E_FAIL;
+	if (g_curLevel != LEVEL_TOOL)
+	{
+		/* HpBar */
+		if (FAILED(pGameInstance->Add_CloneObject(LEVEL_GAMEPLAY, TEXT("Boss_HpBar"), TEXT("ProtoType_GameObject_UI_BossHpBar"))))
+			return E_FAIL;
 
-	m_pHpBar = dynamic_cast<CSkyrimUI_BossHpBar*>
-		(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Boss_HpBar"), TEXT("UI_BossHpbar")));
+		m_pHpBar = dynamic_cast<CSkyrimUI_BossHpBar*>
+			(pGameInstance->Find_CloneObject(LEVEL_GAMEPLAY, TEXT("Boss_HpBar"), TEXT("UI_BossHpbar")));
+	}
 
 	Safe_Release(pGameInstance);
 
@@ -415,7 +421,8 @@ HRESULT CBossSpider::Ready_State()
 
 void CBossSpider::Set_BarShow()
 {
-	m_pHpBar->Set_BarShow();
+	if (g_curLevel != LEVEL_TOOL)
+		m_pHpBar->Set_BarShow();
 }
 
 CBossSpider* CBossSpider::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pContext)

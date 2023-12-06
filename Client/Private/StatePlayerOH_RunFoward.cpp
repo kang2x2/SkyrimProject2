@@ -32,7 +32,7 @@ void CStatePlayerOH_RunFoward::Key_Input(_float _fTimeDelta)
 
 	if (m_pPlayer->Get_CurFrameIndex() == 10 || m_pPlayer->Get_CurFrameIndex() == 20)
 	{
-		pGameInstance->PlaySoundFile(TEXT("fst_dirt_run_player_03.wav"), CHANNEL_PLAYER_RUN, 1.f);
+		pGameInstance->PlaySoundFile(TEXT("fst_dirt_run_player_03.wav"), CHANNEL_PLAYER_RUN, 0.5f);
 	}
 	
 	if (pGameInstance->Get_DIKeyPress('W'))

@@ -47,6 +47,7 @@ private: /* 사용할 컴포넌트들 */
 	_float2			m_vFillPos = {};
 	_float2			m_vFillSize = {};
 
+	_float		m_fAlpha = 0.f;
 	_bool		m_bIsShow = false;
 	wstring		m_TextName = TEXT("");
 public:

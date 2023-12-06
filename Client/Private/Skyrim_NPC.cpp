@@ -147,7 +147,7 @@ void CSkyrim_NPC::Start_Talk()
 }
 _uint CSkyrim_NPC::Get_CurTalkID()
 {
-	return m_pTalk->Get_CurTalkID();
+	return 0;
 }
 _uint CSkyrim_NPC::Get_CurTextID()
 {

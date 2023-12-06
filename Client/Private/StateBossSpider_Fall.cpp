@@ -24,9 +24,9 @@ void CStateBossSpider_Fall::Update(_float _fTimeDelta)
 	_float4 vIdlePos;
 	XMStoreFloat4(&vIdlePos, m_pMonsterTransform->Get_State(CTransform::STATE_POSITION));
 	
-	if (!m_bIsFall && vIdlePos.y >= -1.3f)
+	if (!m_bIsFall && vIdlePos.y >= -12.6f)
 	{
-		m_fDropSpeed -= 30.f * _fTimeDelta;
+		m_fDropSpeed -= 20.f * _fTimeDelta;
 		vIdlePos.y -= m_fDropSpeed * _fTimeDelta;
 		m_pMonsterTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vIdlePos));
 	}

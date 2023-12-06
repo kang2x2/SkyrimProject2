@@ -27,6 +27,7 @@ void CStateBossSpider_Planding::Update(_float _fTimeDelta)
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
+		pGameInstance->PlayBGM(TEXT("BossBattle.mp3"), 0.3f);
 		pGameInstance->PlaySoundFile(TEXT("npc_spiderfrostbitegiant_breathe_lp.wav"), CHANNEL_MONSTER1, 1.f);
 
 		Safe_Release(pGameInstance);
